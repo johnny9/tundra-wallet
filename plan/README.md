@@ -16,7 +16,7 @@ approval system, or cloud account.
 
 - Source: descriptor-first watch-only engine, metadata, unsigned-draft core, UniFFI API,
   Android native import shell, iOS native starter, tests and CI.
-- Verified: 108 Rust tests including real regtest, 23 offline checks, parser fuzzing/audit,
+- Verified: 124 Rust tests including real regtest, 23 offline checks, parser fuzzing/audit,
   Android debug APK and iOS simulator builds, host FFI smoke tests, Android exact-input
   payment/process-restart checks and iOS consolidation/process-restart checks.
   See [VALIDATION.md](VALIDATION.md) for the exact results and remaining gates.
@@ -25,10 +25,11 @@ approval system, or cloud account.
 - Added: native search/filter/selection, payment/max/consolidation review and saved drafts;
   decimal fee rates and atomic bulk coin metadata. Broader native qualification remains.
 - Added: bounded external PSBT validation, per-input cryptographic signature progress,
-  immutable approvals and atomic signature persistence. Native file integration is implemented; iOS UI qualification remains in progress.
-- Added: bounded UR/BBQr codecs and native camera/display source; native QR tests pending.
+  immutable approvals and atomic signature persistence. Native file integration and both initial payment/restart UI scenarios pass; broader coverage remains.
+- Added: bounded UR/BBQr codecs and native camera/display source; Android barcode tests pass, iOS rerun pending.
 - Added: immutable finalized transaction bytes and native final-review source; software tests pass.
-- Not implemented: USB transport, bhwi device integration, broadcast, production storage protection.
+- Added: pinned bhwi Ledger protocol, registration persistence and Android USB adapter source; native/device qualification remains open.
+- Not implemented: broadcast and production storage protection.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Not performed locally: Android build or Xcode build.
 - **No real-funds use. No supported hardware devices yet.**
@@ -43,6 +44,7 @@ approval system, or cloud account.
 | [04-security.md](04-security.md) | Threats, invariants, privacy and release blockers |
 | [05-testing.md](05-testing.md) | Test layers and real-device qualification |
 | [06-build.md](06-build.md) | Dependency choices, native builds and reproducibility |
+| [11-usb.md](11-usb.md) | Bounded Ledger protocol and Android USB qualification |
 | [10-finalization.md](10-finalization.md) | Exact final bytes, persistence and review |
 | [09-qr.md](09-qr.md) | QR formats, bounds and native qualification |
 | [08-signing.md](08-signing.md) | External response rules and software validation gates |

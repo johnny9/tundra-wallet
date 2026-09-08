@@ -1,0 +1,84 @@
+{
+  "recorded_at": "2026-09-08T23:20:12.291025+00:00",
+  "rust_toolchain": "1.93.1",
+  "schema_version": 5,
+  "core_unit_tests": 117,
+  "new_usb_tests": 16,
+  "process_crash_tests": 1,
+  "http_tests": 5,
+  "separate_real_regtest_tests": 1,
+  "total_executed_rust_tests": 124,
+  "fmt": "passed",
+  "clippy": "passed; all targets/features; warnings denied",
+  "offline_checks": 23,
+  "bindings": "Kotlin and Swift generated from the same compiled Rust library",
+  "bhwi_revision": "edfac42caf0d67693660cf1f04c2d24ca6b8f7a1",
+  "bhwi_miniscript_revision": "ff4732e5f75aa555682343cb180fa72ee3e8e9d5",
+  "audit": {
+    "database": {
+      "advisory-count": 1242,
+      "last-commit": "bf25f6575a93a35f30796c65c0ed91bee7fa19fd",
+      "last-updated": "2026-09-08T11:58:15+02:00"
+    },
+    "lockfile": {
+      "dependency-count": 240
+    },
+    "settings": {
+      "target_arch": [],
+      "target_os": [],
+      "severity": null,
+      "ignore": [],
+      "informational_warnings": [
+        "unmaintained",
+        "unsound",
+        "notice"
+      ]
+    },
+    "vulnerabilities": {
+      "found": false,
+      "count": 0,
+      "list": []
+    },
+    "warnings": {}
+  },
+  "fuzz": {
+    "public_parsers_and_hid": {
+      "executions": 1639902,
+      "seconds": 61,
+      "crashes": 0
+    },
+    "usb_apdu_protocol_final": {
+      "executions": 1257,
+      "seconds": 61,
+      "crashes": 0
+    },
+    "sanitizer": "AddressSanitizer",
+    "toolchain": "nightly-2026-09-07",
+    "limits": "Protocol target mutates replies at each public handshake phase and registration/Merkle continuations; no device or signing command is exercised.",
+    "reviewed_lock_unchanged": true
+  },
+  "prior_failures": [
+    "Sandbox check could not bind loopback HTTP listeners; host full check passed.",
+    "Initial host regtest failed at first sync; retry passed. A readiness-file race was found and fixed with atomic rename. Three fresh runs and final regtest passed.",
+    "New policy parity test exposed missing derivation expressions in bhwi key info. Corrected; script equality now passes for both branches/policies."
+  ],
+  "native_usb": "Android source and tests authored; first native build/runtime check pending",
+  "hardware_qualified": false,
+  "hardware_signing_enabled": false,
+  "broadcast_implemented": false,
+  "logs": {
+    "build/usb-check-final.log": "23c2ed4bae816c0755337b6fe470d3851b08655503337a5bb7a301414e5210f8",
+    "build/usb-regtest.log": "1901621d44aa10ddf4f05f12658df8de2b37928f3fbbdacf404f3f7b654d0924",
+    "build/usb-regtest-retry.log": "eb4ae11cf515ef894dadc56f6df1582560eec0165aff6827d120ca2f0df1d61f",
+    "build/usb-regtest-atomic-1.log": "0585f9d1208ca2be6cac20644a9e55c3ff9982dbf1804abf344a9ef8b0887032",
+    "build/usb-regtest-atomic-2.log": "2a58326eb98bc734c888dbbca44d120e075ad287ed85839a8cc0bc5045c63803",
+    "build/usb-regtest-atomic-3.log": "a389ff5f1bbe3423a602f2117552228d232d9d79fe763ab76cbb9aca9c01c391",
+    "build/usb-regtest-final.log": "82f52517696578a852f5a3b3c3e3056480000a2d88e336a37abecba168916483",
+    "build/usb-bindings-final.log": "a5edb34cc7e9df30b3870875504b5ba118357b6295e6aad9a68fb174a4b70481",
+    "build/usb-offline-final.log": "ebac9e91343711c98b45b302893aa05832932bb9bccaaa724595a0ef9dae9bf0",
+    "build/usb-fuzz-host.log": "a5c376b8eceec546be2d8b1c8f2689bf0b57622dcf00eba609fd50d29bea75bc",
+    "build/usb-protocol-fuzz.log": "3933a36125ab7286d2eee67464304455641d7c812df10c9e6951a5f934cea720",
+    "build/usb-protocol-fuzz-final.log": "cc5542d7f303e60bd3a31b6d4b733d9abd8ead81a4675d2d70fd8022e6492e42",
+    "build/usb-audit.json": "373f06f1a982db3d6a42682750c9387d9bc98aaf68c760524f087ca5dddce515"
+  }
+}

@@ -16,5 +16,7 @@
   "adb_devices": [],
   "instrumentation": "NOT RUN",
   "host_issue": "No DHCP lease while UFW is enabled; scoped UDP/67 rule requested from operator",
-  "sudo_or_firewall_changes_by_agent": false
+  "sudo_or_firewall_changes_by_agent": false,
+  "last_recheck_utc": "2026-09-08T23:16:59.111758+00:00",
+  "last_recheck": "Session/container still running, API 33 property responds, IPv4 still unknown, no ADB device. Both bridge IPv6 link-local candidates failed to establish ADB; the bounded attempt timed out."
 }

@@ -42,11 +42,41 @@ Swift compilation on error handling. Both fixes are authored; their native rerun
 A host ZXing probe reproduced the finder failure and decoded all 26 public frames using the
 multi-detector fallback now shared by the camera and instrumentation paths.
 
+The [QR/finalization run at 579e418](https://github.com/johnny9/tundra-wallet/actions/runs/34285430052)
+passed Android's three instrumentation tests and process-restart check, including all public
+UR/BBQr barcode vectors and reviewed-draft export. iOS built and passed two XCTest tests;
+its Vision barcode test and import UI test failed. The follow-up at
+[d68cc23](https://github.com/johnny9/tundra-wallet/actions/runs/34287302455) passed Android,
+Rust and parser/audit, but iOS compilation failed on an unexposed preview field. The focused
+fix is pushed in `650b4d9`. Its iOS import, explicit sync, consolidation, signature progress
+and restart UI scenario now passes, along with the two non-QR XCTest tests. The Vision
+barcode test still failed; its exact attached PNG decodes correctly with host ZXing. The
+next test exercises supported Vision revisions and records the actual decoder used; this
+does not qualify the production camera. Android instrumentation again passed, but the
+cold-restart check was blocked by a captured Quickstep launcher ANR. The test runner now
+retains that evidence, closes only that specific launcher dialog once and rechecks the real
+Tundra state. Its probe passed checks against saved successful/failed hierarchies and refused
+to dismiss a Tundra ANR or unrelated package. Native recovery validation is pending.
+Earlier failures remain recorded.
+
+The development [USB adapter](11-usb.md) adds **16 passing Rust tests**, bringing the full
+total to **124 including real regtest**. Formatting, strict Clippy, 23 offline checks and
+both binding generations pass. The reviewed bhwi/miniscript Git pins compile and cargo-audit
+reports no advisories or warnings. HID parser and APDU fuzzing evidence is recorded in
+`validation/usb-checks.json`. Android USB source/tests await their first native run; no
+hardware model is qualified and USB signing remains blocked.
+
+An initial USB-era regtest run failed at initial sync; a retry passed. Inspection found that
+its test backend published the readiness file before writing the port, allowing a reader
+to see an empty port. Readiness now uses atomic rename; three independent fresh-chain runs
+and the final regtest check passed. This race is a plausible cause of that failure, not a
+confirmed reconstruction. The failed log remains retained alongside the successful runs.
+
 ## Local executed checks
 
 | Check | Actual result |
 |---|---|
-| Rust workspace | **101 core unit tests + 1 process-kill integration test + 5 HTTP integration tests passed**; all targets/features compiled with Rust 1.93.1 |
+| Rust workspace | **117 core unit tests + 1 process-kill integration test + 5 HTTP integration tests passed**; all targets/features compiled with Rust 1.93.1 |
 | Real Bitcoin Core integration | **1 separate regtest test passed** using Core 31.1, wallets disabled; maturity at 99/100 confirmations, persistence, shorter/replacement reorgs, invalidated drafts and durable freezes |
 | Formatting / Clippy | `cargo fmt --all --check` and strict all-target/all-feature Clippy passed |
 | Offline schema/fixture/source checks | **23 passed**, 0 failures/errors |
@@ -57,7 +87,7 @@ multi-detector fallback now shared by the camera and instrumentation paths.
 | Approved design integrity | Four SHA-256 references pass; rebuilding HTML from editable sources is byte-identical |
 | Approved design rendering | Chrome for Testing headless shell 152.0.7977.82 rendered at 420×900; screenshot visually inspected; no browser/hardware interaction retested |
 
-That is **91 executed Rust tests**, including the separate regtest run. The default suite
+That is **124 executed Rust tests**, including the separate regtest run. The default suite
 intentionally ignores the real-node test and the process-kill child helper; the regtest
 script runs the former explicitly, and the parent crash test invokes the latter.
 
@@ -139,9 +169,10 @@ strict manual selection and mainnet gates retained.
 
 ## Unfinished gates
 
-QR/UR/BBQr codecs pass Rust tests; native camera/display source and barcode tests await CI.
-Final transaction assembly and persistence pass Rust tests. Bhwi/USB interoperability and
-broadcast remain **unimplemented**. Physical phones, hardware address/policy verification, all signing
+QR/UR/BBQr codecs pass Rust tests and Android independent barcode tests. iOS fixes await
+native revalidation. Final assembly/persistence passes Rust tests; the development bhwi/USB
+adapter passes software checks, with Android compilation and device qualification pending.
+Broadcast remains **unimplemented**. Physical phones, hardware address/policy verification, all signing
 pairs and the full adversarial device matrix have not been tested. Native coverage still
 needs every payment mode, accessibility/text sizes and complete visual comparison.
 Protected production metadata storage, recovery/migration qualification, reproducibility,

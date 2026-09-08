@@ -65,10 +65,11 @@ a cancelled coroutine is not automatically a cancelled native operation.
 
 ## Hardware boundary
 
-`hardware.rs` currently advertises no capabilities and rejects signing. This is a gate,
-not an implementation. Add a pinned bhwi protocol interpreter only after a device spike.
-Its transport independence is useful for Android USB APIs; it does not make iPhone USB
-compatibility automatic. Initial platform goal: Android QR + qualified USB, iPhone QR.
+`hardware.rs` advertises no qualified devices and rejects signing. The development
+[USB adapter](11-usb.md) links a pinned bhwi Ledger interpreter for public-account inspection,
+policy registration and issued-address comparison. Android owns permission and bounded
+USB IO; Rust owns protocol/persistence. These operations do not qualify a model or mark
+addresses verified. Initial platform goal: Android QR + qualified USB, iPhone QR.
 
 Treat wallet registration artifacts (e.g. device-specific tokens) as wallet metadata,
 not signer profiles. They are not private Bitcoin keys but should be protected as metadata.

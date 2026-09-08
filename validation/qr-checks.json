@@ -48,5 +48,27 @@
     "build/qr-fuzz-host.log": "0e10ff2c644489fd333ae137f4f611e6640a6054a59b32bd2ab9467dde97b473",
     "build/qr-bindings.log": "ee446c4a4a6c6c3573f85b6358f342af21c00ac2da8e6c9162997750d5423b65",
     "build/qr-audit.json": "09a14c108a58710e2577f04084921bbde71ec17f5390127456419d771baf1823"
-  }
+  },
+  "native_followups": [
+    {
+      "run": "https://github.com/johnny9/tundra-wallet/actions/runs/34285430052",
+      "source": "579e418bff9cea6b40903e0f76f199d0efb94f4a",
+      "android": "All three instrumentation tests and process-restart check passed, including all public barcode vectors and reviewed-draft QR export.",
+      "ios": "Build and two XCTest tests passed; Vision barcode decoding and UI import failed. Exact subsequent fixes retained in Git."
+    },
+    {
+      "run": "https://github.com/johnny9/tundra-wallet/actions/runs/34287302455",
+      "source": "d68cc23fd514429848ba302f18e5b63823e61c40",
+      "android": "Passed",
+      "ios": "Swift compilation failed because WalletPreview has no id field. Fixed in 650b4d9; rerun pending."
+    },
+    {
+      "run": "https://github.com/johnny9/tundra-wallet/actions/runs/34288415892",
+      "source": "650b4d94dbbb87a344c1d891bbdd85e1d4f2199d",
+      "android": "All three instrumentation tests passed; restart check blocked by captured Quickstep launcher ANR.",
+      "ios": "Build, two non-QR XCTest tests and the full import/sync/payment/restart UI scenario passed. Vision default decoder failed on the first public UR fixture.",
+      "pixel_diagnosis": "Exact attached PNG decodes correctly using host ZXing 3.5.4 single and multi detectors. A test of supported Vision revisions is authored; its actual decoder revision will be recorded.",
+      "png_sha256": "c6e04b9fc3ae61bd97dbc2143587575876a7c695c0e0b68b87beb7a17162a88d"
+    }
+  ]
 }

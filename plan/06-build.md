@@ -14,8 +14,10 @@
   `gradle-wrapper.properties` enforces the distribution checksum. No system Gradle is needed.
 - iOS: SwiftUI starter, iOS 17+, XcodeGen project. Swift 5 language mode initially to avoid
   pretending the not-yet-generated bridge has passed strict Swift 6 concurrency checks.
-- bhwi: **not linked in M1**. Pin an explicit revision after a hardware spike and review
-  license/API/device-transport implications. QR codecs also await selection/testing.
+- bhwi: Ledger-only core pinned to `edfac42caf0d67693660cf1f04c2d24ca6b8f7a1`;
+  its Git miniscript 13 dependency is locked to `ff4732e5f75aa555682343cb180fa72ee3e8e9d5`.
+  [USB implementation and qualification gates](11-usb.md) and [dependency notices](../third-party/README.md)
+  record the software spike; no hardware is qualified. QR codec pins are in Cargo.toml.
 
 The Rust workspace and binding generator compile with Rust 1.93.1 on Linux. The pinned
 `rust-toolchain.toml` and CI use that version; this is a tested compiler, not an MSRV claim.
@@ -25,9 +27,13 @@ Complete native coverage and physical hardware acceptance remain open.
 
 ## Dependency resolution
 
-Cargo.lock was updated by Cargo on September 8, 2026 for sync and reviewed: checksummed crates.io
-dependencies, two workspace packages, no Git dependency sources. Direct BDK/rusqlite/UniFFI
+Cargo.lock was updated by Cargo on September 8, 2026 and reviewed: checksummed crates.io
+packages, two workspace packages and the two immutable Git revisions recorded above. Direct BDK/rusqlite/UniFFI
 pins are unchanged. Build/check scripts require the committed lock and use `--locked`.
+
+CI caches Cargo registries/Git checkouts and build artifacts by OS, architecture, job,
+Rust toolchain and lockfile hash. It still runs every build/test command with the reviewed
+lock; cache hits are not validation results.
 
 Formatting and Clippy warnings are required checks. Third-party CI actions still use version
 tags; pin their commit SHAs after review before a release. The Gradle wrapper is pinned,

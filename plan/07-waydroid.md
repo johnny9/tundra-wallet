@@ -53,4 +53,8 @@ survives Gradle's test cleanup. Reinstalling an empty app is not restart validat
   changed by this account, which has no sudo access. ADB/runtime tests on Waydroid remain
   unexecuted until connectivity and debugging authorization work.
 
+A later recheck confirmed API 33 responds through Waydroid, but no IPv4 lease or ADB device
+appeared. Both observed IPv6 link-local bridge addresses were also tried; neither established
+an ADB connection. No additional sudo operation or firewall change was performed.
+
 Keep the [validation report](VALIDATION.md) as the authority for tests actually executed.

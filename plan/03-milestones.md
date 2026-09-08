@@ -9,7 +9,7 @@ These are ordered work packages, not time estimates.
 | M2: sync + durable coin state | Core reorg checks and both native regtest sync scenarios pass | Explicit test endpoint syncs/reorgs correctly, no keys/labels leak, balance freshness represented, spent/reserved/frozen transitions tested |
 | M3: native coin control + review | Android exact-input and iOS consolidation/restart checks pass; full mode/layout qualification remains | Native exact-input, automatic, max and consolidation flows round-trip through Rust; no UI-only validation; layouts match prototype; interrupted drafts persist |
 | M4: QR external signing | PSBT verification and QR codecs pass software tests; native camera builds/device qualification open | Bounded UR/BBQr sessions interoperate on devices; wrong payloads/transactions rejected; per-input signatures verified; receive/policy comparison works |
-| M5: Android USB / bhwi | Not implemented | Pinned bhwi revision; documented model/firmware/transport matrix; permission, cancellation, reconnect and app lifecycle tests pass |
+| M5: Android USB / bhwi | Bounded pinned protocol and Android adapter authored; software tests pass, native/device qualification open | Pinned bhwi revision; documented model/firmware/transport matrix; permission, cancellation, reconnect and app lifecycle tests pass |
 | M6: signet end-to-end | Final transaction assembly/persistence passes software tests; hardware/broadcast end-to-end open | 2-of-3 QR + USB with restart signs, validates, finalizes and explicitly broadcasts to a configured test backend |
 | M7: hardened release candidate | Not implemented | Protected storage, backup/recovery/migration tests, dependency/license review, independent security review and a clean supported-device matrix |
 

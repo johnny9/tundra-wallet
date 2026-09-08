@@ -10,7 +10,7 @@ It never imports or generates Bitcoin private signing keys.
 > Rust tests, Android debug and iOS simulator builds pass in CI. Android exact-input payment
 > and iOS consolidation/restart runtime tests have passed; broader device qualification remains.
 > Explicit test-network sync and external signature validation are implemented. Hardware
-> integration and broadcast remain unavailable; native QR validation is in progress.
+> signing and broadcast remain unavailable; USB and iOS QR qualification are in progress.
 > Do not fund addresses from the fixtures or use this version with real savings.
 
 ## Start here
@@ -31,17 +31,18 @@ It never imports or generates Bitcoin private signing keys.
 | `tundra-core` | BDK public descriptor validation, receive/change derivation, SQLite snapshots, bounded opt-in Esplora sync | Test networks only; chosen endpoint supplies the chain view |
 | Metadata | Wallet-scoped labels, BIP 329 origins and patch import/export, atomic bulk edits, user freezes | Known references only; development DB is not encrypted |
 | Transactions | Exact/manual and automatic eligible inputs, max/consolidation, saved reviews/reservations, verified external PSBT signatures and immutable final transaction bytes | Every native mode still needs coverage; hardware integration/broadcast unavailable |
-| QR exchange | Bounded UR/BBQr codecs, native camera/display source and independent barcode tests | Rust codecs pass; native QR builds and physical interoperability pending |
+| QR exchange | Bounded UR/BBQr codecs, native camera/display and independent barcode tests | Android barcode tests pass; iOS rerun and physical interoperability pending |
+| USB exchange | Pinned bhwi Ledger protocol, registration persistence and Android adapter source | Native/device qualification pending; signing remains blocked |
 | `tundra-ffi` | Typed UniFFI API; Kotlin and Swift bindings generated and exercised against the host library | Mobile lifecycle/cancellation qualification remains |
 | Android | Compose import, wallets, sync, coin selection/search, bulk metadata and payment review | Exact-input payment instrumentation passed; full mode/device qualification remains |
 | iOS | SwiftUI import, wallets, sync, coin selection/search, metadata and payment review | Consolidation and restart simulator tests passed; full mode/device qualification remains |
 | Design | Exact approved Tundra HTML reference and source | Simulation stays in `design/`, not in the Rust/native wallet |
 | Quality | Rust tests, offline schema/fixture checks, CI and build scripts | See [validation report](plan/VALIDATION.md) for executed versus unexecuted checks |
 
-**bhwi is the selected candidate, not an implemented dependency in this milestone.**
-The hardware boundary returns an explicit unavailable result. The next hardware milestone
-will pin and test a bhwi revision against specific devices. QR exchange remains a separate
-path. There is no stub that returns a fake signature.
+The [development USB adapter](plan/11-usb.md) links a pinned bhwi Ledger interpreter.
+It inspects public accounts, registers policies and compares issued test-network addresses.
+No device is qualified; hardware signing remains gated. QR is a separate exchange path,
+and all external signatures are independently validated against the approved draft.
 
 ## Layout
 
