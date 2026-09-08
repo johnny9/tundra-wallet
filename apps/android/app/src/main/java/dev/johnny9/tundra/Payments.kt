@@ -57,7 +57,7 @@ import dev.johnny9.tundra.generated.*
                 if (mode == 2) {
                     Text("Consolidation sends the selected coins to a fresh internal address in this wallet.")
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(acknowledged, { acknowledged = it }); Text("I understand this links these coins on-chain")
+                        Checkbox(acknowledged, { acknowledged = it }, modifier = Modifier.testTag("consolidationConsent")); Text("I understand this links these coins on-chain")
                     }
                 }
                 OutlinedTextField(fee, { fee = it }, label = { Text("Fee rate in sat/vB") }, modifier = Modifier.fillMaxWidth())

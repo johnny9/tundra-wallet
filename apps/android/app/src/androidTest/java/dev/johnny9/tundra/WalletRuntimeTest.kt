@@ -83,7 +83,65 @@ class WalletRuntimeTest {
             compose.onNode(isToggleable()).performClick()
             compose.onNodeWithText("Start scan").performScrollTo().performClick()
             compose.waitUntil(30_000) { compose.onAllNodesWithText("150 BTC").fetchSemanticsNodes().isNotEmpty() }
+            fun assertSavedPayment(inputs: Int, consolidation: Boolean, oneOutput: Boolean, selected: Set<String>? = null) {
+                Tundra.open(context.noBackupFilesDir.resolve("tundra.sqlite").path).use { core ->
+                    val wallet = core.wallets().single()
+                    val draft = core.drafts(wallet.id).single()
+                    assertEquals(inputs, draft.inputs.size)
+                    assertEquals(consolidation, draft.isConsolidation)
+                    assertEquals("unsigned", draft.state)
+                    assertEquals(625uL, draft.feeSatPerKwu)
+                    assertTrue(draft.feeSats > 0uL)
+                    if (selected != null) assertEquals(selected, draft.inputs.map { it.outpoint }.toSet())
+                    val inputSum = draft.inputs.fold(0uL) { total, input -> total + input.sats }
+                    val outputSum = draft.outputs.fold(0uL) { total, output -> total + output.sats }
+                    assertEquals(inputSum, outputSum + draft.feeSats)
+                    if (oneOutput) assertEquals(1, draft.outputs.size)
+                    if (!consolidation) assertTrue(draft.outputs.any { it.address == recipient && !it.isChange })
+                    assertEquals(draft.inputs.map { it.outpoint }.toSet(), core.coins(wallet.id).filter { it.state == CoinState.RESERVED }.map { it.outpoint }.toSet())
+                }
+            }
+            fun discardAndClose() {
+                compose.waitUntil(10_000) { compose.onAllNodes(hasText("Discard draft and release inputs") and isEnabled()).fetchSemanticsNodes().isNotEmpty() }
+                compose.onNodeWithText("Discard draft and release inputs").performScrollTo().performClick()
+                waitText("Create a payment")
+                compose.waitUntil(10_000) { compose.onAllNodes(hasText("Close") and isEnabled()).fetchSemanticsNodes().isNotEmpty() }
+                compose.onNodeWithText("Close").performScrollTo().performClick()
+                Tundra.open(context.noBackupFilesDir.resolve("tundra.sqlite").path).use { core ->
+                    val wallet = core.wallets().single()
+                    assertTrue(core.drafts(wallet.id).isEmpty())
+                    assertEquals(15_000_000_000uL, wallet.availableSats)
+                }
+            }
+            // No selected coins: exercise the native automatic-input path first.
+            compose.onNodeWithText("Send").performClick()
+            compose.onNodeWithText("Recipient address").performTextInput(recipient)
+            compose.onNodeWithText("Amount in BTC").performTextInput("0.001")
+            compose.onNodeWithText("Fee rate in sat/vB").performTextReplacement("2.5")
+            compose.onNodeWithTag("buildReview").performScrollTo().performClick()
+            waitText("Inputs · 1")
+            assertSavedPayment(1, consolidation = false, oneOutput = false)
+            discardAndClose()
             compose.onNodeWithText("Coins").performClick()
+            for (consolidation in listOf(false, true)) {
+                val coins = compose.onAllNodes(hasContentDescription("Select coin", substring = true))
+                coins[0].performClick(); coins[1].performClick()
+                var exact = emptySet<String>()
+                activity.onActivity { host -> exact = ViewModelProvider(host)[WalletViewModel::class.java].state.value.selected }
+                assertEquals(2, exact.size)
+                compose.onNodeWithText(if (consolidation) "Consolidate" else "Send").performClick()
+                if (consolidation) compose.onNodeWithTag("consolidationConsent").performScrollTo().performClick()
+                else {
+                    compose.onNodeWithText("Max").performClick()
+                    compose.onNodeWithText("Recipient address").performTextInput(recipient)
+                }
+                compose.onNodeWithText("Fee rate in sat/vB").performTextReplacement("2.5")
+                compose.onNodeWithTag("buildReview").performScrollTo().performClick()
+                waitText("Inputs · 2")
+                assertSavedPayment(2, consolidation, oneOutput = true, selected = exact)
+                if (consolidation) compose.onNodeWithText("Consolidation to this wallet").performScrollTo().assertIsDisplayed()
+                discardAndClose()
+            }
             val choices = compose.onAllNodes(hasContentDescription("Select coin", substring = true))
             choices[0].performClick(); choices[1].performClick()
             compose.onNodeWithText("Send").performClick()

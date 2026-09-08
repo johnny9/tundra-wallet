@@ -9,6 +9,38 @@ final class WalletUITests: XCTestCase {
         XCTAssertEqual(toggle.value as? String, "1")
     }
 
+    @MainActor private func tapVisible(_ element: XCUIElement, in app: XCUIApplication) async -> Bool {
+        for _ in 0..<6 { if element.isHittable { break }; app.swipeUp() }
+        let ready = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == true AND enabled == true AND hittable == true"), object: element)
+        guard await XCTWaiter.fulfillment(of: [ready], timeout: 10) == .completed else {
+            XCTFail("The requested payment control was not actionable"); return false
+        }
+        element.tap(); return true
+    }
+    @MainActor private func discardAndClose(_ app: XCUIApplication) async -> Bool {
+        guard await tapVisible(app.buttons["Discard draft and release inputs"], in: app) else { return false }
+        let ready = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == true AND enabled == true"), object: app.buttons["Close"])
+        guard await XCTWaiter.fulfillment(of: [ready], timeout: 10) == .completed else {
+            XCTFail("Discard did not release the review"); return false
+        }
+        app.buttons["Close"].tap()
+        guard app.staticTexts["balance"].waitForExistence(timeout: 10) else {
+            XCTFail("The wallet did not return after discarding the draft"); return false
+        }
+        return true
+    }
+    @MainActor private func enterPayment(_ app: XCUIApplication, recipient: String, amount: String?) {
+        let address = app.textFields["Recipient address"]
+        XCTAssertTrue(address.waitForExistence(timeout: 10)); address.tap(); address.typeText(recipient)
+        if let amount { let field = app.textFields["Amount in BTC"]; field.tap(); field.typeText(amount) }
+        let fee = app.textFields["Fee rate in sat/vB"]
+        fee.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
+        let previous = fee.value as? String ?? ""
+        fee.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: previous.count) + "2.5")
+        XCTAssertEqual(fee.value as? String, "2.5")
+        app.buttons["Done"].tap()
+    }
+
     @MainActor func testImportRestartAndReceive() async throws {
         continueAfterFailure = false
         let app = XCUIApplication()
@@ -38,6 +70,8 @@ final class WalletUITests: XCTestCase {
         XCTAssertEqual(app.staticTexts["balance"].label, "— BTC")
         app.buttons["Receive"].tap()
         XCTAssertTrue(app.staticTexts["Receive index 0"].waitForExistence(timeout: 10))
+        let recipient = app.staticTexts["receiveAddress"].label
+        XCTAssertTrue(recipient.hasPrefix("bcrt1"))
         app.buttons["Close"].tap()
         app.terminate()
         app.launch()
@@ -61,7 +95,28 @@ final class WalletUITests: XCTestCase {
             XCTFail("The explicit test-network scan did not produce its expected balance")
             return // Async XCTest failures otherwise cascade into unrelated payment actions.
         }
+        // Exercise automatic Send, exact Max and exact Send before the final saved
+        // consolidation. Each discarded draft must release inputs for the next mode.
+        app.buttons["Send"].tap()
+        XCTAssertTrue(app.switches["automaticInputs"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.switches["automaticInputs"].value as? String, "1")
+        enterPayment(app, recipient: recipient, amount: "0.001")
+        guard await tapVisible(app.buttons["Review payment"], in: app) else { return }
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label ==[c] %@", "Inputs · 1")).firstMatch.waitForExistence(timeout: 10))
+        guard await discardAndClose(app) else { return }
         app.buttons["Coins"].tap()
+        for max in [true, false] {
+            let coins = app.buttons.matching(identifier: "Select coin")
+            XCTAssertEqual(coins.count, 3)
+            coins.element(boundBy: 0).tap(); coins.element(boundBy: 1).tap()
+            app.buttons["Send"].tap()
+            if max { app.buttons["paymentMode"].tap(); app.buttons["Max"].tap() }
+            else { XCTAssertEqual(app.switches["automaticInputs"].value as? String, "0") }
+            enterPayment(app, recipient: recipient, amount: max ? nil : "0.001")
+            guard await tapVisible(app.buttons["Review payment"], in: app) else { return }
+            XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label ==[c] %@", "Inputs · 2")).firstMatch.waitForExistence(timeout: 10))
+            guard await discardAndClose(app) else { return }
+        }
         let selections = app.buttons.matching(identifier: "Select coin")
         XCTAssertEqual(selections.count, 3)
         selections.element(boundBy: 0).tap()

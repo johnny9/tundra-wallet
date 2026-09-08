@@ -13,10 +13,13 @@ struct PublicTextExport: FileDocument {
     }
 }
 
+private enum PaymentField: Hashable { case recipient, amount, fee, label }
+
 struct PaymentView: View {
     @ObservedObject var model: WalletModel
     @Environment(\.dismiss) private var dismiss
     @State var mode: Int
+    @FocusState private var editing: PaymentField?
     @State private var address = ""
     @State private var amount = ""
     @State private var fee = "2"
@@ -89,17 +92,20 @@ struct PaymentView: View {
                 } else {
                     Section("Payment") {
                         Picker("Mode", selection: $mode) { Text("Send").tag(0); Text("Max").tag(1); Text("Consolidate").tag(2) }
+                            .accessibilityIdentifier("paymentMode")
                         if mode != 2 {
                             TextField("Recipient address", text: $address).textInputAutocapitalization(.never).autocorrectionDisabled()
+                                .focused($editing, equals: .recipient)
                         }
                         if mode == 0 {
                             HStack {
                                 Text("Amount")
                                 TextField("Amount in BTC", text: $amount).keyboardType(.decimalPad)
+                                    .focused($editing, equals: .amount)
                                     .multilineTextAlignment(.trailing)
                                 Text("BTC").foregroundStyle(.secondary)
                             }
-                            Toggle("Automatic eligible inputs", isOn: $automatic)
+                            Toggle("Automatic eligible inputs", isOn: $automatic).accessibilityIdentifier("automaticInputs")
                         }
                         if !automatic || mode != 0 { Text("\(model.selectedCoins.count) exact inputs selected. Change selection in Coins.") }
                         if mode == 2 {
@@ -110,12 +116,14 @@ struct PaymentView: View {
                         HStack {
                             Text("Fee rate")
                             TextField("Fee rate in sat/vB", text: $fee).keyboardType(.decimalPad)
+                                .focused($editing, equals: .fee)
                                 .multilineTextAlignment(.trailing)
                             Text("sat/vB").foregroundStyle(.secondary)
                         }
-                        TextField("Payment label", text: $label)
+                        TextField("Payment label", text: $label).focused($editing, equals: .label)
                         Text("Review reserves inputs and saves an unsigned draft. It does not sign or broadcast.").font(.caption)
                         Button("Review payment") {
+                            editing = nil
                             model.createPayment(mode: mode, address: address, amount: amount, fee: fee,
                                 label: label, automatic: automatic, acknowledge: acknowledged)
                         }.disabled(model.busy)
@@ -124,9 +132,12 @@ struct PaymentView: View {
                 if let error = model.error { Text(error).foregroundStyle(.red) }
             }
             .navigationTitle("Review payment")
-            .toolbar { ToolbarItem(placement: .cancellationAction) {
-                Button(model.review == nil ? "Close" : "Save for later") { model.closeReview(); dismiss() }.disabled(model.busy)
-            } }
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(model.review == nil ? "Close" : "Save for later") { model.closeReview(); dismiss() }.disabled(model.busy)
+                }
+                ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Done") { editing = nil } }
+            }
         }
         .sheet(isPresented: $scanningPSBT, onDismiss: { importTarget = nil }) {
             QrScanView(purpose: .signedPsbt) { data in

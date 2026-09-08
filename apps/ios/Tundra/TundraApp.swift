@@ -117,7 +117,7 @@ struct WalletView: View {
             .sheet(isPresented: Binding(get: { model.received != nil }, set: { if !$0 { model.received = nil } })) {
                 VStack(alignment: .leading, spacing: 20) {
                     Text("Unverified address").font(.title2)
-                    Text(model.received?.address ?? "").font(.system(.body, design: .monospaced))
+                    Text(model.received?.address ?? "").font(.system(.body, design: .monospaced)).accessibilityIdentifier("receiveAddress")
                     Text("Receive index \(model.received?.index ?? 0)").accessibilityIdentifier("receiveIndex")
                     Text("This address has not been verified on hardware. This build is for disposable test descriptors only. Do not fund it.")
                     Button("Close") { model.received = nil }
