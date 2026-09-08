@@ -81,7 +81,7 @@ struct WalletView: View {
                         VStack(alignment: .leading, spacing: 16) {
                             if tab == 0 {
                                 ForEach(model.drafts, id: \.id) { draft in
-                                    Button { model.review = draft; paying = true } label: {
+                                    Button { model.openReview(draft); paying = true } label: {
                                         VStack(alignment: .leading) {
                                             Text(draft.label.isEmpty ? "Saved payment" : draft.label)
                                             Text("Draft · \(draft.state) · \(draft.inputs.count) inputs").font(.caption)

@@ -16,6 +16,7 @@ final class WalletModel: ObservableObject {
     @Published var selectedCoins: Set<String> = []
     @Published var drafts: [PaymentReview] = []
     @Published var review: PaymentReview?
+    @Published var signing: SigningInfo?
     @Published var exportedPSBT: String?
     @Published var labelPreview: LabelImportPreview?
     @Published var exportedLabels: String?
@@ -43,6 +44,7 @@ final class WalletModel: ObservableObject {
     }
     func load() { run { try await self.refresh() } }
     private func refresh() async throws {
+        signing = nil
         wallets = try await service.wallets()
         if !wallets.contains(where: { $0.id == selectedID }) { selectedID = wallets.first?.id }
         if let id = selectedID {
@@ -52,6 +54,10 @@ final class WalletModel: ObservableObject {
             drafts = try await service.drafts(id)
             selectedCoins.formIntersection(coins.filter { $0.state == .available }.map(\.outpoint))
             if let old = review { review = drafts.first { $0.id == old.id } }
+            if let review, review.state != "invalidated" {
+                let progress = try await service.signingProgress(review.walletId, draftID: review.id)
+                if self.review?.id == review.id { signing = progress }
+            }
         } else { coins = []; activity = [] }
     }
     func select(_ id: String) { run { self.selectedID = id; self.received = nil; self.review = nil; self.selectedCoins = []; try await self.refresh() } }
@@ -150,6 +156,17 @@ final class WalletModel: ObservableObject {
         run {
             guard let review = self.review else { return }
             self.exportedPSBT = try await self.service.exportDraft(review.walletId, draftID: review.id)
+        }
+    }
+    func openReview(_ review: PaymentReview) {
+        self.review = review; signing = nil
+        run { try await self.refresh() }
+    }
+    func importSignedDraft(_ url: URL, walletID: String, draftID: String) {
+        run {
+            guard self.selectedID == walletID, self.review?.id == draftID else { return }
+            try await self.service.importSignedDraft(walletID, draftID: draftID, url: url)
+            try await self.refresh()
         }
     }
     func inspectLabels(_ url: URL) {

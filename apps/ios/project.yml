@@ -39,6 +39,8 @@ targets:
       - path: TundraTests
       - path: ../../tests/fixtures/single-sig.txt
         buildPhase: resources
+      - path: ../../tests/fixtures/hwi-signed-wpkh.psbt
+        buildPhase: resources
     dependencies:
       - target: Tundra
   TundraUITests:

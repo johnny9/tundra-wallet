@@ -62,6 +62,13 @@ final class WalletUITests: XCTestCase {
         app.buttons["Review payment"].tap()
         let inputCount = app.staticTexts.matching(NSPredicate(format: "label ==[c] %@", "Inputs · 2")).firstMatch
         XCTAssertTrue(inputCount.waitForExistence(timeout: 10))
+        let signatureCount = app.staticTexts["Input 1: 0 / 1"]
+        for _ in 0..<3 {
+            if signatureCount.exists { break }
+            app.swipeUp()
+        }
+        XCTAssertTrue(signatureCount.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["Import signed PSBT"].exists)
         app.buttons["Save for later"].tap()
         app.terminate()
         app.launch()

@@ -23,6 +23,8 @@ struct PaymentView: View {
     @State private var label = ""
     @State private var automatic = false
     @State private var acknowledged = false
+    @State private var importingPSBT = false
+    @State private var importTarget: (walletID: String, draftID: String)?
     var body: some View {
         NavigationStack {
             Form {
@@ -54,7 +56,17 @@ struct PaymentView: View {
                     }
                     Section {
                         Text("Compare every output on your hardware before signing. Hardware signing is not qualified in this build.")
-                        Button("Export unsigned PSBT") { model.exportDraft() }.disabled(review.state != "unsigned" || model.busy)
+                        if let signing = model.signing, signing.draftId == review.id {
+                            Text("Verified signatures").font(.headline)
+                            ForEach(Array(signing.inputs.enumerated()), id: \.offset) { index, input in
+                                Text("Input \(index + 1): \(input.validSignatures) / \(input.requiredSignatures)")
+                            }
+                            if signing.complete { Text("All required signatures verified. This payment has not been broadcast.") }
+                        }
+                        Button(review.state == "unsigned" ? "Export unsigned PSBT" : "Export PSBT with signatures") { model.exportDraft() }.disabled(review.state == "invalidated" || model.busy)
+                        Button("Import signed PSBT") {
+                            importTarget = (review.walletId, review.id); importingPSBT = true
+                        }.disabled(review.state == "invalidated" || model.busy)
                         Text("PSBT exports are unencrypted wallet metadata.").font(.caption)
                         Button("Discard draft and release inputs", role: .destructive) { model.discardReview() }.disabled(model.busy)
                     }
@@ -103,10 +115,19 @@ struct PaymentView: View {
         .onAppear { automatic = model.selectedCoins.isEmpty }
         .interactiveDismissDisabled(model.busy)
         .fileExporter(isPresented: Binding(get: { model.exportedPSBT != nil }, set: { if !$0 { model.exportedPSBT = nil } }),
-            document: PublicTextExport(model.exportedPSBT ?? ""), contentType: .plainText, defaultFilename: "tundra-unsigned.psbt.txt") { result in
+            document: PublicTextExport(model.exportedPSBT ?? ""), contentType: .plainText, defaultFilename: "tundra-signing.psbt.txt") { result in
                 if case .failure = result { model.error = "PSBT export could not be saved." }
                 model.exportedPSBT = nil
             }
+        .fileImporter(isPresented: $importingPSBT, allowedContentTypes: [.data, .plainText]) { result in
+            if let target = importTarget {
+                switch result {
+                case .success(let url): model.importSignedDraft(url, walletID: target.walletID, draftID: target.draftID)
+                case .failure: model.error = "Signed PSBT file could not be opened."
+                }
+            }
+            importTarget = nil
+        }
     }
 }
 

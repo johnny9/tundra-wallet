@@ -23,10 +23,16 @@ import dev.johnny9.tundra.generated.*
     var automatic by remember { mutableStateOf(s.selected.isEmpty()) }
     var acknowledged by remember { mutableStateOf(false) }
     var exportTarget by remember { mutableStateOf<Pair<String, String>?>(null) }
+    var importTarget by remember { mutableStateOf<Pair<String, String>?>(null) }
     val export = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("text/plain")) { uri ->
         val target = exportTarget
         if (uri != null && target != null) vm.exportDraft(uri, target.first, target.second)
         exportTarget = null
+    }
+    val importSigned = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        val target = importTarget
+        if (uri != null && target != null) vm.importSignedDraft(uri, target.first, target.second)
+        importTarget = null
     }
     ModalBottomSheet(onDismissRequest = { if (!s.busy) onClose() }, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
         Column(Modifier.padding(24.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(14.dp)) {
@@ -74,7 +80,15 @@ import dev.johnny9.tundra.generated.*
                 }
                 Text("Fee: ${review.feeSats} sats${review.feeSatPerKwu?.let { " · ${formatFeeRate(it)} sat/vB requested" } ?: ""}")
                 Text("Compare every output on your hardware before signing. Hardware signing is not qualified in this build.", style = MaterialTheme.typography.bodySmall)
-                OutlinedButton(onClick = { exportTarget = review.walletId to review.id; export.launch("tundra-unsigned.psbt.txt") }, enabled = !s.busy && review.state == "unsigned") { Text("Export unsigned PSBT") }
+                s.signing?.takeIf { it.draftId == review.id }?.let { signing ->
+                    Text("Verified signatures", style = MaterialTheme.typography.titleMedium)
+                    signing.inputs.forEachIndexed { index, input ->
+                        Text("Input ${index + 1}: ${input.validSignatures} / ${input.requiredSignatures}")
+                    }
+                    if (signing.complete) Text("All required signatures verified. This payment has not been broadcast.")
+                }
+                OutlinedButton(onClick = { exportTarget = review.walletId to review.id; export.launch("tundra-signing.psbt.txt") }, enabled = !s.busy && review.state != "invalidated") { Text(if (review.state == "unsigned") "Export unsigned PSBT" else "Export PSBT with signatures") }
+                OutlinedButton(onClick = { importTarget = review.walletId to review.id; importSigned.launch(arrayOf("*/*")) }, enabled = !s.busy && review.state != "invalidated") { Text("Import signed PSBT") }
                 Text("PSBT exports are unencrypted wallet metadata.", style = MaterialTheme.typography.bodySmall)
                 TextButton(onClick = vm::discardReview, enabled = !s.busy) { Text("Discard draft and release inputs") }
             }

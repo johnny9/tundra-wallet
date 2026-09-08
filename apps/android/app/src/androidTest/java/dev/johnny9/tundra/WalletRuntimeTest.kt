@@ -2,6 +2,8 @@
 package dev.johnny9.tundra
 
 import android.content.Context
+import android.net.Uri
+import androidx.lifecycle.ViewModelProvider
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
@@ -82,6 +84,22 @@ class WalletRuntimeTest {
             compose.onNodeWithText("Fee rate in sat/vB").performTextReplacement("2.5")
             compose.onNodeWithTag("buildReview").performScrollTo().performClick()
             waitText("Inputs · 2")
+            waitText("Input 1: 0 / 1")
+            compose.onNodeWithText("Import signed PSBT").performScrollTo().assertIsDisplayed()
+            // Exercise the actual native file reader and byte-array FFI using an unrelated
+            // published response. Its valid signatures must never be counted for this draft.
+            val responseFile = context.cacheDir.resolve("public-response.psbt")
+            InstrumentationRegistry.getInstrumentation().context.assets.open("hwi-signed-wpkh.psbt").use { input ->
+                responseFile.outputStream().use { output -> input.copyTo(output) }
+            }
+            activity.onActivity { host ->
+                val vm = ViewModelProvider(host)[WalletViewModel::class.java]
+                val review = checkNotNull(vm.state.value.review)
+                vm.importSignedDraft(Uri.fromFile(responseFile), review.walletId, review.id)
+            }
+            waitText("Invalid input: signing response does not match the approved draft")
+            compose.onNodeWithText("Input 1: 0 / 1").performScrollTo().assertIsDisplayed()
+            responseFile.delete()
             compose.onNodeWithText("Save for later").performScrollTo().performClick()
             activity.recreate()
             waitText("Activity")
@@ -95,6 +113,10 @@ class WalletRuntimeTest {
             assertEquals(625uL, draft.feeSatPerKwu)
             assertEquals(2, core.coins(wallet.id).count { it.state == CoinState.RESERVED })
             assertEquals(draft.inputs.sumOf { it.sats }, draft.outputs.sumOf { it.sats } + draft.feeSats)
+            val signing = core.signingProgress(wallet.id, draft.id)
+            assertFalse(signing.complete)
+            assertTrue(signing.inputs.all { it.validSignatures == 0u && it.requiredSignatures == 1u })
+            assertEquals(core.exportUnsignedPsbt(wallet.id, draft.id), core.exportSigningPsbt(wallet.id, draft.id))
         }
     }
 }

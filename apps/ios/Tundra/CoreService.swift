@@ -32,7 +32,12 @@ actor CoreService {
     func drafts(_ id: String) throws -> [PaymentReview] { try engine().drafts(walletId: id) }
     func create(_ request: PaymentRequest) throws -> PaymentReview { try engine().createDraft(request: request) }
     func discard(_ walletID: String, draftID: String) throws { try engine().discardDraft(walletId: walletID, draftId: draftID) }
-    func exportDraft(_ walletID: String, draftID: String) throws -> String { try engine().exportUnsignedPsbt(walletId: walletID, draftId: draftID) }
+    func exportDraft(_ walletID: String, draftID: String) throws -> String { try engine().exportSigningPsbt(walletId: walletID, draftId: draftID) }
+    func signingProgress(_ walletID: String, draftID: String) throws -> SigningInfo { try engine().signingProgress(walletId: walletID, draftId: draftID) }
+    func importSignedDraft(_ walletID: String, draftID: String, url: URL) throws {
+        let payload = try readBytes(url, max: 1_398_106)
+        _ = try engine().acceptSignedPsbt(walletId: walletID, draftId: draftID, payload: payload)
+    }
     func editCoins(_ id: String, outpoints: [String], label: String?, frozen: Bool?) throws {
         try engine().editCoins(walletId: id, outpoints: outpoints, label: label, frozen: frozen)
     }
@@ -50,6 +55,10 @@ actor CoreService {
     func readDescriptor(_ url: URL) throws -> String { try readText(url, max: 32_768) }
     func readLabels(_ url: URL) throws -> String { try readText(url, max: 2 * 1024 * 1024) }
     private func readText(_ url: URL, max: Int) throws -> String {
+        guard let text = String(data: try readBytes(url, max: max), encoding: .utf8) else { throw CocoaError(.fileReadCorruptFile) }
+        return text
+    }
+    private func readBytes(_ url: URL, max: Int) throws -> Data {
         let accessed = url.startAccessingSecurityScopedResource()
         defer { if accessed { url.stopAccessingSecurityScopedResource() } }
         let handle = try FileHandle(forReadingFrom: url)
@@ -61,9 +70,9 @@ actor CoreService {
             if chunk.isEmpty { break }
             data.append(chunk)
         }
-        guard data.count <= max, let text = String(data: data, encoding: .utf8) else {
+        guard data.count <= max else {
             throw CocoaError(.fileReadCorruptFile)
         }
-        return text
+        return data
     }
 }

@@ -23,7 +23,7 @@ data class WalletState(
     val labelPreview: LabelImportPreview? = null,
     val endpoint: String = "", val sync: SyncInfo? = null,
     val selected: Set<String> = emptySet(), val drafts: List<PaymentReview> = emptyList(),
-    val review: PaymentReview? = null
+    val review: PaymentReview? = null, val signing: SigningInfo? = null
 ) { val wallet: WalletInfo? get() = wallets.firstOrNull { it.id == selectedId } }
 
 class WalletViewModel(application: Application) : AndroidViewModel(application) {
@@ -58,7 +58,11 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         val drafts = if (id == null) emptyList() else withContext(Dispatchers.IO) { engine().drafts(id) }
         val selected = mutable.value.selected.intersect(coins.filter { it.state == CoinState.AVAILABLE }.map { it.outpoint }.toSet())
         val review = mutable.value.review?.let { old -> drafts.firstOrNull { it.id == old.id } }
-        mutable.value = mutable.value.copy(wallets = wallets, selectedId = id, coins = coins, activity = activity, endpoint = endpoint, drafts = drafts, selected = selected, review = review)
+        mutable.value = mutable.value.copy(wallets = wallets, selectedId = id, coins = coins, activity = activity, endpoint = endpoint, drafts = drafts, selected = selected, review = review, signing = null)
+        if (review != null && review.state != "invalidated") {
+            val signing = withContext(Dispatchers.IO) { engine().signingProgress(review.walletId, review.id) }
+            if (mutable.value.review?.id == review.id) mutable.value = mutable.value.copy(signing = signing)
+        }
     }
     fun select(id: String) = run { mutable.value = mutable.value.copy(selectedId = id, receive = null, selected = emptySet(), review = null); refresh() }
     fun appearance(dark: Boolean) { preferences.edit().putBoolean("dark", dark).apply(); mutable.value = mutable.value.copy(dark = dark) }
@@ -102,8 +106,8 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         withContext(Dispatchers.IO) { engine().editCoins(checkNotNull(s.selectedId), s.selected.toList(), label, frozen) }
         refresh()
     }
-    fun openReview(review: PaymentReview) { mutable.value = mutable.value.copy(review = review) }
-    fun closeReview() { mutable.value = mutable.value.copy(review = null) }
+    fun openReview(review: PaymentReview) { mutable.value = mutable.value.copy(review = review, signing = null); run { refresh() } }
+    fun closeReview() { mutable.value = mutable.value.copy(review = null, signing = null) }
     fun createPayment(mode: Int, address: String, amount: String, fee: String, label: String, automatic: Boolean, acknowledge: Boolean) = run {
         val s = mutable.value
         val review = withContext(Dispatchers.IO) {
@@ -125,11 +129,17 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     }
     fun exportDraft(uri: Uri, walletId: String, draftId: String) = run {
         withContext(Dispatchers.IO) {
-            val payload = engine().exportUnsignedPsbt(walletId, draftId)
+            val payload = engine().exportSigningPsbt(walletId, draftId)
             getApplication<Application>().contentResolver.openOutputStream(uri, "wt")?.use {
                 it.write(payload.toByteArray(Charsets.US_ASCII)); it.flush()
             } ?: error("Could not open output")
         }
+    }
+    fun importSignedDraft(uri: Uri, walletId: String, draftId: String) = run {
+        require(mutable.value.selectedId == walletId && mutable.value.review?.id == draftId) { "Review changed" }
+        val payload = readBytesBounded(uri, 1_398_106)
+        withContext(Dispatchers.IO) { engine().acceptSignedPsbt(walletId, draftId, payload) }
+        refresh()
     }
     fun sync(endpoint: String, consent: Boolean) = run {
         val id = checkNotNull(mutable.value.selectedId)
@@ -190,6 +200,9 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
     private suspend fun readBounded(uri: Uri, max: Int): String = withContext(Dispatchers.IO) {
+        Charsets.UTF_8.newDecoder().decode(java.nio.ByteBuffer.wrap(readBytesBounded(uri, max))).toString()
+    }
+    private suspend fun readBytesBounded(uri: Uri, max: Int): ByteArray = withContext(Dispatchers.IO) {
         getApplication<Application>().contentResolver.openInputStream(uri)?.use {
             val output = java.io.ByteArrayOutputStream()
             val buffer = ByteArray(8192)
@@ -200,8 +213,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
                 output.write(buffer, 0, count)
                 require(output.size() <= max) { "File too large" }
             }
-            val bytes = output.toByteArray()
-            Charsets.UTF_8.newDecoder().decode(java.nio.ByteBuffer.wrap(bytes)).toString()
+            output.toByteArray()
         } ?: error("Could not open input")
     }
 }

@@ -2,6 +2,32 @@ import XCTest
 @testable import Tundra
 
 final class RuntimeTests: XCTestCase {
+    func testSignedFileBoundsAndBinaryFFI() async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let fixture = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "hwi-signed-wpkh", withExtension: "psbt"))
+        let base64 = try String(contentsOf: fixture, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines)
+        let binary = try XCTUnwrap(Data(base64Encoded: base64))
+        let file = directory.appendingPathComponent("response.psbt")
+        try binary.write(to: file)
+        let service = CoreService()
+        do {
+            try await service.importSignedDraft("missing-wallet", draftID: "missing-draft", url: file)
+            XCTFail("A public response cannot create a draft or wallet")
+        } catch AppError.Operation(_, let detail) {
+            // Reaching wallet lookup proves the binary file crossed the real mobile FFI
+            // and passed PSBT parsing. No app-private state or signatures can be added.
+            XCTAssertEqual(detail, "Wallet, draft or coin was not found")
+        }
+        try Data(repeating: 0, count: 1_398_107).write(to: file)
+        do {
+            try await service.importSignedDraft("missing-wallet", draftID: "missing-draft", url: file)
+            XCTFail("Oversized files must fail before reaching the wallet core")
+        } catch let error as CocoaError {
+            XCTAssertEqual(error.code, .fileReadCorruptFile)
+        }
+    }
     func testNativeReopenAndCancellation() throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
