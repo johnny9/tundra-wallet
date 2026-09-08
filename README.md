@@ -50,7 +50,7 @@ apps/ios/           SwiftUI starter + XcodeGen specification
 plan/               Requirements, roadmap, risks, validation, build decisions
 design/             Approved visual reference and third-party attribution
 tests/fixtures/     Public test descriptors only; NEVER FUND
-scripts/            Verification, binding/build and GitHub publishing helpers
+scripts/            Verification and native binding/build helpers
 ```
 
 ## Build on a connected development machine
@@ -80,7 +80,8 @@ For the subset that can run without Rust, use `python3 scripts/check_offline.py`
 
 ### Android
 
-Use JDK 17+, Android SDK 36, a configured Android NDK, and Gradle 8.13.
+Use JDK 17+, Android SDK 36, build-tools 36.0.0 and NDK 27.2.12479018.
+The committed wrapper supplies Gradle 8.13 and verifies its distribution checksum.
 The scripts do not silently accept SDK licenses or download executables with `curl | sh`.
 
 ```sh
@@ -88,13 +89,14 @@ rustup target add aarch64-linux-android x86_64-linux-android
 cargo install cargo-ndk --locked
 ./scripts/build-android.sh
 # Open apps/android in Android Studio, or:
-cd apps/android && gradle --no-daemon :app:assembleDebug
+cd apps/android && ./gradlew --no-daemon :app:assembleDebug :app:testDebugUnitTest
 ```
 
 The build script generates Kotlin bindings from this repository's compiled library and
-builds the two Android ABIs. A Gradle wrapper is intentionally not faked: when Gradle 8.13
-is installed, run `gradle wrapper --gradle-version 8.13`, review its distribution checksum,
-and commit the wrapper. Native CI remains a compile gate, not a previously passing build.
+builds the two Android ABIs. JVM tests call the host library built by the same script.
+If using a custom `CARGO_TARGET_DIR`, pass its absolute `debug` path to Gradle with
+`-Ptundra.hostLibraryDir=/path/to/target/debug`. Native runtime/device gates are tracked in
+the [validation report](plan/VALIDATION.md).
 
 ### iOS (macOS / Xcode required)
 

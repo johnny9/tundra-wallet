@@ -7,6 +7,9 @@
 - UniFFI `=0.32.0`; generate Kotlin and Swift from the compiled library metadata.
 - Android: Kotlin/Compose, AGP `8.13.2`, Gradle `8.13`, JDK 17+, compile/target SDK 36,
   min SDK 28, Kotlin `2.2.21`, Compose BOM `2025.12.00`.
+- The Gradle 8.13 wrapper was generated with the official distribution, then both the
+  distribution and wrapper JAR were checked against Gradle's published SHA-256 values.
+  `gradle-wrapper.properties` enforces the distribution checksum. No system Gradle is needed.
 - iOS: SwiftUI starter, iOS 17+, XcodeGen project. Swift 5 language mode initially to avoid
   pretending the not-yet-generated bridge has passed strict Swift 6 concurrency checks.
 - bhwi: **not linked in M1**. Pin an explicit revision after a hardware spike and review
@@ -23,8 +26,9 @@ dependencies, two workspace packages, no Git dependency sources. Direct BDK/rusq
 pins are unchanged. Build/check scripts require the committed lock and use `--locked`.
 
 Formatting and Clippy warnings are required checks. Third-party CI actions still use version
-tags; pin their commit SHAs after review before a release. A Rust lock does not lock Gradle
-dependencies, SDK downloads, cargo-ndk installation or the Xcode host.
+tags; pin their commit SHAs after review before a release. The Gradle wrapper is pinned,
+but Gradle dependencies, SDK downloads, cargo-ndk installation and the Xcode host still
+need reproducibility review.
 
 ## Build commands
 

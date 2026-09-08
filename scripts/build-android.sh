@@ -10,4 +10,4 @@ cargo ndk --version >/dev/null || { echo 'Install cargo-ndk using cargo install 
 ./scripts/generate-bindings.sh
 cargo ndk --platform 28 -t arm64-v8a -t x86_64 \
   -o apps/android/app/src/main/jniLibs build --locked --release -p tundra-ffi --lib
-echo 'Rust JNI libraries built. Build the app using Android Studio or Gradle 8.13.'
+echo 'Rust JNI libraries built. Run apps/android/gradlew -p apps/android :app:assembleDebug.'
