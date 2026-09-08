@@ -207,6 +207,76 @@ impl From<core::FinalizedReview> for FinalTransactionInfo {
         }
     }
 }
+#[derive(Debug, Clone, uniffi::Enum)]
+pub enum UsbOperation {
+    Inspect,
+    RegisterPolicy,
+    VerifyReceive { index: u32 },
+    SignDraft { draft_id: String },
+}
+#[derive(Debug, Clone, Copy, uniffi::Enum)]
+pub enum UsbState {
+    Waiting,
+    Complete,
+    Cancelled,
+    Failed,
+}
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct UsbInfo {
+    pub state: UsbState,
+    pub step: u32,
+    pub packets: Vec<Vec<u8>>,
+    pub app_version: Option<String>,
+    pub fingerprint: Option<String>,
+}
+impl From<core::usb::Update> for UsbInfo {
+    fn from(value: core::usb::Update) -> Self {
+        Self {
+            state: match value.state {
+                core::usb::State::Waiting => UsbState::Waiting,
+                core::usb::State::Complete => UsbState::Complete,
+                core::usb::State::Cancelled => UsbState::Cancelled,
+                core::usb::State::Failed => UsbState::Failed,
+            },
+            step: value.step,
+            packets: value.packets,
+            app_version: value.app_version,
+            fingerprint: value.fingerprint,
+        }
+    }
+}
+#[derive(uniffi::Object)]
+pub struct UsbConnection {
+    session: Mutex<core::usb::UsbSession>,
+}
+#[uniffi::export]
+impl UsbConnection {
+    pub fn progress(&self) -> Result<UsbInfo> {
+        Ok(self
+            .session
+            .lock()
+            .map_err(|_| core::Error::Poisoned)?
+            .progress()
+            .into())
+    }
+    pub fn receive(&self, step: u32, report: Vec<u8>) -> Result<UsbInfo> {
+        Ok(self
+            .session
+            .lock()
+            .map_err(|_| core::Error::Poisoned)?
+            .receive(step, &report)?
+            .into())
+    }
+    pub fn cancel(&self) -> Result<UsbInfo> {
+        Ok(self
+            .session
+            .lock()
+            .map_err(|_| core::Error::Poisoned)?
+            .cancel()
+            .into())
+    }
+}
+
 #[derive(Debug, Clone, Copy, uniffi::Enum)]
 pub enum QrEncoding {
     Ur,
@@ -599,6 +669,21 @@ impl Tundra {
     }
     pub fn export_signing_psbt(&self, wallet_id: String, draft_id: String) -> Result<String> {
         Ok(self.core.export_signing_psbt(&wallet_id, &draft_id)?)
+    }
+    pub fn prepare_usb(
+        &self,
+        wallet_id: String,
+        operation: UsbOperation,
+    ) -> Result<Arc<UsbConnection>> {
+        let operation = match operation {
+            UsbOperation::Inspect => core::usb::Operation::Inspect,
+            UsbOperation::RegisterPolicy => core::usb::Operation::RegisterPolicy,
+            UsbOperation::VerifyReceive { index } => core::usb::Operation::VerifyReceive { index },
+            UsbOperation::SignDraft { draft_id } => core::usb::Operation::SignDraft { draft_id },
+        };
+        Ok(Arc::new(UsbConnection {
+            session: Mutex::new(self.core.prepare_usb(&wallet_id, operation)?),
+        }))
     }
     pub fn finalize_draft(
         &self,

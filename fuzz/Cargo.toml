@@ -21,3 +21,10 @@ bench = false
 
 [workspace]
 members = ["."]
+
+[[bin]]
+name = "usb_protocol"
+path = "fuzz_targets/usb_protocol.rs"
+test = false
+doc = false
+bench = false

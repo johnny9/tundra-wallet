@@ -119,6 +119,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
 
 [[package]]
+name = "base64ct"
+version = "1.8.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2af50177e190e07a26ab74f8b1efbfe2ef87da2116221318cb1c2e82baf7de06"
+
+[[package]]
 name = "basic-toml"
 version = "0.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -137,7 +143,7 @@ dependencies = [
  "flate2",
  "log",
  "radix_fmt",
- "thiserror",
+ "thiserror 2.0.20",
 ]
 
 [[package]]
@@ -148,7 +154,7 @@ checksum = "c290eff038799a8ac0c5a82b6160a9ca456baa299a6f22b262c771342d2846c0"
 dependencies = [
  "bdk_core",
  "bitcoin",
- "miniscript",
+ "miniscript 12.3.7",
  "serde",
 ]
 
@@ -171,7 +177,7 @@ checksum = "1284fb23acc3e3022673712b55f4d5ce7e38aadc2c49bbef830dc3935f0a3289"
 dependencies = [
  "bdk_chain",
  "bitcoin",
- "miniscript",
+ "miniscript 12.3.7",
  "rand_core 0.6.4",
  "serde",
  "serde_json",
@@ -182,6 +188,19 @@ name = "bech32"
 version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32637268377fc7b10a8c6d51de3e7fba1ce5dd371a96e342b34e6078db558e7f"
+
+[[package]]
+name = "bhwi"
+version = "0.0.1"
+source = "git+https://github.com/wizardsardine/bhwi?rev=edfac42caf0d67693660cf1f04c2d24ca6b8f7a1#edfac42caf0d67693660cf1f04c2d24ca6b8f7a1"
+dependencies = [
+ "base64ct",
+ "bitcoin",
+ "log",
+ "miniscript 13.0.0",
+ "serde_json",
+ "thiserror 1.0.69",
+]
 
 [[package]]
 name = "bitcoin"
@@ -306,7 +325,7 @@ dependencies = [
  "semver",
  "serde",
  "serde_json",
- "thiserror",
+ "thiserror 2.0.20",
 ]
 
 [[package]]
@@ -944,6 +963,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "miniscript"
+version = "13.0.0"
+source = "git+https://github.com/rust-bitcoin/rust-miniscript.git?rev=ff4732e5#ff4732e5f75aa555682343cb180fa72ee3e8e9d5"
+dependencies = [
+ "bech32",
+ "bitcoin",
+ "hex-conservative 1.3.0",
+]
+
+[[package]]
 name = "mio"
 version = "1.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1041,7 +1070,7 @@ dependencies = [
  "rustc-hash",
  "rustls",
  "socket2",
- "thiserror",
+ "thiserror 2.0.20",
  "tokio",
  "tracing",
  "web-time",
@@ -1063,7 +1092,7 @@ dependencies = [
  "rustls",
  "rustls-pki-types",
  "slab",
- "thiserror",
+ "thiserror 2.0.20",
  "tinyvec",
  "tracing",
  "web-time",
@@ -1546,11 +1575,31 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
+version = "1.0.69"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b6aaf5339b578ea85b50e080feb250a3e8ae8cfcdff9a461c9ec2904bc923f52"
+dependencies = [
+ "thiserror-impl 1.0.69",
+]
+
+[[package]]
+name = "thiserror"
 version = "2.0.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ec86235f5fcc2a73650310756d2ac5b138a5780bbbdfae3eeccec992c435ba4f"
 dependencies = [
- "thiserror-impl",
+ "thiserror-impl 2.0.20",
+]
+
+[[package]]
+name = "thiserror-impl"
+version = "1.0.69"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4fee6c4efc90059e10f81e6d42c60a18f76588c3d74cb83a0b242a2b6c7504c1"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
 ]
 
 [[package]]
@@ -1741,8 +1790,10 @@ dependencies = [
  "base64 0.22.1",
  "bbqr",
  "bdk_wallet",
+ "bhwi",
  "data-encoding",
  "flate2",
+ "log",
  "minicbor",
  "qrcode",
  "reqwest",
@@ -1750,7 +1801,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tempfile",
- "thiserror",
+ "thiserror 2.0.20",
  "tokio",
  "ur",
 ]
@@ -1759,7 +1810,7 @@ dependencies = [
 name = "tundra-ffi"
 version = "0.1.0-dev.1"
 dependencies = [
- "thiserror",
+ "thiserror 2.0.20",
  "tundra-core",
  "uniffi",
 ]

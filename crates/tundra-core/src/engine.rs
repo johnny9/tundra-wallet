@@ -65,7 +65,7 @@ impl Core {
         )?;
         let migration = conn.transaction_with_behavior(TransactionBehavior::Immediate)?;
         let version: i64 = migration.query_row("PRAGMA user_version", [], |r| r.get(0))?;
-        if version > 4 {
+        if version > 5 {
             return Err(Error::CorruptState);
         }
         migration.execute_batch(include_str!("schema.sql"))?;
@@ -1004,7 +1004,7 @@ mod tests {
                 .unwrap()
                 .query_row("PRAGMA user_version", [], |r| r.get::<_, u32>(0))
                 .unwrap(),
-            4
+            5
         );
     }
     #[test]

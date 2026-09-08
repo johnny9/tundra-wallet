@@ -63,7 +63,7 @@ class SchemaChecks(unittest.TestCase):
     def draft(self, wallet="a", ident="draft"):
         self.db.execute("INSERT INTO drafts VALUES(?,?, 'UNSIGNED_TEST_MARKER','{}','',1)", (ident, wallet))
     def test_version_and_foreign_keys(self):
-        self.assertEqual(self.db.execute("PRAGMA user_version").fetchone()[0], 4)
+        self.assertEqual(self.db.execute("PRAGMA user_version").fetchone()[0], 5)
         self.assertEqual(self.db.execute("PRAGMA foreign_keys").fetchone()[0], 1)
     def test_unknown_sync_is_null_not_zero(self):
         self.assertIsNone(self.db.execute("SELECT synced_at FROM wallets WHERE id='a'").fetchone()[0])
@@ -185,7 +185,7 @@ class FixtureAndSourceChecks(unittest.TestCase):
         self.assertEqual([p.get(android+"name") for p in root.findall("uses-permission")],
                          ["android.permission.INTERNET", "android.permission.CAMERA"])
         self.assertEqual([(f.get(android+"name"), f.get(android+"required")) for f in root.findall("uses-feature")],
-                         [("android.hardware.camera.any", "false")])
+                         [("android.hardware.camera.any", "false"), ("android.hardware.usb.host", "false")])
     def test_no_bdk_bhwi_direct_imports_in_native_ui(self):
         for path in (ROOT/"apps").rglob("*"):
             if path.suffix in (".kt", ".swift"):

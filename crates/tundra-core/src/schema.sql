@@ -58,4 +58,12 @@ CREATE TABLE IF NOT EXISTS finalized_drafts (
     PRIMARY KEY (wallet_id, draft_id),
     FOREIGN KEY (wallet_id, draft_id) REFERENCES drafts(wallet_id, id) ON DELETE CASCADE
 );
-PRAGMA user_version = 4;
+-- Wallet-owned policy authentication tokens; this is not a signer directory.
+CREATE TABLE IF NOT EXISTS hardware_registrations (
+    wallet_id TEXT NOT NULL REFERENCES wallets(id) ON DELETE CASCADE,
+    fingerprint TEXT NOT NULL CHECK(length(fingerprint)=8),
+    policy_id BLOB NOT NULL CHECK(length(policy_id)=32),
+    hmac BLOB NOT NULL CHECK(length(hmac)=32),
+    PRIMARY KEY (wallet_id, fingerprint, policy_id)
+);
+PRAGMA user_version = 5;

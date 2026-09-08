@@ -10,6 +10,7 @@ mod model;
 pub mod qr;
 pub mod signing;
 mod sync;
+pub mod usb;
 pub use engine::Core;
 pub use error::{Error, Result};
 pub use model::*;

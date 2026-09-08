@@ -11,6 +11,7 @@ base64 --decode tests/fixtures/ledger-wpkh-two-inputs.psbt > build/fuzz-corpus/l
 cp tests/fixtures/qr-registry-psbt.ur build/fuzz-corpus/
 python3 - <<'PY'
 import json, pathlib
+pathlib.Path('build/fuzz-corpus/usb-response').write_bytes(bytes([1, 1, 5, 0, 0, 0, 2, 0x90, 0]) + bytes(55))
 vectors = json.loads(pathlib.Path('tests/fixtures/qr-bbqr-vectors.json').read_text())
 for vector in vectors['vectors']:
     pathlib.Path('build/fuzz-corpus/qr-bbqr-' + vector['encoding']).write_text('\n'.join(vector['frames']))
@@ -18,5 +19,16 @@ PY
 printf '%s\n' '{"type":"output","ref":"test:0","label":"Unicode 🧊","spendable":false}' > build/fuzz-corpus/label.jsonl
 CARGO_NET_OFFLINE=true cargo +nightly-2026-09-07 fuzz run public_parsers build/fuzz-corpus -- \
   -max_total_time="${TUNDRA_FUZZ_SECONDS:-60}" -max_len=32769 -rss_limit_mb=2048 \
+  -artifact_prefix=build/fuzz-artifacts/
+mkdir -p build/usb-fuzz-corpus
+python3 - <<'SEEDS'
+from pathlib import Path
+# Unknown/short Merkle requests and direct success/refusal, after the public handshake.
+for code in [0x10, 0x40, 0x41, 0x42, 0xa0]:
+    Path(f"build/usb-fuzz-corpus/merkle-{code}").write_bytes(bytes([3, 1, code]))
+Path("build/usb-fuzz-corpus/info").write_bytes(bytes([0, 0, 1, 12]) + b"Bitcoin Test\x052.4.1\x01\x00")
+SEEDS
+CARGO_NET_OFFLINE=true cargo +nightly-2026-09-07 fuzz run usb_protocol build/usb-fuzz-corpus -- \
+  -max_total_time="${TUNDRA_FUZZ_SECONDS:-60}" -max_len=4097 -rss_limit_mb=2048 \
   -artifact_prefix=build/fuzz-artifacts/
 cmp fuzz/Cargo.lock build/fuzz-lock-before

@@ -3,12 +3,38 @@ use libfuzzer_sys::fuzz_target;
 use tundra_core::{Network, amount, descriptor, labels};
 
 fuzz_target!(|data: &[u8]| {
+    // USB framing receives arbitrary report sequences and short final reads. A failed or
+    // complete reader must never accept a subsequent response in the same exchange.
+    let mut reader = tundra_core::usb::framing::ResponseReader::default();
+    for report in data.chunks(64).take(72) {
+        match reader.receive(report) {
+            Ok(Some(payload)) => {
+                assert!((2..=4096).contains(&payload.len()));
+                assert!(reader.receive(report).is_err());
+                break;
+            }
+            Err(_) => {
+                assert!(reader.receive(report).is_err());
+                break;
+            }
+            Ok(None) => {}
+        }
+    }
+    let _ = tundra_core::usb::framing::command_reports(data);
     if let Ok(psbt) = tundra_core::signing::parse_response(data) {
         assert_eq!(psbt.version, 0);
-        assert_eq!(tundra_core::signing::parse_response(&psbt.serialize()).unwrap(), psbt);
+        assert_eq!(
+            tundra_core::signing::parse_response(&psbt.serialize()).unwrap(),
+            psbt
+        );
     }
     if let Ok(text) = std::str::from_utf8(data) {
-        for purpose in [tundra_core::qr::QrPurpose::SignedPsbt, tundra_core::qr::QrPurpose::Descriptor { network: Network::Signet }] {
+        for purpose in [
+            tundra_core::qr::QrPurpose::SignedPsbt,
+            tundra_core::qr::QrPurpose::Descriptor {
+                network: Network::Signet,
+            },
+        ] {
             let mut decoder = tundra_core::qr::QrDecoder::new(purpose);
             // Newlines model sequential scanner frames without unbounded per-case work.
             for frame in text.split('\n').take(32) {
