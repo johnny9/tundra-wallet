@@ -1,0 +1,31 @@
+{
+  "retrieved_at": "2026-09-08T21:11:29.513127+00:00",
+  "sources": [
+    {
+      "repository": "bitcoin-core/HWI",
+      "source_commit": "7625779b09078a48221833363762114bd24169dd",
+      "source_url": "https://github.com/bitcoin-core/HWI/blob/7625779b09078a48221833363762114bd24169dd/docs/examples/bitcoin-core-usage.rst",
+      "license": "MIT",
+      "files": {
+        "hwi-signed-wpkh.psbt": "d58d91e41bfe67335512123c6a999a82b4d37ac57332a1acc7fa1ecb197b013c"
+      }
+    },
+    {
+      "repository": "LedgerHQ/app-bitcoin-new",
+      "source_commit": "04cdef8b340e31775689d36858c509511e815e07",
+      "source_url": "https://github.com/LedgerHQ/app-bitcoin-new/blob/04cdef8b340e31775689d36858c509511e815e07/test_vectors/sign_psbt.toml",
+      "license": "Apache-2.0",
+      "files": {
+        "ledger-wpkh-two-inputs.psbt": "d6573d58674cdc98c5afc9e7f17ae6e3417cca767d3b729518b33aaeebfd1c6c",
+        "ledger-wpkh-two-inputs.json": "2af52f3496e098351ca929bbb74c7b1716d16398b2f8f36bed87c6acc79a437f"
+      }
+    },
+    {
+      "source_url": "https://mempool.space/tx/3dfe302dc91e27edb25f4713e511bcdf178854a3804d54f292c5961f14f9c843",
+      "kind": "public Bitcoin transaction and prevout facts",
+      "files": {
+        "public-signed-multisig.json": "29c3365e5677716b156982fdd3c410722b5a348586563481f99b48f94f19527d"
+      }
+    }
+  ]
+}

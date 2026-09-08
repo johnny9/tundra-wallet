@@ -17,7 +17,7 @@
 descriptor/BIP329 seeds, checksum repair for deeper descriptor mutations, and a bounded
 runtime (60 seconds by default). Toolchain: nightly-2026-09-07; cargo-fuzz 0.13.2;
 libfuzzer-sys 0.4.12. Its separate lock is committed and checked for changes. It covers
-descriptor, label and amount parsing; PSBT/QR fuzzing awaits those implementations.
+descriptor, label, amount and bounded binary/base64 PSBT parsing; QR fuzzing awaits its codecs.
 
 The `crash` integration test kills a child process after a durable receive/label commit and
 during an uncommitted snapshot/metadata write, then checks reopening, index non-reuse and

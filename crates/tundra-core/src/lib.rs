@@ -1,5 +1,5 @@
 //! Tundra's UI-independent, public-descriptor-only application core.
-//! Development milestone: no chain backend, signature acceptance, finalization, or broadcast.
+//! Test-network development; hardware qualification and release gates remain open.
 pub mod amount;
 pub mod descriptor;
 mod engine;
@@ -7,6 +7,7 @@ mod error;
 pub mod hardware;
 pub mod labels;
 mod model;
+pub mod signing;
 mod sync;
 pub use engine::Core;
 pub use error::{Error, Result};

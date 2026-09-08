@@ -16,7 +16,7 @@ approval system, or cloud account.
 
 - Source: descriptor-first watch-only engine, metadata, unsigned-draft core, UniFFI API,
   Android native import shell, iOS native starter, tests and CI.
-- Verified: 76 Rust tests including real regtest, 23 offline checks, parser fuzzing/audit,
+- Verified: 91 Rust tests including real regtest, 23 offline checks, parser fuzzing/audit,
   Android debug APK and iOS simulator builds, host FFI smoke tests, Android exact-input
   payment/process-restart checks and iOS consolidation/process-restart checks.
   See [VALIDATION.md](VALIDATION.md) for the exact results and remaining gates.
@@ -24,8 +24,10 @@ approval system, or cloud account.
   reorg-safe draft invalidation, and a keyless Bitcoin Core regtest integration test.
 - Added: native search/filter/selection, payment/max/consolidation review and saved drafts;
   decimal fee rates and atomic bulk coin metadata. Broader native qualification remains.
+- Added: bounded external PSBT validation, per-input cryptographic signature progress,
+  immutable approvals and atomic signature persistence. Native file integration is in progress.
 - Not implemented: real QR/USB transport, bhwi device integration,
-  signed-response validation, finalization/broadcast, production storage protection.
+  finalization/broadcast, production storage protection.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Not performed locally: Android build or Xcode build.
 - **No real-funds use. No supported hardware devices yet.**
@@ -40,6 +42,7 @@ approval system, or cloud account.
 | [04-security.md](04-security.md) | Threats, invariants, privacy and release blockers |
 | [05-testing.md](05-testing.md) | Test layers and real-device qualification |
 | [06-build.md](06-build.md) | Dependency choices, native builds and reproducibility |
+| [08-signing.md](08-signing.md) | External response rules and software validation gates |
 | [07-waydroid.md](07-waydroid.md) | Reuse CI APKs on a disposable local Android runtime |
 | [VALIDATION.md](VALIDATION.md) | What was actually run during this handoff |
 

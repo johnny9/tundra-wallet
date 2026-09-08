@@ -3,6 +3,10 @@ use libfuzzer_sys::fuzz_target;
 use tundra_core::{Network, amount, descriptor, labels};
 
 fuzz_target!(|data: &[u8]| {
+    if let Ok(psbt) = tundra_core::signing::parse_response(data) {
+        assert_eq!(psbt.version, 0);
+        assert_eq!(tundra_core::signing::parse_response(&psbt.serialize()).unwrap(), psbt);
+    }
     if let Ok(text) = std::str::from_utf8(data) {
         let _ = amount::parse_btc(text);
         let _ = amount::parse_fee_rate(text);

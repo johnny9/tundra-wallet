@@ -143,6 +143,19 @@ pub struct DraftReview {
     pub fee_sat_per_kwu: Option<u64>,
     pub label: String,
     pub is_consolidation: bool,
-    /// No claims about valid signatures are made by the unsigned-draft milestone.
+    /// unsigned, partially_signed, signed, or invalidated. Signed does not mean broadcast.
     pub state: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct InputSigningProgress {
+    pub outpoint: String,
+    pub valid_signatures: u32,
+    pub required_signatures: u32,
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SigningProgress {
+    pub draft_id: String,
+    pub inputs: Vec<InputSigningProgress>,
+    pub complete: bool,
 }

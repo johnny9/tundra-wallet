@@ -1,0 +1,42 @@
+{
+  "recorded_at": "2026-09-08T21:16:42.726976+00:00",
+  "rust_toolchain": "1.93.1",
+  "core_unit_tests": 84,
+  "new_signing_tests": 15,
+  "process_crash_tests": 1,
+  "http_tests": 5,
+  "separate_real_regtest_tests": 1,
+  "total_executed_rust_tests": 91,
+  "offline_checks": 23,
+  "fmt": "passed",
+  "clippy": "passed; all targets/features; warnings denied",
+  "bindings": "Kotlin and Swift generated from compiled Rust library",
+  "fuzz": {
+    "executions": 2103214,
+    "seconds": 61,
+    "crashes": 0,
+    "sanitizer": "AddressSanitizer",
+    "toolchain": "nightly-2026-09-07",
+    "coverage": [
+      "descriptor",
+      "BIP329",
+      "amount",
+      "binary/base64 PSBT parsing"
+    ],
+    "signature_validator_fuzzed": false
+  },
+  "software_signature_fixtures": [
+    "published HWI P2WPKH",
+    "published Ledger two-input P2WPKH",
+    "public confirmed native 2-of-3, one signing pair"
+  ],
+  "hardware_qualified": false,
+  "native_signed_file_checks": "not yet run",
+  "logs": {
+    "build/signing-check.log": "ce47fccb3862d3a1834cc44c7e56ad069e25457b8b62060b5121982dcff5d234",
+    "build/signing-regtest.log": "8d79319789fc2d0f1e20cbb3bddc633aca5ed29fdbdd6888e3e7d8665992ff34",
+    "build/signing-fuzz.log": "5242015887d879da8aa32252609831d0a19535e47e5f8fd0503d4266521e60cf",
+    "build/signing-bindings.log": "a065feab6f64d876285db4ced2de97df641b89e45509b7ee254645423f4497c9"
+  },
+  "environment_failure": "First sandboxed HTTP tests could not bind loopback sockets; rerun with host loopback permission passed all checks."
+}

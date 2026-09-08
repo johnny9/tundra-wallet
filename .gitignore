@@ -8,6 +8,8 @@
 *.db
 *.db-*
 *.psbt
+!tests/fixtures/hwi-signed-wpkh.psbt
+!tests/fixtures/ledger-wpkh-two-inputs.psbt
 .env
 .env.*
 !*.example

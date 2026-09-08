@@ -46,7 +46,11 @@ Mainnet transaction construction is blocked in Rust. Offline addresses are clear
 unverified and must not be funded. Test fixture private keys are not supplied and should
 be assumed unavailable.
 
-## Signing acceptance specification (not yet implemented)
+## Signing acceptance
+
+The software validator and atomic persistence are implemented and exercised with public signed
+fixtures and adversarial tests. [08-signing.md](08-signing.md) defines the accepted format and
+remaining native, hardware, finalization and broadcast gates.
 
 Bound input size, parse PSBT versions/types explicitly, match the draft's unsigned transaction,
 check outpoints/prevout scripts and values against independently known wallet state, match

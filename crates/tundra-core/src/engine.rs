@@ -58,16 +58,18 @@ fn outpoint(s: &str) -> Result<OutPoint> {
 impl Core {
     /// Development storage is SQLite in the app sandbox, NOT encrypted. Use test data only.
     pub fn open(path: impl AsRef<Path>) -> Result<Self> {
-        let conn = Connection::open(path)?;
+        let mut conn = Connection::open(path)?;
         conn.busy_timeout(Duration::from_secs(5))?;
         conn.execute_batch(
             "PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL;",
         )?;
-        let version: i64 = conn.query_row("PRAGMA user_version", [], |r| r.get(0))?;
-        if version > 2 {
+        let migration = conn.transaction_with_behavior(TransactionBehavior::Immediate)?;
+        let version: i64 = migration.query_row("PRAGMA user_version", [], |r| r.get(0))?;
+        if version > 3 {
             return Err(Error::CorruptState);
         }
-        conn.execute_batch(include_str!("schema.sql"))?;
+        migration.execute_batch(include_str!("schema.sql"))?;
+        migration.commit()?;
         Ok(Self {
             db: Arc::new(Mutex::new(conn)),
             syncs: Arc::new(crate::sync::Operations::default()),
@@ -490,6 +492,10 @@ impl Core {
             }
         }
         let psbt = builder.finish().map_err(|_| Error::CannotBuild)?;
+        // Keep construction inside the bounded signing-response format's limits, including
+        // automatic selection from wallets with many small coins.
+        crate::signing::parse_response(&psbt.serialize())
+            .map_err(|_| Error::InvalidInput("transaction exceeds signing payload limits"))?;
         let actual: BTreeSet<_> = psbt
             .unsigned_tx
             .input
@@ -998,7 +1004,7 @@ mod tests {
                 .unwrap()
                 .query_row("PRAGMA user_version", [], |r| r.get::<_, u32>(0))
                 .unwrap(),
-            2
+            3
         );
     }
     #[test]

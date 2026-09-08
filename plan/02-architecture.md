@@ -46,6 +46,11 @@ coin has at most one reservation in a wallet. Freeze rows are independent of res
 rows. Unused indexes and newly revealed receive addresses are persisted before being
 returned. Development SQLite is **not encrypted**; production protection is a release gate.
 
+Schema v3 adds `draft_signatures`, with a composite wallet/draft foreign key and cascading
+deletion. The original PSBT in `drafts` never changes. External responses are validated against
+that approval and current wallet-derived policies; only verified signatures enter the aggregate.
+Signature storage and review progress commit atomically. Exports revalidate the saved aggregate.
+
 ## FFI
 
 Expose only Tundra records/enums and `Arc<Tundra>`; never raw BDK/bhwi objects or DB handles.

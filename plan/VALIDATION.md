@@ -1,8 +1,14 @@
 # Validation status
 
 Planning baseline: September 7, 2026. Recorded validation: **September 8, 2026**.
-This is development source with test-network sync and unsigned native payment flows.
+This is development source with test-network sync, native payments and external PSBT validation.
 **The full plan is not complete. No physical hardware or real-funds readiness is claimed.**
+
+The later signing implementation passes **15 additional Rust tests** and the full local suite:
+published single-sig/2-of-3 verification, per-input progress, mutation rejection, persistence,
+rollback, migration and invalidation. Its updated Kotlin/Swift bindings were generated locally.
+Native signed-file integration is in progress; the earlier CI run below predates these changes.
+See [signing rules and limits](08-signing.md) and `validation/signing-checks.json`.
 
 The [final CI run for bad8721](https://github.com/johnny9/tundra-wallet/actions/runs/34272130763)
 passed all four jobs: Rust, Android, iOS, and parser/dependency checks. Android passed on
@@ -15,18 +21,18 @@ exact commit, jobs, counts and artifact IDs. The downloaded debug APK is
 
 | Check | Actual result |
 |---|---|
-| Rust workspace | **69 core unit tests + 1 process-kill integration test + 5 HTTP integration tests passed**; all targets/features compiled with Rust 1.93.1 |
+| Rust workspace | **84 core unit tests + 1 process-kill integration test + 5 HTTP integration tests passed**; all targets/features compiled with Rust 1.93.1 |
 | Real Bitcoin Core integration | **1 separate regtest test passed** using Core 31.1, wallets disabled; maturity at 99/100 confirmations, persistence, shorter/replacement reorgs, invalidated drafts and durable freezes |
 | Formatting / Clippy | `cargo fmt --all --check` and strict all-target/all-feature Clippy passed |
 | Offline schema/fixture/source checks | **23 passed**, 0 failures/errors |
 | UniFFI | Kotlin and Swift bindings generated from the same compiled Rust library |
-| Parser fuzzing | **2,276,457 executions in 61 seconds**, no crashes; AddressSanitizer, cargo-fuzz 0.13.2, nightly-2026-09-07; committed fuzz lock unchanged |
+| Parser fuzzing | **2,103,214 executions in 61 seconds**, no crashes; expanded PSBT/descriptor/label/amount harness; AddressSanitizer, cargo-fuzz 0.13.2, nightly-2026-09-07; reviewed fuzz lock unchanged during the run |
 | Dependency audit | cargo-audit 0.22.2: **0 reported vulnerabilities, no warnings** against the recorded RustSec database; license inventory collected, distribution-license review incomplete |
 | Native test-chain repeatability | Two fresh starts produced height 103; both refused a duplicate start and removed their own ready signal/data on termination |
 | Approved design integrity | Four SHA-256 references pass; rebuilding HTML from editable sources is byte-identical |
 | Approved design rendering | Chrome for Testing headless shell 152.0.7977.82 rendered at 420×900; screenshot visually inspected; no browser/hardware interaction retested |
 
-That is **76 executed Rust tests**, including the separate regtest run. The default suite
+That is **91 executed Rust tests**, including the separate regtest run. The default suite
 intentionally ignores the real-node test and the process-kill child helper; the regtest
 script runs the former explicitly, and the parent crash test invokes the latter.
 
@@ -108,7 +114,7 @@ strict manual selection and mainnet gates retained.
 
 ## Unfinished gates
 
-QR/UR/BBQr, bhwi/USB interoperability, signed-response validation, finalization and broadcast
+QR/UR/BBQr, bhwi/USB interoperability, finalization and broadcast
 remain **unimplemented**. Physical phones, hardware address/policy verification, all signing
 pairs and the full adversarial device matrix have not been tested. Native coverage still
 needs every payment mode, accessibility/text sizes and complete visual comparison.

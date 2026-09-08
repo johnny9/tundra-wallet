@@ -9,8 +9,8 @@ It never imports or generates Bitcoin private signing keys.
 > **Development source, not a released wallet. Use disposable test descriptors only.**
 > Rust tests, Android debug and iOS simulator builds pass in CI. Android exact-input payment
 > and iOS consolidation/restart runtime tests have passed; broader device qualification remains.
-> Explicit test-network sync is implemented. Hardware integration, signature acceptance
-> and broadcast remain unavailable.
+> Explicit test-network sync and external signature validation are implemented. Hardware
+> integration and broadcast remain unavailable; native signed-file validation is in progress.
 > Do not fund addresses from the fixtures or use this version with real savings.
 
 ## Start here
@@ -30,7 +30,7 @@ It never imports or generates Bitcoin private signing keys.
 |---|---|---|
 | `tundra-core` | BDK public descriptor validation, receive/change derivation, SQLite snapshots, bounded opt-in Esplora sync | Test networks only; chosen endpoint supplies the chain view |
 | Metadata | Wallet-scoped labels, BIP 329 origins and patch import/export, atomic bulk edits, user freezes | Known references only; development DB is not encrypted |
-| Transactions | Exact/manual and automatic eligible inputs, selected-max, consolidation, fractional fees, saved unsigned drafts and atomic reservations | Every native mode still needs coverage; signing/broadcast unavailable |
+| Transactions | Exact/manual and automatic eligible inputs, max/consolidation, saved reviews/reservations, verified external PSBT signatures | Every native mode still needs coverage; hardware integration/finalization/broadcast unavailable |
 | `tundra-ffi` | Typed UniFFI API; Kotlin and Swift bindings generated and exercised against the host library | Mobile lifecycle/cancellation qualification remains |
 | Android | Compose import, wallets, sync, coin selection/search, bulk metadata and payment review | Exact-input payment instrumentation passed; full mode/device qualification remains |
 | iOS | SwiftUI import, wallets, sync, coin selection/search, metadata and payment review | Consolidation and restart simulator tests passed; full mode/device qualification remains |
@@ -51,7 +51,7 @@ apps/android/       Kotlin + Jetpack Compose
 apps/ios/           SwiftUI starter + XcodeGen specification
 plan/               Requirements, roadmap, risks, validation, build decisions
 design/             Approved visual reference and third-party attribution
-tests/fixtures/     Public test descriptors only; NEVER FUND
+tests/fixtures/     Public descriptors and published signature vectors; NEVER FUND
 scripts/            Verification and native binding/build helpers
 ```
 

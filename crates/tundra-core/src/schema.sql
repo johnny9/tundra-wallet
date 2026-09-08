@@ -41,4 +41,13 @@ CREATE TABLE IF NOT EXISTS sync_state (
     revision INTEGER NOT NULL DEFAULT 0,
     endpoint TEXT NOT NULL
 );
-PRAGMA user_version = 2;
+-- The originally approved PSBT stays immutable in drafts. Only cryptographically
+-- validated signatures are stored here; deleting a draft removes them atomically.
+CREATE TABLE IF NOT EXISTS draft_signatures (
+    wallet_id TEXT NOT NULL,
+    draft_id TEXT NOT NULL,
+    psbt TEXT NOT NULL,
+    PRIMARY KEY (wallet_id, draft_id),
+    FOREIGN KEY (wallet_id, draft_id) REFERENCES drafts(wallet_id, id) ON DELETE CASCADE
+);
+PRAGMA user_version = 3;

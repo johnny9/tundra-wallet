@@ -170,6 +170,35 @@ pub struct PaymentReview {
     pub is_consolidation: bool,
     pub state: String,
 }
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct InputSignatureInfo {
+    pub outpoint: String,
+    pub valid_signatures: u32,
+    pub required_signatures: u32,
+}
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct SigningInfo {
+    pub draft_id: String,
+    pub inputs: Vec<InputSignatureInfo>,
+    pub complete: bool,
+}
+impl From<core::SigningProgress> for SigningInfo {
+    fn from(p: core::SigningProgress) -> Self {
+        Self {
+            draft_id: p.draft_id,
+            inputs: p
+                .inputs
+                .into_iter()
+                .map(|i| InputSignatureInfo {
+                    outpoint: i.outpoint,
+                    valid_signatures: i.valid_signatures,
+                    required_signatures: i.required_signatures,
+                })
+                .collect(),
+            complete: p.complete,
+        }
+    }
+}
 impl From<core::DraftReview> for PaymentReview {
     fn from(r: core::DraftReview) -> Self {
         Self {
@@ -427,6 +456,23 @@ impl Tundra {
     }
     pub fn export_unsigned_psbt(&self, wallet_id: String, draft_id: String) -> Result<String> {
         Ok(self.core.export_unsigned_psbt(&wallet_id, &draft_id)?)
+    }
+    pub fn accept_signed_psbt(
+        &self,
+        wallet_id: String,
+        draft_id: String,
+        payload: Vec<u8>,
+    ) -> Result<SigningInfo> {
+        Ok(self
+            .core
+            .accept_signed_psbt(&wallet_id, &draft_id, &payload)?
+            .into())
+    }
+    pub fn signing_progress(&self, wallet_id: String, draft_id: String) -> Result<SigningInfo> {
+        Ok(self.core.signing_progress(&wallet_id, &draft_id)?.into())
+    }
+    pub fn export_signing_psbt(&self, wallet_id: String, draft_id: String) -> Result<String> {
+        Ok(self.core.export_signing_psbt(&wallet_id, &draft_id)?)
     }
     pub fn discard_draft(&self, wallet_id: String, draft_id: String) -> Result<()> {
         Ok(self.core.discard_draft(&wallet_id, &draft_id)?)
