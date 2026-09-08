@@ -47,6 +47,11 @@ jobs:
         with:
           name: tundra-development-apk
           path: apps/android/app/build/outputs/apk/debug/*.apk
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tundra-jvm-test-results
+          path: apps/android/app/build/test-results/testDebugUnitTest/*.xml
   ios:
     runs-on: macos-15
     steps:
