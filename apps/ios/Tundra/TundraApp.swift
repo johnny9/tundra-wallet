@@ -194,7 +194,7 @@ struct ImportView: View {
             .navigationTitle("Add a wallet")
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Close") { dismiss() }.disabled(model.busy) } }
             .interactiveDismissDisabled(model.busy)
-            .onChange(of: model.preview?.id) { _, id in if id != nil { descriptorFocused = false } }
+            .onChange(of: model.preview != nil) { _, reviewing in if reviewing { descriptorFocused = false } }
             .sheet(isPresented: $scanningDescriptor) {
                 QrScanView(purpose: .descriptor(network: scanChain)) { data in
                     if let text = String(data: data, encoding: .utf8) { payload = text; model.inspect(text, chain: scanChain) }
