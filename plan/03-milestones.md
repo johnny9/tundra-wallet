@@ -5,7 +5,7 @@ These are ordered work packages, not time estimates.
 | Milestone | Source status | Done only when |
 |---|---|---|
 | M0: product/design baseline | Approved reference included | Reference renders locally, attribution retained, decisions recorded |
-| M1: offline Rust/native foundation | Authored, uncompiled | Rust tests pass; both generated bindings compile; Android and iOS import a disposable public descriptor, survive restart, derive distinct persistent addresses, show unknown balances |
+| M1: offline Rust/native foundation | Rust compiled/tested; both bindings generated; native gates open | Rust tests pass; both generated bindings compile; Android and iOS import a disposable public descriptor, survive restart, derive distinct persistent addresses, show unknown balances |
 | M2: sync + durable coin state | Not implemented | Explicit test endpoint syncs/reorgs correctly, no keys/labels leak, balance freshness represented, spent/reserved/frozen transitions tested |
 | M3: native coin control + review | Core draft source only | Native exact-input, automatic, max and consolidation flows round-trip through Rust; no UI-only validation; layouts match prototype; interrupted drafts persist |
 | M4: QR external signing | Not implemented | Bounded UR/BBQr sessions interoperate on devices; wrong payloads/transactions rejected; per-input signatures verified; receive/policy comparison works |
@@ -15,8 +15,7 @@ These are ordered work packages, not time estimates.
 
 ## M1 backlog before declaring it done
 
-- Run compilation on Rust and correct any upstream API mismatch; apply rustfmt.
-- Generate, review and commit Cargo.lock; pin the tested compiler/toolchain.
+- Rust compilation, rustfmt and reviewed Cargo.lock completed on Rust 1.93.1; keep required checks passing.
 - Compile generated Kotlin/Swift binding names against the hand-authored adapters.
 - Verify ABI packaging, native errors and Unicode label roundtrips through UniFFI.
 - Run Android instrumentation and an iOS simulator build; validate accessibility and dark/light.

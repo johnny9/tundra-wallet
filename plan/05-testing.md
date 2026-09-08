@@ -5,8 +5,8 @@
 | Layer | Tests / execution |
 |---|---|
 | Offline repository checks | Run `python3 scripts/check_offline.py`; verifies actual SQLite constraints/transactions and public fixture checksums plus source/package guards |
-| Rust unit tests | `cargo test --workspace --all-targets`; tests are authored but were not executable in the authoring environment |
-| Static Rust quality | `cargo fmt --all --check`, `cargo clippy --workspace --all-targets`; format/fix after first connected compilation |
+| Rust unit tests | `cargo test --workspace --all-targets --all-features --locked`; see the current validation report for executed results |
+| Static Rust quality | `cargo fmt --all --check`, `cargo clippy --workspace --all-targets --all-features --locked -- -D warnings`; both are required |
 | FFI contract | Generate both bindings from the same compiled library; test records/errors, Unicode, u64 amounts, cancellation/lifetime handling |
 | Native apps | Android JVM/instrumentation plus emulator; iOS simulator tests; small/large screens, accessibility text, dark/light, file permissions |
 | Bitcoin integration | Regtest/signet synthetic funding, reorgs, conflicts, receive/change persistence, fee accounting, strict exact-input behavior |

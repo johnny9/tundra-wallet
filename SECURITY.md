@@ -1,6 +1,6 @@
 # Security status
 
-This is uncompiled development-source work, not a released or audited wallet.
+This is development-source work with a tested Rust core, not a released or audited wallet.
 **Do not use real funds or personal wallet data.** No devices are qualified and no signing
 or broadcasting is implemented. See [the threat model](plan/04-security.md).
 

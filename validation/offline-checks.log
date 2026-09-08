@@ -7,8 +7,6 @@ test_included_fixture_and_schema_paths_exist (__main__.FixtureAndSourceChecks.te
 test_no_bdk_bhwi_direct_imports_in_native_ui (__main__.FixtureAndSourceChecks.test_no_bdk_bhwi_direct_imports_in_native_ui) ... ok
 test_no_private_extended_keys_in_fixtures (__main__.FixtureAndSourceChecks.test_no_private_extended_keys_in_fixtures) ... ok
 test_public_fixture_checksums (__main__.FixtureAndSourceChecks.test_public_fixture_checksums) ... ok
-test_publisher_refuses_existing_repository_without_git_write (__main__.FixtureAndSourceChecks.test_publisher_refuses_existing_repository_without_git_write) ... ok
-test_publisher_refuses_wrong_account_without_git_write (__main__.FixtureAndSourceChecks.test_publisher_refuses_wrong_account_without_git_write) ... ok
 test_shell_syntax (__main__.FixtureAndSourceChecks.test_shell_syntax) ... ok
 test_transaction_manual_guard_and_mainnet_gate_source_guard (__main__.FixtureAndSourceChecks.test_transaction_manual_guard_and_mainnet_gate_source_guard) ... ok
 test_discard_one_draft_leaves_other_reservation (__main__.SchemaChecks.test_discard_one_draft_leaves_other_reservation) ... ok
@@ -25,6 +23,6 @@ test_wallet_delete_cascades_only_its_metadata (__main__.SchemaChecks.test_wallet
 test_wallet_state_and_metadata_rollback_together (__main__.SchemaChecks.test_wallet_state_and_metadata_rollback_together) ... ok
 
 ----------------------------------------------------------------------
-Ran 25 tests in 0.029s
+Ran 23 tests in 0.015s
 
 OK

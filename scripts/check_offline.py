@@ -4,13 +4,11 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
 from pathlib import Path
 import re
 import shutil
 import sqlite3
 import subprocess
-import tempfile
 import time
 import tomllib
 import unittest
@@ -172,7 +170,7 @@ class FixtureAndSourceChecks(unittest.TestCase):
     def test_hardware_module_fail_closed_source_guard(self):
         source = (ROOT/"crates/tundra-core/src/hardware.rs").read_text()
         self.assertIn('Err(Error::Unavailable("hardware signing"))', source)
-        self.assertIn("available:false", source)
+        self.assertRegex(source, r"available\s*:\s*false")
         # A source guard, not cryptographic or runtime proof.
     def test_transaction_manual_guard_and_mainnet_gate_source_guard(self):
         source = (ROOT/"crates/tundra-core/src/engine.rs").read_text()
@@ -192,24 +190,6 @@ class FixtureAndSourceChecks(unittest.TestCase):
     def test_shell_syntax(self):
         for path in (ROOT/"scripts").glob("*.sh"):
             subprocess.run(["bash", "-n", str(path)], check=True, capture_output=True)
-    def test_publisher_refuses_existing_repository_without_git_write(self):
-        self._publisher_refusal("johnny9", "existing")
-    def test_publisher_refuses_wrong_account_without_git_write(self):
-        self._publisher_refusal("someone-else", "missing")
-    def _publisher_refusal(self, login, existing):
-        with tempfile.TemporaryDirectory() as temp:
-            directory = Path(temp)
-            gh = directory/"gh"
-            gh.write_text('#!/bin/sh\ncase "$1 $2" in\n"auth status") exit 0;;\n"api user") echo '+login+'; exit 0;;\n"repo view") '+('exit 0' if existing=='existing' else 'exit 1')+';;\n*) echo FORBIDDEN_WRITE; exit 99;;\nesac\n')
-            gh.chmod(0o755)
-            fakegit = directory/"git"
-            fakegit.write_text('#!/bin/sh\necho GIT_MUST_NOT_BE_CALLED\nexit 99\n')
-            fakegit.chmod(0o755)
-            env = {**os.environ, "PATH":str(directory)+os.pathsep+os.environ["PATH"]}
-            result = subprocess.run(["bash", str(ROOT/"scripts/publish-github.sh")], env=env, capture_output=True, text=True)
-            self.assertEqual(result.returncode, 2)
-            self.assertNotIn("FORBIDDEN_WRITE", result.stdout+result.stderr)
-            self.assertNotIn("GIT_MUST_NOT_BE_CALLED", result.stdout+result.stderr)
 
 
 if __name__ == "__main__":

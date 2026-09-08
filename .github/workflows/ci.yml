@@ -13,25 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@1.93.1
         with:
           components: rustfmt, clippy
-      - run: python3 scripts/check_offline.py
-      - name: Bootstrap lock only until the reviewed lock is committed
-        run: |
-          if [ ! -f Cargo.lock ]; then
-            echo '::warning::No reviewed lockfile yet; generating bootstrap lock for inspection.'
-            cargo generate-lockfile
-          fi
-      - run: cargo test --workspace --all-targets --locked
-      - run: cargo clippy --workspace --all-targets --locked
-      - name: Formatting diagnostic (make required after first formatter pass)
-        run: cargo fmt --all --check
-        continue-on-error: true
+      - run: ./scripts/check.sh
+      - run: ./scripts/generate-bindings.sh
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: bootstrap-lock-and-offline-report
+          name: lock-and-offline-report
           path: |
             Cargo.lock
             build/offline-checks.json
@@ -46,7 +36,7 @@ jobs:
       - uses: android-actions/setup-android@v3
       - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0' 'ndk;27.2.12479018'
       - run: echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/27.2.12479018" >> "$GITHUB_ENV"
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@1.93.1
         with:
           targets: aarch64-linux-android, x86_64-linux-android
       - run: cargo install cargo-ndk --locked
@@ -63,7 +53,7 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@1.93.1
         with:
           targets: aarch64-apple-ios, aarch64-apple-ios-sim, x86_64-apple-ios
       - run: brew install xcodegen

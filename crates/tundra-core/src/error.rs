@@ -7,13 +7,17 @@ pub enum Error {
     InvalidInput(&'static str),
     #[error("Invalid or unsupported public descriptor")]
     Descriptor,
-    #[error("Only public extended keys with origins and unhardened receive/change ranges are supported")]
+    #[error(
+        "Only public extended keys with origins and unhardened receive/change ranges are supported"
+    )]
     UnsupportedKeys,
     #[error("Only native SegWit single-sig and 2-of-3 sorted multisig are supported")]
     UnsupportedPolicy,
     #[error("Descriptor network does not match the selected network")]
     NetworkMismatch,
-    #[error("Receive and change must describe the same wallet with distinct /0/* and /1/* branches")]
+    #[error(
+        "Receive and change must describe the same wallet with distinct /0/* and /1/* branches"
+    )]
     BranchMismatch,
     #[error("Wallet already exists")]
     AlreadyExists,
@@ -34,5 +38,7 @@ pub enum Error {
 }
 pub type Result<T> = std::result::Result<T, Error>;
 impl From<rusqlite::Error> for Error {
-    fn from(_: rusqlite::Error) -> Self { Self::Storage }
+    fn from(_: rusqlite::Error) -> Self {
+        Self::Storage
+    }
 }

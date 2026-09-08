@@ -8,5 +8,5 @@ pub mod hardware;
 pub mod labels;
 mod model;
 pub use engine::Core;
-pub use error::{Error,Result};
+pub use error::{Error, Result};
 pub use model::*;
