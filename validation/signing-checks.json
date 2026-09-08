@@ -31,7 +31,14 @@
     "public confirmed native 2-of-3, one signing pair"
   ],
   "hardware_qualified": false,
-  "native_signed_file_checks": "not yet run",
+  "native_signed_file_checks": {
+    "source": "2d6862b14ac9c84c118573586b1ec7e50b3eeacb",
+    "run": "https://github.com/johnny9/tundra-wallet/actions/runs/34280039963",
+    "android": "passed wrong-draft file rejection, signature counts and restart",
+    "ios_native_tests": "2 passed on both attempts, including binary file FFI and bounds",
+    "ios_ui": "failed before signature review; attempt 1 launch automation failure/time allowance; attempt 2 explicit sync failure and downstream timeout",
+    "ios_ui_passed": false
+  },
   "logs": {
     "build/signing-check.log": "ce47fccb3862d3a1834cc44c7e56ad069e25457b8b62060b5121982dcff5d234",
     "build/signing-regtest.log": "8d79319789fc2d0f1e20cbb3bddc633aca5ed29fdbdd6888e3e7d8665992ff34",

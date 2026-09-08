@@ -7,7 +7,13 @@ This is development source with test-network sync, native payments and external 
 The later signing implementation passes **15 additional Rust tests** and the full local suite:
 published single-sig/2-of-3 verification, per-input progress, mutation rejection, persistence,
 rollback, migration and invalidation. Its updated Kotlin/Swift bindings were generated locally.
-Native signed-file integration is in progress; the earlier CI run below predates these changes.
+[Signing CI at 2d6862b](https://github.com/johnny9/tundra-wallet/actions/runs/34280039963)
+passed Rust, Android (including wrong-draft signed-file rejection), parser/audit, iOS build
+and both iOS native tests (including binary signed-file bounds). The iOS UI test failed on
+two attempts: initial simulator launch automation, then an explicit sync failure before
+payment review. Neither attempt qualifies the new iOS signature UI. Diagnostics are retained;
+the test server now indexes before advertising readiness, and a failed asynchronous sync
+expectation stops subsequent payment actions. Native QR changes await the next CI run.
 See [signing rules and limits](08-signing.md) and `validation/signing-checks.json`.
 
 The [final CI run for bad8721](https://github.com/johnny9/tundra-wallet/actions/runs/34272130763)
@@ -17,11 +23,18 @@ exact commit, jobs, counts and artifact IDs. The downloaded debug APK is
 `build/ci-final-app/app-debug.apk`; its matching instrumentation APK is under
 `build/ci-final-tests/`. Both are development test artifacts.
 
+The later QR implementation passes **11 additional Rust tests**, bringing the executed Rust
+total to **102 including real regtest**. A host AddressSanitizer run completed 1,679,070 inputs
+in 61 seconds with no crashes; the first sandbox run failed during LeakSanitizer shutdown
+because ptrace was restricted. The dependency audit found no advisories or warnings.
+Both bindings generated successfully. Native QR compilation and independent barcode tests
+are pending. See [QR limits and gates](09-qr.md) and `validation/qr-checks.json`.
+
 ## Local executed checks
 
 | Check | Actual result |
 |---|---|
-| Rust workspace | **84 core unit tests + 1 process-kill integration test + 5 HTTP integration tests passed**; all targets/features compiled with Rust 1.93.1 |
+| Rust workspace | **95 core unit tests + 1 process-kill integration test + 5 HTTP integration tests passed**; all targets/features compiled with Rust 1.93.1 |
 | Real Bitcoin Core integration | **1 separate regtest test passed** using Core 31.1, wallets disabled; maturity at 99/100 confirmations, persistence, shorter/replacement reorgs, invalidated drafts and durable freezes |
 | Formatting / Clippy | `cargo fmt --all --check` and strict all-target/all-feature Clippy passed |
 | Offline schema/fixture/source checks | **23 passed**, 0 failures/errors |
@@ -114,8 +127,8 @@ strict manual selection and mainnet gates retained.
 
 ## Unfinished gates
 
-QR/UR/BBQr, bhwi/USB interoperability, finalization and broadcast
-remain **unimplemented**. Physical phones, hardware address/policy verification, all signing
+QR/UR/BBQr codecs pass Rust tests; native camera/display source and barcode tests await CI.
+Bhwi/USB interoperability, finalization and broadcast remain **unimplemented**. Physical phones, hardware address/policy verification, all signing
 pairs and the full adversarial device matrix have not been tested. Native coverage still
 needs every payment mode, accessibility/text sizes and complete visual comparison.
 Protected production metadata storage, recovery/migration qualification, reproducibility,

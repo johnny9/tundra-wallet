@@ -8,7 +8,7 @@ These are ordered work packages, not time estimates.
 | M1: offline Rust/native foundation | Rust/native builds, host FFI and initial virtual runtime checks pass; broader device qualification remains | Rust tests pass; both generated bindings compile; Android and iOS import a disposable public descriptor, survive restart, derive distinct persistent addresses, show unknown balances |
 | M2: sync + durable coin state | Core reorg checks and both native regtest sync scenarios pass | Explicit test endpoint syncs/reorgs correctly, no keys/labels leak, balance freshness represented, spent/reserved/frozen transitions tested |
 | M3: native coin control + review | Android exact-input and iOS consolidation/restart checks pass; full mode/layout qualification remains | Native exact-input, automatic, max and consolidation flows round-trip through Rust; no UI-only validation; layouts match prototype; interrupted drafts persist |
-| M4: QR external signing | PSBT verification and durable per-input progress pass software tests; QR/device qualification open | Bounded UR/BBQr sessions interoperate on devices; wrong payloads/transactions rejected; per-input signatures verified; receive/policy comparison works |
+| M4: QR external signing | PSBT verification and QR codecs pass software tests; native camera builds/device qualification open | Bounded UR/BBQr sessions interoperate on devices; wrong payloads/transactions rejected; per-input signatures verified; receive/policy comparison works |
 | M5: Android USB / bhwi | Not implemented | Pinned bhwi revision; documented model/firmware/transport matrix; permission, cancellation, reconnect and app lifecycle tests pass |
 | M6: signet end-to-end | Not implemented | 2-of-3 QR + USB with restart signs, validates, finalizes and explicitly broadcasts to a configured test backend |
 | M7: hardened release candidate | Not implemented | Protected storage, backup/recovery/migration tests, dependency/license review, independent security review and a clean supported-device matrix |
@@ -35,10 +35,10 @@ These are ordered work packages, not time estimates.
   Bitcoin Core regtest at 99 and 100 confirmations and after reorgs.
 - Decimal fee rates now normalize upward to BDK's integer sat/kwu precision; the normalized
   rate is included in new saved reviews. Development fee limits still need release review.
-- No on-device scanner or animated-QR codecs yet. Do not relabel the prototype simulation
-  as a native hardware feature.
+- Bounded UR/BBQr codecs pass Rust tests. Native scanner/display and independent barcode
+  tests are authored; native QR compilation and physical interoperability remain open.
 - Explicit bounded Esplora test-network sync and signed-response validation are implemented.
-  QR exchange and broadcast remain unavailable pending their acceptance gates.
+  Native QR qualification and broadcast remain separate acceptance gates.
 - Native coin selection, review, PSBT file export and saved drafts are implemented; validate
   every mode on both platforms and compare layouts/accessibility against the reference.
 - Label provenance is captured on draft inputs. New-output labeling after a real broadcast
