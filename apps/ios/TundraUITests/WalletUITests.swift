@@ -49,7 +49,11 @@ final class WalletUITests: XCTestCase {
         app.buttons["Start scan"].tap()
         let funded = NSPredicate(format: "label == %@", "150 BTC")
         let fundedExpectation = expectation(for: funded, evaluatedWith: app.staticTexts["balance"])
-        await fulfillment(of: [fundedExpectation], timeout: 30)
+        let syncResult = await XCTWaiter.fulfillment(of: [fundedExpectation], timeout: 30)
+        guard syncResult == .completed else {
+            XCTFail("The explicit test-network scan did not produce its expected balance")
+            return // Async XCTest failures otherwise cascade into unrelated payment actions.
+        }
         app.buttons["Coins"].tap()
         let selections = app.buttons.matching(identifier: "Select coin")
         XCTAssertEqual(selections.count, 3)

@@ -120,5 +120,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
 
 server = http.server.ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
+# Readiness includes indexing the actual chain. Otherwise the first mobile request
+# performs hundreds of bitcoin-cli launches inside the app's 15-second HTTP deadline.
+# Slow hosted macOS runners must not turn an unready test backend into an app failure.
+with index.lock:
+    index.refresh()
 Path(args.port_file).write_text(str(server.server_port))
 server.serve_forever()
