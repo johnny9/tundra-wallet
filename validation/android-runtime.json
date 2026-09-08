@@ -1,0 +1,41 @@
+{
+  "recorded_at_utc": "2026-09-08T20:40:25.566459+00:00",
+  "tested_commit": "bad87212320c200896afeb13bac2e96dec3275cf",
+  "job_url": "https://github.com/johnny9/tundra-wallet/actions/runs/34272130763/job/102224926248",
+  "job_conclusion": "success",
+  "overall_run": "success after Android-only retry",
+  "runtime": {
+    "os": "Android 15",
+    "api": 35,
+    "abi": "x86_64",
+    "device": "Pixel 6 emulator"
+  },
+  "instrumentation": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "process_restart": {
+    "action": "am force-stop, am start, UIAutomator hierarchy inspection",
+    "result": "passed",
+    "cached_balance": "150 BTC from keyless regtest",
+    "saved_draft_inputs": 2
+  },
+  "apk": {
+    "artifact_name": "tundra-development-apk",
+    "artifact_id": 10075622952,
+    "filename": "app-debug.apk",
+    "sha256": "7605a4d8069e2ac9a54f7958ec0f660db8fa7c68ebee0948f5829fdaa881d717",
+    "rust_library_abis": [
+      "arm64-v8a",
+      "x86_64"
+    ]
+  },
+  "not_covered": [
+    "Waydroid runtime",
+    "Physical phone",
+    "QR/USB hardware",
+    "Every native payment mode"
+  ]
+}

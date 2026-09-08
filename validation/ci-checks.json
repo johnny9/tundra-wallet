@@ -1,27 +1,39 @@
 {
-  "scope": "Rust checks, native compilation and host-language FFI tests; no mobile runtime or hardware qualification",
-  "recorded_at_utc": "2026-09-08T16:17:16.132209+00:00",
-  "tested_commit": "6b209836af16beee374b6d2429cf20ff005ef403",
-  "ci_url": "https://github.com/johnny9/tundra-wallet/actions/runs/34248953834",
+  "scope": "Rust checks, native builds, host FFI and initial Android/iOS runtime scenarios; physical hardware and release gates remain open",
+  "recorded_at_utc": "2026-09-08T20:40:25.566459+00:00",
+  "tested_commit": "bad87212320c200896afeb13bac2e96dec3275cf",
+  "ci_url": "https://github.com/johnny9/tundra-wallet/actions/runs/34272130763",
   "conclusion": "success",
+  "run_attempt": 2,
   "jobs": [
-    {
-      "name": "rust",
-      "conclusion": "success",
-      "url": "https://github.com/johnny9/tundra-wallet/actions/runs/34248953834/job/102138119907"
-    },
     {
       "name": "android",
       "conclusion": "success",
-      "url": "https://github.com/johnny9/tundra-wallet/actions/runs/34248953834/job/102138120227"
+      "url": "https://github.com/johnny9/tundra-wallet/actions/runs/34272130763/job/102224926248"
+    },
+    {
+      "name": "rust",
+      "conclusion": "success",
+      "url": "https://github.com/johnny9/tundra-wallet/actions/runs/34272130763/job/102224927469"
     },
     {
       "name": "ios",
       "conclusion": "success",
-      "url": "https://github.com/johnny9/tundra-wallet/actions/runs/34248953834/job/102138120250"
+      "url": "https://github.com/johnny9/tundra-wallet/actions/runs/34272130763/job/102224954392"
+    },
+    {
+      "name": "parser-and-dependency-checks",
+      "conclusion": "success",
+      "url": "https://github.com/johnny9/tundra-wallet/actions/runs/34272130763/job/102224961030"
     }
   ],
-  "rust_tests_passed": 60,
+  "rust_tests_passed": 76,
+  "rust_test_breakdown": {
+    "core_unit": 69,
+    "process_kill": 1,
+    "http": 5,
+    "separate_real_regtest": 1
+  },
   "offline_tests_passed": 23,
   "kotlin_jvm": {
     "tests": 3,
@@ -32,18 +44,47 @@
   "swift_host_smoke_tests_passed": 3,
   "android_debug_apk": {
     "artifact_name": "tundra-development-apk",
+    "artifact_id": 10075622952,
     "filename": "app-debug.apk",
-    "sha256": "550cc0bbefd6921c502006e74d5c92bca0f03bc51d42a08592f23229223826cc",
+    "sha256": "7605a4d8069e2ac9a54f7958ec0f660db8fa7c68ebee0948f5829fdaa881d717",
     "rust_library_abis": [
       "arm64-v8a",
       "x86_64"
     ]
   },
-  "ios_simulator_target_build": "passed; CODE_SIGNING_ALLOWED=NO",
+  "android_instrumentation": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "runtime": "Android 15 / API 35 / x86_64 Pixel 6 emulator",
+    "test_apk_artifact_id": 10075623774,
+    "results_artifact_id": 10075625156
+  },
+  "android_process_restart": "passed; retained 150 BTC keyless regtest balance and unsigned two-input draft after force-stop/relaunch",
+  "ios_runtime": {
+    "tests": 2,
+    "failures": 0,
+    "skipped": 0,
+    "runtime": "iOS 26.2 arm64 iPhone 17 Pro simulator",
+    "source_summary": "ios-runtime.json"
+  },
+  "parser_ci": {
+    "executions": 1298217,
+    "elapsed_seconds": 61,
+    "crashes": 0,
+    "address_sanitizer": true
+  },
+  "dependency_audit": {
+    "reported_vulnerabilities": 0,
+    "warnings": 0
+  },
+  "retry_reason": "First Android attempt passed instrumentation, but a Quickstep system launcher ANR obscured restart inspection; identical source passed on retry",
   "not_run": [
-    "Android emulator/instrumentation",
-    "iOS simulator runtime",
-    "physical phones",
-    "hardware wallet interoperability"
+    "Waydroid instrumentation (no DHCP lease/ADB connectivity)",
+    "Physical phones",
+    "Hardware-wallet interoperability",
+    "Every native payment mode",
+    "Independent security review"
   ]
 }

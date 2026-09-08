@@ -7,10 +7,10 @@ The product manages public descriptors, labeled coins and hardware-signed paymen
 It never imports or generates Bitcoin private signing keys.
 
 > **Development source, not a released wallet. Use disposable test descriptors only.**
-> Rust tests, Android debug and iOS simulator builds pass in CI. Mobile runtime and hardware
-> qualification are still pending.
+> Rust tests, Android debug and iOS simulator builds pass in CI. Android exact-input payment
+> and iOS consolidation/restart runtime tests have passed; broader device qualification remains.
 > Explicit test-network sync is implemented. Hardware integration, signature acceptance
-> and broadcast remain unavailable; the newest native changes are being validated.
+> and broadcast remain unavailable.
 > Do not fund addresses from the fixtures or use this version with real savings.
 
 ## Start here
@@ -24,16 +24,16 @@ It never imports or generates Bitcoin private signing keys.
 - [Build and dependency decisions](plan/06-build.md)
 - [Approved interactive design](design/prototype.html)
 
-## What's in the first source milestone
+## Current implementation
 
 | Area | Authored | Important limitation |
 |---|---|---|
 | `tundra-core` | BDK public descriptor validation, receive/change derivation, SQLite snapshots, bounded opt-in Esplora sync | Test networks only; chosen endpoint supplies the chain view |
 | Metadata | Wallet-scoped labels, BIP 329 origins and patch import/export, atomic bulk edits, user freezes | Known references only; development DB is not encrypted |
-| Transactions | Exact/manual and automatic eligible inputs, selected-max, consolidation, fractional fees, saved unsigned drafts and atomic reservations | Native payment flows under runtime validation; signing/broadcast unavailable |
+| Transactions | Exact/manual and automatic eligible inputs, selected-max, consolidation, fractional fees, saved unsigned drafts and atomic reservations | Every native mode still needs coverage; signing/broadcast unavailable |
 | `tundra-ffi` | Typed UniFFI API; Kotlin and Swift bindings generated and exercised against the host library | Mobile lifecycle/cancellation qualification remains |
-| Android | Compose import, wallets, sync, coin selection/search, bulk metadata and payment review | Runtime validation in progress; QR and USB remain unavailable |
-| iOS | SwiftUI import, wallets, sync, coin selection/search, metadata and payment review | Import/restart simulator tests passed; payment runtime validation in progress |
+| Android | Compose import, wallets, sync, coin selection/search, bulk metadata and payment review | Exact-input payment instrumentation passed; full mode/device qualification remains |
+| iOS | SwiftUI import, wallets, sync, coin selection/search, metadata and payment review | Consolidation and restart simulator tests passed; full mode/device qualification remains |
 | Design | Exact approved Tundra HTML reference and source | Simulation stays in `design/`, not in the Rust/native wallet |
 | Quality | Rust tests, offline schema/fixture checks, CI and build scripts | See [validation report](plan/VALIDATION.md) for executed versus unexecuted checks |
 
@@ -84,6 +84,7 @@ For the subset that can run without Rust, use `python3 scripts/check_offline.py`
 
 Use JDK 17+, Android SDK 36, build-tools 36.0.0 and NDK 27.2.12479018.
 The committed wrapper supplies Gradle 8.13 and verifies its distribution checksum.
+For local runtime checks using CI-built APKs, see [Waydroid validation](plan/07-waydroid.md).
 The scripts do not silently accept SDK licenses or download executables with `curl | sh`.
 
 ```sh

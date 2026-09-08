@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="dev.johnny9.tundra.WalletRuntimeTest" tests="1" failures="0" errors="0" skipped="0" time="22.462" timestamp="2026-09-08T20:36:12" hostname="localhost">
+  <properties>
+    <property name="device" value="emulator-5554 - 15" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="importRecreateReceiveAppearanceAndSyncConsent" classname="dev.johnny9.tundra.WalletRuntimeTest" time="21.754" />
+</testsuite>

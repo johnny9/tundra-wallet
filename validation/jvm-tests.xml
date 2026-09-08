@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="dev.johnny9.tundra.NativeCoreTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-09-08T16:11:37.666Z" hostname="runnervmejwal" time="0.496">
+<testsuite name="dev.johnny9.tundra.NativeCoreTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-09-08T20:33:36.675Z" hostname="runnervmejwal" time="0.445">
   <properties/>
-  <testcase name="importAndReopenPreserveUnicodeUnknownBalanceAndReceiveIndex" classname="dev.johnny9.tundra.NativeCoreTest" time="0.483"/>
-  <testcase name="unsignedAmountsCrossTheBridgeWithoutTruncation" classname="dev.johnny9.tundra.NativeCoreTest" time="0.003"/>
-  <testcase name="nativeErrorsAreTypedAndDoNotEchoInput" classname="dev.johnny9.tundra.NativeCoreTest" time="0.009"/>
+  <testcase name="importAndReopenPreserveUnicodeUnknownBalanceAndReceiveIndex" classname="dev.johnny9.tundra.NativeCoreTest" time="0.429"/>
+  <testcase name="unsignedAmountsCrossTheBridgeWithoutTruncation" classname="dev.johnny9.tundra.NativeCoreTest" time="0.004"/>
+  <testcase name="nativeErrorsAreTypedAndDoNotEchoInput" classname="dev.johnny9.tundra.NativeCoreTest" time="0.011"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

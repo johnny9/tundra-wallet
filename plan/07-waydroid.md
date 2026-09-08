@@ -1,7 +1,7 @@
 # Waydroid development validation
 
 Waydroid can reuse the Android APKs from CI for local app, Rust/UniFFI, lifecycle and
-regtest checks. It does not qualify physical camera/USB hardware or replace Xcode/iOS
+regtest checks. It does not replace physical-phone camera/USB qualification or Xcode/iOS
 tests. Use a disposable development instance: the instrumentation test clears Tundra's
 development database before importing public fixtures.
 

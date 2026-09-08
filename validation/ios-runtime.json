@@ -1,0 +1,56 @@
+{
+  "recorded_at_utc": "2026-09-08T20:31:58.925981+00:00",
+  "tested_commit": "bad87212320c200896afeb13bac2e96dec3275cf",
+  "job_url": "https://github.com/johnny9/tundra-wallet/actions/runs/34272130763/job/102216268897",
+  "job_conclusion": "success",
+  "simulator_summary": {
+    "devicesAndConfigurations": [
+      {
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "C9332773-CE6D-4AB5-88EA-F586A473DAA1",
+          "deviceName": "iPhone 17 Pro",
+          "modelName": "iPhone 17 Pro",
+          "osBuildNumber": "23C54",
+          "osVersion": "26.2",
+          "platform": "iOS Simulator"
+        },
+        "expectedFailures": 0,
+        "failedTests": 0,
+        "passedTests": 2,
+        "skippedTests": 0,
+        "testPlanConfiguration": {
+          "configurationId": "1",
+          "configurationName": "Test Scheme Action"
+        }
+      }
+    ],
+    "environmentDescription": "Tundra \u00b7 Built with macOS 15.7.9",
+    "expectedFailures": 0,
+    "failedTests": 0,
+    "finishTime": 1788899114.486,
+    "passedTests": 2,
+    "result": "Passed",
+    "skippedTests": 0,
+    "startTime": 1788898735.555,
+    "statistics": [],
+    "testFailures": [],
+    "title": "Test - Tundra",
+    "topInsights": [],
+    "totalTestCount": 2
+  },
+  "host_swift_ffi_smoke_tests": 3,
+  "covered": [
+    "Import and unknown balance",
+    "Distinct receive indices across process restart",
+    "Explicit endpoint privacy consent and real regtest sync",
+    "Two-coin consolidation with visible fee units",
+    "Saved draft after process termination and relaunch"
+  ],
+  "not_covered": [
+    "Physical phone",
+    "Every payment mode",
+    "QR or USB",
+    "Active network IO cancellation on a phone"
+  ]
+}

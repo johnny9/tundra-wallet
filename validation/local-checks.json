@@ -1,0 +1,88 @@
+{
+  "recorded_at_utc": "2026-09-08T20:40:25.566459+00:00",
+  "scope": "Local Linux checks, distinct from native CI and physical-device qualification",
+  "rust_source_commit": "2efc29692c8026b0793e056d7991c987207712bc",
+  "rust_version": "1.93.1",
+  "rust_unit_tests": 69,
+  "process_kill_integration_tests": 1,
+  "adversarial_http_integration_tests": 5,
+  "separately_executed_real_regtest_tests": 1,
+  "offline_checks": 23,
+  "formatting": "passed",
+  "clippy": "passed with warnings denied",
+  "bindings": {
+    "kotlin": "generated",
+    "swift": "generated"
+  },
+  "fuzz": {
+    "tool": "cargo-fuzz 0.13.2",
+    "toolchain": "nightly-2026-09-07",
+    "harness": "public_parsers",
+    "runs": 2276457,
+    "elapsed_seconds": 61,
+    "crashes": 0,
+    "sanitizer": "AddressSanitizer",
+    "lock_unchanged": true
+  },
+  "rustsec_audit": {
+    "database": {
+      "advisory-count": 1242,
+      "last-commit": "bf25f6575a93a35f30796c65c0ed91bee7fa19fd",
+      "last-updated": "2026-09-08T11:58:15+02:00"
+    },
+    "lockfile": {
+      "dependency-count": 223
+    },
+    "settings": {
+      "target_arch": [],
+      "target_os": [],
+      "severity": null,
+      "ignore": [],
+      "informational_warnings": [
+        "unmaintained",
+        "unsound",
+        "notice"
+      ]
+    },
+    "vulnerabilities": {
+      "found": false,
+      "count": 0,
+      "list": []
+    },
+    "warnings": {}
+  },
+  "design": {
+    "reference_files_verified": 4,
+    "rebuild": "byte-identical",
+    "local_browser": "Chrome for Testing headless shell 152.0.7977.82",
+    "viewport": [
+      420,
+      900
+    ],
+    "network": "Host names mapped to ~NOTFOUND; background networking disabled",
+    "screenshot_sha256": "19652572e93641f40a2ddef17c011c5c38f3038cff51002c974e3de8f5226a7d",
+    "scope": "Rendered and visually inspected the approved HTML reference; no hardware behavior retested"
+  },
+  "test_chain_repeatability": {
+    "fresh_starts": 2,
+    "height_each": 103,
+    "duplicate_start_refusals": 2,
+    "teardown": "passed"
+  },
+  "not_covered": [
+    "Physical power loss",
+    "PSBT or QR fuzzing",
+    "Physical phones or hardware wallets",
+    "Independent security review"
+  ],
+  "ios_visual_inspection": {
+    "ci_commit": "ab6772e52f227032764a156faf42bdbb9872824a",
+    "source": "Exported XCUITest screen recording",
+    "observed": [
+      "Dark wallet screen with unknown balance during sync and a visible cancel control",
+      "Native consolidation form with exact-input count and explicit privacy consent"
+    ],
+    "finding": "Populated fee field hid its unit placeholder; persistent fee and amount units added in bad8721",
+    "scope": "Limited frame inspection, not complete visual/accessibility qualification"
+  }
+}

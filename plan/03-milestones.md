@@ -4,10 +4,10 @@ These are ordered work packages, not time estimates.
 
 | Milestone | Source status | Done only when |
 |---|---|---|
-| M0: product/design baseline | Approved reference included | Reference renders locally, attribution retained, decisions recorded |
-| M1: offline Rust/native foundation | Rust/native compilation and host FFI tests pass; mobile runtime gates open | Rust tests pass; both generated bindings compile; Android and iOS import a disposable public descriptor, survive restart, derive distinct persistent addresses, show unknown balances |
-| M2: sync + durable coin state | Core and real regtest checks pass; native/runtime qualification in progress | Explicit test endpoint syncs/reorgs correctly, no keys/labels leak, balance freshness represented, spent/reserved/frozen transitions tested |
-| M3: native coin control + review | Native source and core tests implemented; runtime validation in progress | Native exact-input, automatic, max and consolidation flows round-trip through Rust; no UI-only validation; layouts match prototype; interrupted drafts persist |
+| M0: product/design baseline | Local rendering and all reference integrity checks passed; attribution retained | Reference renders locally, attribution retained, decisions recorded |
+| M1: offline Rust/native foundation | Rust/native builds, host FFI and initial virtual runtime checks pass; broader device qualification remains | Rust tests pass; both generated bindings compile; Android and iOS import a disposable public descriptor, survive restart, derive distinct persistent addresses, show unknown balances |
+| M2: sync + durable coin state | Core reorg checks and both native regtest sync scenarios pass | Explicit test endpoint syncs/reorgs correctly, no keys/labels leak, balance freshness represented, spent/reserved/frozen transitions tested |
+| M3: native coin control + review | Android exact-input and iOS consolidation/restart checks pass; full mode/layout qualification remains | Native exact-input, automatic, max and consolidation flows round-trip through Rust; no UI-only validation; layouts match prototype; interrupted drafts persist |
 | M4: QR external signing | Not implemented | Bounded UR/BBQr sessions interoperate on devices; wrong payloads/transactions rejected; per-input signatures verified; receive/policy comparison works |
 | M5: Android USB / bhwi | Not implemented | Pinned bhwi revision; documented model/firmware/transport matrix; permission, cancellation, reconnect and app lifecycle tests pass |
 | M6: signet end-to-end | Not implemented | 2-of-3 QR + USB with restart signs, validates, finalizes and explicitly broadcasts to a configured test backend |
@@ -16,10 +16,10 @@ These are ordered work packages, not time estimates.
 ## M1 backlog before declaring it done
 
 - Rust compilation, rustfmt and reviewed Cargo.lock completed on Rust 1.93.1; keep required checks passing.
-- Both native adapters compile, host FFI error/Unicode/amount/reopen tests pass, and the
-  Android APK contains the arm64/x86_64 Rust libraries. Verify these on mobile runtimes.
-- Run Android instrumentation and iOS simulator runtime tests; validate accessibility,
-  dark/light appearance, restart and cancellation on device.
+- Both adapters compile and execute the actual mobile Rust library; Android packages both
+  arm64/x86_64 ABIs. Keep the recorded host/mobile FFI and process-restart checks passing.
+- Extend initial emulator/simulator coverage to accessibility, dark/light appearance and
+  cancellation during active network IO on physical phones.
 - Public key ordering, duplicate accounts/origins, branch/policy mismatches and hardened/public
   derivation constraints now have regression coverage. Expand private-key/WIF rejection and
   parser fuzz coverage before declaring descriptor validation complete.
