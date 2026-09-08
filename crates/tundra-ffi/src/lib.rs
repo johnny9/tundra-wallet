@@ -49,7 +49,7 @@ pub enum CoinState {
     Frozen,
     Reserved,
     Pending,
-    CoinbaseUnsupported,
+    Immature,
 }
 impl From<core::CoinStatus> for CoinState {
     fn from(p: core::CoinStatus) -> Self {
@@ -58,7 +58,7 @@ impl From<core::CoinStatus> for CoinState {
             core::CoinStatus::Frozen => Self::Frozen,
             core::CoinStatus::Reserved => Self::Reserved,
             core::CoinStatus::Pending => Self::Pending,
-            core::CoinStatus::CoinbaseUnsupported => Self::CoinbaseUnsupported,
+            core::CoinStatus::Immature => Self::Immature,
         }
     }
 }
@@ -69,6 +69,7 @@ pub struct WalletInfo {
     pub network: Chain,
     pub policy: WalletPolicy,
     pub synced: bool,
+    pub synced_at: Option<u64>,
     pub total_sats: Option<u64>,
     pub available_sats: Option<u64>,
 }
@@ -80,6 +81,7 @@ impl From<core::WalletSummary> for WalletInfo {
             network: w.network.into(),
             policy: w.policy.into(),
             synced: w.synced_at.is_some(),
+            synced_at: w.synced_at,
             total_sats: w.total_sats,
             available_sats: w.available_sats,
         }
@@ -233,6 +235,42 @@ impl From<core::Error> for AppError {
 }
 type Result<T> = std::result::Result<T, AppError>;
 
+#[derive(Debug, Clone, Copy, uniffi::Enum)]
+pub enum SyncState {
+    Prepared,
+    Scanning,
+    Applying,
+    Complete,
+    Cancelled,
+    Failed,
+}
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct SyncInfo {
+    pub id: u64,
+    pub wallet_id: String,
+    pub state: SyncState,
+    pub scanned_scripts: u32,
+    pub error: Option<String>,
+}
+impl From<core::SyncProgress> for SyncInfo {
+    fn from(p: core::SyncProgress) -> Self {
+        Self {
+            id: p.id,
+            wallet_id: p.wallet_id,
+            state: match p.phase {
+                core::SyncPhase::Prepared => SyncState::Prepared,
+                core::SyncPhase::Scanning => SyncState::Scanning,
+                core::SyncPhase::Applying => SyncState::Applying,
+                core::SyncPhase::Complete => SyncState::Complete,
+                core::SyncPhase::Cancelled => SyncState::Cancelled,
+                core::SyncPhase::Failed => SyncState::Failed,
+            },
+            scanned_scripts: p.scanned_scripts,
+            error: p.error,
+        }
+    }
+}
+
 #[derive(uniffi::Object)]
 pub struct Tundra {
     core: core::Core,
@@ -247,6 +285,29 @@ impl Tundra {
     }
     pub fn wallets(&self) -> Result<Vec<WalletInfo>> {
         Ok(self.core.wallets()?.into_iter().map(Into::into).collect())
+    }
+    pub fn prepare_sync(
+        &self,
+        wallet_id: String,
+        endpoint: String,
+        privacy_consent: bool,
+    ) -> Result<SyncInfo> {
+        Ok(self
+            .core
+            .prepare_sync(&wallet_id, &endpoint, privacy_consent)?
+            .into())
+    }
+    pub fn run_sync(&self, operation_id: u64) -> Result<()> {
+        Ok(self.core.run_sync(operation_id)?)
+    }
+    pub fn sync_progress(&self, operation_id: u64) -> Result<SyncInfo> {
+        Ok(self.core.sync_progress(operation_id)?.into())
+    }
+    pub fn cancel_sync(&self, operation_id: u64) -> Result<SyncInfo> {
+        Ok(self.core.cancel_sync(operation_id)?.into())
+    }
+    pub fn sync_endpoint(&self, wallet_id: String) -> Result<Option<String>> {
+        Ok(self.core.sync_endpoint(&wallet_id)?)
     }
     pub fn preview_import(&self, payload: String, network: Chain) -> Result<WalletPreview> {
         let p = self.core.preview_import(&payload, network.into())?;

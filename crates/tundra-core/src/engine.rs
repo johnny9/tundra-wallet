@@ -16,30 +16,32 @@ use std::{
     collections::{BTreeMap, BTreeSet},
     path::Path,
     str::FromStr,
-    sync::{Mutex, MutexGuard},
+    sync::{Arc, Mutex, MutexGuard},
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
 /// One shared service per app. All wallet mutations are committed atomically with metadata.
 /// No in-memory BDK instance survives a failed DB transaction.
+#[derive(Clone)]
 pub struct Core {
-    db: Mutex<Connection>,
+    pub(crate) db: Arc<Mutex<Connection>>,
+    pub(crate) syncs: Arc<crate::sync::Operations>,
 }
-struct Loaded {
-    wallet: Wallet,
-    state: ChangeSet,
-    summary: WalletSummary,
+pub(crate) struct Loaded {
+    pub(crate) wallet: Wallet,
+    pub(crate) state: ChangeSet,
+    pub(crate) summary: WalletSummary,
 }
-fn now() -> Result<u64> {
+pub(crate) fn now() -> Result<u64> {
     SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .map(|t| t.as_secs())
         .map_err(|_| Error::Storage)
 }
-fn json<T: serde::Serialize>(v: &T) -> Result<String> {
+pub(crate) fn json<T: serde::Serialize>(v: &T) -> Result<String> {
     serde_json::to_string(v).map_err(|_| Error::CorruptState)
 }
-fn from_json<T: serde::de::DeserializeOwned>(v: &str) -> Result<T> {
+pub(crate) fn from_json<T: serde::de::DeserializeOwned>(v: &str) -> Result<T> {
     serde_json::from_str(v).map_err(|_| Error::CorruptState)
 }
 fn text(s: &str, max: usize) -> Result<()> {
@@ -62,15 +64,16 @@ impl Core {
             "PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL;",
         )?;
         let version: i64 = conn.query_row("PRAGMA user_version", [], |r| r.get(0))?;
-        if version > 1 {
+        if version > 2 {
             return Err(Error::CorruptState);
         }
         conn.execute_batch(include_str!("schema.sql"))?;
         Ok(Self {
-            db: Mutex::new(conn),
+            db: Arc::new(Mutex::new(conn)),
+            syncs: Arc::new(crate::sync::Operations::default()),
         })
     }
-    fn lock(&self) -> Result<MutexGuard<'_, Connection>> {
+    pub(crate) fn lock(&self) -> Result<MutexGuard<'_, Connection>> {
         self.db.lock().map_err(|_| Error::Poisoned)
     }
     pub fn preview_import(&self, payload: &str, network: Network) -> Result<ImportPreview> {
@@ -508,13 +511,18 @@ impl Core {
     }
     pub fn export_unsigned_psbt(&self, id: &str, draft_id: &str) -> Result<String> {
         let db = self.lock()?;
-        db.query_row(
-            "SELECT psbt FROM drafts WHERE wallet_id=?1 AND id=?2",
-            params![id, draft_id],
-            |r| r.get(0),
-        )
-        .optional()?
-        .ok_or(Error::NotFound)
+        let (psbt, review): (String, String) = db
+            .query_row(
+                "SELECT psbt,review_json FROM drafts WHERE wallet_id=?1 AND id=?2",
+                params![id, draft_id],
+                |r| Ok((r.get(0)?, r.get(1)?)),
+            )
+            .optional()?
+            .ok_or(Error::NotFound)?;
+        if from_json::<DraftReview>(&review)?.state != "unsigned" {
+            return Err(Error::UnavailableCoin);
+        }
+        Ok(psbt)
     }
     pub fn discard_draft(&self, id: &str, draft_id: &str) -> Result<()> {
         let mut db = self.lock()?;
@@ -531,7 +539,7 @@ impl Core {
     }
 }
 
-fn load(db: &Connection, id: &str) -> Result<Loaded> {
+pub(crate) fn load(db: &Connection, id: &str) -> Result<Loaded> {
     let row = db
         .query_row(
             "SELECT name,network,policy,state_json,synced_at FROM wallets WHERE id=?1",
@@ -574,7 +582,7 @@ fn load(db: &Connection, id: &str) -> Result<Loaded> {
         },
     })
 }
-fn save(db: &Connection, id: &str, l: &mut Loaded) -> Result<()> {
+pub(crate) fn save(db: &Connection, id: &str, l: &mut Loaded) -> Result<()> {
     if let Some(changes) = l.wallet.take_staged() {
         l.state.merge(changes);
     }
@@ -628,7 +636,6 @@ fn coins(db: &Connection, id: &str, w: &Wallet) -> Result<Vec<Coin>> {
             |r| r.get(0),
         )?;
         let confirmed = matches!(c.chain_position, ChainPosition::Confirmed { .. });
-        // Conservative milestone rule: coinbase outputs are not eligible yet, even if mature.
         let coinbase = w
             .get_tx(c.outpoint.txid)
             .is_some_and(|tx| tx.tx_node.tx.is_coinbase());
@@ -638,8 +645,10 @@ fn coins(db: &Connection, id: &str, w: &Wallet) -> Result<Vec<Coin>> {
             CoinStatus::Reserved
         } else if !confirmed {
             CoinStatus::Pending
-        } else if coinbase {
-            CoinStatus::CoinbaseUnsupported
+        } else if coinbase
+            && !crate::sync::spendable(c.chain_position, w.local_chain().tip().height(), true)
+        {
+            CoinStatus::Immature
         } else {
             CoinStatus::Available
         };
@@ -766,6 +775,83 @@ mod tests {
         let (c, id) = setup();
         assert!(c.wallets().unwrap()[0].total_sats.is_none());
         assert!(c.coins(&id).unwrap().is_empty());
+    }
+    #[test]
+    fn observed_spend_invalidates_draft_and_releases_other_inputs_only() {
+        let (c, id, coins) = funded();
+        let draft = c
+            .create_draft(req(
+                &id,
+                coins.iter().map(|c| c.outpoint.clone()).collect(),
+                50_000,
+            ))
+            .unwrap();
+        c.set_frozen(&id, &coins[1].outpoint, true).unwrap();
+        {
+            let mut db = c.lock().unwrap();
+            let tx = db
+                .transaction_with_behavior(TransactionBehavior::Immediate)
+                .unwrap();
+            let mut l = load(&tx, &id).unwrap();
+            // Graph fixture only: not a signed or broadcast transaction.
+            let spend = Transaction {
+                version: transaction::Version::TWO,
+                lock_time: absolute::LockTime::ZERO,
+                input: vec![TxIn {
+                    previous_output: outpoint(&coins[0].outpoint).unwrap(),
+                    script_sig: ScriptBuf::new(),
+                    sequence: Sequence::MAX,
+                    witness: Witness::new(),
+                }],
+                output: vec![TxOut {
+                    value: Amount::from_sat(coins[0].sats - 1000),
+                    script_pubkey: ScriptBuf::new(),
+                }],
+            };
+            l.wallet.apply_unconfirmed_txs([(spend, now().unwrap())]);
+            crate::sync::invalidate_drafts(&tx, &id, &l.wallet).unwrap();
+            save(&tx, &id, &mut l).unwrap();
+            tx.commit().unwrap();
+        }
+        assert_eq!(c.drafts(&id).unwrap()[0].state, "invalidated");
+        assert!(c.export_unsigned_psbt(&id, &draft.id).is_err());
+        assert!(
+            !c.coins(&id)
+                .unwrap()
+                .iter()
+                .any(|c| c.outpoint == coins[0].outpoint)
+        );
+        c.set_frozen(&id, &coins[1].outpoint, false).unwrap();
+        assert_eq!(c.coins(&id).unwrap()[0].status, CoinStatus::Available);
+    }
+    #[test]
+    fn version_one_migration_keeps_indices_and_metadata() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("wallet.sqlite");
+        let c = Core::open(&path).unwrap();
+        let w = c
+            .import_wallet("Migration", SINGLE, Network::Signet)
+            .unwrap();
+        let address = c.receive_address(&w.id).unwrap();
+        c.set_label(&w.id, "addr", &address.address, "Keep 🧊")
+            .unwrap();
+        c.lock()
+            .unwrap()
+            .execute_batch("DROP TABLE sync_state; PRAGMA user_version=1;")
+            .unwrap();
+        drop(c);
+        let c = Core::open(&path).unwrap();
+        assert_eq!(c.receive_address(&w.id).unwrap().index, 1);
+        assert!(c.export_labels(&w.id).unwrap().contains("Keep 🧊"));
+        assert!(c.wallets().unwrap()[0].total_sats.is_none());
+        assert!(c.sync_endpoint(&w.id).unwrap().is_none());
+        assert_eq!(
+            c.lock()
+                .unwrap()
+                .query_row("PRAGMA user_version", [], |r| r.get::<_, u32>(0))
+                .unwrap(),
+            2
+        );
     }
     #[test]
     fn duplicate_wallet_rejected() {

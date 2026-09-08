@@ -36,4 +36,9 @@ CREATE TABLE IF NOT EXISTS reservations (
     PRIMARY KEY (wallet_id, outpoint),
     FOREIGN KEY (wallet_id, draft_id) REFERENCES drafts(wallet_id, id) ON DELETE CASCADE
 );
-PRAGMA user_version = 1;
+CREATE TABLE IF NOT EXISTS sync_state (
+    wallet_id TEXT PRIMARY KEY REFERENCES wallets(id) ON DELETE CASCADE,
+    revision INTEGER NOT NULL DEFAULT 0,
+    endpoint TEXT NOT NULL
+);
+PRAGMA user_version = 2;

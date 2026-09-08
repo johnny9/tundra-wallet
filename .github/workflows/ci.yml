@@ -17,6 +17,8 @@ jobs:
         with:
           components: rustfmt, clippy
       - run: ./scripts/check.sh
+      - run: ./scripts/install-bitcoin-ci.sh
+      - run: ./scripts/check-regtest.sh
       - run: ./scripts/generate-bindings.sh
       - uses: actions/upload-artifact@v4
         if: always()

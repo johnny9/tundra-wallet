@@ -1,5 +1,21 @@
 # Validation status
 
+## Sync implementation pass — September 8, 2026
+
+Locally executed: 64 core unit tests, 5 adversarial loopback HTTP tests, 23 offline checks,
+formatting and strict Clippy pass. The separate real Bitcoin Core 31.1 regtest scenario
+passes: keyless mining, coinbase maturity, persistence, shorter/replacement reorgs,
+draft invalidation and durable user freezes. Both language bindings generate from the
+new compiled Rust library. Native sync changes await this pass's CI build/runtime tests;
+the native build evidence below belongs to the earlier named commit.
+
+The HTTP tests cover endpoint failure/wrong network, redirects, oversized/malformed responses,
+cancellation during IO, concurrent address issuance, failed database commit, and retention
+of the previous successful timestamp. These are development tests, not independent security
+review or hardware qualification. Real QR/USB signing and broadcast remain unavailable.
+
+## Previous compiled foundation
+
 Planning baseline: September 7, 2026. Current validation: **September 8, 2026**.
 **M1 is still open. The debug APK is a development artifact; no supported hardware or real-funds readiness is claimed.**
 

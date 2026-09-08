@@ -63,7 +63,7 @@ class SchemaChecks(unittest.TestCase):
     def draft(self, wallet="a", ident="draft"):
         self.db.execute("INSERT INTO drafts VALUES(?,?, 'UNSIGNED_TEST_MARKER','{}','',1)", (ident, wallet))
     def test_version_and_foreign_keys(self):
-        self.assertEqual(self.db.execute("PRAGMA user_version").fetchone()[0], 1)
+        self.assertEqual(self.db.execute("PRAGMA user_version").fetchone()[0], 2)
         self.assertEqual(self.db.execute("PRAGMA foreign_keys").fetchone()[0], 1)
     def test_unknown_sync_is_null_not_zero(self):
         self.assertIsNone(self.db.execute("SELECT synced_at FROM wallets WHERE id='a'").fetchone()[0])
@@ -177,12 +177,13 @@ class FixtureAndSourceChecks(unittest.TestCase):
         self.assertIn("manually_selected_only()", source)
         self.assertNotIn(".drain_wallet()", source)
         self.assertIn('Error::Unavailable("mainnet spending")', source)
-    def test_android_permissions_do_not_enable_network_or_backup(self):
+    def test_android_permissions_are_limited_and_backup_disabled(self):
         import xml.etree.ElementTree as ET
         root = ET.parse(ROOT/"apps/android/app/src/main/AndroidManifest.xml").getroot()
         android = "{http://schemas.android.com/apk/res/android}"
         self.assertEqual(root.find("application").get(android+"allowBackup"), "false")
-        self.assertFalse(root.findall("uses-permission"))
+        self.assertEqual([p.get(android+"name") for p in root.findall("uses-permission")],
+                         ["android.permission.INTERNET"])
     def test_no_bdk_bhwi_direct_imports_in_native_ui(self):
         for path in (ROOT/"apps").rglob("*"):
             if path.suffix in (".kt", ".swift"):

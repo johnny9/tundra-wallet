@@ -29,6 +29,13 @@ actor CoreService {
         try engine().importWallet(name: name, payload: payload, network: chain)
     }
     func receive(_ id: String) throws -> AddressInfo { try engine().receiveAddress(walletId: id) }
+    func endpoint(_ id: String) throws -> String { try engine().syncEndpoint(walletId: id) ?? "" }
+    func prepareSync(_ id: String, endpoint: String, consent: Bool) throws -> SyncInfo {
+        try engine().prepareSync(walletId: id, endpoint: endpoint, privacyConsent: consent)
+    }
+    func runSync(_ id: UInt64) throws { try engine().runSync(operationId: id) }
+    func progress(_ id: UInt64) throws -> SyncInfo { try engine().syncProgress(operationId: id) }
+    func cancelSync(_ id: UInt64) throws { _ = try engine().cancelSync(operationId: id) }
     func readDescriptor(_ url: URL) throws -> String {
         let accessed = url.startAccessingSecurityScopedResource()
         defer { if accessed { url.stopAccessingSecurityScopedResource() } }

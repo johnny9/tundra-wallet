@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 /** Presentation state only. Wallet decisions and persistence remain in Rust. */
@@ -19,7 +20,8 @@ data class WalletState(
     val coins: List<CoinInfo> = emptyList(), val activity: List<ActivityInfo> = emptyList(),
     val busy: Boolean = false, val error: String? = null, val dark: Boolean = true,
     val importPreview: WalletPreview? = null, val receive: AddressInfo? = null,
-    val labelPreview: LabelImportPreview? = null
+    val labelPreview: LabelImportPreview? = null,
+    val endpoint: String = "", val sync: SyncInfo? = null
 ) { val wallet: WalletInfo? get() = wallets.firstOrNull { it.id == selectedId } }
 
 class WalletViewModel(application: Application) : AndroidViewModel(application) {
@@ -50,7 +52,8 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         val id = mutable.value.selectedId?.takeIf { id -> wallets.any { it.id == id } } ?: wallets.firstOrNull()?.id
         val coins = if (id == null) emptyList() else withContext(Dispatchers.IO) { engine().coins(id) }
         val activity = if (id == null) emptyList() else withContext(Dispatchers.IO) { engine().activity(id) }
-        mutable.value = mutable.value.copy(wallets = wallets, selectedId = id, coins = coins, activity = activity)
+        val endpoint = if (id == null) "" else withContext(Dispatchers.IO) { engine().syncEndpoint(id) ?: "" }
+        mutable.value = mutable.value.copy(wallets = wallets, selectedId = id, coins = coins, activity = activity, endpoint = endpoint)
     }
     fun select(id: String) = run { mutable.value = mutable.value.copy(selectedId = id, receive = null); refresh() }
     fun appearance(dark: Boolean) { preferences.edit().putBoolean("dark", dark).apply(); mutable.value = mutable.value.copy(dark = dark) }
@@ -82,6 +85,34 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         mutable.value = mutable.value.copy(receive = address)
     }
     fun closeReceive() { mutable.value = mutable.value.copy(receive = null) }
+    fun sync(endpoint: String, consent: Boolean) = run {
+        val id = checkNotNull(mutable.value.selectedId)
+        val operation = withContext(Dispatchers.IO) { engine().prepareSync(id, endpoint, consent) }
+        mutable.value = mutable.value.copy(sync = operation)
+        try {
+            withContext(Dispatchers.IO) { engine().runSync(operation.id) }
+            while (true) {
+                val progress = withContext(Dispatchers.IO) { engine().syncProgress(operation.id) }
+                mutable.value = mutable.value.copy(sync = progress)
+                if (progress.state in listOf(SyncState.COMPLETE, SyncState.CANCELLED, SyncState.FAILED)) {
+                    mutable.value = mutable.value.copy(error = progress.error)
+                    refresh(); break
+                }
+                delay(150)
+            }
+        } finally {
+            // Idempotent; if commit won, the core retains its completed result.
+            withContext(kotlinx.coroutines.NonCancellable + Dispatchers.IO) { engine().cancelSync(operation.id) }
+        }
+    }
+    fun cancelSync() {
+        val id = mutable.value.sync?.id ?: return
+        viewModelScope.launch { withContext(Dispatchers.IO) { core?.cancelSync(id) } }
+    }
+    override fun onCleared() {
+        mutable.value.sync?.id?.let { core?.cancelSync(it) }
+        super.onCleared()
+    }
     fun label(kind: String, reference: String, value: String) = run {
         val id = checkNotNull(mutable.value.selectedId)
         withContext(Dispatchers.IO) { engine().setLabel(id, kind, reference, value) }; refresh()

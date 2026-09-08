@@ -14,6 +14,7 @@ struct TundraApp: App {
                 .privacySensitive()
                 .blur(radius: phase == .active ? 0 : 18)
                 .task { model.load() }
+                .onChange(of: phase) { _, phase in if phase != .active { model.cancelSync() } }
         }
     }
 }
@@ -23,6 +24,7 @@ struct WalletView: View {
     @Binding var dark: Bool
     @State private var tab = 0
     @State private var adding = false
+    @State private var syncing = false
     private var background: Color { dark ? Color(red: 0.055, green: 0.067, blue: 0.082) : Color(red: 0.984, green: 0.988, blue: 0.992) }
     var body: some View {
         NavigationStack {
@@ -45,8 +47,17 @@ struct WalletView: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(model.wallet?.totalSats.map { formatBalance(sats: $0) + " BTC" } ?? "— BTC")
                         .font(.system(size: 32, weight: .medium, design: .rounded)).monospacedDigit()
-                    Text(model.wallet == nil ? "Your bitcoin. Your hardware." : "Not connected · balance unknown")
+                    Text(model.wallet == nil ? "Your bitcoin. Your hardware." : model.wallet?.syncedAt.map { "Cached · last sync \(Date(timeIntervalSince1970: TimeInterval($0)).formatted())" } ?? "Not synced · balance unknown")
                         .font(.subheadline).foregroundStyle(.secondary)
+                    if model.wallet != nil {
+                        HStack {
+                            Button("Sync test network") { syncing = true }.disabled(model.busy)
+                            if let sync = model.sync, [.prepared, .scanning, .applying].contains(sync.state) {
+                                Text("\(sync.scannedScripts) scripts").font(.caption)
+                                Button("Cancel sync") { model.cancelSync() }
+                            }
+                        }
+                    }
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 Picker("Wallet view", selection: $tab) { Text("Activity").tag(0); Text("Coins").tag(1) }
                     .pickerStyle(.segmented)
@@ -78,7 +89,7 @@ struct WalletView: View {
                                     }
                                 }
                             }
-                            Text("Blockchain sync and hardware signing are not implemented in this build.")
+                            Text("Hardware signing is not qualified. Use disposable test wallets only.")
                                 .font(.footnote).foregroundStyle(.secondary)
                         }.frame(maxWidth: .infinity, alignment: .leading)
                     }
@@ -89,8 +100,8 @@ struct WalletView: View {
                 Text("Development only. Do not fund these addresses.").font(.caption).foregroundStyle(.secondary)
             }
             .padding(24).background(background.ignoresSafeArea())
-            .disabled(model.busy)
             .sheet(isPresented: $adding, onDismiss: { model.cancelImport() }) { ImportView(model: model) }
+            .sheet(isPresented: $syncing) { SyncView(model: model) }
             .sheet(isPresented: Binding(get: { model.received != nil }, set: { if !$0 { model.received = nil } })) {
                 VStack(alignment: .leading, spacing: 20) {
                     Text("Unverified address").font(.title2)
@@ -100,6 +111,27 @@ struct WalletView: View {
                 }.padding(24).presentationDetents([.medium])
             }
         }
+    }
+}
+
+struct SyncView: View {
+    @ObservedObject var model: WalletModel
+    @Environment(\.dismiss) private var dismiss
+    @State private var endpoint = ""
+    @State private var consent = false
+    var body: some View {
+        NavigationStack {
+            Form {
+                TextField("Esplora API URL", text: $endpoint)
+                    .textInputAutocapitalization(.never).autocorrectionDisabled().keyboardType(.URL)
+                Text("Your server can associate requested script hashes and transactions with your IP address. Descriptors and labels stay on this device. The server supplies your view of the test chain.")
+                Toggle("I trust this endpoint and agree to these requests", isOn: $consent)
+                Button("Start scan") { model.synchronize(endpoint, consent: consent); dismiss() }
+                    .disabled(!consent || endpoint.isEmpty || model.busy)
+            }
+            .navigationTitle("Test endpoint")
+            .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } } }
+        }.onAppear { endpoint = model.endpoint }
     }
 }
 

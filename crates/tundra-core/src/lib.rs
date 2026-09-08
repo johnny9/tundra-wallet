@@ -7,6 +7,8 @@ mod error;
 pub mod hardware;
 pub mod labels;
 mod model;
+mod sync;
 pub use engine::Core;
 pub use error::{Error, Result};
 pub use model::*;
+pub use sync::{SyncPhase, SyncProgress};

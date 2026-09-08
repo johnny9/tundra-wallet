@@ -27,6 +27,16 @@ pub enum Error {
     UnavailableCoin,
     #[error("Selected coins cannot fund this transaction, including its fee")]
     CannotBuild,
+    #[error("Sync was cancelled; the previous wallet state was retained")]
+    Cancelled,
+    #[error("Sync failed: check the endpoint, network and connection, then retry")]
+    SyncFailed,
+    #[error("Sync exceeded a bounded response, scan or time limit")]
+    SyncLimit,
+    #[error("Wallet changed during sync; retry with the current state")]
+    StaleSync,
+    #[error("Another sync is already in progress")]
+    SyncBusy,
     #[error("Not implemented in this development milestone: {0}")]
     Unavailable(&'static str),
     #[error("Wallet database operation failed")]

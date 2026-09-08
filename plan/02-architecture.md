@@ -72,9 +72,27 @@ validates bounded payloads. Never send camera images across FFI unnecessarily.
 
 ## Sync and draft lifecycle
 
-No sync adapter exists in M1. Implement configurable test-network Esplora first with explicit
-consent, then additional adapters as justified. No fixed public endpoint or automatic
-network request at app launch. Cached balances need last-sync/stale state.
+The Esplora adapter uses a bounded reqwest/rustls client and BDK wallet updates. A prepared
+operation ID exists before IO; run, poll and cancel are separate typed calls. A worker scans
+both keychains outside the DB mutex, then checks its snapshot/revision and commits chain,
+freshness and draft invalidation atomically. Address/draft changes during the scan cause a
+retry; independent label/freeze changes survive. Cancellation and commit serialize, so the
+returned terminal state says which won. Schema v2 adds endpoint and sync revision metadata.
+
+No fixed endpoint or launch requests. Each scan requires explicit privacy consent. HTTPS
+is required except loopback HTTP (including Android emulator host 10.0.2.2). Redirects,
+embedded credentials and implicit environment proxies are disabled. Cached balances show
+the last successful scan; errors/cancellation preserve it. Limits: 20 unused scripts per
+branch after the last revealed/active index, 2,000 scripts per branch, 5,000 transactions,
+4 MB per response, 64 MB total, 20,000 requests and 180 seconds overall. Reaching a limit
+fails without a partial commit. Larger histories and non-default discovery gaps need a
+reviewed configuration flow before broad wallet support.
+
+The server remains the trusted view of the test chain. Transaction IDs, block-header hashes
+and Merkle inclusion proofs are checked; this is not independent chain-work/SPV validation.
+The adapter replaces its validated checkpoint snapshot, including shorter tips, and expires
+affected drafts permanently until the user rebuilds them. A reappearing coin retains its
+label/freeze, but cannot silently restore an old approval.
 
 Build -> review -> request signature -> validate/merge -> request second key if needed ->
 finalize -> explicit broadcast. A returned PSBT must match the immutable approved transaction.

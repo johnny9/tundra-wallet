@@ -12,14 +12,16 @@ approval system, or cloud account.
 
 ## Current status — September 8, 2026
 
-**Rust and native builds pass; mobile runtime qualification pending. M1 remains open.**
+**Test-network sync implemented and under validation; M1 mobile runtime gates remain open.**
 
 - Source: descriptor-first watch-only engine, metadata, unsigned-draft core, UniFFI API,
   Android native import shell, iOS native starter, tests and CI.
 - Verified: 60 Rust tests, 23 offline checks, Android debug APK and iOS simulator-target builds,
   and Kotlin/Swift host FFI smoke tests.
   See [VALIDATION.md](VALIDATION.md) for the exact results and remaining gates.
-- Not implemented: chain synchronization, real QR/USB transport, bhwi device integration,
+- Added: bounded opt-in Esplora scans, cancellation, cached timestamps, coinbase maturity,
+  reorg-safe draft invalidation, and a keyless Bitcoin Core regtest integration test.
+- Not implemented: real QR/USB transport, bhwi device integration,
   signed-response validation, finalization/broadcast, production storage protection.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Not performed locally: Android build or Xcode build.

@@ -38,7 +38,10 @@ The database contains public descriptors and sensitive labels/history. An attack
 can tamper with it can mislead the UI. Hardware address/policy verification is therefore a
 required user interaction, not replaced by successful descriptor parsing.
 
-M1 has no application-network permissions on Android and no configured remote endpoint.
+Android now requests INTERNET for explicitly initiated sync. No endpoint is configured by
+default, and opening/resuming the app makes no chain requests. The native Rust HTTP adapter
+enforces transport restrictions; Android's Java networking policy is not treated as a
+substitute for those checks.
 Mainnet transaction construction is blocked in Rust. Offline addresses are clearly
 unverified and must not be funded. Test fixture private keys are not supplied and should
 be assumed unavailable.

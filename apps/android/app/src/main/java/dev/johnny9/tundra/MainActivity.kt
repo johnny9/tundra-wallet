@@ -23,6 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.johnny9.tundra.generated.*
 
 class MainActivity : ComponentActivity() {
@@ -44,6 +47,13 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
     var menu by remember { mutableStateOf(false) }
     var editing by remember { mutableStateOf<CoinInfo?>(null) }
     var labelText by remember { mutableStateOf("") }
+    var syncSheet by remember { mutableStateOf(false) }
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner, vm) {
+        val observer = LifecycleEventObserver { _, event -> if (event == Lifecycle.Event.ON_STOP) vm.cancelSync() }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
     val importLabels = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { it?.let(vm::inspectLabels) }
     val exportLabels = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/jsonl")) { it?.let(vm::exportLabels) }
     Surface(Modifier.fillMaxSize()) {
@@ -74,6 +84,16 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
                 Spacer(Modifier.height(20.dp))
                 Text(s.wallet!!.totalSats?.let { "${formatBalance(it)} BTC" } ?: "— BTC", fontSize = 30.sp, fontWeight = FontWeight.Medium)
                 Text(if (s.wallet!!.synced) "${s.wallet!!.availableSats?.let(::formatBalance) ?: "—"} BTC available" else "Not synced · balance unknown", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(s.wallet!!.syncedAt?.let { "Cached · last sync ${java.time.Instant.ofEpochSecond(it.toLong())}" } ?: "No successful scan", style = MaterialTheme.typography.bodySmall)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    TextButton(onClick = { syncSheet = true }, enabled = !s.busy) { Text("Sync test network") }
+                    s.sync?.let { op ->
+                        if (op.state in listOf(SyncState.PREPARED, SyncState.SCANNING, SyncState.APPLYING)) {
+                            Text("${op.scannedScripts} scripts", style = MaterialTheme.typography.bodySmall)
+                            TextButton(onClick = vm::cancelSync) { Text("Cancel sync") }
+                        }
+                    }
+                }
                 Spacer(Modifier.height(20.dp))
                 // Shared header stays outside either lazy list; switching tabs cannot move it.
                 TabRow(selectedTabIndex = tab) {
@@ -85,9 +105,9 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
                         OutlinedButton(onClick = vm::receive, enabled = !s.busy, modifier = Modifier.weight(1f)) { Text("Receive") }
                         Button(onClick = {}, enabled = false, modifier = Modifier.weight(1f)) { Text("Send") }
                     }
-                    Text("Sync and hardware signing are not connected in this milestone. Do not fund derived addresses.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("Hardware signing is not qualified. Use disposable test wallets only.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     LazyColumn(Modifier.weight(1f).padding(top = 16.dp)) {
-                        if (s.activity.isEmpty()) item { EmptyState("No synced activity", "A future backend connection will populate your actual transactions.") }
+                        if (s.activity.isEmpty()) item { EmptyState("No activity", "Transactions appear after a successful scan of your chosen endpoint.") }
                         items(s.activity, key = { it.txid }) { tx ->
                             ListItem(headlineContent = { Text(tx.label.ifBlank { "Unlabeled transaction" }) }, supportingContent = { Text(if (tx.confirmed) "Confirmed" else "Pending") })
                         }
@@ -108,6 +128,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
         }
     }
     if (add) ImportSheet(vm, s, onClose = { vm.cancelImport(); add = false })
+    if (syncSheet) SyncSheet(s.endpoint, onClose = { syncSheet = false }, onSync = { endpoint, consent -> syncSheet = false; vm.sync(endpoint, consent) })
     if (settings) ModalBottomSheet(onDismissRequest = { settings = false }) {
         Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Text("Tundra", style = MaterialTheme.typography.headlineSmall)
@@ -119,7 +140,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
             Text("Exports are unencrypted and privacy-sensitive. Only existing references in this wallet are matched; origin-tagged records are skipped for now.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { importLabels.launch(arrayOf("*/*")) }, enabled = s.wallet != null && !s.busy) { Text("Import labels") }
             OutlinedButton(onClick = { exportLabels.launch("tundra-labels.jsonl") }, enabled = s.wallet != null && !s.busy) { Text("Export labels") }
-            Text("v0.1.0-dev.1 · Offline watch-only milestone", style = MaterialTheme.typography.labelSmall)
+            Text("v0.1.0-dev.1 · Test-network development", style = MaterialTheme.typography.labelSmall)
             Spacer(Modifier.height(24.dp))
         }
     }
@@ -144,6 +165,23 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
         confirmButton = { TextButton(onClick = vm::applyLabels, enabled = !s.busy) { Text("Apply") } },
         dismissButton = { TextButton(onClick = vm::cancelLabels) { Text("Cancel") } }) }
     s.error?.let { message -> AlertDialog(onDismissRequest = vm::clearError, title = { Text("Could not complete") }, text = { Text(message) }, confirmButton = { TextButton(onClick = vm::clearError) { Text("OK") } }) }
+}
+@Composable private fun SyncSheet(savedEndpoint: String, onClose: () -> Unit, onSync: (String, Boolean) -> Unit) {
+    var endpoint by remember { mutableStateOf(savedEndpoint) }
+    var consent by remember { mutableStateOf(false) }
+    ModalBottomSheet(onDismissRequest = onClose) {
+        Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Text("Connect a test endpoint", style = MaterialTheme.typography.headlineSmall)
+            OutlinedTextField(value = endpoint, onValueChange = { if (it.length <= 2048) endpoint = it }, label = { Text("Esplora API URL") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+            Text("Your server can associate requested script hashes and transactions with your IP address. Descriptors and labels stay on this device. The server supplies your view of the test chain.")
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(checked = consent, onCheckedChange = { consent = it })
+                Text("I trust this endpoint and agree to these requests")
+            }
+            Button(onClick = { onSync(endpoint, consent) }, enabled = consent && endpoint.isNotBlank()) { Text("Start scan") }
+            TextButton(onClick = onClose) { Text("Cancel") }
+        }
+    }
 }
 @Composable private fun EmptyState(title: String, detail: String) {
     Column(Modifier.fillMaxWidth().padding(vertical = 24.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {

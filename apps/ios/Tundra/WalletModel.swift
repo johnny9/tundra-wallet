@@ -11,6 +11,8 @@ final class WalletModel: ObservableObject {
     @Published var received: AddressInfo?
     @Published var busy = false
     @Published var error: String?
+    @Published var endpoint = ""
+    @Published var sync: SyncInfo?
     private let service = CoreService()
     // Sensitive in-memory edit state is not stored in scene restoration or preferences.
     private var pendingPayload: String?
@@ -35,6 +37,7 @@ final class WalletModel: ObservableObject {
         if let id = selectedID {
             coins = try await service.coins(id)
             activity = try await service.activity(id)
+            endpoint = try await service.endpoint(id)
         } else { coins = []; activity = [] }
     }
     func select(_ id: String) { run { self.selectedID = id; self.received = nil; try await self.refresh() } }
@@ -66,5 +69,32 @@ final class WalletModel: ObservableObject {
             guard let id = self.selectedID else { return }
             self.received = try await self.service.receive(id)
         }
+    }
+    func synchronize(_ endpoint: String, consent: Bool) {
+        run {
+            guard let id = self.selectedID else { return }
+            let operation = try await self.service.prepareSync(id, endpoint: endpoint, consent: consent)
+            self.sync = operation
+            do {
+                try await self.service.runSync(operation.id)
+                while true {
+                    let progress = try await self.service.progress(operation.id)
+                    self.sync = progress
+                    if [.complete, .cancelled, .failed].contains(progress.state) {
+                        self.error = progress.error
+                        try await self.refresh()
+                        break
+                    }
+                    try await Task.sleep(for: .milliseconds(150))
+                }
+            } catch {
+                try? await self.service.cancelSync(operation.id)
+                throw error
+            }
+        }
+    }
+    func cancelSync() {
+        guard let id = sync?.id else { return }
+        Task { try? await service.cancelSync(id) }
     }
 }

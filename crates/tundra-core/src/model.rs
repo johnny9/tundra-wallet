@@ -85,7 +85,7 @@ pub enum CoinStatus {
     Frozen,
     Reserved,
     Pending,
-    CoinbaseUnsupported,
+    Immature,
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Coin {
