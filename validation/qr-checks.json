@@ -31,7 +31,15 @@
     "signature_validator_fuzzed": false
   },
   "environment_failure": "Sandbox run completed 1638756 inputs in 61 seconds, then LeakSanitizer failed because ptrace was restricted. The same harness passed on the host without changing system settings.",
-  "native_qr_tests": "authored; not yet built/run",
+  "native_qr_tests": {
+    "run": "https://github.com/johnny9/tundra-wallet/actions/runs/34284043840",
+    "source": "b034c46878aef1413ebba93e75ed3b729a295587",
+    "android": "compiled; descriptor barcode and payment/QR-export flow passed; BBQr fixture decoding failed in the single QR finder",
+    "ios": "Rust frameworks built; Swift compile failed on missing try and catch-variable shadowing",
+    "fixes": "Authored Swift error handling and Android multi-detector fallback; native rerun pending",
+    "host_probe": "ZXing 3.5.4 reproduced the single-finder miss; multi-detector decoded all 26 public UR/BBQr frames",
+    "host_probe_sha256": "079529e13920c2aa70015e328d00d8d18f220f4ea91d9a50f906555e801b4a6e"
+  },
   "physical_camera_or_hardware_qualified": false,
   "logs": {
     "build/qr-check.log": "73677a71acdf9c789661c28c5714ee0454962b5fbc4934bb6bdf220534dd3af5",

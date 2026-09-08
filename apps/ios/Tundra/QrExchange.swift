@@ -67,9 +67,9 @@ private actor QrSession {
     private let scanner: QrScanner
     init(_ purpose: QrPurpose) { scanner = QrScanner(purpose: purpose) }
     func receive(_ text: String) throws -> QrInfo { try scanner.receive(frame: text) }
-    func progress() -> QrInfo { scanner.progress() }
+    func progress() throws -> QrInfo { try scanner.progress() }
     func payload() throws -> Data { try scanner.payload() }
-    func cancel() { _ = scanner.cancel() }
+    func cancel() { _ = try? scanner.cancel() }
 }
 
 @MainActor private final class QrScanModel: ObservableObject {
@@ -110,7 +110,12 @@ private actor QrSession {
         polling = Task { [weak self] in
             while !Task.isCancelled {
                 do { try await Task.sleep(for: .milliseconds(250)) } catch { return }
-                let progress = await current.progress()
+                let progress: QrInfo
+                do { progress = try await current.progress() }
+                catch {
+                    if let self, self.generation == token { self.stop("Scan failed. Start a new scan or import a file.") }
+                    return
+                }
                 guard let self, self.generation == token else { return }
                 self.info = progress
                 if progress.state == .failed { self.stop("Scan expired. Start a new scan to continue."); return }
@@ -222,7 +227,7 @@ struct QrDisplayView: View {
                 try Task.checkCancellation()
                 bitmap = qrBitmap(matrix)
             } catch is CancellationError { }
-            catch { error = "QR could not be displayed. Close this screen and export a file."; paused = true }
+            catch { self.error = "QR could not be displayed. Close this screen and export a file."; paused = true }
         }
         .task(id: paused) {
             while !paused && frames.count > 1 {

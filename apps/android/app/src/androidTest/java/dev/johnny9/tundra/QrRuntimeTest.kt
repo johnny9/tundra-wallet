@@ -6,7 +6,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.google.zxing.BinaryBitmap
 import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.common.HybridBinarizer
-import com.google.zxing.qrcode.QRCodeReader
 import dev.johnny9.tundra.generated.*
 import org.json.JSONObject
 import org.junit.Assert.*
@@ -21,7 +20,7 @@ internal fun decodeQrMatrix(frame: String): String {
     val pixels = IntArray(width * width) { index ->
         if (image.modules[(index / width / scale) * side + index % width / scale].toInt() == 0) -1 else 0xff000000.toInt()
     }
-    return QRCodeReader().decode(BinaryBitmap(HybridBinarizer(RGBLuminanceSource(width, width, pixels)))).text
+    return decodeQrBitmap(BinaryBitmap(HybridBinarizer(RGBLuminanceSource(width, width, pixels))))
 }
 
 class QrRuntimeTest {

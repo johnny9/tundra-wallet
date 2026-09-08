@@ -39,9 +39,9 @@ final class RuntimeTests: XCTestCase {
                 let progress = try session.receive(frame: text)
                 if progress.state != .complete { XCTAssertEqual(try session.receive(frame: text), progress) }
             }
-            XCTAssertEqual(session.progress().state, .complete)
+            XCTAssertEqual(try session.progress().state, .complete)
             XCTAssertEqual(try session.payload(), expected)
-            XCTAssertEqual(session.cancel().state, .cancelled)
+            XCTAssertEqual(try session.cancel().state, .cancelled)
             XCTAssertThrowsError(try session.payload())
         }
         let descriptorURL = try XCTUnwrap(bundle.url(forResource: "single-sig", withExtension: "txt"))
@@ -52,7 +52,7 @@ final class RuntimeTests: XCTestCase {
         XCTAssertEqual(try importing.payload(), Data(descriptor.utf8))
         let wrongType = QrScanner(purpose: .signedPsbt)
         XCTAssertThrowsError(try wrongType.receive(frame: text))
-        XCTAssertEqual(wrongType.progress().state, .failed)
+        XCTAssertEqual(try wrongType.progress().state, .failed)
     }
     func testSignedFileBoundsAndBinaryFFI() async throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)

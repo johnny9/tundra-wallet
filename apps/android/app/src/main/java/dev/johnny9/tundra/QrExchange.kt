@@ -36,6 +36,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.google.zxing.BinaryBitmap
 import com.google.zxing.PlanarYUVLuminanceSource
 import com.google.zxing.ReaderException
+import com.google.zxing.NotFoundException
+import com.google.zxing.multi.qrcode.QRCodeMultiReader
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 import dev.johnny9.tundra.generated.*
@@ -47,9 +49,20 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 
+/** A valid QR can contain an extra finder-like pattern. The single detector can select
+ * the wrong triple; the multi detector considers the remaining candidates. This still
+ * locates a QR in a camera frame and does not assume a pre-cropped, perfectly aligned image. */
+internal fun decodeQrBitmap(bitmap: BinaryBitmap): String {
+    val reader = QRCodeReader()
+    return try { reader.decode(bitmap).text }
+    catch (_: ReaderException) {
+        QRCodeMultiReader().decodeMultiple(bitmap).firstOrNull()?.text
+            ?: throw NotFoundException.getNotFoundInstance()
+    } finally { reader.reset() }
+}
+
 /** Pixels stay on Android. Only a decoded QR string crosses the Rust boundary. */
 private class CameraQrAnalyzer(private val frame: (String) -> Unit) : ImageAnalysis.Analyzer {
-    private val reader = QRCodeReader()
     private var lastScan = 0L
     override fun analyze(image: ImageProxy) {
         try {
@@ -68,11 +81,11 @@ private class CameraQrAnalyzer(private val frame: (String) -> Unit) : ImageAnaly
                 pixels[y * width + x] = buffer.get(origin + y * plane.rowStride + x * plane.pixelStride)
             }
             val source = PlanarYUVLuminanceSource(pixels, width, height, 0, 0, width, height, false)
-            val text = reader.decode(BinaryBitmap(HybridBinarizer(source))).text
+            val text = decodeQrBitmap(BinaryBitmap(HybridBinarizer(source)))
             if (text.length <= 4_296) frame(text)
         } catch (_: ReaderException) {
             // A video frame without a readable QR is normal. Never log its pixels/text.
-        } finally { reader.reset(); image.close() }
+        } finally { image.close() }
     }
 }
 
@@ -109,6 +122,8 @@ private class CameraQrAnalyzer(private val frame: (String) -> Unit) : ImageAnaly
     AndroidView(factory = { view }, modifier = Modifier.fillMaxWidth().aspectRatio(1f))
 }
 
+private fun cancelScan(scanner: QrScanner): QrInfo? = try { scanner.cancel() } catch (_: Exception) { null }
+
 @Composable fun QrScanDialog(purpose: QrPurpose, onPayload: (ByteArray) -> Unit, onClose: () -> Unit) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current
@@ -125,10 +140,10 @@ private class CameraQrAnalyzer(private val frame: (String) -> Unit) : ImageAnaly
     DisposableEffect(scanner, lifecycle) {
         val session = scanner
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_STOP) { info = session.cancel(); error = "Scan cancelled when the app left the screen. Start a new scan to continue." }
+            if (event == Lifecycle.Event.ON_STOP) { info = cancelScan(session); error = "Scan cancelled when the app left the screen. Start a new scan to continue." }
         }
         lifecycle.lifecycle.addObserver(observer)
-        onDispose { lifecycle.lifecycle.removeObserver(observer); session.cancel(); session.close() }
+        onDispose { lifecycle.lifecycle.removeObserver(observer); cancelScan(session); session.close() }
     }
     LaunchedEffect(scanner) {
         val session = scanner
@@ -136,6 +151,7 @@ private class CameraQrAnalyzer(private val frame: (String) -> Unit) : ImageAnaly
             delay(250)
             val progress = try { withContext(Dispatchers.Default) { session.progress() } }
             catch (_: IllegalStateException) { break }
+            catch (failure: AppException.Operation) { error = failure.detail; break }
             info = progress
             if (progress.state == QrState.FAILED) { error = "Scan expired. Start a new scan to continue."; break }
             if (progress.state != QrState.SCANNING) break
@@ -168,7 +184,7 @@ private class CameraQrAnalyzer(private val frame: (String) -> Unit) : ImageAnaly
                                 finally { processing = false }
                             }
                         }
-                    }, onFailure = { error = "Camera unavailable. Close this scan and import a file."; info = scanner.cancel() })
+                    }, onFailure = { error = "Camera unavailable. Close this scan and import a file."; info = cancelScan(scanner) })
                     Text("${info?.resolvedFragments ?: 0u} / ${info?.totalFragments?.toString() ?: "?"} fragments")
                 }
                 error?.let {
