@@ -13,6 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+            fuzz/target
+          key: rust-${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-1.93.1-${{ hashFiles('Cargo.lock', 'fuzz/Cargo.lock') }}
       - uses: dtolnay/rust-toolchain@1.93.1
       - run: cargo install cargo-audit --version 0.22.2 --locked --no-default-features
       - run: mkdir -p build && cargo audit --json > build/audit.json
@@ -31,6 +39,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+            fuzz/target
+          key: rust-${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-1.93.1-${{ hashFiles('Cargo.lock', 'fuzz/Cargo.lock') }}
       - uses: dtolnay/rust-toolchain@1.93.1
         with:
           components: rustfmt, clippy
@@ -49,6 +65,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: rust-${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-1.93.1-${{ hashFiles('Cargo.lock') }}
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -113,6 +136,14 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+            fuzz/target
+          key: rust-${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-1.93.1-${{ hashFiles('Cargo.lock', 'fuzz/Cargo.lock') }}
       - uses: dtolnay/rust-toolchain@1.93.1
         with:
           targets: aarch64-apple-ios, aarch64-apple-ios-sim, x86_64-apple-ios
