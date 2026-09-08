@@ -186,12 +186,17 @@ struct QrScanView: View {
 }
 
 /// The Rust matrix includes its quiet zone. Use the same native image in display and Vision tests.
-func qrBitmap(_ matrix: QrImage) -> CGImage? {
+func qrBitmap(_ matrix: QrImage, scale: Int = 1) -> CGImage? {
     let side = Int(matrix.side)
-    guard side > 0, side <= 512, matrix.modules.count == side * side else { return nil }
-    let pixels = Data(matrix.modules.map { $0 == 0 ? UInt8(255) : UInt8(0) })
+    guard side > 0, side <= 512, (1...8).contains(scale), matrix.modules.count == side * side else { return nil }
+    let width = side * scale
+    // Expand rows directly so test/display pixels have the same orientation. Drawing an
+    // intermediate CGImage through a CGContext can introduce a coordinate-system flip.
+    let pixels = Data((0..<(width * width)).map { index in
+        matrix.modules[(index / width / scale) * side + index % width / scale] == 0 ? UInt8(255) : UInt8(0)
+    })
     guard let provider = CGDataProvider(data: pixels as CFData) else { return nil }
-    return CGImage(width: side, height: side, bitsPerComponent: 8, bitsPerPixel: 8, bytesPerRow: side,
+    return CGImage(width: width, height: width, bitsPerComponent: 8, bitsPerPixel: 8, bytesPerRow: width,
                    space: CGColorSpaceCreateDeviceGray(), bitmapInfo: CGBitmapInfo(rawValue: 0),
                    provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
 }

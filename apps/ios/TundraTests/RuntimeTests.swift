@@ -1,19 +1,18 @@
 import XCTest
 import Vision
+import UIKit
 @testable import Tundra
 
 final class RuntimeTests: XCTestCase {
     private func decodeQr(_ frame: String) throws -> String {
-        let bitmap = try XCTUnwrap(qrBitmap(try renderQrFrame(frame: frame)))
-        let side = bitmap.width * 8
-        let context = try XCTUnwrap(CGContext(data: nil, width: side, height: side, bitsPerComponent: 8,
-            bytesPerRow: side, space: CGColorSpaceCreateDeviceGray(), bitmapInfo: 0))
-        context.interpolationQuality = .none
-        context.draw(bitmap, in: CGRect(x: 0, y: 0, width: side, height: side))
-        let scaled = try XCTUnwrap(context.makeImage())
+        let scaled = try XCTUnwrap(qrBitmap(try renderQrFrame(frame: frame), scale: 8))
         let request = VNDetectBarcodesRequest(); request.symbologies = [.qr]
         try VNImageRequestHandler(cgImage: scaled).perform([request])
-        return try XCTUnwrap(request.results?.first?.payloadStringValue)
+        if let text = request.results?.first?.payloadStringValue { return text }
+        let image = XCTAttachment(image: UIImage(cgImage: scaled))
+        image.name = "Public QR fixture pixels"; image.lifetime = .keepAlways; add(image)
+        XCTFail("Vision could not decode the public QR fixture; exact pixels attached")
+        throw CocoaError(.fileReadCorruptFile)
     }
     func testQrMatrixWithIndependentVisionDecoderAndRealFfi() throws {
         let bundle = Bundle(for: Self.self)

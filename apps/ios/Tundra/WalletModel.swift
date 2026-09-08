@@ -80,9 +80,10 @@ final class WalletModel: ObservableObject {
         }
     }
     func add(_ name: String) {
+        guard let payload = pendingPayload else { return }
+        let chain = pendingChain
         run {
-            guard let payload = self.pendingPayload else { return }
-            let wallet = try await self.service.add(name: name, payload: payload, chain: self.pendingChain)
+            let wallet = try await self.service.add(name: name, payload: payload, chain: chain)
             self.selectedID = wallet.id; self.cancelImport(); try await self.refresh()
         }
     }

@@ -24,7 +24,14 @@ final class WalletUITests: XCTestCase {
         editor.typeText(try String(contentsOf: url, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines))
         app.buttons["Review descriptor"].tap()
         XCTAssertTrue(app.buttons["Add wallet"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["Add wallet"].isEnabled)
+        XCTAssertTrue(app.buttons["Add wallet"].isHittable)
         app.buttons["Add wallet"].tap()
+        // The review disappears only after the wallet is durably imported.
+        let imported = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: app.buttons["Add wallet"])
+        guard await XCTWaiter.fulfillment(of: [imported], timeout: 10) == .completed else {
+            XCTFail("Wallet import did not finish"); return
+        }
         // Import remains reviewable in the sheet until explicitly closed.
         app.buttons["Close"].tap()
         XCTAssertTrue(app.buttons["Receive"].waitForExistence(timeout: 10))
