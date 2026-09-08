@@ -12,6 +12,7 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "0.1.0-dev.1"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         ndk { abiFilters += listOf("arm64-v8a", "x86_64") }
     }
     buildFeatures { compose = true }
@@ -23,6 +24,7 @@ android {
     packaging { jniLibs.useLegacyPackaging = false }
     buildTypes { release { isMinifyEnabled = false } }
     sourceSets.getByName("test").resources.srcDir("../../../tests/fixtures")
+    sourceSets.getByName("androidTest").assets.srcDir("../../../tests/fixtures")
 }
 tasks.withType<Test>().configureEach {
     // Exercise the host Rust library via JNA, not an Android ABI or a mocked wallet.
@@ -40,6 +42,11 @@ dependencies {
     implementation("net.java.dev.jna:jna:5.17.0@aar")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
     testImplementation("junit:junit:4.13.2")
+    androidTestImplementation(platform("androidx.compose:compose-bom:2025.12.00"))
+    androidTestImplementation("androidx.test:runner:1.7.0")
+    androidTestImplementation("androidx.test:core-ktx:1.7.0")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     // The Android AAR has no host JNA dispatch library; JVM tests need the desktop artifact.
     testRuntimeOnly("net.java.dev.jna:jna:5.17.0@jar")
     debugImplementation("androidx.compose.ui:ui-tooling")

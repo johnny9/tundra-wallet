@@ -32,8 +32,30 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: dev.johnny9.tundra.dev
         TARGETED_DEVICE_FAMILY: "1,2"
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
+  TundraTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: TundraTests
+      - path: ../../tests/fixtures/single-sig.txt
+        buildPhase: resources
+    dependencies:
+      - target: Tundra
+  TundraUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: TundraUITests
+      - path: ../../tests/fixtures/single-sig.txt
+        buildPhase: resources
+    dependencies:
+      - target: Tundra
 schemes:
   Tundra:
     build:
       targets:
         Tundra: all
+    test:
+      targets:
+        - TundraTests
+        - TundraUITests

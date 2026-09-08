@@ -47,6 +47,7 @@ struct WalletView: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(model.wallet?.totalSats.map { formatBalance(sats: $0) + " BTC" } ?? "— BTC")
                         .font(.system(size: 32, weight: .medium, design: .rounded)).monospacedDigit()
+                        .accessibilityIdentifier("balance")
                     Text(model.wallet == nil ? "Your bitcoin. Your hardware." : model.wallet?.syncedAt.map { "Cached · last sync \(Date(timeIntervalSince1970: TimeInterval($0)).formatted())" } ?? "Not synced · balance unknown")
                         .font(.subheadline).foregroundStyle(.secondary)
                     if model.wallet != nil {
@@ -106,6 +107,7 @@ struct WalletView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     Text("Unverified address").font(.title2)
                     Text(model.received?.address ?? "").font(.system(.body, design: .monospaced))
+                    Text("Receive index \(model.received?.index ?? 0)").accessibilityIdentifier("receiveIndex")
                     Text("This address has not been verified on hardware. This build is for disposable test descriptors only. Do not fund it.")
                     Button("Close") { model.received = nil }
                 }.padding(24).presentationDetents([.medium])
@@ -151,6 +153,7 @@ struct ImportView: View {
                     TextEditor(text: $payload).font(.system(.caption, design: .monospaced))
                         .frame(minHeight: 120).autocorrectionDisabled().textInputAutocapitalization(.never)
                         .accessibilityLabel("Public descriptor")
+                        .accessibilityIdentifier("publicDescriptor")
                     Button("Review descriptor") { model.inspect(payload, chain: chain) }.disabled(payload.isEmpty || model.busy)
                     Text("QR scanning is planned. This native build does not simulate it.").font(.caption)
                 }

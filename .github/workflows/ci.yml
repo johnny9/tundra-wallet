@@ -45,6 +45,15 @@ jobs:
       - run: ./scripts/build-android.sh
       - uses: gradle/actions/setup-gradle@v4
       - run: ./apps/android/gradlew --no-daemon -p apps/android :app:assembleDebug :app:testDebugUnitTest
+      - name: Enable KVM for the hosted Android emulator
+        run: sudo chmod 666 /dev/kvm
+      - uses: reactivecircus/android-emulator-runner@v2.35.0
+        with:
+          api-level: 35
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          script: ./apps/android/gradlew --no-daemon -p apps/android :app:connectedDebugAndroidTest
       - uses: actions/upload-artifact@v4
         with:
           name: tundra-development-apk
@@ -54,6 +63,11 @@ jobs:
         with:
           name: tundra-jvm-test-results
           path: apps/android/app/build/test-results/testDebugUnitTest/*.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tundra-android-runtime-results
+          path: apps/android/app/build/outputs/androidTest-results/connected/**
   ios:
     runs-on: macos-15
     steps:
@@ -66,3 +80,9 @@ jobs:
       - run: ./scripts/check-swift-ffi.sh
       - run: cd apps/ios && xcodegen generate
       - run: xcodebuild -project apps/ios/Tundra.xcodeproj -scheme Tundra -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
+      - run: ./scripts/check-ios-runtime.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tundra-ios-runtime-results
+          path: build/ios-runtime.xcresult
