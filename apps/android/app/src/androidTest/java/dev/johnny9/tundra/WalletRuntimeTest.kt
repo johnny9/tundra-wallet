@@ -94,6 +94,10 @@ class WalletRuntimeTest {
             Tundra.open(context.noBackupFilesDir.resolve("tundra.sqlite").path).use { core ->
                 val wallet = core.wallets().single()
                 val draft = core.drafts(wallet.id).single()
+                assertNull(core.finalizedDraft(wallet.id, draft.id))
+                try { core.finalizeDraft(wallet.id, draft.id); fail("An unsigned draft cannot be finalized") }
+                catch (_: AppException.Operation) { }
+                assertEquals("unsigned", core.drafts(wallet.id).single().state)
                 val expected = android.util.Base64.decode(core.exportSigningPsbt(wallet.id, draft.id), android.util.Base64.DEFAULT)
                 for (encoding in listOf(QrEncoding.UR, QrEncoding.BBQR)) {
                     QrScanner(QrPurpose.SignedPsbt).use { scanner ->

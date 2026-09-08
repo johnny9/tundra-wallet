@@ -17,6 +17,7 @@ final class WalletModel: ObservableObject {
     @Published var drafts: [PaymentReview] = []
     @Published var review: PaymentReview?
     @Published var signing: SigningInfo?
+    @Published var finalized: FinalTransactionInfo?
     @Published var qrFrames: [String]?
     @Published var exportedPSBT: String?
     @Published var labelPreview: LabelImportPreview?
@@ -45,7 +46,7 @@ final class WalletModel: ObservableObject {
     }
     func load() { run { try await self.refresh() } }
     private func refresh() async throws {
-        signing = nil
+        signing = nil; finalized = nil
         wallets = try await service.wallets()
         if !wallets.contains(where: { $0.id == selectedID }) { selectedID = wallets.first?.id }
         if let id = selectedID {
@@ -57,7 +58,8 @@ final class WalletModel: ObservableObject {
             if let old = review { review = drafts.first { $0.id == old.id } }
             if let review, review.state != "invalidated" {
                 let progress = try await service.signingProgress(review.walletId, draftID: review.id)
-                if self.review?.id == review.id { signing = progress }
+                let finalized = try await service.finalized(review.walletId, draftID: review.id)
+                if self.review?.id == review.id { signing = progress; self.finalized = finalized }
             }
         } else { coins = []; activity = [] }
     }
@@ -183,7 +185,14 @@ final class WalletModel: ObservableObject {
             self.qrFrames = try await self.service.exportQr(review.walletId, draftID: review.id, encoding: encoding)
         }
     }
-    func closeReview() { review = nil; signing = nil; qrFrames = nil }
+    func finalizeReview() {
+        run {
+            guard let review = self.review else { return }
+            try await self.service.finalize(review.walletId, draftID: review.id)
+            try await self.refresh()
+        }
+    }
+    func closeReview() { review = nil; signing = nil; finalized = nil; qrFrames = nil }
     func inspectLabels(_ url: URL) {
         run {
             guard let id = self.selectedID else { return }

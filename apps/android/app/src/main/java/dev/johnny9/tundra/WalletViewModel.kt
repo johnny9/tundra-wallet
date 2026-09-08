@@ -24,7 +24,7 @@ data class WalletState(
     val endpoint: String = "", val sync: SyncInfo? = null,
     val selected: Set<String> = emptySet(), val drafts: List<PaymentReview> = emptyList(),
     val review: PaymentReview? = null, val signing: SigningInfo? = null,
-    val qrFrames: List<String>? = null
+    val finalized: FinalTransactionInfo? = null, val qrFrames: List<String>? = null
 ) { val wallet: WalletInfo? get() = wallets.firstOrNull { it.id == selectedId } }
 
 class WalletViewModel(application: Application) : AndroidViewModel(application) {
@@ -59,10 +59,11 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         val drafts = if (id == null) emptyList() else withContext(Dispatchers.IO) { engine().drafts(id) }
         val selected = mutable.value.selected.intersect(coins.filter { it.state == CoinState.AVAILABLE }.map { it.outpoint }.toSet())
         val review = mutable.value.review?.let { old -> drafts.firstOrNull { it.id == old.id } }
-        mutable.value = mutable.value.copy(wallets = wallets, selectedId = id, coins = coins, activity = activity, endpoint = endpoint, drafts = drafts, selected = selected, review = review, signing = null)
+        mutable.value = mutable.value.copy(wallets = wallets, selectedId = id, coins = coins, activity = activity, endpoint = endpoint, drafts = drafts, selected = selected, review = review, signing = null, finalized = null)
         if (review != null && review.state != "invalidated") {
             val signing = withContext(Dispatchers.IO) { engine().signingProgress(review.walletId, review.id) }
-            if (mutable.value.review?.id == review.id) mutable.value = mutable.value.copy(signing = signing)
+            val finalized = withContext(Dispatchers.IO) { engine().finalizedDraft(review.walletId, review.id) }
+            if (mutable.value.review?.id == review.id) mutable.value = mutable.value.copy(signing = signing, finalized = finalized)
         }
     }
     fun select(id: String) = run { mutable.value = mutable.value.copy(selectedId = id, receive = null, selected = emptySet(), review = null, qrFrames = null); refresh() }
@@ -107,8 +108,8 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         withContext(Dispatchers.IO) { engine().editCoins(checkNotNull(s.selectedId), s.selected.toList(), label, frozen) }
         refresh()
     }
-    fun openReview(review: PaymentReview) { mutable.value = mutable.value.copy(review = review, signing = null); run { refresh() } }
-    fun closeReview() { mutable.value = mutable.value.copy(review = null, signing = null, qrFrames = null) }
+    fun openReview(review: PaymentReview) { mutable.value = mutable.value.copy(review = review, signing = null, finalized = null); run { refresh() } }
+    fun closeReview() { mutable.value = mutable.value.copy(review = null, signing = null, finalized = null, qrFrames = null) }
     fun createPayment(mode: Int, address: String, amount: String, fee: String, label: String, automatic: Boolean, acknowledge: Boolean) = run {
         val s = mutable.value
         val review = withContext(Dispatchers.IO) {
@@ -151,6 +152,11 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         val review = checkNotNull(mutable.value.review)
         val frames = withContext(Dispatchers.IO) { engine().exportDraftQr(review.walletId, review.id, encoding) }
         mutable.value = mutable.value.copy(qrFrames = frames)
+    }
+    fun finalizeReview() = run {
+        val review = mutable.value.review ?: return@run
+        withContext(Dispatchers.IO) { engine().finalizeDraft(review.walletId, review.id) }
+        refresh()
     }
     fun closeQr() { mutable.value = mutable.value.copy(qrFrames = null) }
     fun sync(endpoint: String, consent: Boolean) = run {

@@ -63,17 +63,26 @@ struct PaymentView: View {
                             ForEach(Array(signing.inputs.enumerated()), id: \.offset) { index, input in
                                 Text("Input \(index + 1): \(input.validSignatures) / \(input.requiredSignatures)")
                             }
-                            if signing.complete { Text("All required signatures verified. This payment has not been broadcast.") }
+                            if signing.complete {
+                                Text("All required signatures verified. This payment has not been broadcast.")
+                                if review.state != "finalized" { Button("Finalize for review") { model.finalizeReview() }.disabled(model.busy) }
+                            }
+                        }
+                        if let finalized = model.finalized, finalized.draftId == review.id {
+                            Text("Final transaction").font(.headline)
+                            Text(finalized.txid).font(.caption)
+                            Text("\(finalized.vsize) vB · \(finalized.feeSats) sats fee")
+                            Text("Saved for final review. Inputs remain reserved. Broadcast is not available yet.")
                         }
                         Button(review.state == "unsigned" ? "Export unsigned PSBT" : "Export PSBT with signatures") { model.exportDraft() }.disabled(review.state == "invalidated" || model.busy)
                         Button("Import signed PSBT") {
                             importTarget = (review.walletId, review.id); importingPSBT = true
-                        }.disabled(review.state == "invalidated" || model.busy)
+                        }.disabled(["invalidated", "finalized"].contains(review.state) || model.busy)
                         Picker("QR format", selection: $qrEncoding) { Text("UR").tag(QrEncoding.ur); Text("BBQr").tag(QrEncoding.bbqr) }
                         Button("Show PSBT QR") { model.exportQr(qrEncoding) }.disabled(review.state == "invalidated" || model.busy)
                         Button("Scan signed PSBT") {
                             importTarget = (review.walletId, review.id); scanningPSBT = true
-                        }.disabled(review.state == "invalidated" || model.busy)
+                        }.disabled(["invalidated", "finalized"].contains(review.state) || model.busy)
                         Text("PSBT exports are unencrypted wallet metadata.").font(.caption)
                         Button("Discard draft and release inputs", role: .destructive) { model.discardReview() }.disabled(model.busy)
                     }

@@ -87,17 +87,26 @@ import dev.johnny9.tundra.generated.*
                     signing.inputs.forEachIndexed { index, input ->
                         Text("Input ${index + 1}: ${input.validSignatures} / ${input.requiredSignatures}")
                     }
-                    if (signing.complete) Text("All required signatures verified. This payment has not been broadcast.")
+                    if (signing.complete) {
+                        Text("All required signatures verified. This payment has not been broadcast.")
+                        if (review.state != "finalized") Button(onClick = vm::finalizeReview, enabled = !s.busy) { Text("Finalize for review") }
+                    }
+                }
+                s.finalized?.takeIf { it.draftId == review.id }?.let { finalized ->
+                    Text("Final transaction", style = MaterialTheme.typography.titleMedium)
+                    Text(finalized.txid, style = MaterialTheme.typography.bodySmall)
+                    Text("${finalized.vsize} vB · ${finalized.feeSats} sats fee")
+                    Text("Saved for final review. Inputs remain reserved. Broadcast is not available yet.")
                 }
                 OutlinedButton(onClick = { exportTarget = review.walletId to review.id; export.launch("tundra-signing.psbt.txt") }, enabled = !s.busy && review.state != "invalidated") { Text(if (review.state == "unsigned") "Export unsigned PSBT" else "Export PSBT with signatures") }
-                OutlinedButton(onClick = { importTarget = review.walletId to review.id; importSigned.launch(arrayOf("*/*")) }, enabled = !s.busy && review.state != "invalidated") { Text("Import signed PSBT") }
+                OutlinedButton(onClick = { importTarget = review.walletId to review.id; importSigned.launch(arrayOf("*/*")) }, enabled = !s.busy && review.state !in listOf("invalidated", "finalized")) { Text("Import signed PSBT") }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     listOf(QrEncoding.UR to "UR", QrEncoding.BBQR to "BBQr").forEach { (encoding, title) ->
                         FilterChip(selected = qrEncoding == encoding, onClick = { qrEncoding = encoding }, label = { Text(title) }, enabled = !s.busy)
                     }
                 }
                 OutlinedButton(onClick = { vm.exportQr(qrEncoding) }, enabled = !s.busy && review.state != "invalidated") { Text("Show PSBT QR") }
-                OutlinedButton(onClick = { scanTarget = review.walletId to review.id }, enabled = !s.busy && review.state != "invalidated") { Text("Scan signed PSBT") }
+                OutlinedButton(onClick = { scanTarget = review.walletId to review.id }, enabled = !s.busy && review.state !in listOf("invalidated", "finalized")) { Text("Scan signed PSBT") }
                 Text("PSBT exports are unencrypted wallet metadata.", style = MaterialTheme.typography.bodySmall)
                 TextButton(onClick = vm::discardReview, enabled = !s.busy) { Text("Discard draft and release inputs") }
             }
