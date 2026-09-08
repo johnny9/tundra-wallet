@@ -1,0 +1,44 @@
+/*
+ * Tundra / Bitcoin UI Kit adaptation.
+ * Design reference: https://www.bitcoinuikit.com/ (Bitcoin Design Community / GBKS, CC BY 4.0).
+ * Orange/neutral foundation informed by the kit and its Bitcoin Core App implementation.
+ * Semantic colors below are customized for this web prototype; they are not a Figma token export.
+ * Inter is preferred when locally installed; no external font requests or font files are included.
+ */
+:root {
+  --sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Consolas,monospace;
+  --radius-button:999px; --radius-card:16px; --radius-input:12px;
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-6:24px; --space-8:32px;
+  font-family:var(--sans); color:var(--text); font-size:14px;
+}
+:root, :root[data-theme="dark"] {
+  color-scheme:dark;
+  --bg:#0e1115; --canvas:#151a20; --panel:#1b2129; --panel-raised:#252d37;
+  --line:#343e49; --line-strong:#637080; --text:#f2f5f8; --muted:#adb7c3; --quiet:#919eac;
+  --primary:#f89b2a; --primary-hover:#ffad4a; --on-primary:#171717; --accent:#f89b2a;
+  --accent-dark:#302315; --accent-line:#6b4821; --accent-glow:#f89b2a30;
+  --success:#57cf8b; --success-bg:#14291c; --success-line:#315b40;
+  --danger:#ff9696; --danger-bg:#301a1a; --danger-line:#764343; --warning:#dfba81;
+  --selected:#302315; --input-bg:#1b2129; --sheet-bg:#171d24;
+  --overlay:#00000099; --shadow:#00000055; --shadow-heavy:#00000088;
+  --device-frame:#778491; --device-body:#282f39; --device-deep:#171d24;
+  --device-screen:#dbe2e9; --device-ink:#171717;
+  --scan-bg:#151a20; --scan-grid:#ffffff09; --scan-tag:#10161ce6;
+  --qr-bg:#ffffff; --qr-ink:#111111; --qr-label:#555555;
+}
+:root[data-theme="light"] {
+  color-scheme:light;
+  --bg:#fbfcfd; --canvas:#f0f3f6; --panel:#f0f3f6; --panel-raised:#e5ebf0;
+  --line:#dbe2e9; --line-strong:#85929f; --text:#17202a; --muted:#566372; --quiet:#606e7c;
+  --primary:#f7931a; --primary-hover:#f89b2a; --on-primary:#171717; --accent:#975000;
+  --accent-dark:#fff2df; --accent-line:#d19a56; --accent-glow:#f7931a20;
+  --success:#19743b; --success-bg:#e9f6ed; --success-line:#9ccbab;
+  --danger:#b72c2c; --danger-bg:#fff1f1; --danger-line:#d89d9d; --warning:#795015;
+  --selected:#fff2df; --input-bg:#f4f7f9; --sheet-bg:#ffffff;
+  --overlay:#00000066; --shadow:#0000000d; --shadow-heavy:#0000001a;
+  --device-frame:#778491; --device-body:#e2e8ed; --device-deep:#d1dae3;
+  --device-screen:#ffffff; --device-ink:#171717;
+  --scan-bg:#f0f3f6; --scan-grid:#00000009; --scan-tag:#ffffffe6;
+  --qr-bg:#ffffff; --qr-ink:#111111; --qr-label:#555555;
+}

@@ -1,0 +1,10 @@
+[bindings.kotlin]
+package_name = "dev.johnny9.tundra.generated"
+cdylib_name = "tundra_ffi"
+android = true
+generate_immutable_records = true
+
+[bindings.swift]
+module_name = "TundraCore"
+ffi_module_name = "TundraCoreFFI"
+generate_module_map = true

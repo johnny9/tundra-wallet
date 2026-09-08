@@ -1,0 +1,15 @@
+[package]
+name = "tundra-core"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+bdk_wallet.workspace = true
+rusqlite.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[lints]
+workspace = true

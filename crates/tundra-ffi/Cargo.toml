@@ -1,0 +1,22 @@
+[package]
+name = "tundra-ffi"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[lib]
+name = "tundra_ffi"
+crate-type = ["cdylib", "staticlib", "rlib"]
+
+[dependencies]
+tundra-core.workspace = true
+uniffi.workspace = true
+thiserror.workspace = true
+
+[features]
+bindgen = ["uniffi/cli"]
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "src/bindgen.rs"
+required-features = ["bindgen"]

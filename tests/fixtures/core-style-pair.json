@@ -1,0 +1,14 @@
+{
+  "name": "Savings (test)",
+  "network": "signet",
+  "descriptors": [
+    {
+      "desc": "wsh(sortedmulti(2,[a1b2c3d4/48h/1h/0h/2h]tpubDE2qaB2bR6mCKdLYsrB3B7nHVGBHmaB324fzRuUCgr1FfNX3FXSwgYTnLaxfgtsQuDbkJcHSENkmpUB4HgUt2wyNupDhmLhRraTjBNWDyTH/0/*,[1122aabb/48h/1h/0h/2h]tpubDE2qaB2bR6mCHU9T9Y9MSCpYEfQrLpqRXZg6ngzp29mvfwRytXMB8NLY8hGiZED38XThdAwgdhusYPiiMTwhQeNwYQoStyDYMjbLn3mY3Nj/0/*,[9988ccdd/48h/1h/0h/2h]tpubDE2qaB2bR6mCHpL2KmtcuJaeZ8YjRGKYfi65x8eA2ymfs2tvS46rsuzz5zoJku6nFfvMPG5uLWyoMKwSvbe9WA4vjYhEHsLyotiwLYFF1UN/0/*))#exy9qtk2",
+      "internal": false
+    },
+    {
+      "desc": "wsh(sortedmulti(2,[a1b2c3d4/48h/1h/0h/2h]tpubDE2qaB2bR6mCKdLYsrB3B7nHVGBHmaB324fzRuUCgr1FfNX3FXSwgYTnLaxfgtsQuDbkJcHSENkmpUB4HgUt2wyNupDhmLhRraTjBNWDyTH/1/*,[1122aabb/48h/1h/0h/2h]tpubDE2qaB2bR6mCHU9T9Y9MSCpYEfQrLpqRXZg6ngzp29mvfwRytXMB8NLY8hGiZED38XThdAwgdhusYPiiMTwhQeNwYQoStyDYMjbLn3mY3Nj/1/*,[9988ccdd/48h/1h/0h/2h]tpubDE2qaB2bR6mCHpL2KmtcuJaeZ8YjRGKYfi65x8eA2ymfs2tvS46rsuzz5zoJku6nFfvMPG5uLWyoMKwSvbe9WA4vjYhEHsLyotiwLYFF1UN/1/*))#un0l7dxz",
+      "internal": true
+    }
+  ]
+}

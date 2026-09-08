@@ -1,0 +1,12 @@
+{
+  "scope": "Offline SQLite, fixture and source guards; NOT Rust or native compilation",
+  "tests_run": 25,
+  "failures": 0,
+  "errors": 0,
+  "passed": true,
+  "elapsed_seconds": 0.029,
+  "rust_tests": "NOT RUN by this checker",
+  "android_build": "NOT RUN",
+  "ios_build": "NOT RUN",
+  "cargo_available": false
+}

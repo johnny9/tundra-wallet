@@ -1,0 +1,25 @@
+[workspace]
+members = ["crates/tundra-core", "crates/tundra-ffi"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0-dev.1"
+edition = "2024"
+publish = false
+
+[workspace.dependencies]
+bdk_wallet = { version = "=3.1.0", default-features = false, features = ["std"] }
+rusqlite = { version = "=0.37.0", features = ["bundled"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "2.0"
+uniffi = { version = "=0.32.0" }
+tundra-core = { path = "crates/tundra-core" }
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = "debuginfo"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"

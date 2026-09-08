@@ -1,0 +1,1 @@
+wpkh([a1b2c3d4/84h/1h/0h]tpubDC9hiPWaCo6CNm48mwC6qut1oY9Hb4P9562p4yzYTChc4K8RXnyH9FTo2XyeyZS6giQQaKxh9PH83nmdVVTzawa2cKS9Afp8MjFp7M8S5B2/<0;1>/*)#2qugx73x

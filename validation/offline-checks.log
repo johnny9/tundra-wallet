@@ -1,0 +1,30 @@
+test_android_permissions_do_not_enable_network_or_backup (__main__.FixtureAndSourceChecks.test_android_permissions_do_not_enable_network_or_backup) ... ok
+test_cargo_manifest_syntax_and_private_packages (__main__.FixtureAndSourceChecks.test_cargo_manifest_syntax_and_private_packages) ... ok
+test_checksum_known_example (__main__.FixtureAndSourceChecks.test_checksum_known_example) ... ok
+test_fixture_xpub_encoding_and_origin_depth (__main__.FixtureAndSourceChecks.test_fixture_xpub_encoding_and_origin_depth) ... ok
+test_hardware_module_fail_closed_source_guard (__main__.FixtureAndSourceChecks.test_hardware_module_fail_closed_source_guard) ... ok
+test_included_fixture_and_schema_paths_exist (__main__.FixtureAndSourceChecks.test_included_fixture_and_schema_paths_exist) ... ok
+test_no_bdk_bhwi_direct_imports_in_native_ui (__main__.FixtureAndSourceChecks.test_no_bdk_bhwi_direct_imports_in_native_ui) ... ok
+test_no_private_extended_keys_in_fixtures (__main__.FixtureAndSourceChecks.test_no_private_extended_keys_in_fixtures) ... ok
+test_public_fixture_checksums (__main__.FixtureAndSourceChecks.test_public_fixture_checksums) ... ok
+test_publisher_refuses_existing_repository_without_git_write (__main__.FixtureAndSourceChecks.test_publisher_refuses_existing_repository_without_git_write) ... ok
+test_publisher_refuses_wrong_account_without_git_write (__main__.FixtureAndSourceChecks.test_publisher_refuses_wrong_account_without_git_write) ... ok
+test_shell_syntax (__main__.FixtureAndSourceChecks.test_shell_syntax) ... ok
+test_transaction_manual_guard_and_mainnet_gate_source_guard (__main__.FixtureAndSourceChecks.test_transaction_manual_guard_and_mainnet_gate_source_guard) ... ok
+test_discard_one_draft_leaves_other_reservation (__main__.SchemaChecks.test_discard_one_draft_leaves_other_reservation) ... ok
+test_discard_releases_only_reservations_not_freezes (__main__.SchemaChecks.test_discard_releases_only_reservations_not_freezes) ... ok
+test_label_type_constraint (__main__.SchemaChecks.test_label_type_constraint) ... ok
+test_labels_are_wallet_scoped (__main__.SchemaChecks.test_labels_are_wallet_scoped) ... ok
+test_name_limit (__main__.SchemaChecks.test_name_limit) ... ok
+test_reservation_cannot_target_another_wallet_draft (__main__.SchemaChecks.test_reservation_cannot_target_another_wallet_draft) ... ok
+test_reservations_exclusive_within_wallet (__main__.SchemaChecks.test_reservations_exclusive_within_wallet) ... ok
+test_unicode_label_character_limit (__main__.SchemaChecks.test_unicode_label_character_limit) ... ok
+test_unknown_sync_is_null_not_zero (__main__.SchemaChecks.test_unknown_sync_is_null_not_zero) ... ok
+test_version_and_foreign_keys (__main__.SchemaChecks.test_version_and_foreign_keys) ... ok
+test_wallet_delete_cascades_only_its_metadata (__main__.SchemaChecks.test_wallet_delete_cascades_only_its_metadata) ... ok
+test_wallet_state_and_metadata_rollback_together (__main__.SchemaChecks.test_wallet_state_and_metadata_rollback_together) ... ok
+
+----------------------------------------------------------------------
+Ran 25 tests in 0.029s
+
+OK

@@ -1,0 +1,144 @@
+/* Tundra 07: contextual controls, flat lists, and one stable wallet header.
+   Semantic colors continue to come from the Bitcoin UI Kit adaptation. */
+.chrome {min-height:68px;height:68px;padding:10px 20px;gap:8px}
+.wallet-chrome {min-height:76px;height:76px}
+.chrome .wallet-picker {flex:1;width:auto;min-width:0;gap:11px;padding:0;border:0;border-radius:0;background:none;min-height:48px}
+.chrome .wallet-picker .wallet-mark {width:36px;height:36px;flex:0 0 36px;border-radius:11px}
+.chrome .wallet-picker .column {min-width:0;gap:2px}
+.chrome .wallet-picker .name {font-size:17px;line-height:22px;letter-spacing:-.015em;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;display:block}
+.chrome .wallet-picker .name svg {margin-left:8px;vertical-align:-1px}
+.chrome .policy-label {font-size:11px;color:var(--muted);line-height:17px}
+.chrome .demo-tag {flex-shrink:0;font-size:9px;padding:4px 7px;margin-left:auto}
+.chrome .icon-btn {flex-shrink:0}
+.wallet-overview {padding:4px 24px 0;border-bottom:0}
+.wallet-overview .compact-balance {padding:8px 0 0}
+.compact-balance .balance-caption {font-size:12px;min-height:20px}
+.compact-balance .big-balance {margin-top:0;font-size:32px;min-height:42px;line-height:42px;letter-spacing:-.03em}
+.compact-balance .balance-availability {display:flex;align-items:center;justify-content:flex-start;gap:4px;width:max-content;max-width:100%;min-height:32px;padding:0;margin:0;font-size:12px;color:var(--muted)}
+.compact-balance .balance-availability svg {transform:rotate(90deg);opacity:.7}
+.wallet-overview .wallet-sections {margin:9px 0 0;border:0;border-radius:0;box-shadow:none;padding:0;background:none;gap:24px;min-height:48px;border-bottom:1px solid var(--line)}
+.wallet-sections>button {flex:0 1 auto;min-width:0;min-height:48px;padding:10px 0;border:0;border-radius:0;border-bottom:2px solid transparent;font-size:14px;background:none}
+.wallet-sections>button[aria-selected="true"] {background:none;border-bottom-color:var(--primary);box-shadow:none;color:var(--text)}
+.wallet-sections>button>span {background:none!important;color:var(--muted)!important;font-size:11px;padding:0;min-width:0}
+.wallet-panel {padding-top:18px}
+.wallet-panel .actions {margin:0 0 18px;gap:12px}
+.actions .btn {min-height:48px;font-size:14px}
+.activity-list {margin-top:0}
+.activity-row {min-height:72px;padding:13px 0;border-bottom:1px solid var(--line);gap:12px}
+.activity-row:last-child {border-bottom:0}
+.activity-icon {width:34px;height:34px;flex:0 0 34px;border-radius:50%}
+.activity-row .label {font-size:14px;line-height:20px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.activity-row .subtitle {font-size:11px;line-height:16px;margin-top:3px}
+.activity-amount {font-size:13px;font-weight:500;white-space:nowrap;line-height:20px}
+.activity-amount .unit {font-size:10px;line-height:15px}
+.activity-amount.accent {color:var(--text)}
+.coin-tools-row {display:flex;gap:10px;align-items:center}
+.coin-search {flex:1;width:auto;min-width:0;min-height:46px;height:46px;padding:0 12px;background:var(--input-bg);border:1px solid var(--line);border-radius:12px;gap:9px}
+.coin-search input {font-size:13px;min-height:44px;padding:0;width:100%;min-width:0}
+.filter-button {position:relative;flex:0 0 46px;width:46px;height:46px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:12px;color:var(--muted);background:var(--input-bg)}
+.filter-button.has-filter {color:var(--accent);border-color:var(--accent-line)}
+.filter-dot {position:absolute;width:5px;height:5px;border-radius:50%;background:var(--accent);top:8px;right:7px}
+.active-filter {min-height:36px;display:flex;align-items:center;padding-top:6px}
+.active-filter button {font-size:11px;display:flex;align-items:center;gap:8px;min-height:36px;color:var(--accent);padding:0 8px;border-radius:8px;background:var(--accent-dark)}
+.coin-list-heading {display:flex;align-items:center;justify-content:space-between;padding:0;min-height:48px;margin:3px 0 0;font-size:12px}
+.coin-list-options {display:flex;align-items:center;gap:14px}
+.coin-list-heading .text-button {font-size:12px;min-height:44px;padding:8px 0}
+.coin-list {display:block;gap:0;margin:0}
+.coin-row {position:relative;background:none;border:0;border-bottom:1px solid var(--line);border-radius:0;margin:0;overflow:visible}
+.coin-row:last-child {border-bottom:0}
+.coin-row:hover {background:var(--panel)}
+.coin-row.is-selected {background:var(--accent-dark);border-color:var(--line);border-radius:10px}
+.coin-detail-button {display:flex;align-items:center;gap:12px;width:100%;min-height:72px;padding:13px 0;text-align:left;min-width:0}
+.coin-list.selecting .coin-detail-button {padding-left:8px;padding-right:8px}
+.coin-row-content {flex:1;min-width:0;display:block}
+.coin-row-top {display:flex;align-items:baseline;gap:14px;min-width:0}
+.coin-label {font-size:14px;font-weight:500;line-height:21px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.coin-label.no-label {color:var(--accent);font-style:normal}
+.coin-value {font-size:13px;line-height:21px;font-weight:500;letter-spacing:0;flex-shrink:0;white-space:nowrap}
+.coin-value>span {font-size:10px;color:var(--muted);margin-left:4px}
+.coin-row-bottom {font-size:11px;line-height:17px;display:flex;align-items:center;justify-content:space-between;margin-top:4px;gap:8px}
+.coin-status {font-size:11px;line-height:17px}
+.coin-status.pending,.coin-status.frozen {color:var(--muted)}
+.coin-select-mark {width:21px;height:21px;flex:0 0 21px;display:flex;justify-content:center;align-items:center;border:1px solid var(--line-strong);border-radius:6px}
+.coin-select-mark.unavailable {border-color:transparent;color:var(--quiet)}
+.is-selected .coin-select-mark {background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.coin-note-row {margin-top:6px}
+.coin-local-note {font-size:11px}
+.coin-selection-footer {padding:13px 24px 20px}
+.selection-summary {min-height:36px;margin-bottom:10px;gap:8px}
+.selection-summary>div {display:flex;justify-content:flex-start;align-items:baseline;gap:10px;flex-wrap:wrap;min-width:0}
+.selection-summary strong {font-size:13px;font-weight:600;white-space:nowrap}
+.selection-summary span {font-size:12px;white-space:nowrap}
+.selection-summary .text-button {min-height:36px;font-size:12px;padding:4px 0}
+.selection-actions {display:flex;gap:10px}
+.selection-actions .primary {flex:1;min-height:48px;font-size:13px}
+.selection-actions .more-selected {flex:0 0 auto;min-height:48px;font-size:12px;gap:6px;padding:10px 16px}
+.picker-feedback {display:flex;align-items:center;gap:6px;color:var(--muted)!important;text-align:left!important;font-size:11px!important;margin:0 0 10px!important;line-height:17px}
+.picker-feedback svg {color:var(--success)}
+.picker-feedback.needs-more {color:var(--danger)!important}
+.picker-overview {border-bottom:1px solid var(--line);padding-bottom:8px}
+.picker-wallet-name {font-size:13px;font-weight:550;margin:2px 0 10px;line-height:20px}
+.picker-wallet-name>span {font-size:11px;color:var(--muted);font-weight:400}
+.coin-picker-panel {padding-top:12px}
+.coin-picker-panel .coin-picker-target {min-height:24px;font-size:12px}
+.coin-picker-panel .coin-picker-target strong {font-size:12px}
+.picker-selection-mode {margin:0 0 10px;min-height:34px;font-size:11px}
+.picker-selection-mode .text-button {min-height:36px;font-size:11px}
+.filter-fieldset {margin:8px 0 18px;padding:0;border:0}
+.filter-fieldset legend {font-size:11px;color:var(--muted);margin-bottom:8px}
+.filter-option {display:flex;align-items:center;justify-content:space-between;min-height:52px;border-bottom:1px solid var(--line);font-size:14px;cursor:pointer}
+.filter-option input {width:21px;height:21px;accent-color:var(--primary)}
+.filter-sort {display:flex;align-items:center;justify-content:space-between;font-size:13px;min-height:52px;margin-bottom:18px}
+.filter-sort select {max-width:65%;min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text);padding:8px 10px}
+.context-action {display:flex;gap:14px;align-items:center;width:100%;min-height:76px;text-align:left;border-bottom:1px solid var(--line);padding:14px 0}
+.context-action:last-child {border-bottom:0}
+.context-action>svg {color:var(--muted);flex-shrink:0}
+.context-action strong {display:block;font-size:15px;font-weight:500}
+.context-action small {display:block;font-size:12px;color:var(--muted);line-height:18px;margin-top:4px}
+.coin-detail-amount {font-size:28px;margin:4px 0 20px}
+.coin-detail-amount .coin-status {color:var(--muted);margin-top:8px;font-size:12px}
+.coin-detail-amount+.form-field {margin-top:0}
+.label-suggestions {margin-top:10px;margin-bottom:18px;gap:6px}
+.label-suggestions button {min-height:36px;background:var(--panel);border-color:var(--line);color:var(--muted)}
+.coin-technical {margin-top:12px;border-bottom:1px solid var(--line)}
+.coin-technical>summary {min-height:52px;display:flex;align-items:center;justify-content:space-between;list-style:none;font-size:13px;cursor:pointer}
+.coin-technical>summary::-webkit-details-marker {display:none}
+.coin-technical[open]>summary>svg {transform:rotate(90deg)}
+.coin-technical .coin-detail-data {padding:0 0 16px;margin-top:0;border-top:0}
+.balance-breakdown small {display:block;font-size:11px;color:var(--muted);margin-top:3px}
+.send-wallet-context {margin:0 0 18px;color:var(--muted);font-size:13px}
+.send-wallet-context strong {color:var(--text);font-weight:500}
+.send-options {margin-top:18px;border-top:1px solid var(--line)}
+.coin-input-control {min-height:52px;margin:0;padding:12px 0;background:none;border:0;border-bottom:1px solid var(--line);border-radius:0;gap:10px}
+.coin-input-control strong {font-weight:500;font-size:13px}
+.coin-input-control>svg {color:var(--muted)}
+.coin-input-control .control-value {font-size:13px;color:var(--muted)}
+.fee-button {margin:0;min-height:64px;padding:12px 0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none}
+.coin-input-control:hover,.fee-button:hover {background:var(--panel)}
+.fee-button .label {font-size:13px;font-weight:500}
+.fee-button .label small {font-size:11px;color:var(--muted)}
+.screen .page-intro h1 {font-size:26px}
+.privacy-footer {font-size:10px;padding-top:12px;padding-bottom:16px}
+@media(max-width:500px){
+ .chrome {padding-top:calc(10px + env(safe-area-inset-top));height:calc(68px + env(safe-area-inset-top));min-height:68px}
+ .wallet-chrome {height:calc(76px + env(safe-area-inset-top));min-height:76px}
+ .coin-selection-footer {padding-bottom:max(20px,env(safe-area-inset-bottom))}
+}
+@media(max-width:360px){
+ .wallet-overview {padding-left:20px;padding-right:20px}
+ .chrome .wallet-picker .wallet-mark {width:31px;height:31px;flex-basis:31px}
+ .chrome .wallet-picker {gap:8px}
+ .chrome .wallet-picker .name {font-size:15px}
+ .chrome .policy-label {font-size:10px}
+ .coin-selection-footer {padding-left:20px;padding-right:20px}
+ .coin-value,.coin-label {font-size:12px}
+ .coin-row-top {gap:8px}
+ .coin-detail-button {gap:8px}
+ .coin-list.selecting .coin-detail-button {padding-left:4px;padding-right:4px}
+ .selection-summary>div {gap:6px}
+ .activity-row .label {font-size:13px}
+ .activity-amount {font-size:12px}
+ .activity-row {gap:9px}
+ .coin-value>span {font-size:9px;margin-left:3px}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}

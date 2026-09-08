@@ -1,0 +1,72 @@
+name: Build and test development source
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - run: python3 scripts/check_offline.py
+      - name: Bootstrap lock only until the reviewed lock is committed
+        run: |
+          if [ ! -f Cargo.lock ]; then
+            echo '::warning::No reviewed lockfile yet; generating bootstrap lock for inspection.'
+            cargo generate-lockfile
+          fi
+      - run: cargo test --workspace --all-targets --locked
+      - run: cargo clippy --workspace --all-targets --locked
+      - name: Formatting diagnostic (make required after first formatter pass)
+        run: cargo fmt --all --check
+        continue-on-error: true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bootstrap-lock-and-offline-report
+          path: |
+            Cargo.lock
+            build/offline-checks.json
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0' 'ndk;27.2.12479018'
+      - run: echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/27.2.12479018" >> "$GITHUB_ENV"
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android, x86_64-linux-android
+      - run: cargo install cargo-ndk --locked
+      - run: ./scripts/build-android.sh
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+      - run: gradle --no-daemon -p apps/android :app:assembleDebug :app:testDebugUnitTest
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tundra-development-apk
+          path: apps/android/app/build/outputs/apk/debug/*.apk
+  ios:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-ios, aarch64-apple-ios-sim, x86_64-apple-ios
+      - run: brew install xcodegen
+      - run: ./scripts/build-ios.sh
+      - run: cd apps/ios && xcodegen generate
+      - run: xcodebuild -project apps/ios/Tundra.xcodeproj -scheme Tundra -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
