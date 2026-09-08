@@ -75,7 +75,7 @@
     "build/usb-regtest-atomic-3.log": "a389ff5f1bbe3423a602f2117552228d232d9d79fe763ab76cbb9aca9c01c391",
     "build/usb-regtest-final.log": "82f52517696578a852f5a3b3c3e3056480000a2d88e336a37abecba168916483",
     "build/usb-bindings-final.log": "a5edb34cc7e9df30b3870875504b5ba118357b6295e6aad9a68fb174a4b70481",
-    "build/usb-offline-final.log": "ebac9e91343711c98b45b302893aa05832932bb9bccaaa724595a0ef9dae9bf0",
+    "build/usb-offline-final.log": "5f2ef3739e41a0aff8752e59098700ed5e37fcc3f788ce82be1a67d159d00f4c",
     "build/usb-fuzz-host.log": "a5c376b8eceec546be2d8b1c8f2689bf0b57622dcf00eba609fd50d29bea75bc",
     "build/usb-protocol-fuzz.log": "3933a36125ab7286d2eee67464304455641d7c812df10c9e6951a5f934cea720",
     "build/usb-protocol-fuzz-final.log": "cc5542d7f303e60bd3a31b6d4b733d9abd8ead81a4675d2d70fd8022e6492e42",
