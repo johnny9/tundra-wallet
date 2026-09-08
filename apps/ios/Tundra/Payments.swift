@@ -72,6 +72,7 @@ struct PaymentView: View {
                         if mode == 2 {
                             Text("Send selected coins to a fresh internal address in this wallet.")
                             Toggle("I understand this links these coins on-chain", isOn: $acknowledged)
+                                .accessibilityIdentifier("consolidationConsent")
                         }
                         TextField("Fee rate in sat/vB", text: $fee).keyboardType(.decimalPad)
                         TextField("Payment label", text: $label)

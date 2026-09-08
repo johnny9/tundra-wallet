@@ -132,13 +132,16 @@ struct SyncView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var endpoint = ""
     @State private var consent = false
+    @FocusState private var editingEndpoint: Bool
     var body: some View {
         NavigationStack {
             Form {
                 TextField("Esplora API URL", text: $endpoint)
                     .textInputAutocapitalization(.never).autocorrectionDisabled().keyboardType(.URL)
+                    .focused($editingEndpoint).submitLabel(.done).onSubmit { editingEndpoint = false }
                 Text("Your server can associate requested script hashes and transactions with your IP address. Descriptors and labels stay on this device. The server supplies your view of the test chain.")
                 Toggle("I trust this endpoint and agree to these requests", isOn: $consent)
+                    .accessibilityIdentifier("syncConsent")
                 Button("Start scan") { model.synchronize(endpoint, consent: consent); dismiss() }
                     .disabled(!consent || endpoint.isEmpty || model.busy)
             }

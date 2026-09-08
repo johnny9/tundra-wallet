@@ -1,7 +1,16 @@
 import XCTest
 
 final class WalletUITests: XCTestCase {
+    @MainActor private func enable(_ toggle: XCUIElement) {
+        XCTAssertTrue(toggle.waitForExistence(timeout: 10))
+        // SwiftUI includes the long label in the switch's accessibility frame.
+        // Tap the trailing control, then assert the actual value before proceeding.
+        toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.93, dy: 0.5)).tap()
+        XCTAssertEqual(toggle.value as? String, "1")
+    }
+
     @MainActor func testImportRestartAndReceive() async throws {
+        continueAfterFailure = false
         let app = XCUIApplication()
         app.launch()
         XCTAssertTrue(app.buttons["Import descriptor"].waitForExistence(timeout: 15))
@@ -33,9 +42,10 @@ final class WalletUITests: XCTestCase {
         app.buttons["Sync test network"].tap()
         let endpoint = app.textFields["Esplora API URL"]
         endpoint.tap()
-        endpoint.typeText("http://127.0.0.1:3002")
+        endpoint.typeText("http://127.0.0.1:3002\n")
         XCTAssertFalse(app.buttons["Start scan"].isEnabled)
-        app.switches["I trust this endpoint and agree to these requests"].tap()
+        enable(app.switches["syncConsent"])
+        XCTAssertTrue(app.buttons["Start scan"].isEnabled)
         app.buttons["Start scan"].tap()
         let funded = NSPredicate(format: "label == %@", "150 BTC")
         let fundedExpectation = expectation(for: funded, evaluatedWith: app.staticTexts["balance"])
@@ -46,7 +56,7 @@ final class WalletUITests: XCTestCase {
         selections.element(boundBy: 0).tap()
         selections.element(boundBy: 1).tap()
         app.buttons["Consolidate"].tap()
-        app.switches["I understand this links these coins on-chain"].tap()
+        enable(app.switches["consolidationConsent"])
         app.buttons["Review payment"].tap()
         XCTAssertTrue(app.staticTexts["Inputs · 2"].waitForExistence(timeout: 10))
         app.buttons["Save for later"].tap()

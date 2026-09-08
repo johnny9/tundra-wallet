@@ -92,6 +92,11 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
+          name: tundra-instrumentation-apk
+          path: apps/android/app/build/outputs/apk/androidTest/debug/*.apk
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
           name: tundra-jvm-test-results
           path: apps/android/app/build/test-results/testDebugUnitTest/*.xml
       - uses: actions/upload-artifact@v4
@@ -123,8 +128,18 @@ jobs:
           exit 1
       - run: ./scripts/check-ios-runtime.sh
         timeout-minutes: 20
+      - name: Export simulator test diagnostics
+        if: always()
+        run: |
+          if test -d build/ios-runtime.xcresult; then
+            xcrun xcresulttool get test-results summary --path build/ios-runtime.xcresult > build/ios-runtime-summary.json
+            xcrun xcresulttool export attachments --path build/ios-runtime.xcresult --output-path build/ios-runtime-attachments
+          fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: tundra-ios-runtime-results
-          path: build/ios-runtime.xcresult
+          path: |
+            build/ios-runtime.xcresult
+            build/ios-runtime-summary.json
+            build/ios-runtime-attachments/
