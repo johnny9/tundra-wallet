@@ -4,11 +4,24 @@ import UIKit
 @testable import Tundra
 
 final class RuntimeTests: XCTestCase {
+    private var usedBarcodeRevisions = Set<Int>()
     private func decodeQr(_ frame: String) throws -> String {
         let scaled = try XCTUnwrap(qrBitmap(try renderQrFrame(frame: frame), scale: 8))
-        let request = VNDetectBarcodesRequest(); request.symbologies = [.qr]
-        try VNImageRequestHandler(cgImage: scaled).perform([request])
-        if let text = request.results?.first?.payloadStringValue { return text }
+        // This is an independent matrix/FFI oracle, not a camera qualification test.
+        // Record the decoder revision: a supported older revision can establish barcode
+        // interoperability without claiming the simulator's default detector works.
+        for revision in VNDetectBarcodesRequest.supportedRevisions.reversed() {
+            let request = VNDetectBarcodesRequest(); request.revision = revision; request.symbologies = [.qr]
+            do { try VNImageRequestHandler(cgImage: scaled).perform([request]) }
+            catch { continue }
+            if let text = request.results?.first?.payloadStringValue {
+                if usedBarcodeRevisions.insert(revision).inserted {
+                    let note = XCTAttachment(string: "Decoded public fixture with Vision revision \(revision); default is \(VNDetectBarcodesRequest.defaultRevision). Camera and default-detector qualification are separate.")
+                    note.name = "Independent barcode decoder revision"; note.lifetime = .keepAlways; add(note)
+                }
+                return text
+            }
+        }
         let image = XCTAttachment(image: UIImage(cgImage: scaled))
         image.name = "Public QR fixture pixels"; image.lifetime = .keepAlways; add(image)
         XCTFail("Vision could not decode the public QR fixture; exact pixels attached")
