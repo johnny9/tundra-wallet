@@ -30,7 +30,7 @@ It never imports or generates Bitcoin private signing keys.
 |---|---|---|
 | `tundra-core` | BDK public descriptor validation, receive/change derivation, SQLite snapshots, bounded opt-in Esplora sync | Test networks only; chosen endpoint supplies the chain view |
 | Metadata | Wallet-scoped labels, BIP 329 origins and patch import/export, atomic bulk edits, user freezes | Known references only; development DB is not encrypted |
-| Transactions | Exact/manual and automatic eligible inputs, max/consolidation, saved reviews/reservations, verified external PSBT signatures | Every native mode still needs coverage; hardware integration/finalization/broadcast unavailable |
+| Transactions | Exact/manual and automatic eligible inputs, max/consolidation, saved reviews/reservations, verified external PSBT signatures and immutable final transaction bytes | Every native mode still needs coverage; hardware integration/broadcast unavailable |
 | QR exchange | Bounded UR/BBQr codecs, native camera/display source and independent barcode tests | Rust codecs pass; native QR builds and physical interoperability pending |
 | `tundra-ffi` | Typed UniFFI API; Kotlin and Swift bindings generated and exercised against the host library | Mobile lifecycle/cancellation qualification remains |
 | Android | Compose import, wallets, sync, coin selection/search, bulk metadata and payment review | Exact-input payment instrumentation passed; full mode/device qualification remains |

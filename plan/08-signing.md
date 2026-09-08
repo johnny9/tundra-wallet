@@ -3,7 +3,7 @@
 The Rust core accepts a signed PSBT for an existing test-network draft. The original PSBT
 and review stay immutable; schema v3 stores the validated signature aggregate separately.
 Import, review-state update and signature persistence share one SQLite transaction.
-Reopen/export revalidate signatures. There is no finalization or broadcast API yet.
+Reopen/export revalidate signatures. [Finalization](10-finalization.md) now saves exact transaction bytes; broadcast remains unavailable.
 
 ## Accepted format and policy
 

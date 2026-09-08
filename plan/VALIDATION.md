@@ -30,11 +30,23 @@ because ptrace was restricted. The dependency audit found no advisories or warni
 Both bindings generated successfully. Native QR compilation and independent barcode tests
 are pending. See [QR limits and gates](09-qr.md) and `validation/qr-checks.json`.
 
+Finalization adds **6 passing Rust tests**, for **108 including regtest**, plus coverage of
+finalized-draft sync invalidation. Schema v4 persists exact bytes and freezes signature changes.
+[Finalization details](10-finalization.md) and `validation/finalization-checks.json` distinguish
+local checks from pending native final-review qualification.
+
+The first [QR native run](https://github.com/johnny9/tundra-wallet/actions/runs/34284043840)
+passed Rust and parser/audit. Android compiled; descriptor scanning and reviewed-draft QR
+export tests passed, while one public BBQr image failed ZXing's single finder. iOS failed
+Swift compilation on error handling. Both fixes are authored; their native rerun is pending.
+A host ZXing probe reproduced the finder failure and decoded all 26 public frames using the
+multi-detector fallback now shared by the camera and instrumentation paths.
+
 ## Local executed checks
 
 | Check | Actual result |
 |---|---|
-| Rust workspace | **95 core unit tests + 1 process-kill integration test + 5 HTTP integration tests passed**; all targets/features compiled with Rust 1.93.1 |
+| Rust workspace | **101 core unit tests + 1 process-kill integration test + 5 HTTP integration tests passed**; all targets/features compiled with Rust 1.93.1 |
 | Real Bitcoin Core integration | **1 separate regtest test passed** using Core 31.1, wallets disabled; maturity at 99/100 confirmations, persistence, shorter/replacement reorgs, invalidated drafts and durable freezes |
 | Formatting / Clippy | `cargo fmt --all --check` and strict all-target/all-feature Clippy passed |
 | Offline schema/fixture/source checks | **23 passed**, 0 failures/errors |
@@ -128,7 +140,8 @@ strict manual selection and mainnet gates retained.
 ## Unfinished gates
 
 QR/UR/BBQr codecs pass Rust tests; native camera/display source and barcode tests await CI.
-Bhwi/USB interoperability, finalization and broadcast remain **unimplemented**. Physical phones, hardware address/policy verification, all signing
+Final transaction assembly and persistence pass Rust tests. Bhwi/USB interoperability and
+broadcast remain **unimplemented**. Physical phones, hardware address/policy verification, all signing
 pairs and the full adversarial device matrix have not been tested. Native coverage still
 needs every payment mode, accessibility/text sizes and complete visual comparison.
 Protected production metadata storage, recovery/migration qualification, reproducibility,
