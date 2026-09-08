@@ -37,6 +37,11 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     private var pendingLabels: String? = null
     private var pendingLabelsWallet: String? = null
     init { run { core = withContext(Dispatchers.IO) { Tundra.open(application.noBackupFilesDir.resolve("tundra.sqlite").path) }; refresh() } }
+    // The USB adapter calls this on its IO coroutine and owns the returned native handle.
+    fun prepareUsb(walletId: String, operation: UsbOperation): UsbConnection {
+        check(mutable.value.selectedId == walletId)
+        return engine().prepareUsb(walletId, operation)
+    }
     private fun engine() = checkNotNull(core) { "Wallet core is not ready" }
     private fun run(block: suspend () -> Unit) {
         if (mutable.value.busy) return
