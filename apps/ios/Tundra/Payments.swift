@@ -65,7 +65,12 @@ struct PaymentView: View {
                             TextField("Recipient address", text: $address).textInputAutocapitalization(.never).autocorrectionDisabled()
                         }
                         if mode == 0 {
-                            TextField("Amount in BTC", text: $amount).keyboardType(.decimalPad)
+                            HStack {
+                                Text("Amount")
+                                TextField("Amount in BTC", text: $amount).keyboardType(.decimalPad)
+                                    .multilineTextAlignment(.trailing)
+                                Text("BTC").foregroundStyle(.secondary)
+                            }
                             Toggle("Automatic eligible inputs", isOn: $automatic)
                         }
                         if !automatic || mode != 0 { Text("\(model.selectedCoins.count) exact inputs selected. Change selection in Coins.") }
@@ -74,7 +79,12 @@ struct PaymentView: View {
                             Toggle("I understand this links these coins on-chain", isOn: $acknowledged)
                                 .accessibilityIdentifier("consolidationConsent")
                         }
-                        TextField("Fee rate in sat/vB", text: $fee).keyboardType(.decimalPad)
+                        HStack {
+                            Text("Fee rate")
+                            TextField("Fee rate in sat/vB", text: $fee).keyboardType(.decimalPad)
+                                .multilineTextAlignment(.trailing)
+                            Text("sat/vB").foregroundStyle(.secondary)
+                        }
                         TextField("Payment label", text: $label)
                         Text("Review reserves inputs and saves an unsigned draft. It does not sign or broadcast.").font(.caption)
                         Button("Review payment") {
