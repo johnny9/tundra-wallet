@@ -64,8 +64,11 @@ rollback, migration, wallet isolation and the signing gate. Full-suite evidence 
 `validation/usb-checks.json`. Separate fuzz targets exercise arbitrary HID framing and
 APDU responses after a public test handshake; no device or Bitcoin private key is used.
 
-Android source includes HID parser tests, a public-transcript test through the real mobile
-FFI, and an empty-device UI path. Its first USB native build/runtime run is pending.
+Android compiled and passed five JVM tests, five instrumentation tests and a process-restart
+check at `dc54fe9`. This includes the HID parser, a public transcript through the real mobile
+FFI, permission-filter matching and the empty-device UI. One unrelated Quickstep launcher ANR
+was recorded and closed before rechecking the same persisted app state. The iOS framework,
+app and four runtime tests also passed; see `validation/usb-native-checks.json`.
 Permission prompts with hardware, cancellation during device approval, detach/reconnect,
 phone rotation/background, cable/OTG behavior and firmware interoperability remain physical
 qualification gates. Emulator or Waydroid results cannot fill those device-matrix cells.

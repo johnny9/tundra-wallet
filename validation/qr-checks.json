@@ -69,6 +69,13 @@
       "ios": "Build, two non-QR XCTest tests and the full import/sync/payment/restart UI scenario passed. Vision default decoder failed on the first public UR fixture.",
       "pixel_diagnosis": "Exact attached PNG decodes correctly using host ZXing 3.5.4 single and multi detectors. A test of supported Vision revisions is authored; its actual decoder revision will be recorded.",
       "png_sha256": "c6e04b9fc3ae61bd97dbc2143587575876a7c695c0e0b68b87beb7a17162a88d"
+    },
+    {
+      "run": "https://github.com/johnny9/tundra-wallet/actions/runs/34290175840",
+      "source": "dc54fe9f647707569fe96bec0cca52e3058406fb",
+      "android": "All barcode, USB FFI and initial payment/restart checks passed.",
+      "ios": "All four XCTest/XCUITest tests passed. All public barcode images decoded using Vision revision 2; default revision 4 is not qualified.",
+      "camera_or_physical_hardware_qualified": false
     }
   ]
 }

@@ -26,9 +26,9 @@ approval system, or cloud account.
   decimal fee rates and atomic bulk coin metadata. Broader native qualification remains.
 - Added: bounded external PSBT validation, per-input cryptographic signature progress,
   immutable approvals and atomic signature persistence. Native file integration and both initial payment/restart UI scenarios pass; broader coverage remains.
-- Added: bounded UR/BBQr codecs and native camera/display source; Android barcode tests pass, iOS rerun pending.
+- Added: bounded UR/BBQr codecs and native camera/display source; both native barcode tests pass; iOS uses Vision revision 2 as its independent image decoder.
 - Added: immutable finalized transaction bytes and native final-review source; software tests pass.
-- Added: pinned bhwi Ledger protocol, registration persistence and Android USB adapter source; native/device qualification remains open.
+- Added: pinned bhwi Ledger protocol, registration persistence and Android USB adapter source; Android build/FFI/runtime checks pass; physical device qualification remains open.
 - Not implemented: broadcast and production storage protection.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Not performed locally: Android build or Xcode build.

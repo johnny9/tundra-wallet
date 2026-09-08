@@ -13,7 +13,7 @@
   "clippy": "passed; all targets/features; warnings denied",
   "bindings": "Kotlin and Swift generated from compiled Rust library",
   "finalized_transaction_fixture": "Byte-for-byte equality with the public confirmed 2-of-3 transaction in public-signed-multisig.json",
-  "native_finalization": "authored; compilation/runtime check pending",
+  "native_finalization": "Both apps compiled at dc54fe9; Android unsigned-finalization rejection passed. Positive signed final-review UI qualification remains open.",
   "finalization_or_signature_validator_fuzzed": false,
   "broadcast_implemented": false,
   "hardware_qualified": false,

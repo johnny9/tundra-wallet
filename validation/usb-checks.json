@@ -62,7 +62,7 @@
     "Initial host regtest failed at first sync; retry passed. A readiness-file race was found and fixed with atomic rename. Three fresh runs and final regtest passed.",
     "New policy parity test exposed missing derivation expressions in bhwi key info. Corrected; script equality now passes for both branches/policies."
   ],
-  "native_usb": "Android source and tests authored; first native build/runtime check pending",
+  "native_usb": "Passed Android build, five JVM tests, five instrumentation tests and process-restart check at dc54fe9; physical USB IO remains unqualified. See usb-native-checks.json.",
   "hardware_qualified": false,
   "hardware_signing_enabled": false,
   "broadcast_implemented": false,

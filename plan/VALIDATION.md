@@ -72,6 +72,17 @@ to see an empty port. Readiness now uses atomic rename; three independent fresh-
 and the final regtest check passed. This race is a plausible cause of that failure, not a
 confirmed reconstruction. The failed log remains retained alongside the successful runs.
 
+The latest [complete passing run at dc54fe9](https://github.com/johnny9/tundra-wallet/actions/runs/34290175840)
+passed all four jobs. Android passed five JVM and five instrumentation tests, including USB
+public-account transcripts and permission-filter matching. The restart check recorded and
+recovered one Quickstep launcher ANR, then verified the same saved balance/draft. iOS passed
+all four XCTest/XCUITest tests. Its independent barcode oracle used **Vision revision 2**;
+default revision 4 remains unqualified, and this is not a physical camera test. APK hashes,
+test names, simulator details and artifact IDs are in `validation/usb-native-checks.json`.
+
+Newer source adds every payment mode to both native UI scenarios, an iOS keyboard Done
+control and an Android fallback for runtimes without USB. Their native rerun is pending.
+
 ## Local executed checks
 
 | Check | Actual result |
@@ -169,9 +180,9 @@ strict manual selection and mainnet gates retained.
 
 ## Unfinished gates
 
-QR/UR/BBQr codecs pass Rust tests and Android independent barcode tests. iOS fixes await
-native revalidation. Final assembly/persistence passes Rust tests; the development bhwi/USB
-adapter passes software checks, with Android compilation and device qualification pending.
+QR/UR/BBQr codecs and both native independent barcode tests pass; the iOS test uses
+Vision revision 2, with default-detector and physical-camera qualification still open. Final assembly/persistence passes Rust tests; the development bhwi/USB
+adapter passes software and Android native checks, with physical device qualification pending.
 Broadcast remains **unimplemented**. Physical phones, hardware address/policy verification, all signing
 pairs and the full adversarial device matrix have not been tested. Native coverage still
 needs every payment mode, accessibility/text sizes and complete visual comparison.

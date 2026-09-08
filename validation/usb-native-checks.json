@@ -1,0 +1,220 @@
+{
+  "recorded_at": "2026-09-08T23:46:59.460031+00:00",
+  "run": "https://github.com/johnny9/tundra-wallet/actions/runs/34290175840",
+  "source": "dc54fe9f647707569fe96bec0cca52e3058406fb",
+  "all_four_jobs": "passed",
+  "rust_total_including_regtest": 124,
+  "offline_checks": 23,
+  "android": {
+    "jvm_tests": 5,
+    "instrumentation_tests": [
+      {
+        "class": "dev.johnny9.tundra.QrRuntimeTest",
+        "name": "descriptorQrRequiresSelectedNetworkAndExplicitNewSession"
+      },
+      {
+        "class": "dev.johnny9.tundra.QrRuntimeTest",
+        "name": "publicUrAndBbqrImagesCrossRealMobileFfi"
+      },
+      {
+        "class": "dev.johnny9.tundra.UsbRuntimeTest",
+        "name": "permissionFilterAcceptsOnlyItsNonceUriScheme"
+      },
+      {
+        "class": "dev.johnny9.tundra.UsbRuntimeTest",
+        "name": "publicAccountHandshakeCancellationAndSigningGateCrossFfi"
+      },
+      {
+        "class": "dev.johnny9.tundra.WalletRuntimeTest",
+        "name": "importRecreateReceiveAppearanceAndSyncConsent"
+      }
+    ],
+    "failures": 0,
+    "errors": 0,
+    "restart": "passed after one recorded Quickstep launcher ANR recovery; same data, 150 BTC total and unsigned two-input draft",
+    "app_apk_sha256": "40937265c5ba84370769054bb62e5f80ac55f8097fef732cb9de9d8171e71aec",
+    "test_apk_sha256": "f4252bf2efb37a1d85ff6af7066674e7211328e817989e27069ae4564f4caa42"
+  },
+  "ios": {
+    "devicesAndConfigurations": [
+      {
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "C9332773-CE6D-4AB5-88EA-F586A473DAA1",
+          "deviceName": "iPhone 17 Pro",
+          "modelName": "iPhone 17 Pro",
+          "osBuildNumber": "23C54",
+          "osVersion": "26.2",
+          "platform": "iOS Simulator"
+        },
+        "expectedFailures": 0,
+        "failedTests": 0,
+        "passedTests": 4,
+        "skippedTests": 0,
+        "testPlanConfiguration": {
+          "configurationId": "1",
+          "configurationName": "Test Scheme Action"
+        }
+      }
+    ],
+    "environmentDescription": "Tundra \u00b7 Built with macOS 15.7.9",
+    "expectedFailures": 0,
+    "failedTests": 0,
+    "finishTime": 1788910675.315,
+    "passedTests": 4,
+    "result": "Passed",
+    "skippedTests": 0,
+    "startTime": 1788910317.357,
+    "statistics": [],
+    "testFailures": [],
+    "title": "Test - Tundra",
+    "topInsights": [],
+    "totalTestCount": 4
+  },
+  "ios_barcode_decoder": "Vision revision 2 decoded all public frames; simulator default revision 4 remains unqualified. This test is an independent matrix/FFI oracle, not a camera test.",
+  "usb_device_io_qualified": false,
+  "waydroid_instrumentation": "NOT RUN; no IPv4 lease or ADB connection, including attempted IPv6 addresses",
+  "newer_source": "Every-payment-mode native scenarios, keyboard Done control and no-USB-runtime fallback are authored; their native rerun is pending.",
+  "artifacts": [
+    {
+      "id": 10081508048,
+      "node_id": "MDg6QXJ0aWZhY3QxMDA4MTUwODA0OA==",
+      "name": "tundra-ios-runtime-results",
+      "size_in_bytes": 390456,
+      "url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10081508048",
+      "archive_download_url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10081508048/zip",
+      "expired": false,
+      "digest": "sha256:0a318220299f44a9d9baa09927c4eba6d99ada7bf6ceec9c0d5ad5515f036da2",
+      "created_at": "2026-09-08T23:38:07Z",
+      "updated_at": "2026-09-08T23:38:07Z",
+      "expires_at": "2026-12-07T23:20:15Z",
+      "workflow_run": {
+        "id": 34290175840,
+        "repository_id": 1361561052,
+        "head_repository_id": 1361561052,
+        "head_branch": "master",
+        "head_sha": "dc54fe9f647707569fe96bec0cca52e3058406fb"
+      }
+    },
+    {
+      "id": 10081389489,
+      "node_id": "MDg6QXJ0aWZhY3QxMDA4MTM4OTQ4OQ==",
+      "name": "tundra-android-runtime-results",
+      "size_in_bytes": 24357,
+      "url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10081389489",
+      "archive_download_url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10081389489/zip",
+      "expired": false,
+      "digest": "sha256:d38f319e5c29f6f9355b7df061f240205cb9a38b7296f55fe97fc0906bc21cd2",
+      "created_at": "2026-09-08T23:33:39Z",
+      "updated_at": "2026-09-08T23:33:39Z",
+      "expires_at": "2026-12-07T23:20:15Z",
+      "workflow_run": {
+        "id": 34290175840,
+        "repository_id": 1361561052,
+        "head_repository_id": 1361561052,
+        "head_branch": "master",
+        "head_sha": "dc54fe9f647707569fe96bec0cca52e3058406fb"
+      }
+    },
+    {
+      "id": 10081389141,
+      "node_id": "MDg6QXJ0aWZhY3QxMDA4MTM4OTE0MQ==",
+      "name": "tundra-jvm-test-results",
+      "size_in_bytes": 1043,
+      "url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10081389141",
+      "archive_download_url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10081389141/zip",
+      "expired": false,
+      "digest": "sha256:0f353b16abf2dce73d60d3189e1218daa80e3f5d96850b8dca383635b155a640",
+      "created_at": "2026-09-08T23:33:38Z",
+      "updated_at": "2026-09-08T23:33:38Z",
+      "expires_at": "2026-12-07T23:20:15Z",
+      "workflow_run": {
+        "id": 34290175840,
+        "repository_id": 1361561052,
+        "head_repository_id": 1361561052,
+        "head_branch": "master",
+        "head_sha": "dc54fe9f647707569fe96bec0cca52e3058406fb"
+      }
+    },
+    {
+      "id": 10081388813,
+      "node_id": "MDg6QXJ0aWZhY3QxMDA4MTM4ODgxMw==",
+      "name": "tundra-instrumentation-apk",
+      "size_in_bytes": 939348,
+      "url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10081388813",
+      "archive_download_url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10081388813/zip",
+      "expired": false,
+      "digest": "sha256:d1d509f16a1af79990d40d247ea1483059c2309aa58bab99b0ba019434b4823b",
+      "created_at": "2026-09-08T23:33:37Z",
+      "updated_at": "2026-09-08T23:33:37Z",
+      "expires_at": "2026-12-07T23:20:15Z",
+      "workflow_run": {
+        "id": 34290175840,
+        "repository_id": 1361561052,
+        "head_repository_id": 1361561052,
+        "head_branch": "master",
+        "head_sha": "dc54fe9f647707569fe96bec0cca52e3058406fb"
+      }
+    },
+    {
+      "id": 10081388401,
+      "node_id": "MDg6QXJ0aWZhY3QxMDA4MTM4ODQwMQ==",
+      "name": "tundra-development-apk",
+      "size_in_bytes": 33956790,
+      "url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10081388401",
+      "archive_download_url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10081388401/zip",
+      "expired": false,
+      "digest": "sha256:712ac61e9ef7a2f871275fbb42f2fa847191ceee685b77acdeb1a1c5df3d5144",
+      "created_at": "2026-09-08T23:33:36Z",
+      "updated_at": "2026-09-08T23:33:36Z",
+      "expires_at": "2026-12-07T23:20:15Z",
+      "workflow_run": {
+        "id": 34290175840,
+        "repository_id": 1361561052,
+        "head_repository_id": 1361561052,
+        "head_branch": "master",
+        "head_sha": "dc54fe9f647707569fe96bec0cca52e3058406fb"
+      }
+    },
+    {
+      "id": 10081267911,
+      "node_id": "MDg6QXJ0aWZhY3QxMDA4MTI2NzkxMQ==",
+      "name": "tundra-parser-and-dependency-results",
+      "size_in_bytes": 177552,
+      "url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10081267911",
+      "archive_download_url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10081267911/zip",
+      "expired": false,
+      "digest": "sha256:7e07c6f76973acb567e7203f7289e1ad3c65712c3b8ae2d884506892c2c9cc0a",
+      "created_at": "2026-09-08T23:29:08Z",
+      "updated_at": "2026-09-08T23:29:08Z",
+      "expires_at": "2026-12-07T23:20:15Z",
+      "workflow_run": {
+        "id": 34290175840,
+        "repository_id": 1361561052,
+        "head_repository_id": 1361561052,
+        "head_branch": "master",
+        "head_sha": "dc54fe9f647707569fe96bec0cca52e3058406fb"
+      }
+    },
+    {
+      "id": 10081140711,
+      "node_id": "MDg6QXJ0aWZhY3QxMDA4MTE0MDcxMQ==",
+      "name": "lock-and-offline-report",
+      "size_in_bytes": 14495,
+      "url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10081140711",
+      "archive_download_url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10081140711/zip",
+      "expired": false,
+      "digest": "sha256:534ec40312850c2a44f3e8a6f9d5ea2bb444c5c8514253a6888bb9f8253c8e4d",
+      "created_at": "2026-09-08T23:24:35Z",
+      "updated_at": "2026-09-08T23:24:35Z",
+      "expires_at": "2026-12-07T23:20:15Z",
+      "workflow_run": {
+        "id": 34290175840,
+        "repository_id": 1361561052,
+        "head_repository_id": 1361561052,
+        "head_branch": "master",
+        "head_sha": "dc54fe9f647707569fe96bec0cca52e3058406fb"
+      }
+    }
+  ]
+}
