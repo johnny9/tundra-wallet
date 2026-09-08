@@ -23,13 +23,14 @@ These are ordered work packages, not time estimates.
 - Public key ordering, duplicate accounts/origins, branch/policy mismatches and hardened/public
   derivation constraints now have regression coverage. Expand private-key/WIF rejection and
   parser fuzz coverage before declaring descriptor validation complete.
-- File reopen, snapshot-write rollback and competing reservation tests pass; add process-kill
-  and power-loss recovery tests covering BDK state plus metadata atomicity.
+- File reopen, snapshot-write rollback, competing reservations and abrupt-process WAL
+  recovery tests pass. Physical power-loss/storage-fault testing remains open.
 
 ## Scope limitations to close deliberately
 
-- Origin-bearing BIP 329 imports are currently skipped, not treated as an authority to
-  apply labels to a different wallet. Add canonical descriptor-origin matching.
+- BIP 329 abbreviated origins now match canonical wallet policy/origins (including reordered
+  multisig origins and hardened notation aliases). Known-reference checks remain mandatory;
+  duplicate matching records roll back atomically. Both apps expose label file import/export.
 - Coinbase maturity now follows confirmation depth at the current tip; verified against
   Bitcoin Core regtest at 99 and 100 confirmations and after reorgs.
 - Decimal fee rates now normalize upward to BDK's integer sat/kwu precision; the normalized

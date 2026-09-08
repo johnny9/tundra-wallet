@@ -43,19 +43,25 @@ actor CoreService {
     func runSync(_ id: UInt64) throws { try engine().runSync(operationId: id) }
     func progress(_ id: UInt64) throws -> SyncInfo { try engine().syncProgress(operationId: id) }
     func cancelSync(_ id: UInt64) throws { _ = try engine().cancelSync(operationId: id) }
-    func readDescriptor(_ url: URL) throws -> String {
+    func importLabels(_ id: String, payload: String, apply: Bool) throws -> LabelImportPreview {
+        try engine().importLabels(walletId: id, payload: payload, apply: apply)
+    }
+    func exportLabels(_ id: String) throws -> String { try engine().exportLabels(walletId: id) }
+    func readDescriptor(_ url: URL) throws -> String { try readText(url, max: 32_768) }
+    func readLabels(_ url: URL) throws -> String { try readText(url, max: 2 * 1024 * 1024) }
+    private func readText(_ url: URL, max: Int) throws -> String {
         let accessed = url.startAccessingSecurityScopedResource()
         defer { if accessed { url.stopAccessingSecurityScopedResource() } }
         let handle = try FileHandle(forReadingFrom: url)
         defer { try? handle.close() }
         // Read through EOF within a bound; a short read is not assumed to mean EOF.
         var data = Data()
-        while data.count <= 32_768 {
-            let chunk = try handle.read(upToCount: min(8192, 32_769 - data.count)) ?? Data()
+        while data.count <= max {
+            let chunk = try handle.read(upToCount: min(8192, max + 1 - data.count)) ?? Data()
             if chunk.isEmpty { break }
             data.append(chunk)
         }
-        guard data.count <= 32_768, let text = String(data: data, encoding: .utf8) else {
+        guard data.count <= max, let text = String(data: data, encoding: .utf8) else {
             throw CocoaError(.fileReadCorruptFile)
         }
         return text

@@ -1,0 +1,23 @@
+[package]
+name = "tundra-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "=0.4.12"
+tundra-core = { path = "../crates/tundra-core" }
+bdk_wallet = { version = "=3.1.0", default-features = false, features = ["std"] }
+
+[[bin]]
+name = "public_parsers"
+path = "fuzz_targets/public_parsers.rs"
+test = false
+doc = false
+bench = false
+
+[workspace]
+members = ["."]

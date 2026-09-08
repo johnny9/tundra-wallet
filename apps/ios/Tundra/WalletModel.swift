@@ -17,6 +17,10 @@ final class WalletModel: ObservableObject {
     @Published var drafts: [PaymentReview] = []
     @Published var review: PaymentReview?
     @Published var exportedPSBT: String?
+    @Published var labelPreview: LabelImportPreview?
+    @Published var exportedLabels: String?
+    private var pendingLabels: String?
+    private var labelsWalletID: String?
     private let service = CoreService()
     // Sensitive in-memory edit state is not stored in scene restoration or preferences.
     private var pendingPayload: String?
@@ -146,6 +150,28 @@ final class WalletModel: ObservableObject {
         run {
             guard let review = self.review else { return }
             self.exportedPSBT = try await self.service.exportDraft(review.walletId, draftID: review.id)
+        }
+    }
+    func inspectLabels(_ url: URL) {
+        run {
+            guard let id = self.selectedID else { return }
+            let payload = try await self.service.readLabels(url)
+            self.labelPreview = try await self.service.importLabels(id, payload: payload, apply: false)
+            self.pendingLabels = payload; self.labelsWalletID = id
+        }
+    }
+    func applyLabels() {
+        run {
+            guard let id = self.labelsWalletID, id == self.selectedID, let payload = self.pendingLabels else { return }
+            _ = try await self.service.importLabels(id, payload: payload, apply: true)
+            self.cancelLabels(); try await self.refresh()
+        }
+    }
+    func cancelLabels() { pendingLabels = nil; labelsWalletID = nil; labelPreview = nil }
+    func exportLabels() {
+        run {
+            guard let id = self.selectedID else { return }
+            self.exportedLabels = try await self.service.exportLabels(id)
         }
     }
 }

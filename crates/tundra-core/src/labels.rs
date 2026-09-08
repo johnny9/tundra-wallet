@@ -88,7 +88,7 @@ pub fn parse_labels(input: &str) -> Result<(Vec<LabelRecord>, u32)> {
             Some(Value::String(s)) if s.len() <= 1024 => Some(s.clone()),
             _ => return Err(Error::InvalidInput("label origin")),
         };
-        if !seen.insert((kind.to_owned(), reference.to_owned())) {
+        if !seen.insert((kind.to_owned(), reference.to_owned(), origin.clone())) {
             return Err(Error::InvalidInput("duplicate label reference"));
         }
         records.push(LabelRecord {

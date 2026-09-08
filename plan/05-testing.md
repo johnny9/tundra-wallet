@@ -13,6 +13,21 @@
 | Hardware | Physical devices and qualified firmware, not just emulators or a README support list |
 | Security | Fuzz descriptor/BIP329/PSBT/QR parsers, transaction mutation corpus, storage crash tests, privacy/network/log inspection |
 
+`scripts/check-fuzz.sh` runs the checked-in libFuzzer harness with AddressSanitizer, public
+descriptor/BIP329 seeds, checksum repair for deeper descriptor mutations, and a bounded
+runtime (60 seconds by default). Toolchain: nightly-2026-09-07; cargo-fuzz 0.13.2;
+libfuzzer-sys 0.4.12. Its separate lock is committed and checked for changes. It covers
+descriptor, label and amount parsing; PSBT/QR fuzzing awaits those implementations.
+
+The `crash` integration test kills a child process after a durable receive/label commit and
+during an uncommitted snapshot/metadata write, then checks reopening, index non-reuse and
+SQLite integrity. It is abrupt-process recovery evidence, not physical power-loss evidence.
+
+The native runtime tests use a real Bitcoin Core 31.1 node with wallets disabled. It mines
+regtest outputs directly to public fixtures; no private signing keys or native fake balance
+API are used. Android forwards loopback port 3002 using ADB; the iOS simulator uses host
+loopback. These tests qualify software behavior on the recorded virtual runtimes only.
+
 ## Existing Rust source tests
 
 Amount parsing/formatting; policy import and checksums; test-network matching; missing-change

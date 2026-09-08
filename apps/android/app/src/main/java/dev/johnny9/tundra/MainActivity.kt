@@ -181,7 +181,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
                 Text("Dark appearance", Modifier.weight(1f)); Switch(checked = s.dark, onCheckedChange = vm::appearance)
             }
             Text("Labels", style = MaterialTheme.typography.titleMedium)
-            Text("Exports are unencrypted and privacy-sensitive. Only existing references in this wallet are matched; origin-tagged records are skipped for now.", style = MaterialTheme.typography.bodySmall)
+            Text("Exports are unencrypted and privacy-sensitive. Only known references are matched; origin-tagged records must match this wallet's policy and key origins.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { importLabels.launch(arrayOf("*/*")) }, enabled = s.wallet != null && !s.busy) { Text("Import labels") }
             OutlinedButton(onClick = { exportLabels.launch("tundra-labels.jsonl") }, enabled = s.wallet != null && !s.busy) { Text("Export labels") }
             Text("v0.1.0-dev.1 · Test-network development", style = MaterialTheme.typography.labelSmall)

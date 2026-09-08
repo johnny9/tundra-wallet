@@ -1,5 +1,5 @@
 use crate::{
-    descriptor::{canonical_descriptor, preview_import},
+    descriptor::{canonical_descriptor, label_origin, normalize_label_origin, preview_import},
     labels::{self, LabelPreview, LabelRecord},
     *,
 };
@@ -279,11 +279,19 @@ impl Core {
         let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
         let l = load(&tx, id)?;
         let (mut matched, mut changed) = (0, 0);
+        let origin = label_origin(l.wallet.public_descriptor(KeychainKind::External))?;
+        let mut seen = BTreeSet::new();
         for r in records {
-            // Origin disambiguation belongs to M2. Skip explicitly rather than risk cross-wallet assignment.
-            if r.origin.is_some() || !known_reference(&l.wallet, &r.kind, &r.reference) {
+            if r.origin
+                .as_ref()
+                .is_some_and(|o| normalize_label_origin(o).as_deref() != Some(origin.as_str()))
+                || !known_reference(&l.wallet, &r.kind, &r.reference)
+            {
                 skipped += 1;
                 continue;
+            }
+            if !seen.insert((r.kind.clone(), r.reference.clone())) {
+                return Err(Error::InvalidInput("duplicate matching label reference"));
             }
             matched += 1;
             let mut differs = false;
@@ -329,7 +337,8 @@ impl Core {
     }
     pub fn export_labels(&self, id: &str) -> Result<String> {
         let db = self.lock()?;
-        load(&db, id)?;
+        let loaded = load(&db, id)?;
+        let origin = label_origin(loaded.wallet.public_descriptor(KeychainKind::External))?;
         let mut records: BTreeMap<(String, String), LabelRecord> = BTreeMap::new();
         let mut stmt = db.prepare(
             "SELECT kind,reference,label FROM labels WHERE wallet_id=?1 ORDER BY kind,reference",
@@ -349,7 +358,7 @@ impl Core {
                     reference,
                     label: Some(label),
                     spendable: None,
-                    origin: None,
+                    origin: Some(origin.clone()),
                 },
             );
         }
@@ -364,7 +373,7 @@ impl Core {
                     reference,
                     label: None,
                     spendable: None,
-                    origin: None,
+                    origin: Some(origin.clone()),
                 })
                 .spendable = Some(false);
         }
@@ -830,6 +839,33 @@ mod tests {
         let (c, id) = setup();
         assert!(c.wallets().unwrap()[0].total_sats.is_none());
         assert!(c.coins(&id).unwrap().is_empty());
+    }
+    #[test]
+    fn bip329_origins_disambiguate_without_losing_matching_records() {
+        let (c, id, coins) = funded();
+        c.set_label(&id, "output", &coins[0].outpoint, "Original")
+            .unwrap();
+        let exported = c.export_labels(&id).unwrap();
+        let record: serde_json::Value = serde_json::from_str(exported.trim()).unwrap();
+        let origin = record["origin"].as_str().unwrap();
+        assert!(!origin.contains("tpub"));
+        let wrong = serde_json::json!({"type":"output", "ref":coins[0].outpoint, "label":"Other account", "origin":"wpkh([00000000/84h/1h/9h])"});
+        let right = serde_json::json!({"type":"output", "ref":coins[0].outpoint, "label":"Matched", "origin":origin.replace('\'', "h")});
+        let payload = format!("{wrong}\n{right}");
+        let preview = c.import_labels(&id, &payload, false).unwrap();
+        assert_eq!(
+            (preview.matched, preview.skipped, preview.changed),
+            (1, 1, 1)
+        );
+        c.import_labels(&id, &payload, true).unwrap();
+        assert_eq!(c.coins(&id).unwrap()[0].label, "Matched");
+        // The same reference with two equivalent origin spellings is still a duplicate.
+        let duplicate = format!(
+            "{right}\n{}",
+            serde_json::json!({"type":"output", "ref":coins[0].outpoint, "label":"Ambiguous", "origin":origin})
+        );
+        assert!(c.import_labels(&id, &duplicate, true).is_err());
+        assert_eq!(c.coins(&id).unwrap()[0].label, "Matched");
     }
     #[test]
     fn bulk_metadata_rolls_back_if_any_coin_is_unavailable() {

@@ -221,9 +221,85 @@ pub fn preview_import(input: &str, network: Network) -> Result<ImportPreview> {
     })
 }
 
+/// BIP 329's abbreviated descriptor contains origins only, not xpubs/child branches.
+pub(crate) fn label_origin(descriptor: &PublicDescriptor) -> Result<String> {
+    let mut origins = Vec::new();
+    descriptor.for_each_key(|key| {
+        if let DescriptorPublicKey::XPub(key) = key
+            && let Some((fingerprint, path)) = &key.origin
+        {
+            origins.push(format!("[{fingerprint}/{path}]"));
+        }
+        true
+    });
+    origins.sort();
+    match policy(descriptor)? {
+        Policy::SingleSig if origins.len() == 1 => Ok(format!("wpkh({})", origins[0])),
+        Policy::TwoOfThree if origins.len() == 3 => {
+            Ok(format!("wsh(sortedmulti(2,{}))", origins.join(",")))
+        }
+        _ => Err(Error::CorruptState),
+    }
+}
+pub(crate) fn normalize_label_origin(input: &str) -> Option<String> {
+    use bdk_wallet::bitcoin::bip32::{DerivationPath, Fingerprint};
+    if input.len() > 1024 || input.chars().any(char::is_whitespace) {
+        return None;
+    }
+    let (body, multi) = if let Some(body) = input
+        .strip_prefix("wpkh(")
+        .and_then(|s| s.strip_suffix(')'))
+    {
+        (body, false)
+    } else {
+        (
+            input
+                .strip_prefix("wsh(sortedmulti(2,")?
+                .strip_suffix("))")?,
+            true,
+        )
+    };
+    let mut origins = Vec::new();
+    for key in body.split(',') {
+        let key = key.strip_prefix('[')?.strip_suffix(']')?;
+        let (fingerprint, path) = key.split_once('/')?;
+        let fingerprint = Fingerprint::from_str(fingerprint).ok()?;
+        let path = DerivationPath::from_str(path).ok()?;
+        if path.as_ref().is_empty() {
+            return None;
+        }
+        origins.push(format!("[{fingerprint}/{path}]"));
+    }
+    origins.sort();
+    if origins.windows(2).any(|v| v[0] == v[1]) {
+        return None;
+    }
+    match (multi, origins.len()) {
+        (false, 1) => Some(format!("wpkh({})", origins[0])),
+        (true, 3) => Some(format!("wsh(sortedmulti(2,{}))", origins.join(","))),
+        _ => None,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn abbreviated_origins_canonicalize_multisig_key_order_and_hardened_notation() {
+        let left = "wsh(sortedmulti(2,[deadbeef/48'/1'/0'/2'],[aaaaaaaa/48'/1'/0'/2'],[bbbbbbbb/48'/1'/0'/2']))";
+        let right = "wsh(sortedmulti(2,[BBBBBBBB/48h/1h/0h/2h],[DEADBEEF/48h/1h/0h/2h],[AAAAAAAA/48h/1h/0h/2h]))";
+        assert_eq!(normalize_label_origin(left), normalize_label_origin(right));
+        assert!(normalize_label_origin(left).is_some());
+        for bad in [
+            "wpkh([deadbeef])",
+            "wpkh([deadbeef/84h/1h/0h]xpub)",
+            "wpkh([deadbeef/84h/1h/0h])/0/*",
+            "wpkh([deadbeef/84h/1h/0h])#checksum",
+            "wsh(sortedmulti(2,[deadbeef/48h/1h/0h/2h],[deadbeef/48h/1h/0h/2h],[aaaaaaaa/48h/1h/0h/2h]))",
+        ] {
+            assert!(normalize_label_origin(bad).is_none());
+        }
+    }
     const SINGLE: &str = include_str!("../../../tests/fixtures/single-sig.txt");
     const MULTI: &str = include_str!("../../../tests/fixtures/two-of-three.txt");
 

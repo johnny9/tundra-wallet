@@ -41,6 +41,9 @@ need reproducibility review.
 - `scripts/check-swift-ffi.sh`: macOS host smoke tests through the generated Swift binding.
 - `scripts/check-regtest.sh`: actual keyless Bitcoin Core chain, maturity and reorg tests.
 - `scripts/install-bitcoin-ci.sh`: checksummed Bitcoin Core 31.1 user-local CI installation.
+- `scripts/check-fuzz.sh`: bounded AddressSanitizer parser fuzzing with a pinned nightly/tool.
+- CI audits the lock with cargo-audit 0.22.2 and the current RustSec database; a clean audit
+  is not an independent review or a guarantee that dependencies have no vulnerabilities.
 - `scripts/build-android.sh`: bindings + cargo-ndk libraries for arm64 and x86_64.
 - `scripts/build-ios.sh`: Apple static libraries + XCFramework; macOS/Xcode required.
 - Publish commits using normal Git pushes to the configured origin; no creation helper exists.

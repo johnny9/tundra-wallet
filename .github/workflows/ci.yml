@@ -9,6 +9,24 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  parser-and-dependency-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.93.1
+      - run: cargo install cargo-audit --version 0.22.2 --locked --no-default-features
+      - run: mkdir -p build && cargo audit --json > build/audit.json
+      - run: cargo install cargo-fuzz --version 0.13.2 --locked
+      - run: rustup toolchain install nightly-2026-09-07 --profile minimal
+      - run: ./scripts/check-fuzz.sh > build/fuzz.log 2>&1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tundra-parser-and-dependency-results
+          path: |
+            build/audit.json
+            build/fuzz.log
+            build/fuzz-artifacts/
   rust:
     runs-on: ubuntu-latest
     steps:
@@ -41,7 +59,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@1.93.1
         with:
           targets: aarch64-linux-android, x86_64-linux-android
-      - run: cargo install cargo-ndk --locked
+      - run: cargo install cargo-ndk --version 4.1.2 --locked
       - run: ./scripts/build-android.sh
       - uses: gradle/actions/setup-gradle@v4
       - run: ./apps/android/gradlew --no-daemon -p apps/android :app:assembleDebug :app:testDebugUnitTest
