@@ -31,6 +31,7 @@ dependencies, SDK downloads, cargo-ndk installation or the Xcode host.
 - `scripts/check.sh`: required Rust formatting, all-target/all-feature tests, strict Clippy,
   and offline checks; never rewrites sources or bootstraps a missing lock.
 - `scripts/generate-bindings.sh`: host library build and generated Kotlin/Swift API.
+- `scripts/check-swift-ffi.sh`: macOS host smoke tests through the generated Swift binding.
 - `scripts/build-android.sh`: bindings + cargo-ndk libraries for arm64 and x86_64.
 - `scripts/build-ios.sh`: Apple static libraries + XCFramework; macOS/Xcode required.
 - Publish commits using normal Git pushes to the configured origin; no creation helper exists.

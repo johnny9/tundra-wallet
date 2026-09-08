@@ -58,5 +58,6 @@ jobs:
           targets: aarch64-apple-ios, aarch64-apple-ios-sim, x86_64-apple-ios
       - run: brew install xcodegen
       - run: ./scripts/build-ios.sh
+      - run: ./scripts/check-swift-ffi.sh
       - run: cd apps/ios && xcodegen generate
       - run: xcodebuild -project apps/ios/Tundra.xcodeproj -scheme Tundra -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build

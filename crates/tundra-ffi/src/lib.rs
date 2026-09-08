@@ -210,8 +210,9 @@ pub enum ErrorCode {
 }
 #[derive(Debug, thiserror::Error, uniffi::Error)]
 pub enum AppError {
-    #[error("{message}")]
-    Operation { code: ErrorCode, message: String },
+    // `message` conflicts with kotlin.Exception.message in generated Kotlin errors.
+    #[error("{detail}")]
+    Operation { code: ErrorCode, detail: String },
 }
 impl From<core::Error> for AppError {
     fn from(e: core::Error) -> Self {
@@ -226,7 +227,7 @@ impl From<core::Error> for AppError {
         };
         Self::Operation {
             code,
-            message: e.to_string(),
+            detail: e.to_string(),
         }
     }
 }

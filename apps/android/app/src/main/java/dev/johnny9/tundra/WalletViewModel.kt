@@ -41,7 +41,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
             catch (e: CancellationException) { throw e }
             catch (e: Exception) {
                 // Do not log descriptors, labels, addresses, database paths or native stack traces.
-                mutable.value = mutable.value.copy(error = if (e is AppException) e.message else "Operation failed. Please try again.")
+                mutable.value = mutable.value.copy(error = if (e is AppException.Operation) e.detail else "Operation failed. Please try again.")
             } finally { mutable.value = mutable.value.copy(busy = false) }
         }
     }

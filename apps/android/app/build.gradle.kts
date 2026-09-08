@@ -22,6 +22,12 @@ android {
     kotlinOptions { jvmTarget = "17" }
     packaging { jniLibs.useLegacyPackaging = false }
     buildTypes { release { isMinifyEnabled = false } }
+    sourceSets.getByName("test").resources.srcDir("../../../tests/fixtures")
+}
+tasks.withType<Test>().configureEach {
+    // Exercise the host Rust library via JNA, not an Android ABI or a mocked wallet.
+    systemProperty("jna.library.path", providers.gradleProperty("tundra.hostLibraryDir")
+        .getOrElse(rootProject.projectDir.resolve("../../target/debug").absolutePath))
 }
 dependencies {
     implementation(platform("androidx.compose:compose-bom:2025.12.00"))
@@ -34,5 +40,7 @@ dependencies {
     implementation("net.java.dev.jna:jna:5.17.0@aar")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
     testImplementation("junit:junit:4.13.2")
+    // The Android AAR has no host JNA dispatch library; JVM tests need the desktop artifact.
+    testRuntimeOnly("net.java.dev.jna:jna:5.17.0@jar")
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
