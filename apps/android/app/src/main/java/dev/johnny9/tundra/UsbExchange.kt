@@ -152,7 +152,13 @@ private data class PendingUsbPermission(
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current
     val scope = rememberCoroutineScope()
-    val manager = remember { context.getSystemService(Context.USB_SERVICE) as UsbManager }
+    val manager = remember { context.getSystemService(UsbManager::class.java) }
+    if (manager == null) {
+        AlertDialog(onDismissRequest = onClose, title = { Text("USB hardware") },
+            text = { Text("USB host is not available on this Android runtime.") },
+            confirmButton = { TextButton(onClick = onClose) { Text("Close USB") } })
+        return
+    }
     val permissionAction = remember { "${context.packageName}.USB_PERMISSION.${UUID.randomUUID()}" }
     var devices by remember { mutableStateOf(LedgerUsbLink.candidates(manager)) }
     var selected by remember { mutableStateOf(devices.firstOrNull()?.deviceId) }
@@ -244,7 +250,10 @@ private data class PendingUsbPermission(
         // separate filters, otherwise Android's data matching silently drops one of them.
         ContextCompat.registerReceiver(context, receiver, usbPermissionFilter(permissionAction), ContextCompat.RECEIVER_NOT_EXPORTED)
         ContextCompat.registerReceiver(context, receiver, IntentFilter(UsbManager.ACTION_USB_DEVICE_DETACHED), ContextCompat.RECEIVER_NOT_EXPORTED)
-        val observer = LifecycleEventObserver { _, event -> if (event == Lifecycle.Event.ON_STOP) latestStop("USB operation cancelled when the app left the screen.") }
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP && (job != null || pending != null))
+                latestStop("USB operation cancelled when the app left the screen.")
+        }
         lifecycle.lifecycle.addObserver(observer)
         onDispose { context.unregisterReceiver(receiver); lifecycle.lifecycle.removeObserver(observer); latestStop(null) }
     }
