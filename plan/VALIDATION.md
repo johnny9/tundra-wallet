@@ -2,6 +2,14 @@
 
 ## Sync implementation pass — September 8, 2026
 
+Follow-up payment core checks: 67 core tests plus 5 HTTP tests and the separate real regtest
+scenario pass. Decimal fee normalization/review and bulk metadata rollback have regression
+coverage. The new native payment flow tests are not yet claimed passing.
+
+At commit `287e305`, the iOS simulator ran both XCTest FFI and XCUITest import/restart/receive
+tests successfully. Android app/JVM builds passed, but its first instrumentation run failed;
+diagnosis and correction are in progress. [CI run](https://github.com/johnny9/tundra-wallet/actions/runs/34264453998).
+
 Locally executed: 64 core unit tests, 5 adversarial loopback HTTP tests, 23 offline checks,
 formatting and strict Clippy pass. The separate real Bitcoin Core 31.1 regtest scenario
 passes: keyless mining, coinbase maturity, persistence, shorter/replacement reorgs,

@@ -7,7 +7,7 @@ These are ordered work packages, not time estimates.
 | M0: product/design baseline | Approved reference included | Reference renders locally, attribution retained, decisions recorded |
 | M1: offline Rust/native foundation | Rust/native compilation and host FFI tests pass; mobile runtime gates open | Rust tests pass; both generated bindings compile; Android and iOS import a disposable public descriptor, survive restart, derive distinct persistent addresses, show unknown balances |
 | M2: sync + durable coin state | Core and real regtest checks pass; native/runtime qualification in progress | Explicit test endpoint syncs/reorgs correctly, no keys/labels leak, balance freshness represented, spent/reserved/frozen transitions tested |
-| M3: native coin control + review | Core draft source only | Native exact-input, automatic, max and consolidation flows round-trip through Rust; no UI-only validation; layouts match prototype; interrupted drafts persist |
+| M3: native coin control + review | Native source and core tests implemented; runtime validation in progress | Native exact-input, automatic, max and consolidation flows round-trip through Rust; no UI-only validation; layouts match prototype; interrupted drafts persist |
 | M4: QR external signing | Not implemented | Bounded UR/BBQr sessions interoperate on devices; wrong payloads/transactions rejected; per-input signatures verified; receive/policy comparison works |
 | M5: Android USB / bhwi | Not implemented | Pinned bhwi revision; documented model/firmware/transport matrix; permission, cancellation, reconnect and app lifecycle tests pass |
 | M6: signet end-to-end | Not implemented | 2-of-3 QR + USB with restart signs, validates, finalizes and explicitly broadcasts to a configured test backend |
@@ -32,13 +32,14 @@ These are ordered work packages, not time estimates.
   apply labels to a different wallet. Add canonical descriptor-origin matching.
 - Coinbase maturity now follows confirmation depth at the current tip; verified against
   Bitcoin Core regtest at 99 and 100 confirmations and after reorgs.
-- Fees are integer sat/vB and have a development cap. Add precise fractional fee-rate support
-  and reviewed policy limits without floating-point satoshi accounting.
+- Decimal fee rates now normalize upward to BDK's integer sat/kwu precision; the normalized
+  rate is included in new saved reviews. Development fee limits still need release review.
 - No on-device scanner or animated-QR codecs yet. Do not relabel the prototype simulation
   as a native hardware feature.
 - Explicit bounded Esplora test-network sync is implemented. Signed-response parsing and
   broadcast remain unavailable pending their acceptance gates.
-- Native screens show the offline import/list experience; advanced draft UI is still to port.
+- Native coin selection, review, PSBT file export and saved drafts are implemented; validate
+  every mode on both platforms and compare layouts/accessibility against the reference.
 - Label provenance is captured on draft inputs. New-output labeling after a real broadcast
   and resulting history linkage remain to implement.
 

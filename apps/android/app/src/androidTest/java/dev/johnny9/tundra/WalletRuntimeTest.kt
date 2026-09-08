@@ -28,13 +28,14 @@ class WalletRuntimeTest {
         ActivityScenario.launch(MainActivity::class.java).use { activity ->
             waitText("Add wallet")
             compose.onNodeWithText("Add wallet").performClick()
+            compose.onNodeWithText("Regtest").performClick()
             compose.onNodeWithText("Or paste a public descriptor").performTextInput(fixture())
             compose.onNodeWithText("Review wallet").performClick()
             waitText("Single signature")
-            compose.onNode(hasText("Add wallet") and hasClickAction()).performClick()
+            compose.onNodeWithTag("confirmImport").performScrollTo().performClick()
             // Import removes the preview asynchronously; wait for the new wallet first.
             compose.waitUntil(10_000) { compose.onAllNodesWithText("— BTC").fetchSemanticsNodes().isNotEmpty() }
-            compose.onNodeWithText("Close").performClick()
+            compose.onNodeWithTag("closeImport").performScrollTo().performClick()
             compose.onNodeWithText("Not synced · balance unknown").assertIsDisplayed()
             compose.onNodeWithText("Receive").performClick()
             waitText("Index 0. Hardware verification is not available. Do not fund this address.")
@@ -58,6 +59,42 @@ class WalletRuntimeTest {
             assertEquals(SyncState.PREPARED, op.state)
             assertEquals(SyncState.CANCELLED, core.cancelSync(op.id).state)
             assertNull(core.wallets().single().syncedAt)
+        }
+        val recipient = Tundra.open(":memory:").use { core ->
+            val descriptor = InstrumentationRegistry.getInstrumentation().context.assets
+                .open("two-of-three.txt").bufferedReader().use { it.readText() }
+            core.previewImport(descriptor, Chain.REGTEST).firstAddress
+        }
+        ActivityScenario.launch(MainActivity::class.java).use { activity ->
+            waitText("Sync test network")
+            compose.onNodeWithText("Sync test network").performClick()
+            compose.onNodeWithText("Esplora API URL").performTextInput("http://127.0.0.1:3002")
+            compose.onNodeWithText("Start scan").assertIsNotEnabled()
+            compose.onNode(isToggleable()).performClick()
+            compose.onNodeWithText("Start scan").performScrollTo().performClick()
+            compose.waitUntil(30_000) { compose.onAllNodesWithText("150 BTC").fetchSemanticsNodes().isNotEmpty() }
+            compose.onNodeWithText("Coins").performClick()
+            val choices = compose.onAllNodes(hasContentDescription("Select coin", substring = true))
+            choices[0].performClick(); choices[1].performClick()
+            compose.onNodeWithText("Send").performClick()
+            compose.onNodeWithText("Recipient address").performTextInput(recipient)
+            compose.onNodeWithText("Amount in BTC").performTextInput("0.001")
+            compose.onNodeWithText("Fee rate in sat/vB").performTextReplacement("2.5")
+            compose.onNodeWithTag("buildReview").performScrollTo().performClick()
+            waitText("Inputs · 2")
+            compose.onNodeWithText("Save for later").performScrollTo().performClick()
+            activity.recreate()
+            waitText("Activity")
+            compose.onNodeWithText("Activity").performClick()
+            waitText("Draft · unsigned · 2 inputs")
+        }
+        Tundra.open(context.noBackupFilesDir.resolve("tundra.sqlite").path).use { core ->
+            val wallet = core.wallets().single()
+            val draft = core.drafts(wallet.id).single()
+            assertEquals(2, draft.inputs.size)
+            assertEquals(625uL, draft.feeSatPerKwu)
+            assertEquals(2, core.coins(wallet.id).count { it.state == CoinState.RESERVED })
+            assertEquals(draft.inputs.sumOf { it.sats }, draft.outputs.sumOf { it.sats } + draft.feeSats)
         }
     }
 }

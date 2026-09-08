@@ -171,7 +171,7 @@ fn real_chain_maturity_persistence_shorter_reorg_and_draft_invalidation() {
                 sats: 100_000,
             },
             selected_outpoints: Some(vec![coin.outpoint.clone()]),
-            fee_sat_per_vb: 2,
+            fee_sat_per_kwu: 500,
             label: "Reorg test".into(),
         })
         .unwrap();

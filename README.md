@@ -30,10 +30,10 @@ It never imports or generates Bitcoin private signing keys.
 |---|---|---|
 | `tundra-core` | BDK public descriptor validation, receive/change derivation, SQLite snapshots, bounded opt-in Esplora sync | Test networks only; chosen endpoint supplies the chain view |
 | Metadata | Wallet-scoped transaction/address/output labels, BIP 329 patch import/export, user freezes | Known references only; origin-bearing imports are skipped; development DB is not encrypted |
-| Transactions | Exact/manual and automatic eligible inputs, selected-max, consolidation, unsigned PSBT drafts and atomic reservations | Tested in Rust on test data; not exposed as an enabled native Send flow |
+| Transactions | Exact/manual and automatic eligible inputs, selected-max, consolidation, fractional fees, saved unsigned drafts and atomic reservations | Native payment flows under runtime validation; signing/broadcast unavailable |
 | `tundra-ffi` | Typed UniFFI API; Kotlin and Swift bindings generated and exercised against the host library | Mobile lifecycle/cancellation qualification remains |
-| Android | Compose import, wallets, cached/unknown balances, Activity/Coins, labels, appearance and opt-in sync | Runtime validation pending; QR, Send and USB remain unavailable |
-| iOS | SwiftUI starter and actor adapter for import/list/receive; simulator target compiled in CI | No simulator/phone runtime validation; UI parity still required |
+| Android | Compose import, wallets, sync, coin selection/search, bulk metadata and payment review | Runtime validation in progress; QR and USB remain unavailable |
+| iOS | SwiftUI import, wallets, sync, coin selection/search, metadata and payment review | Import/restart simulator tests passed; payment runtime validation in progress |
 | Design | Exact approved Tundra HTML reference and source | Simulation stays in `design/`, not in the Rust/native wallet |
 | Quality | Rust tests, offline schema/fixture checks, CI and build scripts | See [validation report](plan/VALIDATION.md) for executed versus unexecuted checks |
 

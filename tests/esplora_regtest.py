@@ -15,6 +15,7 @@ from pathlib import Path
 p = argparse.ArgumentParser()
 p.add_argument("--datadir", required=True)
 p.add_argument("--port-file", required=True)
+p.add_argument("--port", type=int, default=0)
 args = p.parse_args()
 
 
@@ -118,6 +119,6 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.send_error(500)
 
 
-server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+server = http.server.ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
 Path(args.port_file).write_text(str(server.server_port))
 server.serve_forever()

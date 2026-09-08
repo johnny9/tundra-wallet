@@ -21,7 +21,9 @@ data class WalletState(
     val busy: Boolean = false, val error: String? = null, val dark: Boolean = true,
     val importPreview: WalletPreview? = null, val receive: AddressInfo? = null,
     val labelPreview: LabelImportPreview? = null,
-    val endpoint: String = "", val sync: SyncInfo? = null
+    val endpoint: String = "", val sync: SyncInfo? = null,
+    val selected: Set<String> = emptySet(), val drafts: List<PaymentReview> = emptyList(),
+    val review: PaymentReview? = null
 ) { val wallet: WalletInfo? get() = wallets.firstOrNull { it.id == selectedId } }
 
 class WalletViewModel(application: Application) : AndroidViewModel(application) {
@@ -53,9 +55,12 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         val coins = if (id == null) emptyList() else withContext(Dispatchers.IO) { engine().coins(id) }
         val activity = if (id == null) emptyList() else withContext(Dispatchers.IO) { engine().activity(id) }
         val endpoint = if (id == null) "" else withContext(Dispatchers.IO) { engine().syncEndpoint(id) ?: "" }
-        mutable.value = mutable.value.copy(wallets = wallets, selectedId = id, coins = coins, activity = activity, endpoint = endpoint)
+        val drafts = if (id == null) emptyList() else withContext(Dispatchers.IO) { engine().drafts(id) }
+        val selected = mutable.value.selected.intersect(coins.filter { it.state == CoinState.AVAILABLE }.map { it.outpoint }.toSet())
+        val review = mutable.value.review?.let { old -> drafts.firstOrNull { it.id == old.id } }
+        mutable.value = mutable.value.copy(wallets = wallets, selectedId = id, coins = coins, activity = activity, endpoint = endpoint, drafts = drafts, selected = selected, review = review)
     }
-    fun select(id: String) = run { mutable.value = mutable.value.copy(selectedId = id, receive = null); refresh() }
+    fun select(id: String) = run { mutable.value = mutable.value.copy(selectedId = id, receive = null, selected = emptySet(), review = null); refresh() }
     fun appearance(dark: Boolean) { preferences.edit().putBoolean("dark", dark).apply(); mutable.value = mutable.value.copy(dark = dark) }
     fun clearError() { mutable.value = mutable.value.copy(error = null) }
     fun cancelImport() { pendingDescriptor = null; mutable.value = mutable.value.copy(importPreview = null) }
@@ -85,6 +90,47 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         mutable.value = mutable.value.copy(receive = address)
     }
     fun closeReceive() { mutable.value = mutable.value.copy(receive = null) }
+    fun toggleCoin(coin: CoinInfo) {
+        if (mutable.value.busy || coin.state != CoinState.AVAILABLE) return
+        val selected = mutable.value.selected.toMutableSet()
+        if (!selected.remove(coin.outpoint)) selected.add(coin.outpoint)
+        mutable.value = mutable.value.copy(selected = selected)
+    }
+    fun clearSelection() { mutable.value = mutable.value.copy(selected = emptySet()) }
+    fun bulkEdit(label: String?, frozen: Boolean?) = run {
+        val s = mutable.value
+        withContext(Dispatchers.IO) { engine().editCoins(checkNotNull(s.selectedId), s.selected.toList(), label, frozen) }
+        refresh()
+    }
+    fun openReview(review: PaymentReview) { mutable.value = mutable.value.copy(review = review) }
+    fun closeReview() { mutable.value = mutable.value.copy(review = null) }
+    fun createPayment(mode: Int, address: String, amount: String, fee: String, label: String, automatic: Boolean, acknowledge: Boolean) = run {
+        val s = mutable.value
+        val review = withContext(Dispatchers.IO) {
+            val intent = when (mode) {
+                1 -> PaymentIntent.SendMax(address)
+                2 -> PaymentIntent.Consolidate(acknowledge)
+                else -> PaymentIntent.Send(address, parseBtcAmount(amount))
+            }
+            engine().createDraft(PaymentRequest(checkNotNull(s.selectedId), intent,
+                if (automatic && mode == 0) null else s.selected.toList(), parseFeeRate(fee), label))
+        }
+        mutable.value = mutable.value.copy(review = review, selected = emptySet())
+        refresh()
+    }
+    fun discardReview() = run {
+        val review = checkNotNull(mutable.value.review)
+        withContext(Dispatchers.IO) { engine().discardDraft(review.walletId, review.id) }
+        mutable.value = mutable.value.copy(review = null); refresh()
+    }
+    fun exportDraft(uri: Uri, walletId: String, draftId: String) = run {
+        withContext(Dispatchers.IO) {
+            val payload = engine().exportUnsignedPsbt(walletId, draftId)
+            getApplication<Application>().contentResolver.openOutputStream(uri, "wt")?.use {
+                it.write(payload.toByteArray(Charsets.US_ASCII)); it.flush()
+            } ?: error("Could not open output")
+        }
+    }
     fun sync(endpoint: String, consent: Boolean) = run {
         val id = checkNotNull(mutable.value.selectedId)
         val operation = withContext(Dispatchers.IO) { engine().prepareSync(id, endpoint, consent) }

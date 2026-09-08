@@ -142,7 +142,7 @@ pub struct PaymentRequest {
     pub wallet_id: String,
     pub intent: PaymentIntent,
     pub selected_outpoints: Option<Vec<String>>,
-    pub fee_sat_per_vb: u64,
+    pub fee_sat_per_kwu: u64,
     pub label: String,
 }
 #[derive(Debug, Clone, uniffi::Record)]
@@ -165,6 +165,7 @@ pub struct PaymentReview {
     pub inputs: Vec<InputInfo>,
     pub outputs: Vec<OutputInfo>,
     pub fee_sats: u64,
+    pub fee_sat_per_kwu: Option<u64>,
     pub label: String,
     pub is_consolidation: bool,
     pub state: String,
@@ -194,6 +195,7 @@ impl From<core::DraftReview> for PaymentReview {
                 })
                 .collect(),
             fee_sats: r.fee_sats,
+            fee_sat_per_kwu: r.fee_sat_per_kwu,
             label: r.label,
             is_consolidation: r.is_consolidation,
             state: r.state,
@@ -285,6 +287,15 @@ impl Tundra {
     }
     pub fn wallets(&self) -> Result<Vec<WalletInfo>> {
         Ok(self.core.wallets()?.into_iter().map(Into::into).collect())
+    }
+    pub fn edit_coins(
+        &self,
+        wallet_id: String,
+        outpoints: Vec<String>,
+        label: Option<String>,
+        frozen: Option<bool>,
+    ) -> Result<()> {
+        Ok(self.core.edit_coins(&wallet_id, outpoints, label, frozen)?)
     }
     pub fn prepare_sync(
         &self,
@@ -401,7 +412,7 @@ impl Tundra {
                 wallet_id: request.wallet_id,
                 payment,
                 selected_outpoints: request.selected_outpoints,
-                fee_sat_per_vb: request.fee_sat_per_vb,
+                fee_sat_per_kwu: request.fee_sat_per_kwu,
                 label: request.label,
             })?
             .into())
@@ -428,4 +439,12 @@ pub fn format_balance(sats: u64) -> String {
 #[uniffi::export]
 pub fn parse_btc_amount(value: String) -> Result<u64> {
     Ok(core::amount::parse_btc(&value)?)
+}
+#[uniffi::export]
+pub fn parse_fee_rate(value: String) -> Result<u64> {
+    Ok(core::amount::parse_fee_rate(&value)?)
+}
+#[uniffi::export]
+pub fn format_fee_rate(sat_per_kwu: u64) -> String {
+    core::amount::format_fee_rate(sat_per_kwu)
 }

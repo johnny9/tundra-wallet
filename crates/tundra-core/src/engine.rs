@@ -217,6 +217,61 @@ impl Core {
         tx.commit()?;
         Ok(())
     }
+    /// All-or-nothing bulk metadata changes, scoped to current wallet-owned outputs.
+    pub fn edit_coins(
+        &self,
+        id: &str,
+        references: Vec<String>,
+        label: Option<String>,
+        frozen: Option<bool>,
+    ) -> Result<()> {
+        if references.is_empty() || references.len() > 200 || (label.is_none() && frozen.is_none())
+        {
+            return Err(Error::InvalidInput(
+                "select 1–200 coins and a metadata change",
+            ));
+        }
+        if let Some(ref label) = label {
+            labels::validate_label(label)?;
+        }
+        let mut db = self.lock()?;
+        let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
+        let loaded = load(&tx, id)?;
+        let known: BTreeSet<_> = loaded
+            .wallet
+            .list_unspent()
+            .map(|c| c.outpoint.to_string())
+            .collect();
+        let unique: BTreeSet<_> = references.iter().collect();
+        if unique.len() != references.len() {
+            return Err(Error::InvalidInput("duplicate outpoint"));
+        }
+        for reference in &references {
+            if !known.contains(reference) {
+                return Err(Error::UnavailableCoin);
+            }
+            if let Some(ref label) = label {
+                put_label(&tx, id, "output", reference, label)?;
+            }
+            match frozen {
+                Some(true) => {
+                    tx.execute(
+                        "INSERT OR IGNORE INTO freezes(wallet_id,outpoint) VALUES(?1,?2)",
+                        params![id, reference],
+                    )?;
+                }
+                Some(false) => {
+                    tx.execute(
+                        "DELETE FROM freezes WHERE wallet_id=?1 AND outpoint=?2",
+                        params![id, reference],
+                    )?;
+                }
+                None => {}
+            }
+        }
+        tx.commit()?;
+        Ok(())
+    }
     /// Preview and apply both rematch against this wallet. Unknown references/origins are not guessed.
     pub fn import_labels(&self, id: &str, payload: &str, apply: bool) -> Result<LabelPreview> {
         let (records, mut skipped) = labels::parse_labels(payload)?;
@@ -323,8 +378,8 @@ impl Core {
     }
     pub fn create_draft(&self, request: DraftRequest) -> Result<DraftReview> {
         labels::validate_label(&request.label)?;
-        if !(1..=1000).contains(&request.fee_sat_per_vb) {
-            return Err(Error::InvalidInput("fee rate must be 1–1000 sat/vB"));
+        if !(1..=250_000).contains(&request.fee_sat_per_kwu) {
+            return Err(Error::InvalidInput("fee rate must be 1–250000 sat/kwu"));
         }
         let mut db = self.lock()?;
         let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
@@ -405,8 +460,7 @@ impl Core {
             .filter(|c| c.status != CoinStatus::Available)
             .map(|c| outpoint(&c.outpoint))
             .collect::<Result<Vec<_>>>()?;
-        let fee_rate = FeeRate::from_sat_per_vb(request.fee_sat_per_vb)
-            .ok_or(Error::InvalidInput("fee rate"))?;
+        let fee_rate = FeeRate::from_sat_per_kwu(request.fee_sat_per_kwu);
         let mut builder = l.wallet.build_tx();
         builder
             .fee_rate(fee_rate)
@@ -483,6 +537,7 @@ impl Core {
             inputs,
             outputs,
             fee_sats: fee,
+            fee_sat_per_kwu: Some(request.fee_sat_per_kwu),
             label: request.label.clone(),
             is_consolidation: consolidate,
             state: "unsigned".into(),
@@ -766,7 +821,7 @@ mod tests {
                 sats,
             },
             selected_outpoints: Some(coins),
-            fee_sat_per_vb: 2,
+            fee_sat_per_kwu: 500,
             label: "Test payment".into(),
         }
     }
@@ -775,6 +830,63 @@ mod tests {
         let (c, id) = setup();
         assert!(c.wallets().unwrap()[0].total_sats.is_none());
         assert!(c.coins(&id).unwrap().is_empty());
+    }
+    #[test]
+    fn bulk_metadata_rolls_back_if_any_coin_is_unavailable() {
+        let (c, id, coins) = funded();
+        let all = coins.iter().map(|c| c.outpoint.clone()).collect::<Vec<_>>();
+        c.edit_coins(&id, all.clone(), Some("Batch 🧊".into()), Some(true))
+            .unwrap();
+        assert!(
+            c.coins(&id)
+                .unwrap()
+                .iter()
+                .all(|coin| coin.label == "Batch 🧊" && coin.status == CoinStatus::Frozen)
+        );
+        assert!(
+            c.edit_coins(
+                &id,
+                vec![all[0].clone(), "unknown:0".into()],
+                Some("Must roll back".into()),
+                Some(false)
+            )
+            .is_err()
+        );
+        assert!(
+            c.coins(&id)
+                .unwrap()
+                .iter()
+                .all(|coin| coin.label == "Batch 🧊" && coin.status == CoinStatus::Frozen)
+        );
+        assert!(
+            c.edit_coins(
+                &id,
+                vec![all[0].clone(), all[0].clone()],
+                Some("Duplicate".into()),
+                None
+            )
+            .is_err()
+        );
+        c.edit_coins(&id, all, None, Some(false)).unwrap();
+        assert!(
+            c.coins(&id)
+                .unwrap()
+                .iter()
+                .all(|coin| coin.label == "Batch 🧊" && coin.status == CoinStatus::Available)
+        );
+    }
+    #[test]
+    fn fractional_fee_rate_is_recorded_in_immutable_review() {
+        let (c, id, coins) = funded();
+        let mut request = req(&id, vec![coins[0].outpoint.clone()], 50_000);
+        request.fee_sat_per_kwu = amount::parse_fee_rate("1.001").unwrap();
+        let review = c.create_draft(request).unwrap();
+        assert_eq!(review.fee_sat_per_kwu, Some(251));
+        assert_eq!(c.drafts(&id).unwrap()[0].fee_sat_per_kwu, Some(251));
+        assert_eq!(
+            review.inputs.iter().map(|i| i.sats).sum::<u64>(),
+            review.outputs.iter().map(|o| o.sats).sum::<u64>() + review.fee_sats
+        );
     }
     #[test]
     fn observed_spend_invalidates_draft_and_releases_other_inputs_only() {

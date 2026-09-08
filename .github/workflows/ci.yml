@@ -47,13 +47,25 @@ jobs:
       - run: ./apps/android/gradlew --no-daemon -p apps/android :app:assembleDebug :app:testDebugUnitTest
       - name: Enable KVM for the hosted Android emulator
         run: sudo chmod 666 /dev/kvm
+      - run: ./scripts/install-bitcoin-ci.sh
+      - name: Start keyless native test chain
+        run: |
+          python3 tests/native_chain.py > build/native-chain.log 2>&1 &
+          for attempt in $(seq 1 60); do
+            test -f build/native-chain-port && exit 0
+            sleep 1
+          done
+          cat build/native-chain.log
+          exit 1
       - uses: reactivecircus/android-emulator-runner@v2.35.0
         with:
           api-level: 35
           arch: x86_64
           profile: pixel_6
           disable-animations: true
-          script: ./apps/android/gradlew --no-daemon -p apps/android :app:connectedDebugAndroidTest
+          script: |
+            adb reverse tcp:3002 tcp:3002
+            ./apps/android/gradlew --no-daemon -p apps/android :app:connectedDebugAndroidTest
       - uses: actions/upload-artifact@v4
         with:
           name: tundra-development-apk
@@ -80,6 +92,16 @@ jobs:
       - run: ./scripts/check-swift-ffi.sh
       - run: cd apps/ios && xcodegen generate
       - run: xcodebuild -project apps/ios/Tundra.xcodeproj -scheme Tundra -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
+      - run: ./scripts/install-bitcoin-ci.sh
+      - name: Start keyless native test chain
+        run: |
+          python3 tests/native_chain.py > build/native-chain.log 2>&1 &
+          for attempt in $(seq 1 60); do
+            test -f build/native-chain-port && exit 0
+            sleep 1
+          done
+          cat build/native-chain.log
+          exit 1
       - run: ./scripts/check-ios-runtime.sh
       - uses: actions/upload-artifact@v4
         if: always()

@@ -12,7 +12,7 @@ approval system, or cloud account.
 
 ## Current status — September 8, 2026
 
-**Test-network sync implemented and under validation; M1 mobile runtime gates remain open.**
+**Test-network sync and native coin control implemented; mobile qualification in progress.**
 
 - Source: descriptor-first watch-only engine, metadata, unsigned-draft core, UniFFI API,
   Android native import shell, iOS native starter, tests and CI.
@@ -21,6 +21,8 @@ approval system, or cloud account.
   See [VALIDATION.md](VALIDATION.md) for the exact results and remaining gates.
 - Added: bounded opt-in Esplora scans, cancellation, cached timestamps, coinbase maturity,
   reorg-safe draft invalidation, and a keyless Bitcoin Core regtest integration test.
+- Added: native search/filter/selection, payment/max/consolidation review and saved drafts;
+  decimal fee rates and atomic bulk coin metadata. New native tests await validation.
 - Not implemented: real QR/USB transport, bhwi device integration,
   signed-response validation, finalization/broadcast, production storage protection.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.

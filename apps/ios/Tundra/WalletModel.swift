@@ -13,6 +13,10 @@ final class WalletModel: ObservableObject {
     @Published var error: String?
     @Published var endpoint = ""
     @Published var sync: SyncInfo?
+    @Published var selectedCoins: Set<String> = []
+    @Published var drafts: [PaymentReview] = []
+    @Published var review: PaymentReview?
+    @Published var exportedPSBT: String?
     private let service = CoreService()
     // Sensitive in-memory edit state is not stored in scene restoration or preferences.
     private var pendingPayload: String?
@@ -27,6 +31,9 @@ final class WalletModel: ObservableObject {
             defer { busy = false }
             do { try await operation() }
             catch is CancellationError { }
+            catch let error as AppError {
+                switch error { case .Operation(_, let detail): self.error = detail }
+            }
             catch { self.error = "The operation could not be completed. Check the test descriptor and selected network." }
         }
     }
@@ -38,9 +45,12 @@ final class WalletModel: ObservableObject {
             coins = try await service.coins(id)
             activity = try await service.activity(id)
             endpoint = try await service.endpoint(id)
+            drafts = try await service.drafts(id)
+            selectedCoins.formIntersection(coins.filter { $0.state == .available }.map(\.outpoint))
+            if let old = review { review = drafts.first { $0.id == old.id } }
         } else { coins = []; activity = [] }
     }
-    func select(_ id: String) { run { self.selectedID = id; self.received = nil; try await self.refresh() } }
+    func select(_ id: String) { run { self.selectedID = id; self.received = nil; self.review = nil; self.selectedCoins = []; try await self.refresh() } }
     func inspect(_ payload: String, chain: Chain) {
         run {
             self.preview = nil; self.pendingPayload = nil
@@ -96,5 +106,46 @@ final class WalletModel: ObservableObject {
     func cancelSync() {
         guard let id = sync?.id else { return }
         Task { try? await service.cancelSync(id) }
+    }
+    func toggleCoin(_ coin: CoinInfo) {
+        guard !busy, coin.state == .available else { return }
+        if selectedCoins.contains(coin.outpoint) { selectedCoins.remove(coin.outpoint) }
+        else { selectedCoins.insert(coin.outpoint) }
+    }
+    func editCoins(_ outpoints: [String], label: String?, frozen: Bool?) {
+        run {
+            guard let id = self.selectedID else { return }
+            try await self.service.editCoins(id, outpoints: outpoints, label: label, frozen: frozen)
+            try await self.refresh()
+        }
+    }
+    func createPayment(mode: Int, address: String, amount: String, fee: String, label: String, automatic: Bool, acknowledge: Bool) {
+        run {
+            guard let id = self.selectedID else { return }
+            let intent: PaymentIntent
+            switch mode {
+            case 1: intent = .sendMax(address: address)
+            case 2: intent = .consolidate(privacyAcknowledged: acknowledge)
+            default: intent = .send(address: address, sats: try parseBtcAmount(value: amount))
+            }
+            self.review = try await self.service.create(PaymentRequest(walletId: id, intent: intent,
+                selectedOutpoints: automatic && mode == 0 ? nil : Array(self.selectedCoins).sorted(),
+                feeSatPerKwu: try parseFeeRate(value: fee), label: label))
+            self.selectedCoins = []
+            try await self.refresh()
+        }
+    }
+    func discardReview() {
+        run {
+            guard let review = self.review else { return }
+            try await self.service.discard(review.walletId, draftID: review.id)
+            self.review = nil; try await self.refresh()
+        }
+    }
+    func exportDraft() {
+        run {
+            guard let review = self.review else { return }
+            self.exportedPSBT = try await self.service.exportDraft(review.walletId, draftID: review.id)
+        }
     }
 }

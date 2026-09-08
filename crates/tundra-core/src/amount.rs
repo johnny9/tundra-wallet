@@ -50,12 +50,42 @@ pub fn format_btc(sats: u64) -> String {
     }
 }
 
+/// Decimal sat/vB input, rounded upward to BDK's exact integer sat/kwu precision.
+/// The normalized rate is included in the immutable review. No floating point.
+pub fn parse_fee_rate(input: &str) -> Result<u64> {
+    let sats = parse_btc(input)?;
+    if sats == 0 || sats > 1000 * 100_000_000 {
+        return Err(Error::InvalidInput(
+            "fee rate must be greater than zero and at most 1000 sat/vB",
+        ));
+    }
+    Ok(sats.div_ceil(400_000))
+}
+pub fn format_fee_rate(sat_per_kwu: u64) -> String {
+    format_btc(sat_per_kwu.saturating_mul(400_000))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     #[test]
     fn exact_satoshi() {
         assert_eq!(parse_btc("0.00000001").unwrap(), 1);
+    }
+    #[test]
+    fn fee_rates_are_precise_and_never_round_down() {
+        for (text, units, display) in [
+            ("0.1", 25, "0.1"),
+            ("1.001", 251, "1.004"),
+            ("2.5", 625, "2.5"),
+            ("1000", 250_000, "1000"),
+        ] {
+            assert_eq!(parse_fee_rate(text).unwrap(), units);
+            assert_eq!(format_fee_rate(units), display);
+        }
+        for text in ["0", "1000.1", "-1", "1e2", "1,1"] {
+            assert!(parse_fee_rate(text).is_err());
+        }
     }
     #[test]
     fn rejects_sub_satoshi() {

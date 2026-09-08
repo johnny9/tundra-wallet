@@ -25,6 +25,8 @@ struct WalletView: View {
     @State private var tab = 0
     @State private var adding = false
     @State private var syncing = false
+    @State private var paying = false
+    @State private var paymentMode = 0
     private var background: Color { dark ? Color(red: 0.055, green: 0.067, blue: 0.082) : Color(red: 0.984, green: 0.988, blue: 0.992) }
     var body: some View {
         NavigationStack {
@@ -70,12 +72,20 @@ struct WalletView: View {
                     if tab == 0 {
                         HStack {
                             Button("Receive", systemImage: "arrow.down") { model.receive() }.buttonStyle(.bordered)
-                            Button("Send", systemImage: "arrow.up") { }.buttonStyle(.borderedProminent).disabled(true)
+                            Button("Send", systemImage: "arrow.up") { model.review = nil; paymentMode = 0; paying = true }.buttonStyle(.borderedProminent).disabled(model.busy || model.wallet?.synced != true)
                         }.frame(maxWidth: .infinity)
                     }
                     ScrollView {
                         VStack(alignment: .leading, spacing: 16) {
                             if tab == 0 {
+                                ForEach(model.drafts, id: \.id) { draft in
+                                    Button { model.review = draft; paying = true } label: {
+                                        VStack(alignment: .leading) {
+                                            Text(draft.label.isEmpty ? "Saved payment" : draft.label)
+                                            Text("Draft · \(draft.state) · \(draft.inputs.count) inputs").font(.caption)
+                                        }
+                                    }.disabled(model.busy)
+                                }
                                 ForEach(model.activity, id: \.txid) { row in
                                     VStack(alignment: .leading) {
                                         Text(row.label.isEmpty ? "Unlabeled transaction" : row.label)
@@ -83,11 +93,8 @@ struct WalletView: View {
                                     }
                                 }
                             } else {
-                                ForEach(model.coins, id: \.outpoint) { coin in
-                                    HStack {
-                                        Text(coin.label.isEmpty ? "Unlabeled coin" : coin.label)
-                                        Spacer(); Text(formatBalance(sats: coin.sats)).monospacedDigit()
-                                    }
+                                CoinsView(model: model) { mode in
+                                    model.review = nil; paymentMode = mode; paying = true
                                 }
                             }
                             Text("Hardware signing is not qualified. Use disposable test wallets only.")
@@ -103,6 +110,7 @@ struct WalletView: View {
             .padding(24).background(background.ignoresSafeArea())
             .sheet(isPresented: $adding, onDismiss: { model.cancelImport() }) { ImportView(model: model) }
             .sheet(isPresented: $syncing) { SyncView(model: model) }
+            .sheet(isPresented: $paying, onDismiss: { model.review = nil }) { PaymentView(model: model, mode: paymentMode) }
             .sheet(isPresented: Binding(get: { model.received != nil }, set: { if !$0 { model.received = nil } })) {
                 VStack(alignment: .leading, spacing: 20) {
                     Text("Unverified address").font(.title2)
@@ -148,7 +156,7 @@ struct ImportView: View {
         NavigationStack {
             Form {
                 Section("Public test descriptor") {
-                    Picker("Network", selection: $chain) { Text("Signet").tag(Chain.signet); Text("Regtest").tag(Chain.regtest) }
+                    Picker("Network", selection: $chain) { Text("Signet").tag(Chain.signet); Text("Regtest").tag(Chain.regtest) }.accessibilityIdentifier("networkPicker")
                     Button("Import descriptor file") { filePicker = true }
                     TextEditor(text: $payload).font(.system(.caption, design: .monospaced))
                         .frame(minHeight: 120).autocorrectionDisabled().textInputAutocapitalization(.never)

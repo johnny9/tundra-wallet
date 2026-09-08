@@ -115,7 +115,7 @@ pub struct DraftRequest {
     pub payment: Payment,
     /// None means automatic selection. Some(vec![]) is an error, not automatic.
     pub selected_outpoints: Option<Vec<String>>,
-    pub fee_sat_per_vb: u64,
+    pub fee_sat_per_kwu: u64,
     pub label: String,
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -138,6 +138,9 @@ pub struct DraftReview {
     pub inputs: Vec<ReviewedInput>,
     pub outputs: Vec<ReviewedOutput>,
     pub fee_sats: u64,
+    /// None for older stored drafts which predate normalized fee-rate review.
+    #[serde(default)]
+    pub fee_sat_per_kwu: Option<u64>,
     pub label: String,
     pub is_consolidation: bool,
     /// No claims about valid signatures are made by the unsigned-draft milestone.

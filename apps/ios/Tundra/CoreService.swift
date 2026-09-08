@@ -29,6 +29,13 @@ actor CoreService {
         try engine().importWallet(name: name, payload: payload, network: chain)
     }
     func receive(_ id: String) throws -> AddressInfo { try engine().receiveAddress(walletId: id) }
+    func drafts(_ id: String) throws -> [PaymentReview] { try engine().drafts(walletId: id) }
+    func create(_ request: PaymentRequest) throws -> PaymentReview { try engine().createDraft(request: request) }
+    func discard(_ walletID: String, draftID: String) throws { try engine().discardDraft(walletId: walletID, draftId: draftID) }
+    func exportDraft(_ walletID: String, draftID: String) throws -> String { try engine().exportUnsignedPsbt(walletId: walletID, draftId: draftID) }
+    func editCoins(_ id: String, outpoints: [String], label: String?, frozen: Bool?) throws {
+        try engine().editCoins(walletId: id, outpoints: outpoints, label: label, frozen: frozen)
+    }
     func endpoint(_ id: String) throws -> String { try engine().syncEndpoint(walletId: id) ?? "" }
     func prepareSync(_ id: String, endpoint: String, consent: Bool) throws -> SyncInfo {
         try engine().prepareSync(walletId: id, endpoint: endpoint, privacyConsent: consent)

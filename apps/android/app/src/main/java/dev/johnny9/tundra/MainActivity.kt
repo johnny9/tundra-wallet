@@ -8,6 +8,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,8 +21,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.testTag
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.Lifecycle
@@ -48,6 +53,12 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
     var editing by remember { mutableStateOf<CoinInfo?>(null) }
     var labelText by remember { mutableStateOf("") }
     var syncSheet by remember { mutableStateOf(false) }
+    var paymentSheet by remember { mutableStateOf(false) }
+    var paymentMode by remember { mutableIntStateOf(0) }
+    var query by remember { mutableStateOf("") }
+    var largestFirst by remember { mutableStateOf(false) }
+    var availableOnly by remember { mutableStateOf(false) }
+    var bulkLabel by remember { mutableStateOf(false) }
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner, vm) {
         val observer = LifecycleEventObserver { _, event -> if (event == Lifecycle.Event.ON_STOP) vm.cancelSync() }
@@ -103,21 +114,49 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
                 if (tab == 0) {
                     Row(Modifier.fillMaxWidth().padding(vertical = 20.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         OutlinedButton(onClick = vm::receive, enabled = !s.busy, modifier = Modifier.weight(1f)) { Text("Receive") }
-                        Button(onClick = {}, enabled = false, modifier = Modifier.weight(1f)) { Text("Send") }
+                        Button(onClick = { vm.closeReview(); paymentMode = 0; paymentSheet = true }, enabled = !s.busy && s.wallet!!.synced, modifier = Modifier.weight(1f)) { Text("Send") }
                     }
                     Text("Hardware signing is not qualified. Use disposable test wallets only.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     LazyColumn(Modifier.weight(1f).padding(top = 16.dp)) {
+                        items(s.drafts, key = { "draft-${it.id}" }) { draft ->
+                            ListItem(modifier = Modifier.clickable(enabled = !s.busy) { vm.openReview(draft); paymentSheet = true },
+                                headlineContent = { Text(draft.label.ifBlank { "Saved payment" }) },
+                                supportingContent = { Text("Draft · ${draft.state} · ${draft.inputs.size} inputs") })
+                        }
                         if (s.activity.isEmpty()) item { EmptyState("No activity", "Transactions appear after a successful scan of your chosen endpoint.") }
                         items(s.activity, key = { it.txid }) { tx ->
                             ListItem(headlineContent = { Text(tx.label.ifBlank { "Unlabeled transaction" }) }, supportingContent = { Text(if (tx.confirmed) "Confirmed" else "Pending") })
                         }
                     }
                 } else {
+                    OutlinedTextField(query, { query = it }, label = { Text("Search labels, addresses, outpoints") }, singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 12.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        FilterChip(availableOnly, { availableOnly = !availableOnly }, label = { Text("Available") })
+                        FilterChip(largestFirst, { largestFirst = !largestFirst }, label = { Text("Largest first") })
+                    }
+                    if (s.selected.isNotEmpty()) {
+                        Text("${s.selected.size} selected · ${formatBalance(s.coins.filter { it.outpoint in s.selected }.fold(0uL) { total, coin -> total + coin.sats })} BTC")
+                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            TextButton(onClick = { vm.closeReview(); paymentMode = 0; paymentSheet = true }, enabled = !s.busy) { Text("Send") }
+                            TextButton(onClick = { vm.closeReview(); paymentMode = 2; paymentSheet = true }, enabled = !s.busy && s.selected.size >= 2) { Text("Consolidate") }
+                            TextButton(onClick = { labelText = ""; bulkLabel = true }, enabled = !s.busy) { Text("Label") }
+                        }
+                        Row {
+                            TextButton(onClick = { vm.bulkEdit(null, true) }, enabled = !s.busy) { Text("Freeze selected") }
+                            TextButton(onClick = vm::clearSelection) { Text("Clear selection") }
+                        }
+                    }
+                    val filtered = s.coins.filter { coin ->
+                        (!availableOnly || coin.state == CoinState.AVAILABLE) &&
+                            listOf(coin.label, coin.address, coin.outpoint).any { it.contains(query, ignoreCase = true) }
+                    }.let { coins -> if (largestFirst) coins.sortedByDescending { it.sats } else coins.sortedBy { it.label.lowercase() } }
                     LazyColumn(Modifier.weight(1f).padding(top = 16.dp)) {
                         if (s.coins.isEmpty()) item { EmptyState("No synced coins", "No sample UTXOs are injected. Labels and coin control operate on wallet-owned outputs.") }
-                        items(s.coins, key = { it.outpoint }) { coin ->
+                        items(filtered, key = { it.outpoint }) { coin ->
                             ListItem(modifier = Modifier.clickable(enabled = !s.busy) { editing = coin; labelText = coin.label },
                                 headlineContent = { Text(coin.label.ifBlank { "Add a label" }) },
+                                leadingContent = { Checkbox(checked = coin.outpoint in s.selected, onCheckedChange = { vm.toggleCoin(coin) }, enabled = !s.busy && coin.state == CoinState.AVAILABLE,
+                                    modifier = Modifier.semantics { contentDescription = "Select coin, ${formatBalance(coin.sats)} BTC" }) },
                                 supportingContent = { Text(coin.state.name.lowercase().replace('_', ' ').replaceFirstChar { it.uppercase() }) },
                                 trailingContent = { Text("${formatBalance(coin.sats)} BTC") })
                         }
@@ -129,6 +168,11 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
     }
     if (add) ImportSheet(vm, s, onClose = { vm.cancelImport(); add = false })
     if (syncSheet) SyncSheet(s.endpoint, onClose = { syncSheet = false }, onSync = { endpoint, consent -> syncSheet = false; vm.sync(endpoint, consent) })
+    if (paymentSheet) PaymentSheet(vm, s, paymentMode, onClose = { vm.closeReview(); paymentSheet = false })
+    if (bulkLabel) AlertDialog(onDismissRequest = { bulkLabel = false }, title = { Text("Label selected coins") },
+        text = { OutlinedTextField(labelText, { labelText = it }, label = { Text("Label") }) },
+        confirmButton = { TextButton(onClick = { vm.bulkEdit(labelText, null); bulkLabel = false }) { Text("Apply") } },
+        dismissButton = { TextButton(onClick = { bulkLabel = false }) { Text("Cancel") } })
     if (settings) ModalBottomSheet(onDismissRequest = { settings = false }) {
         Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Text("Tundra", style = MaterialTheme.typography.headlineSmall)
@@ -169,8 +213,8 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
 @Composable private fun SyncSheet(savedEndpoint: String, onClose: () -> Unit, onSync: (String, Boolean) -> Unit) {
     var endpoint by remember { mutableStateOf(savedEndpoint) }
     var consent by remember { mutableStateOf(false) }
-    ModalBottomSheet(onDismissRequest = onClose) {
-        Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    ModalBottomSheet(onDismissRequest = onClose, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+        Column(Modifier.padding(24.dp).verticalScroll(rememberScrollState()).imePadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Text("Connect a test endpoint", style = MaterialTheme.typography.headlineSmall)
             OutlinedTextField(value = endpoint, onValueChange = { if (it.length <= 2048) endpoint = it }, label = { Text("Esplora API URL") }, singleLine = true, modifier = Modifier.fillMaxWidth())
             Text("Your server can associate requested script hashes and transactions with your IP address. Descriptors and labels stay on this device. The server supplies your view of the test chain.")
@@ -195,8 +239,8 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
     // Test-network only native first milestone. The core can inspect mainnet public descriptors.
     var chain by remember { mutableStateOf(Chain.SIGNET) }
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { it?.let { uri -> vm.inspectFile(uri, chain) } }
-    ModalBottomSheet(onDismissRequest = { if (!s.busy) onClose() }) {
-        Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+    ModalBottomSheet(onDismissRequest = { if (!s.busy) onClose() }, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+        Column(Modifier.padding(24.dp).verticalScroll(rememberScrollState()).imePadding(), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Text("Add wallet", style = MaterialTheme.typography.headlineSmall)
             Text("Public descriptors only. Never enter a seed or private key.", color = MaterialTheme.colorScheme.onSurfaceVariant)
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -212,10 +256,10 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
                 Text(policyText(s.importPreview.policy), style = MaterialTheme.typography.titleMedium)
                 Text(s.importPreview.firstAddress, style = MaterialTheme.typography.bodySmall)
                 OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Wallet name") }, singleLine = true)
-                Button(onClick = { vm.importWallet(name) }, enabled = name.isNotBlank() && !s.busy, modifier = Modifier.fillMaxWidth()) { Text("Add wallet") }
+                Button(onClick = { vm.importWallet(name) }, enabled = name.isNotBlank() && !s.busy, modifier = Modifier.fillMaxWidth().testTag("confirmImport")) { Text("Add wallet") }
                 TextButton(onClick = vm::cancelImport, enabled = !s.busy) { Text("Use a different descriptor") }
             }
-            TextButton(onClick = onClose, enabled = !s.busy) { Text("Close") }
+            TextButton(onClick = onClose, enabled = !s.busy, modifier = Modifier.testTag("closeImport")) { Text("Close") }
             Spacer(Modifier.height(16.dp))
         }
     }

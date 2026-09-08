@@ -1,11 +1,13 @@
 import XCTest
 
 final class WalletUITests: XCTestCase {
-    @MainActor func testImportRestartAndReceive() throws {
+    @MainActor func testImportRestartAndReceive() async throws {
         let app = XCUIApplication()
         app.launch()
         XCTAssertTrue(app.buttons["Import descriptor"].waitForExistence(timeout: 15))
         app.buttons["Import descriptor"].tap()
+        app.buttons["networkPicker"].tap()
+        app.buttons["Regtest"].tap()
         let editor = app.textViews["publicDescriptor"]
         XCTAssertTrue(editor.waitForExistence(timeout: 10))
         let url = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "single-sig", withExtension: "txt"))
@@ -27,5 +29,31 @@ final class WalletUITests: XCTestCase {
         XCTAssertEqual(app.staticTexts["balance"].label, "— BTC")
         app.buttons["Receive"].tap()
         XCTAssertTrue(app.staticTexts["Receive index 1"].waitForExistence(timeout: 10))
+        app.buttons["Close"].tap()
+        app.buttons["Sync test network"].tap()
+        let endpoint = app.textFields["Esplora API URL"]
+        endpoint.tap()
+        endpoint.typeText("http://127.0.0.1:3002")
+        XCTAssertFalse(app.buttons["Start scan"].isEnabled)
+        app.switches["I trust this endpoint and agree to these requests"].tap()
+        app.buttons["Start scan"].tap()
+        let funded = NSPredicate(format: "label == %@", "150 BTC")
+        let fundedExpectation = expectation(for: funded, evaluatedWith: app.staticTexts["balance"])
+        await fulfillment(of: [fundedExpectation], timeout: 30)
+        app.buttons["Coins"].tap()
+        let selections = app.buttons.matching(identifier: "Select coin")
+        XCTAssertEqual(selections.count, 3)
+        selections.element(boundBy: 0).tap()
+        selections.element(boundBy: 1).tap()
+        app.buttons["Consolidate"].tap()
+        app.switches["I understand this links these coins on-chain"].tap()
+        app.buttons["Review payment"].tap()
+        XCTAssertTrue(app.staticTexts["Inputs · 2"].waitForExistence(timeout: 10))
+        app.buttons["Save for later"].tap()
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(app.buttons["Activity"].waitForExistence(timeout: 10))
+        app.buttons["Activity"].tap()
+        XCTAssertTrue(app.staticTexts["Draft · unsigned · 2 inputs"].waitForExistence(timeout: 10))
     }
 }
