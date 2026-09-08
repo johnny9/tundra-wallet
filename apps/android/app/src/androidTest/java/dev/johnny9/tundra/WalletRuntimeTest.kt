@@ -30,6 +30,9 @@ class WalletRuntimeTest {
         ActivityScenario.launch(MainActivity::class.java).use { activity ->
             waitText("Add wallet")
             compose.onNodeWithText("Add wallet").performClick()
+            compose.onNodeWithText("Scan descriptor QR").performClick()
+            waitText("Close scan")
+            compose.onNodeWithText("Close scan").performClick()
             compose.onNodeWithText("Regtest").performClick()
             compose.onNodeWithText("Or paste a public descriptor").performTextInput(fixture())
             compose.onNodeWithText("Review wallet").performClick()
@@ -86,6 +89,22 @@ class WalletRuntimeTest {
             waitText("Inputs · 2")
             waitText("Input 1: 0 / 1")
             compose.onNodeWithText("Import signed PSBT").performScrollTo().assertIsDisplayed()
+            // Export a real reviewed draft in both formats, decode native barcode pixels,
+            // then reassemble through Rust. Transport cannot add signatures.
+            Tundra.open(context.noBackupFilesDir.resolve("tundra.sqlite").path).use { core ->
+                val wallet = core.wallets().single()
+                val draft = core.drafts(wallet.id).single()
+                val expected = android.util.Base64.decode(core.exportSigningPsbt(wallet.id, draft.id), android.util.Base64.DEFAULT)
+                for (encoding in listOf(QrEncoding.UR, QrEncoding.BBQR)) {
+                    QrScanner(QrPurpose.SignedPsbt).use { scanner ->
+                        for (frame in core.exportDraftQr(wallet.id, draft.id, encoding)) {
+                            if (scanner.receive(decodeQrMatrix(frame)).state == QrState.COMPLETE) break
+                        }
+                        assertArrayEquals(expected, scanner.payload())
+                    }
+                }
+                assertTrue(core.signingProgress(wallet.id, draft.id).inputs.all { it.validSignatures == 0u })
+            }
             // Exercise the actual native file reader and byte-array FFI using an unrelated
             // published response. Its valid signatures must never be counted for this draft.
             val responseFile = context.cacheDir.resolve("public-response.psbt")

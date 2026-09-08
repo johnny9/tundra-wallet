@@ -24,6 +24,8 @@ import dev.johnny9.tundra.generated.*
     var acknowledged by remember { mutableStateOf(false) }
     var exportTarget by remember { mutableStateOf<Pair<String, String>?>(null) }
     var importTarget by remember { mutableStateOf<Pair<String, String>?>(null) }
+    var scanTarget by remember { mutableStateOf<Pair<String, String>?>(null) }
+    var qrEncoding by remember { mutableStateOf(QrEncoding.UR) }
     val export = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("text/plain")) { uri ->
         val target = exportTarget
         if (uri != null && target != null) vm.exportDraft(uri, target.first, target.second)
@@ -89,6 +91,13 @@ import dev.johnny9.tundra.generated.*
                 }
                 OutlinedButton(onClick = { exportTarget = review.walletId to review.id; export.launch("tundra-signing.psbt.txt") }, enabled = !s.busy && review.state != "invalidated") { Text(if (review.state == "unsigned") "Export unsigned PSBT" else "Export PSBT with signatures") }
                 OutlinedButton(onClick = { importTarget = review.walletId to review.id; importSigned.launch(arrayOf("*/*")) }, enabled = !s.busy && review.state != "invalidated") { Text("Import signed PSBT") }
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    listOf(QrEncoding.UR to "UR", QrEncoding.BBQR to "BBQr").forEach { (encoding, title) ->
+                        FilterChip(selected = qrEncoding == encoding, onClick = { qrEncoding = encoding }, label = { Text(title) }, enabled = !s.busy)
+                    }
+                }
+                OutlinedButton(onClick = { vm.exportQr(qrEncoding) }, enabled = !s.busy && review.state != "invalidated") { Text("Show PSBT QR") }
+                OutlinedButton(onClick = { scanTarget = review.walletId to review.id }, enabled = !s.busy && review.state != "invalidated") { Text("Scan signed PSBT") }
                 Text("PSBT exports are unencrypted wallet metadata.", style = MaterialTheme.typography.bodySmall)
                 TextButton(onClick = vm::discardReview, enabled = !s.busy) { Text("Discard draft and release inputs") }
             }
@@ -97,4 +106,10 @@ import dev.johnny9.tundra.generated.*
             Spacer(Modifier.height(24.dp))
         }
     }
+    scanTarget?.let { target ->
+        QrScanDialog(QrPurpose.SignedPsbt, onPayload = { payload ->
+            scanTarget = null; vm.importSignedQr(payload, target.first, target.second)
+        }, onClose = { scanTarget = null })
+    }
+    s.qrFrames?.let { QrDisplayDialog(it, onClose = vm::closeQr) }
 }

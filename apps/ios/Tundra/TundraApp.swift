@@ -158,18 +158,21 @@ struct ImportView: View {
     @State private var name = "Savings"
     @State private var chain: Chain = .signet
     @State private var filePicker = false
+    @State private var scanningDescriptor = false
+    @State private var scanChain: Chain = .signet
     var body: some View {
         NavigationStack {
             Form {
                 Section("Public test descriptor") {
                     Picker("Network", selection: $chain) { Text("Signet").tag(Chain.signet); Text("Regtest").tag(Chain.regtest) }.accessibilityIdentifier("networkPicker")
                     Button("Import descriptor file") { filePicker = true }
+                    Button("Scan descriptor QR") { scanChain = chain; scanningDescriptor = true }.disabled(model.busy)
                     TextEditor(text: $payload).font(.system(.caption, design: .monospaced))
                         .frame(minHeight: 120).autocorrectionDisabled().textInputAutocapitalization(.never)
                         .accessibilityLabel("Public descriptor")
                         .accessibilityIdentifier("publicDescriptor")
                     Button("Review descriptor") { model.inspect(payload, chain: chain) }.disabled(payload.isEmpty || model.busy)
-                    Text("QR scanning is planned. This native build does not simulate it.").font(.caption)
+                    Text("Scan a public descriptor as text, UR bytes or BBQr. Device-specific account exports are not supported yet.").font(.caption)
                 }
                 if let preview = model.preview {
                     Section("Review") {
@@ -185,6 +188,12 @@ struct ImportView: View {
             }
             .navigationTitle("Add a wallet")
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Close") { dismiss() } } }
+            .sheet(isPresented: $scanningDescriptor) {
+                QrScanView(purpose: .descriptor(network: scanChain)) { data in
+                    if let text = String(data: data, encoding: .utf8) { payload = text; model.inspect(text, chain: scanChain) }
+                    scanningDescriptor = false
+                }
+            }
             .fileImporter(isPresented: $filePicker, allowedContentTypes: [.plainText, .json, .data]) { result in
                 if case let .success(url) = result { model.inspectFile(url, chain: chain) }
             }

@@ -234,6 +234,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
     }
 }
 @Composable private fun ImportSheet(vm: WalletViewModel, s: WalletState, onClose: () -> Unit) {
+    var scanning by remember { mutableStateOf(false) }
     var payload by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("Savings") }
     // Test-network only native first milestone. The core can inspect mainnet public descriptors.
@@ -249,9 +250,10 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
             }
             if (s.importPreview == null) {
                 OutlinedButton(onClick = { picker.launch(arrayOf("*/*")) }, enabled = !s.busy, modifier = Modifier.fillMaxWidth()) { Text("Import descriptor file") }
+                OutlinedButton(onClick = { scanning = true }, enabled = !s.busy, modifier = Modifier.fillMaxWidth()) { Text("Scan descriptor QR") }
                 OutlinedTextField(value = payload, onValueChange = { if (it.length <= 32768) payload = it }, label = { Text("Or paste a public descriptor") }, modifier = Modifier.fillMaxWidth().heightIn(min = 120.dp, max = 200.dp), enabled = !s.busy)
                 Button(onClick = { vm.inspect(payload, chain) }, enabled = payload.isNotBlank() && !s.busy, modifier = Modifier.fillMaxWidth()) { Text("Review wallet") }
-                Text("Camera QR import is planned; it is not simulated here.", style = MaterialTheme.typography.bodySmall)
+                Text("Public descriptor text, UR bytes or BBQr text/JSON. Device-specific account QR formats are not yet supported.", style = MaterialTheme.typography.bodySmall)
             } else {
                 Text(policyText(s.importPreview.policy), style = MaterialTheme.typography.titleMedium)
                 Text(s.importPreview.firstAddress, style = MaterialTheme.typography.bodySmall)
@@ -263,4 +265,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
             Spacer(Modifier.height(16.dp))
         }
     }
+    if (scanning) QrScanDialog(QrPurpose.Descriptor(chain), onPayload = { bytes ->
+        scanning = false; vm.inspect(bytes.toString(Charsets.UTF_8), chain)
+    }, onClose = { scanning = false })
 }

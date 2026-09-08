@@ -23,7 +23,8 @@ data class WalletState(
     val labelPreview: LabelImportPreview? = null,
     val endpoint: String = "", val sync: SyncInfo? = null,
     val selected: Set<String> = emptySet(), val drafts: List<PaymentReview> = emptyList(),
-    val review: PaymentReview? = null, val signing: SigningInfo? = null
+    val review: PaymentReview? = null, val signing: SigningInfo? = null,
+    val qrFrames: List<String>? = null
 ) { val wallet: WalletInfo? get() = wallets.firstOrNull { it.id == selectedId } }
 
 class WalletViewModel(application: Application) : AndroidViewModel(application) {
@@ -64,7 +65,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
             if (mutable.value.review?.id == review.id) mutable.value = mutable.value.copy(signing = signing)
         }
     }
-    fun select(id: String) = run { mutable.value = mutable.value.copy(selectedId = id, receive = null, selected = emptySet(), review = null); refresh() }
+    fun select(id: String) = run { mutable.value = mutable.value.copy(selectedId = id, receive = null, selected = emptySet(), review = null, qrFrames = null); refresh() }
     fun appearance(dark: Boolean) { preferences.edit().putBoolean("dark", dark).apply(); mutable.value = mutable.value.copy(dark = dark) }
     fun clearError() { mutable.value = mutable.value.copy(error = null) }
     fun cancelImport() { pendingDescriptor = null; mutable.value = mutable.value.copy(importPreview = null) }
@@ -107,7 +108,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         refresh()
     }
     fun openReview(review: PaymentReview) { mutable.value = mutable.value.copy(review = review, signing = null); run { refresh() } }
-    fun closeReview() { mutable.value = mutable.value.copy(review = null, signing = null) }
+    fun closeReview() { mutable.value = mutable.value.copy(review = null, signing = null, qrFrames = null) }
     fun createPayment(mode: Int, address: String, amount: String, fee: String, label: String, automatic: Boolean, acknowledge: Boolean) = run {
         val s = mutable.value
         val review = withContext(Dispatchers.IO) {
@@ -141,6 +142,17 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         withContext(Dispatchers.IO) { engine().acceptSignedPsbt(walletId, draftId, payload) }
         refresh()
     }
+    fun importSignedQr(payload: ByteArray, walletId: String, draftId: String) = run {
+        require(mutable.value.selectedId == walletId && mutable.value.review?.id == draftId) { "Review changed" }
+        withContext(Dispatchers.IO) { engine().acceptSignedPsbt(walletId, draftId, payload) }
+        refresh()
+    }
+    fun exportQr(encoding: QrEncoding) = run {
+        val review = checkNotNull(mutable.value.review)
+        val frames = withContext(Dispatchers.IO) { engine().exportDraftQr(review.walletId, review.id, encoding) }
+        mutable.value = mutable.value.copy(qrFrames = frames)
+    }
+    fun closeQr() { mutable.value = mutable.value.copy(qrFrames = null) }
     fun sync(endpoint: String, consent: Boolean) = run {
         val id = checkNotNull(mutable.value.selectedId)
         val operation = withContext(Dispatchers.IO) { engine().prepareSync(id, endpoint, consent) }

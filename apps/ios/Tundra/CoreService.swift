@@ -38,6 +38,12 @@ actor CoreService {
         let payload = try readBytes(url, max: 1_398_106)
         _ = try engine().acceptSignedPsbt(walletId: walletID, draftId: draftID, payload: payload)
     }
+    func importSignedQr(_ walletID: String, draftID: String, payload: Data) throws {
+        _ = try engine().acceptSignedPsbt(walletId: walletID, draftId: draftID, payload: payload)
+    }
+    func exportQr(_ walletID: String, draftID: String, encoding: QrEncoding) throws -> [String] {
+        try engine().exportDraftQr(walletId: walletID, draftId: draftID, encoding: encoding)
+    }
     func editCoins(_ id: String, outpoints: [String], label: String?, frozen: Bool?) throws {
         try engine().editCoins(walletId: id, outpoints: outpoints, label: label, frozen: frozen)
     }

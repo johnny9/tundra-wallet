@@ -24,6 +24,8 @@ struct PaymentView: View {
     @State private var automatic = false
     @State private var acknowledged = false
     @State private var importingPSBT = false
+    @State private var scanningPSBT = false
+    @State private var qrEncoding: QrEncoding = .ur
     @State private var importTarget: (walletID: String, draftID: String)?
     var body: some View {
         NavigationStack {
@@ -67,6 +69,11 @@ struct PaymentView: View {
                         Button("Import signed PSBT") {
                             importTarget = (review.walletId, review.id); importingPSBT = true
                         }.disabled(review.state == "invalidated" || model.busy)
+                        Picker("QR format", selection: $qrEncoding) { Text("UR").tag(QrEncoding.ur); Text("BBQr").tag(QrEncoding.bbqr) }
+                        Button("Show PSBT QR") { model.exportQr(qrEncoding) }.disabled(review.state == "invalidated" || model.busy)
+                        Button("Scan signed PSBT") {
+                            importTarget = (review.walletId, review.id); scanningPSBT = true
+                        }.disabled(review.state == "invalidated" || model.busy)
                         Text("PSBT exports are unencrypted wallet metadata.").font(.caption)
                         Button("Discard draft and release inputs", role: .destructive) { model.discardReview() }.disabled(model.busy)
                     }
@@ -109,9 +116,19 @@ struct PaymentView: View {
             }
             .navigationTitle("Review payment")
             .toolbar { ToolbarItem(placement: .cancellationAction) {
-                Button(model.review == nil ? "Close" : "Save for later") { model.review = nil; dismiss() }.disabled(model.busy)
+                Button(model.review == nil ? "Close" : "Save for later") { model.closeReview(); dismiss() }.disabled(model.busy)
             } }
         }
+        .sheet(isPresented: $scanningPSBT, onDismiss: { importTarget = nil }) {
+            QrScanView(purpose: .signedPsbt) { data in
+                if let target = importTarget { model.importSignedQr(data, walletID: target.walletID, draftID: target.draftID) }
+                scanningPSBT = false
+            }
+        }
+        .sheet(isPresented: Binding(get: { model.qrFrames != nil }, set: { if !$0 { model.qrFrames = nil } })) {
+            if let frames = model.qrFrames { QrDisplayView(frames: frames) }
+        }
+        .onDisappear { model.qrFrames = nil }
         .onAppear { automatic = model.selectedCoins.isEmpty }
         .interactiveDismissDisabled(model.busy)
         .fileExporter(isPresented: Binding(get: { model.exportedPSBT != nil }, set: { if !$0 { model.exportedPSBT = nil } }),

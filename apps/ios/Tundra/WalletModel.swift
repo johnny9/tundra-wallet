@@ -17,6 +17,7 @@ final class WalletModel: ObservableObject {
     @Published var drafts: [PaymentReview] = []
     @Published var review: PaymentReview?
     @Published var signing: SigningInfo?
+    @Published var qrFrames: [String]?
     @Published var exportedPSBT: String?
     @Published var labelPreview: LabelImportPreview?
     @Published var exportedLabels: String?
@@ -60,7 +61,7 @@ final class WalletModel: ObservableObject {
             }
         } else { coins = []; activity = [] }
     }
-    func select(_ id: String) { run { self.selectedID = id; self.received = nil; self.review = nil; self.selectedCoins = []; try await self.refresh() } }
+    func select(_ id: String) { run { self.selectedID = id; self.received = nil; self.review = nil; self.qrFrames = nil; self.selectedCoins = []; try await self.refresh() } }
     func inspect(_ payload: String, chain: Chain) {
         run {
             self.preview = nil; self.pendingPayload = nil
@@ -169,6 +170,20 @@ final class WalletModel: ObservableObject {
             try await self.refresh()
         }
     }
+    func importSignedQr(_ payload: Data, walletID: String, draftID: String) {
+        run {
+            guard self.selectedID == walletID, self.review?.id == draftID else { return }
+            try await self.service.importSignedQr(walletID, draftID: draftID, payload: payload)
+            try await self.refresh()
+        }
+    }
+    func exportQr(_ encoding: QrEncoding) {
+        run {
+            guard let review = self.review else { return }
+            self.qrFrames = try await self.service.exportQr(review.walletId, draftID: review.id, encoding: encoding)
+        }
+    }
+    func closeReview() { review = nil; signing = nil; qrFrames = nil }
     func inspectLabels(_ url: URL) {
         run {
             guard let id = self.selectedID else { return }

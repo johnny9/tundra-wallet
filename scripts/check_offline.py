@@ -183,7 +183,9 @@ class FixtureAndSourceChecks(unittest.TestCase):
         android = "{http://schemas.android.com/apk/res/android}"
         self.assertEqual(root.find("application").get(android+"allowBackup"), "false")
         self.assertEqual([p.get(android+"name") for p in root.findall("uses-permission")],
-                         ["android.permission.INTERNET"])
+                         ["android.permission.INTERNET", "android.permission.CAMERA"])
+        self.assertEqual([(f.get(android+"name"), f.get(android+"required")) for f in root.findall("uses-feature")],
+                         [("android.hardware.camera.any", "false")])
     def test_no_bdk_bhwi_direct_imports_in_native_ui(self):
         for path in (ROOT/"apps").rglob("*"):
             if path.suffix in (".kt", ".swift"):
