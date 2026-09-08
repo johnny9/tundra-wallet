@@ -125,5 +125,10 @@ server = http.server.ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
 # Slow hosted macOS runners must not turn an unready test backend into an app failure.
 with index.lock:
     index.refresh()
-Path(args.port_file).write_text(str(server.server_port))
+# Readers test for file existence; publish the complete port atomically so they can
+# never see an empty file and accidentally construct an endpoint using default port 80.
+ready = Path(args.port_file)
+pending = ready.with_name(ready.name + ".tmp")
+pending.write_text(str(server.server_port))
+pending.replace(ready)
 server.serve_forever()

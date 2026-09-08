@@ -12,19 +12,23 @@ if ! adb shell am start -W -n dev.johnny9.tundra.dev/dev.johnny9.tundra.MainActi
   cat build/android-restart-launch.log >&2
   exit 1
 fi
+launcher_recovered=0
 for attempt in $(seq 1 15); do
   adb shell uiautomator dump /sdcard/tundra-runtime.xml >/dev/null
   adb pull /sdcard/tundra-runtime.xml build/android-restart.xml >/dev/null 2>&1
-  if python3 - <<'PY'
-import xml.etree.ElementTree as ET
-root = ET.parse('build/android-restart.xml').getroot()
-texts = {node.get('text') for node in root.iter('node')}
-raise SystemExit(0 if {'150 BTC', 'Draft · unsigned · 2 inputs'} <= texts else 1)
-PY
-  then
+  state="$(python3 scripts/android_restart_probe.py build/android-restart.xml)"
+  if [[ "$state" == ready ]]; then
     adb shell rm /sdcard/tundra-runtime.xml
     echo 'Android force-stop/relaunch retained the synced balance and exact-input draft.'
     exit 0
+  fi
+  if [[ "$state" == launcher-anr* && "$launcher_recovered" == 0 ]]; then
+    cp build/android-restart.xml build/android-restart-launcher-anr.xml
+    echo 'Hosted emulator Quickstep ANR observed; closing that launcher dialog once, then rechecking Tundra.' | tee build/android-restart-environment.log
+    read -r _ tap_x tap_y <<< "$state"
+    adb shell input tap "$tap_x" "$tap_y"
+    adb shell am start -W -n dev.johnny9.tundra.dev/dev.johnny9.tundra.MainActivity >> build/android-restart-launch.log 2>&1
+    launcher_recovered=1
   fi
   sleep 1
 done

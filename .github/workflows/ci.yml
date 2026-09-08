@@ -107,7 +107,7 @@ jobs:
           path: |
             apps/android/app/build/outputs/androidTest-results/connected/**
             build/android-restart*.log
-            build/android-restart.xml
+            build/android-restart*.xml
             build/native-chain.log
   ios:
     runs-on: macos-15
