@@ -1,0 +1,49 @@
+{
+  "scope": "Rust checks, native compilation and host-language FFI tests; no mobile runtime or hardware qualification",
+  "recorded_at_utc": "2026-09-08T16:17:16.132209+00:00",
+  "tested_commit": "6b209836af16beee374b6d2429cf20ff005ef403",
+  "ci_url": "https://github.com/johnny9/tundra-wallet/actions/runs/34248953834",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "rust",
+      "conclusion": "success",
+      "url": "https://github.com/johnny9/tundra-wallet/actions/runs/34248953834/job/102138119907"
+    },
+    {
+      "name": "android",
+      "conclusion": "success",
+      "url": "https://github.com/johnny9/tundra-wallet/actions/runs/34248953834/job/102138120227"
+    },
+    {
+      "name": "ios",
+      "conclusion": "success",
+      "url": "https://github.com/johnny9/tundra-wallet/actions/runs/34248953834/job/102138120250"
+    }
+  ],
+  "rust_tests_passed": 60,
+  "offline_tests_passed": 23,
+  "kotlin_jvm": {
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "swift_host_smoke_tests_passed": 3,
+  "android_debug_apk": {
+    "artifact_name": "tundra-development-apk",
+    "filename": "app-debug.apk",
+    "sha256": "550cc0bbefd6921c502006e74d5c92bca0f03bc51d42a08592f23229223826cc",
+    "rust_library_abis": [
+      "arm64-v8a",
+      "x86_64"
+    ]
+  },
+  "ios_simulator_target_build": "passed; CODE_SIGNING_ALLOWED=NO",
+  "not_run": [
+    "Android emulator/instrumentation",
+    "iOS simulator runtime",
+    "physical phones",
+    "hardware wallet interoperability"
+  ]
+}

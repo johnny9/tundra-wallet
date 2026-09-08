@@ -17,7 +17,8 @@
 
 The Rust workspace and binding generator compile with Rust 1.93.1 on Linux. The pinned
 `rust-toolchain.toml` and CI use that version; this is a tested compiler, not an MSRV claim.
-The workspace is edition 2024. Native compilation and runtime acceptance remain pending.
+The workspace is edition 2024. Android debug and iOS simulator-target builds plus host
+Kotlin/Swift FFI tests pass in CI. Mobile runtime and hardware acceptance remain pending.
 
 ## Dependency resolution
 

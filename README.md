@@ -7,7 +7,8 @@ The product manages public descriptors, labeled coins and hardware-signed paymen
 It never imports or generates Bitcoin private signing keys.
 
 > **Development source, not a released wallet. Use disposable test descriptors only.**
-> The Rust workspace compiles and its tests pass; native app validation is still pending.
+> Rust tests, Android debug and iOS simulator builds pass in CI. Mobile runtime and hardware
+> qualification are still pending.
 > No hardware integration, blockchain sync, signature acceptance or broadcast is enabled.
 > Do not fund addresses from the fixtures or use this version with real savings.
 
@@ -28,10 +29,10 @@ It never imports or generates Bitcoin private signing keys.
 |---|---|---|
 | `tundra-core` | BDK public descriptor validation, receive/change derivation, SQLite snapshots | Deliberately narrow native-SegWit policies; no sync backend |
 | Metadata | Wallet-scoped transaction/address/output labels, BIP 329 patch import/export, user freezes | Known references only; origin-bearing imports are skipped; development DB is not encrypted |
-| Transactions | Exact/manual and automatic eligible inputs, selected-max, consolidation, unsigned PSBT drafts and atomic reservations | Core source only; test networks; not exposed as an enabled native Send flow |
-| `tundra-ffi` | Typed UniFFI API; Kotlin and Swift bindings generated from the compiled library | Native compilation and runtime checks remain gates |
-| Android | Native Compose import-by-file/paste, wallet list, unknown balance, Activity/Coins, labels and appearance | No APK built here; QR, Send, sync and USB remain disabled/unavailable |
-| iOS | SwiftUI starter and actor adapter for import/list/receive with generated bindings | Not an iOS release; build and UI parity still required |
+| Transactions | Exact/manual and automatic eligible inputs, selected-max, consolidation, unsigned PSBT drafts and atomic reservations | Tested in Rust on test data; not exposed as an enabled native Send flow |
+| `tundra-ffi` | Typed UniFFI API; Kotlin and Swift bindings generated and exercised against the host library | Mobile lifecycle/cancellation qualification remains |
+| Android | Native Compose import-by-file/paste, wallet list, unknown balance, Activity/Coins, labels and appearance; debug APK built in CI | No emulator/phone validation; QR, Send, sync and USB remain disabled/unavailable |
+| iOS | SwiftUI starter and actor adapter for import/list/receive; simulator target compiled in CI | No simulator/phone runtime validation; UI parity still required |
 | Design | Exact approved Tundra HTML reference and source | Simulation stays in `design/`, not in the Rust/native wallet |
 | Quality | Rust tests, offline schema/fixture checks, CI and build scripts | See [validation report](plan/VALIDATION.md) for executed versus unexecuted checks |
 

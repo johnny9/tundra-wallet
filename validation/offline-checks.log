@@ -23,6 +23,6 @@ test_wallet_delete_cascades_only_its_metadata (__main__.SchemaChecks.test_wallet
 test_wallet_state_and_metadata_rollback_together (__main__.SchemaChecks.test_wallet_state_and_metadata_rollback_together) ... ok
 
 ----------------------------------------------------------------------
-Ran 23 tests in 0.015s
+Ran 23 tests in 0.020s
 
 OK

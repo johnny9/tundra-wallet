@@ -12,15 +12,16 @@ approval system, or cloud account.
 
 ## Current status — September 8, 2026
 
-**Rust foundation compiled and tested; native app validation pending. M1 remains open.**
+**Rust and native builds pass; mobile runtime qualification pending. M1 remains open.**
 
 - Source: descriptor-first watch-only engine, metadata, unsigned-draft core, UniFFI API,
   Android native import shell, iOS native starter, tests and CI.
-- Verified: 60 Rust tests; Kotlin and Swift binding generation from the compiled library.
+- Verified: 60 Rust tests, 23 offline checks, Android debug APK and iOS simulator-target builds,
+  and Kotlin/Swift host FFI smoke tests.
   See [VALIDATION.md](VALIDATION.md) for the exact results and remaining gates.
 - Not implemented: chain synchronization, real QR/USB transport, bhwi device integration,
   signed-response validation, finalization/broadcast, production storage protection.
-- Git is initialized with the owner's configured `johnny9/tundra-wallet` origin.
+- Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Not performed locally: Android build or Xcode build.
 - **No real-funds use. No supported hardware devices yet.**
 
@@ -40,7 +41,9 @@ approval system, or cloud account.
 
 1. Keep `scripts/check.sh` passing against the reviewed lock and pinned Rust 1.93.1.
    Close the remaining descriptor, persistence and FFI regression gaps in M1.
-2. Build Android debug and an iOS simulator target using both generated bindings.
+2. Run the apps on an Android emulator and iOS simulator: import a disposable descriptor,
+   restart, verify persistent distinct receive indices and unknown balances, and check
+   accessibility, appearance and cancellation. Then qualify physical phones.
 3. Implement an explicit opt-in test-network sync source and reorg tests. Never convert an
    unsynced balance into a displayed zero.
 4. Port native selection/review/draft screens from the approved design using the Rust API.
