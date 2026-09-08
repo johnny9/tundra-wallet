@@ -1,5 +1,5 @@
 use crate::{
-    descriptor::preview_import,
+    descriptor::{canonical_descriptor, preview_import},
     labels::{self, LabelPreview, LabelRecord},
     *,
 };
@@ -93,6 +93,30 @@ impl Core {
         )?;
         if exists {
             return Err(Error::AlreadyExists);
+        }
+        // Pre-normalization development databases may have an order-dependent ID.
+        // Keep that ID and its metadata intact, while refusing an equivalent import.
+        if p.policy == Policy::TwoOfThree {
+            let mut stmt = tx.prepare("SELECT id FROM wallets WHERE network=?1 AND policy=?2")?;
+            let ids = stmt
+                .query_map(params![network.key(), p.policy.key()], |r| {
+                    r.get::<_, String>(0)
+                })?
+                .collect::<std::result::Result<Vec<_>, _>>()?;
+            for id in ids {
+                let existing = load(&tx, &id)?;
+                if canonical_descriptor(existing.wallet.public_descriptor(KeychainKind::External))?
+                    .to_string()
+                    == p.receive_descriptor
+                    && canonical_descriptor(
+                        existing.wallet.public_descriptor(KeychainKind::Internal),
+                    )?
+                    .to_string()
+                        == p.change_descriptor
+                {
+                    return Err(Error::AlreadyExists);
+                }
+            }
         }
         let mut wallet = Wallet::create(p.receive_descriptor, p.change_descriptor)
             .network(network.bitcoin())
@@ -663,12 +687,16 @@ mod tests {
     // Synthetic block data only. There is no production FFI method to inject chain state.
     fn funded() -> (Core, String, Vec<Coin>) {
         let (c, id) = setup();
+        let coins = fund(&c, &id);
+        (c, id, coins)
+    }
+    fn fund(c: &Core, id: &str) -> Vec<Coin> {
         {
             let mut db = c.lock().unwrap();
             let tx = db
                 .transaction_with_behavior(TransactionBehavior::Immediate)
                 .unwrap();
-            let mut l = load(&tx, &id).unwrap();
+            let mut l = load(&tx, id).unwrap();
             let address = l.wallet.reveal_next_address(KeychainKind::External).address;
             let funding = Transaction {
                 version: transaction::Version::TWO,
@@ -708,13 +736,12 @@ mod tests {
             };
             block.header.merkle_root = block.compute_merkle_root().unwrap();
             l.wallet.apply_block(&block, 1).unwrap();
-            save(&tx, &id, &mut l).unwrap();
-            tx.execute("UPDATE wallets SET synced_at=1 WHERE id=?1", [&id])
+            save(&tx, id, &mut l).unwrap();
+            tx.execute("UPDATE wallets SET synced_at=1 WHERE id=?1", [id])
                 .unwrap();
             tx.commit().unwrap();
         }
-        let cs = c.coins(&id).unwrap();
-        (c, id, cs)
+        c.coins(id).unwrap()
     }
     fn req(id: &str, coins: Vec<String>, sats: u64) -> DraftRequest {
         // An external test-network address derived from the other descriptor's first account.
@@ -747,6 +774,210 @@ mod tests {
             c.import_wallet("Again", SINGLE, Network::Signet),
             Err(Error::AlreadyExists)
         ));
+    }
+    #[test]
+    fn equivalent_multisig_import_keeps_legacy_id_and_metadata() {
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join("wallet.sqlite");
+        let c = Core::open(&path).unwrap();
+        let pair: serde_json::Value =
+            serde_json::from_str(include_str!("../../../tests/fixtures/core-style-pair.json"))
+                .unwrap();
+        let receive = pair["descriptors"][0]["desc"].as_str().unwrap();
+        let change = pair["descriptors"][1]["desc"].as_str().unwrap();
+        let legacy_id = "pre-normalization-wallet-id";
+        let mut wallet = Wallet::create(receive.to_owned(), change.to_owned())
+            .network(Network::Signet.bitcoin())
+            .create_wallet_no_persist()
+            .unwrap();
+        c.lock().unwrap().execute(
+            "INSERT INTO wallets(id,name,network,policy,state_json,created_at) VALUES(?1,'Legacy','signet','two_of_three',?2,1)",
+            params![legacy_id, json(&wallet.take_staged().unwrap()).unwrap()],
+        ).unwrap();
+        let address = c.receive_address(legacy_id).unwrap();
+        c.set_label(legacy_id, "addr", &address.address, "Épargne 🧊")
+            .unwrap();
+        drop(c);
+        let c = Core::open(&path).unwrap();
+        assert!(matches!(
+            c.import_wallet(
+                "Duplicate",
+                include_str!("../../../tests/fixtures/two-of-three.txt"),
+                Network::Signet
+            ),
+            Err(Error::AlreadyExists)
+        ));
+        let wallets = c.wallets().unwrap();
+        assert_eq!(wallets.len(), 1);
+        assert_eq!(wallets[0].id, legacy_id);
+        assert!(c.export_labels(legacy_id).unwrap().contains("Épargne 🧊"));
+        assert_eq!(
+            c.receive_address(legacy_id).unwrap().index,
+            address.index + 1
+        );
+    }
+
+    #[test]
+    fn reopen_preserves_unknown_balance_address_index_and_unicode_labels() {
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join("wallet.sqlite");
+        let c = Core::open(&path).unwrap();
+        let id = c
+            .import_wallet("Épargne 🧊", SINGLE, Network::Signet)
+            .unwrap()
+            .id;
+        let first = c.receive_address(&id).unwrap();
+        c.set_label(&id, "addr", &first.address, "家族の貯蓄 🧊")
+            .unwrap();
+        let labels = c.export_labels(&id).unwrap();
+        drop(c);
+        let reopened = Core::open(&path).unwrap();
+        let wallet = reopened.wallets().unwrap().remove(0);
+        assert_eq!(wallet.name, "Épargne 🧊");
+        assert!(wallet.synced_at.is_none());
+        assert!(wallet.total_sats.is_none());
+        assert!(wallet.available_sats.is_none());
+        assert_eq!(reopened.export_labels(&id).unwrap(), labels);
+        let next = reopened.receive_address(&id).unwrap();
+        assert_eq!(next.index, first.index + 1);
+        assert_ne!(next.address, first.address);
+    }
+
+    #[test]
+    fn reopened_draft_reserves_inputs_and_discard_keeps_user_freezes() {
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join("wallet.sqlite");
+        let c = Core::open(&path).unwrap();
+        let id = c
+            .import_wallet("Savings", SINGLE, Network::Signet)
+            .unwrap()
+            .id;
+        let coins = fund(&c, &id);
+        c.set_label(&id, "output", &coins[0].outpoint, "Épargne 🧊")
+            .unwrap();
+        let draft = c
+            .create_draft(req(&id, vec![coins[0].outpoint.clone()], 10_000))
+            .unwrap();
+        let psbt = c.export_unsigned_psbt(&id, &draft.id).unwrap();
+        c.set_frozen(&id, &coins[0].outpoint, true).unwrap();
+        drop(c);
+        let reopened = Core::open(&path).unwrap();
+        assert_eq!(
+            json(&reopened.drafts(&id).unwrap()[0]).unwrap(),
+            json(&draft).unwrap()
+        );
+        assert_eq!(reopened.export_unsigned_psbt(&id, &draft.id).unwrap(), psbt);
+        reopened.set_frozen(&id, &coins[0].outpoint, false).unwrap();
+        assert!(matches!(
+            reopened.create_draft(req(&id, vec![coins[0].outpoint.clone()], 20_000)),
+            Err(Error::UnavailableCoin)
+        ));
+        reopened.set_frozen(&id, &coins[0].outpoint, true).unwrap();
+        reopened.discard_draft(&id, &draft.id).unwrap();
+        drop(reopened);
+        let reopened = Core::open(&path).unwrap();
+        assert!(reopened.drafts(&id).unwrap().is_empty());
+        let coin = reopened
+            .coins(&id)
+            .unwrap()
+            .into_iter()
+            .find(|c| c.outpoint == coins[0].outpoint)
+            .unwrap();
+        assert_eq!(coin.status, CoinStatus::Frozen);
+        assert_eq!(coin.label, "Épargne 🧊");
+        reopened.set_frozen(&id, &coins[0].outpoint, false).unwrap();
+        assert!(
+            reopened
+                .create_draft(req(&id, vec![coins[0].outpoint.clone()], 20_000))
+                .is_ok()
+        );
+    }
+
+    #[test]
+    fn failed_snapshot_save_rolls_back_draft_reservations_and_change_index() {
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join("wallet.sqlite");
+        let c = Core::open(&path).unwrap();
+        let id = c
+            .import_wallet("Savings", SINGLE, Network::Signet)
+            .unwrap()
+            .id;
+        let coins = fund(&c, &id);
+        let before = json(&load(&c.lock().unwrap(), &id).unwrap().state).unwrap();
+        c.lock()
+            .unwrap()
+            .execute_batch(
+                "CREATE TEMP TRIGGER fail_save BEFORE UPDATE OF state_json ON wallets
+             BEGIN SELECT RAISE(ABORT, 'injected failure'); END;",
+            )
+            .unwrap();
+        assert!(matches!(
+            c.create_draft(req(&id, vec![coins[0].outpoint.clone()], 10_000)),
+            Err(Error::Storage)
+        ));
+        assert!(matches!(c.receive_address(&id), Err(Error::Storage)));
+        drop(c); // Reopen discards the temporary fault injector as well as the failed operation.
+        let reopened = Core::open(&path).unwrap();
+        assert_eq!(
+            json(&load(&reopened.lock().unwrap(), &id).unwrap().state).unwrap(),
+            before
+        );
+        assert!(reopened.drafts(&id).unwrap().is_empty());
+        assert!(
+            reopened
+                .coins(&id)
+                .unwrap()
+                .iter()
+                .all(|c| c.status == CoinStatus::Available)
+        );
+        assert!(
+            reopened
+                .create_draft(req(&id, vec![coins[0].outpoint.clone()], 10_000))
+                .is_ok()
+        );
+    }
+
+    #[test]
+    fn separate_connections_cannot_reserve_the_same_coin_concurrently() {
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join("wallet.sqlite");
+        let c = Core::open(&path).unwrap();
+        let id = c
+            .import_wallet("Savings", SINGLE, Network::Signet)
+            .unwrap()
+            .id;
+        let coins = fund(&c, &id);
+        let first = Core::open(&path).unwrap();
+        let second = Core::open(&path).unwrap();
+        let barrier = std::sync::Arc::new(std::sync::Barrier::new(2));
+        let requests = [
+            req(&id, vec![coins[0].outpoint.clone()], 10_000),
+            req(&id, vec![coins[0].outpoint.clone()], 20_000),
+        ];
+        let handles = [first, second]
+            .into_iter()
+            .zip(requests)
+            .map(|(core, request)| {
+                let barrier = barrier.clone();
+                std::thread::spawn(move || {
+                    barrier.wait();
+                    core.create_draft(request)
+                })
+            })
+            .collect::<Vec<_>>();
+        let results = handles
+            .into_iter()
+            .map(|h| h.join().unwrap())
+            .collect::<Vec<_>>();
+        assert_eq!(results.iter().filter(|r| r.is_ok()).count(), 1);
+        assert_eq!(
+            results
+                .iter()
+                .filter(|r| matches!(r, Err(Error::UnavailableCoin)))
+                .count(),
+            1
+        );
+        assert_eq!(c.drafts(&id).unwrap().len(), 1);
     }
     #[test]
     fn addresses_advance_durably() {

@@ -16,7 +16,7 @@ approval system, or cloud account.
 
 - Source: descriptor-first watch-only engine, metadata, unsigned-draft core, UniFFI API,
   Android native import shell, iOS native starter, tests and CI.
-- Verified: 49 Rust tests; Kotlin and Swift binding generation from the compiled library.
+- Verified: 60 Rust tests; Kotlin and Swift binding generation from the compiled library.
   See [VALIDATION.md](VALIDATION.md) for the exact results and remaining gates.
 - Not implemented: chain synchronization, real QR/USB transport, bhwi device integration,
   signed-response validation, finalization/broadcast, production storage protection.

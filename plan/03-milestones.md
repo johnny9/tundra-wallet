@@ -19,10 +19,11 @@ These are ordered work packages, not time estimates.
 - Compile generated Kotlin/Swift binding names against the hand-authored adapters.
 - Verify ABI packaging, native errors and Unicode label roundtrips through UniFFI.
 - Run Android instrumentation and an iOS simulator build; validate accessibility and dark/light.
-- Add exhaustive public-only descriptor tests (valid private extended keys/WIF rejected,
-  duplicate account keys, same key with different origins, mismatched policies/branches,
-  public-key order normalization, hardened/public derivation constraints).
-- Add crash/reopen tests covering BDK state plus metadata atomicity.
+- Public key ordering, duplicate accounts/origins, branch/policy mismatches and hardened/public
+  derivation constraints now have regression coverage. Expand private-key/WIF rejection and
+  parser fuzz coverage before declaring descriptor validation complete.
+- File reopen, snapshot-write rollback and competing reservation tests pass; add process-kill
+  and power-loss recovery tests covering BDK state plus metadata atomicity.
 
 ## Scope limitations to close deliberately
 

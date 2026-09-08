@@ -9,7 +9,7 @@ use bdk_wallet::{
     },
     miniscript::{
         Descriptor, ForEachKey,
-        descriptor::{DescriptorPublicKey, Wildcard},
+        descriptor::{DescriptorPublicKey, Wildcard, WshInner},
     },
 };
 use serde_json::Value;
@@ -38,20 +38,25 @@ fn body(d: &PublicDescriptor) -> String {
 fn policy(d: &PublicDescriptor) -> Result<Policy> {
     match d {
         Descriptor::Wpkh(_) => Ok(Policy::SingleSig),
-        Descriptor::Wsh(_) if body(d).starts_with("wsh(sortedmulti(2,") => {
-            let mut count = 0;
-            d.for_each_key(|_| {
-                count += 1;
-                true
-            });
-            if count == 3 {
-                Ok(Policy::TwoOfThree)
-            } else {
-                Err(Error::UnsupportedPolicy)
-            }
+        Descriptor::Wsh(wsh) if matches!(wsh.as_inner(), WshInner::SortedMulti(keys) if keys.k() == 2 && keys.n() == 3) => {
+            Ok(Policy::TwoOfThree)
         }
         _ => Err(Error::UnsupportedPolicy),
     }
+}
+
+/// sortedmulti sorts the derived script keys. Its source key order must not create
+/// a second wallet identity (and a second set of labels, freezes and reservations).
+pub(crate) fn canonical_descriptor(d: &PublicDescriptor) -> Result<PublicDescriptor> {
+    if let Descriptor::Wsh(wsh) = d
+        && let WshInner::SortedMulti(multi) = wsh.as_inner()
+    {
+        let mut keys = multi.pks().to_vec();
+        keys.sort();
+        return PublicDescriptor::new_wsh_sortedmulti(multi.k(), keys)
+            .map_err(|_| Error::Descriptor);
+    }
+    Ok(d.clone())
 }
 
 /// Validate account keys and return branch-independent identities in stable order.
@@ -189,8 +194,8 @@ pub fn preview_import(input: &str, network: Network) -> Result<ImportPreview> {
     {
         return Err(Error::BranchMismatch);
     }
-    let receive_descriptor = receive.to_string();
-    let change_descriptor = change.to_string();
+    let receive_descriptor = canonical_descriptor(&receive)?.to_string();
+    let change_descriptor = canonical_descriptor(&change)?.to_string();
     let wallet = Wallet::create(receive_descriptor.clone(), change_descriptor.clone())
         .network(network.bitcoin())
         .create_wallet_no_persist()
@@ -221,6 +226,142 @@ mod tests {
     use super::*;
     const SINGLE: &str = include_str!("../../../tests/fixtures/single-sig.txt");
     const MULTI: &str = include_str!("../../../tests/fixtures/two-of-three.txt");
+
+    fn checksummed(body: &str) -> String {
+        let checksum = bdk_wallet::miniscript::descriptor::checksum::desc_checksum(body).unwrap();
+        format!("{body}#{checksum}")
+    }
+
+    fn multi_keys() -> Vec<String> {
+        MULTI
+            .trim()
+            .split('#')
+            .next()
+            .unwrap()
+            .strip_prefix("wsh(sortedmulti(2,")
+            .unwrap()
+            .strip_suffix("))")
+            .unwrap()
+            .split(',')
+            .map(str::to_owned)
+            .collect()
+    }
+
+    fn multi(keys: &[String]) -> String {
+        checksummed(&format!("wsh(sortedmulti(2,{}))", keys.join(",")))
+    }
+
+    #[test]
+    fn multisig_key_order_does_not_change_wallet_identity() {
+        let keys = multi_keys();
+        let original = preview_import(MULTI, Network::Signet).unwrap();
+        for order in [
+            [0, 1, 2],
+            [0, 2, 1],
+            [1, 0, 2],
+            [1, 2, 0],
+            [2, 0, 1],
+            [2, 1, 0],
+        ] {
+            let reordered = multi(&order.map(|i| keys[i].clone()));
+            let preview = preview_import(&reordered, Network::Signet).unwrap();
+            assert_eq!(preview.first_address, original.first_address);
+            assert_eq!(preview.id, original.id);
+            assert_eq!(preview.receive_descriptor, original.receive_descriptor);
+            assert_eq!(preview.change_descriptor, original.change_descriptor);
+        }
+    }
+
+    #[test]
+    fn receive_and_change_may_list_multisig_keys_in_different_orders() {
+        let keys = multi_keys();
+        let receive = multi(
+            &keys
+                .iter()
+                .map(|k| k.replace("/<0;1>/*", "/0/*"))
+                .collect::<Vec<_>>(),
+        );
+        let change = multi(
+            &keys
+                .iter()
+                .rev()
+                .map(|k| k.replace("/<0;1>/*", "/1/*"))
+                .collect::<Vec<_>>(),
+        );
+        let preview = preview_import(&format!("{receive}\n{change}"), Network::Signet).unwrap();
+        assert_eq!(
+            preview.id,
+            preview_import(MULTI, Network::Signet).unwrap().id
+        );
+    }
+
+    #[test]
+    fn duplicate_account_key_is_rejected_even_with_a_different_origin() {
+        for change_origin in [false, true] {
+            let mut keys = multi_keys();
+            keys[1] = if change_origin {
+                keys[0].replace("a1b2c3d4", "1122aabb")
+            } else {
+                keys[0].clone()
+            };
+            assert!(preview_import(&multi(&keys), Network::Signet).is_err());
+        }
+    }
+
+    #[test]
+    fn different_accounts_with_the_same_master_fingerprint_are_rejected() {
+        let mut keys = multi_keys();
+        keys[1] = keys[1].replace("1122aabb", "a1b2c3d4");
+        assert!(preview_import(&multi(&keys), Network::Signet).is_err());
+    }
+
+    #[test]
+    fn public_derivation_requires_origins_and_unhardened_ranges() {
+        let original = SINGLE.trim().split('#').next().unwrap();
+        let origin_start = original.find('[').unwrap();
+        let origin_end = original.find(']').unwrap() + 1;
+        let without_origin = format!("{}{}", &original[..origin_start], &original[origin_end..]);
+        for invalid in [
+            without_origin,
+            original.replace("/<0;1>/*", "/<0;1>/*h"),
+            original.replace("/<0;1>/*", "/<0h;1h>/*"),
+            original.replace("/<0;1>/*", "/<0;1>/0/*"),
+            original.replace("/<0;1>/*", "/<1;0>/*"),
+            original.replace("/<0;1>/*", "/<0;2>/*"),
+        ] {
+            assert!(preview_import(&checksummed(&invalid), Network::Signet).is_err());
+        }
+    }
+
+    #[test]
+    fn mismatched_receive_change_accounts_and_policies_are_rejected() {
+        let single = preview_import(SINGLE, Network::Signet).unwrap();
+        let original = preview_import(MULTI, Network::Signet).unwrap();
+        let changed = original
+            .change_descriptor
+            .split('#')
+            .next()
+            .unwrap()
+            .replace("48'", "49'");
+        // Use a same-depth origin change, which must not be accepted as the receive policy.
+        assert_ne!(
+            changed,
+            original.change_descriptor.split('#').next().unwrap()
+        );
+        for change in [
+            single.change_descriptor,
+            checksummed(&changed),
+            original.receive_descriptor.clone(),
+        ] {
+            assert!(
+                preview_import(
+                    &format!("{}\n{change}", original.receive_descriptor),
+                    Network::Signet
+                )
+                .is_err()
+            );
+        }
+    }
     #[test]
     fn single_sig() {
         assert_eq!(

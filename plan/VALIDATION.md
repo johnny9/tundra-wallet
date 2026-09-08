@@ -7,7 +7,7 @@ Planning baseline: September 7, 2026. Current validation: **September 8, 2026**.
 
 | Check | Actual result |
 |---|---|
-| Rust workspace | **49 passed**, 0 failures; all targets and features, including the binding generator, compiled with Rust/Cargo 1.93.1 |
+| Rust workspace | **60 passed**, 0 failures; all targets and features, including the binding generator, compiled with Rust/Cargo 1.93.1 |
 | Formatting | `cargo fmt --all --check` passed after formatting the handoff sources |
 | Clippy | `cargo clippy --workspace --all-targets --all-features --locked -- -D warnings` passed |
 | Offline SQLite / public fixture / source checks | **23 passed**, 0 failures, 0 errors |
@@ -32,6 +32,20 @@ Current offline evidence is checked in at `validation/offline-checks.json` and
 `validation/offline-checks.log`. Full local Rust output is in ignored `build/check.log`.
 The offline report only describes its own checker; it does not certify Rust/native builds.
 Rust source checks cannot establish native packaging, FFI lifetime behavior or device support.
+
+## Descriptor identity and persistence regressions
+
+Six additional descriptor tests and five file-backed engine tests pass. The reordered-key
+and mixed receive/change-order tests failed before the fix: the same sortedmulti script
+could acquire a second wallet ID. Import now canonicalizes key order and recognizes older
+order-dependent IDs without renaming wallet rows or losing metadata.
+
+The persistence tests reopen actual Rust-created SQLite databases, preserve unknown balances,
+receive indices, Unicode labels, unsigned PSBTs, freezes and reservations, inject a failed
+snapshot write after draft/reservation creation, and race two independent connections for
+one coin. They test transaction rollback and reopen behavior, not power-loss recovery or
+mobile process termination. `tempfile` 3.27.0 is now a direct test-only dependency; its
+MIT/Apache-2.0 license was checked and it was already present in Cargo.lock.
 
 ## Original handoff evidence (September 7, 2026)
 
