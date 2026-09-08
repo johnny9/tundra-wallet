@@ -1,5 +1,5 @@
 //! The mobile apps depend on these dependency-independent, Tundra-owned types only.
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 use tundra_core as core;
 uniffi::setup_scaffolding!();
 
@@ -181,6 +181,107 @@ pub struct SigningInfo {
     pub draft_id: String,
     pub inputs: Vec<InputSignatureInfo>,
     pub complete: bool,
+}
+#[derive(Debug, Clone, Copy, uniffi::Enum)]
+pub enum QrEncoding {
+    Ur,
+    Bbqr,
+}
+impl From<QrEncoding> for core::qr::QrFormat {
+    fn from(value: QrEncoding) -> Self {
+        match value {
+            QrEncoding::Ur => Self::Ur,
+            QrEncoding::Bbqr => Self::Bbqr,
+        }
+    }
+}
+#[derive(Debug, Clone, Copy, uniffi::Enum)]
+pub enum QrPurpose {
+    SignedPsbt,
+    Descriptor { network: Chain },
+}
+#[derive(Debug, Clone, Copy, uniffi::Enum)]
+pub enum QrState {
+    Scanning,
+    Complete,
+    Cancelled,
+    Failed,
+}
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct QrInfo {
+    pub state: QrState,
+    pub resolved_fragments: u32,
+    pub total_fragments: Option<u32>,
+}
+impl From<core::qr::QrProgress> for QrInfo {
+    fn from(value: core::qr::QrProgress) -> Self {
+        Self {
+            state: match value.phase {
+                core::qr::QrPhase::Scanning => QrState::Scanning,
+                core::qr::QrPhase::Complete => QrState::Complete,
+                core::qr::QrPhase::Cancelled => QrState::Cancelled,
+                core::qr::QrPhase::Failed => QrState::Failed,
+            },
+            resolved_fragments: value.resolved_fragments,
+            total_fragments: value.total_fragments,
+        }
+    }
+}
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct QrImage {
+    pub side: u32,
+    pub modules: Vec<u8>,
+}
+
+#[derive(uniffi::Object)]
+pub struct QrScanner {
+    decoder: Mutex<core::qr::QrDecoder>,
+}
+#[uniffi::export]
+impl QrScanner {
+    #[uniffi::constructor]
+    pub fn new(purpose: QrPurpose) -> Arc<Self> {
+        let purpose = match purpose {
+            QrPurpose::SignedPsbt => core::qr::QrPurpose::SignedPsbt,
+            QrPurpose::Descriptor { network } => core::qr::QrPurpose::Descriptor {
+                network: network.into(),
+            },
+        };
+        Arc::new(Self {
+            decoder: Mutex::new(core::qr::QrDecoder::new(purpose)),
+        })
+    }
+    pub fn receive(&self, frame: String) -> Result<QrInfo> {
+        Ok(self
+            .decoder
+            .lock()
+            .map_err(|_| core::Error::Poisoned)?
+            .receive(&frame)?
+            .into())
+    }
+    pub fn progress(&self) -> Result<QrInfo> {
+        Ok(self
+            .decoder
+            .lock()
+            .map_err(|_| core::Error::Poisoned)?
+            .progress()
+            .into())
+    }
+    pub fn cancel(&self) -> Result<QrInfo> {
+        Ok(self
+            .decoder
+            .lock()
+            .map_err(|_| core::Error::Poisoned)?
+            .cancel()
+            .into())
+    }
+    pub fn payload(&self) -> Result<Vec<u8>> {
+        Ok(self
+            .decoder
+            .lock()
+            .map_err(|_| core::Error::Poisoned)?
+            .payload()?)
+    }
 }
 impl From<core::SigningProgress> for SigningInfo {
     fn from(p: core::SigningProgress) -> Self {
@@ -474,6 +575,15 @@ impl Tundra {
     pub fn export_signing_psbt(&self, wallet_id: String, draft_id: String) -> Result<String> {
         Ok(self.core.export_signing_psbt(&wallet_id, &draft_id)?)
     }
+    pub fn export_draft_qr(
+        &self,
+        wallet_id: String,
+        draft_id: String,
+        encoding: QrEncoding,
+    ) -> Result<Vec<String>> {
+        let payload = self.core.export_signing_psbt(&wallet_id, &draft_id)?;
+        Ok(core::qr::encode_psbt(payload.as_bytes(), encoding.into())?)
+    }
     pub fn discard_draft(&self, wallet_id: String, draft_id: String) -> Result<()> {
         Ok(self.core.discard_draft(&wallet_id, &draft_id)?)
     }
@@ -493,4 +603,12 @@ pub fn parse_fee_rate(value: String) -> Result<u64> {
 #[uniffi::export]
 pub fn format_fee_rate(sat_per_kwu: u64) -> String {
     core::amount::format_fee_rate(sat_per_kwu)
+}
+#[uniffi::export]
+pub fn render_qr_frame(frame: String) -> Result<QrImage> {
+    let matrix = core::qr::render_frame(&frame)?;
+    Ok(QrImage {
+        side: matrix.side,
+        modules: matrix.modules,
+    })
 }

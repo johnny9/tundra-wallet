@@ -8,6 +8,13 @@ cp tests/fixtures/single-sig.txt tests/fixtures/two-of-three.txt tests/fixtures/
 cp tests/fixtures/hwi-signed-wpkh.psbt tests/fixtures/ledger-wpkh-two-inputs.psbt build/fuzz-corpus/
 base64 --decode tests/fixtures/hwi-signed-wpkh.psbt > build/fuzz-corpus/hwi-binary
 base64 --decode tests/fixtures/ledger-wpkh-two-inputs.psbt > build/fuzz-corpus/ledger-binary
+cp tests/fixtures/qr-registry-psbt.ur build/fuzz-corpus/
+python3 - <<'PY'
+import json, pathlib
+vectors = json.loads(pathlib.Path('tests/fixtures/qr-bbqr-vectors.json').read_text())
+for vector in vectors['vectors']:
+    pathlib.Path('build/fuzz-corpus/qr-bbqr-' + vector['encoding']).write_text('\n'.join(vector['frames']))
+PY
 printf '%s\n' '{"type":"output","ref":"test:0","label":"Unicode 🧊","spendable":false}' > build/fuzz-corpus/label.jsonl
 CARGO_NET_OFFLINE=true cargo +nightly-2026-09-07 fuzz run public_parsers build/fuzz-corpus -- \
   -max_total_time="${TUNDRA_FUZZ_SECONDS:-60}" -max_len=32769 -rss_limit_mb=2048 \

@@ -7,6 +7,7 @@ mod error;
 pub mod hardware;
 pub mod labels;
 mod model;
+pub mod qr;
 pub mod signing;
 mod sync;
 pub use engine::Core;

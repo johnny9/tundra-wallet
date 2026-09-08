@@ -1,0 +1,21 @@
+{
+  "sources": [
+    {
+      "fixture": "qr-registry-psbt.ur",
+      "source": "https://github.com/BlockchainCommons/Research/blob/e4a4fbb186e2e7625ccdf7149aec4f0a5adaf850/papers/bcr-2020-006-urtypes.md",
+      "upstream_revision": "e4a4fbb186e2e7625ccdf7149aec4f0a5adaf850",
+      "attribution": "Copyright 2020 Blockchain Commons; Wolf McNally and Christopher Allen; public PSBT test vector only",
+      "license_notice": "upstream-licenses/BlockchainCommons-Research.txt"
+    },
+    {
+      "fixture": "qr-bbqr-vectors.json",
+      "source": "https://github.com/coinkite/BBQr/blob/master/BBQr.md",
+      "construction": "Independent Python stdlib base64/hex/raw DEFLATE (wbits=-10), 80 encoded characters per fragment, over hwi-signed-wpkh.psbt; no implementation code copied",
+      "payload_attribution": "See signing-provenance.json and upstream-licenses/HWI.txt"
+    }
+  ],
+  "sha256": {
+    "qr-registry-psbt.ur": "3b7f576a3b007faf0985849a710f44988bde7587606cbe6f7141efcd4d44a475",
+    "qr-bbqr-vectors.json": "c918996b6b205e1a78698b4572cdb58a77116236a48edab13ffc1bf790c29edc"
+  }
+}

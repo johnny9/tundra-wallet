@@ -19,3 +19,9 @@ order. It does not qualify the other pairs, a hardware model or mainnet use.
 The Rust persistence tests construct a test-only wallet snapshot from the Ledger account and
 funding transactions with synthetic confirmation data, then save the fixture transaction's
 review. No app API injects those snapshots, generates keys or manufactures signatures.
+
+`qr-registry-psbt.ur` is the public PSBT test vector from Blockchain Commons' UR type
+registry (© 2020 Blockchain Commons; Wolf McNally and Christopher Allen).
+`qr-bbqr-vectors.json` independently encodes the existing public HWI response with Python
+base64/hex/raw zlib following the BBQr specification. `qr-provenance.json` records sources
+and hashes. None of these QR vectors contains a private signing key.

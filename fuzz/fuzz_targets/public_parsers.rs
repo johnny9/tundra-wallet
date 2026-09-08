@@ -8,6 +8,21 @@ fuzz_target!(|data: &[u8]| {
         assert_eq!(tundra_core::signing::parse_response(&psbt.serialize()).unwrap(), psbt);
     }
     if let Ok(text) = std::str::from_utf8(data) {
+        for purpose in [tundra_core::qr::QrPurpose::SignedPsbt, tundra_core::qr::QrPurpose::Descriptor { network: Network::Signet }] {
+            let mut decoder = tundra_core::qr::QrDecoder::new(purpose);
+            // Newlines model sequential scanner frames without unbounded per-case work.
+            for frame in text.split('\n').take(32) {
+                match decoder.receive(frame) {
+                    Ok(progress) if progress.phase == tundra_core::qr::QrPhase::Complete => {
+                        let payload = decoder.payload().unwrap();
+                        assert!(payload.len() <= tundra_core::qr::MAX_QR_PAYLOAD_BYTES);
+                        break;
+                    }
+                    Ok(_) => {}
+                    Err(_) => break,
+                }
+            }
+        }
         let _ = amount::parse_btc(text);
         let _ = amount::parse_fee_rate(text);
         let _ = labels::parse_labels(text);

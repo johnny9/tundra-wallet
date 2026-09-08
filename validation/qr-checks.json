@@ -1,0 +1,44 @@
+{
+  "recorded_at": "2026-09-08T22:01:45.448183+00:00",
+  "rust_toolchain": "1.93.1",
+  "core_unit_tests": 95,
+  "new_qr_tests": 11,
+  "process_crash_tests": 1,
+  "http_tests": 5,
+  "separate_real_regtest_tests": 1,
+  "total_executed_rust_tests": 102,
+  "offline_checks": 23,
+  "fmt": "passed",
+  "clippy": "passed; all targets/features; warnings denied",
+  "bindings": "Kotlin and Swift generated from compiled Rust library",
+  "audit": {
+    "advisories": 0,
+    "warnings": 0
+  },
+  "fuzz": {
+    "executions": 1679070,
+    "seconds": 61,
+    "crashes": 0,
+    "sanitizer": "AddressSanitizer",
+    "toolchain": "nightly-2026-09-07",
+    "coverage": [
+      "descriptors",
+      "BIP329",
+      "amount",
+      "binary/base64 PSBT parser",
+      "QR sessions/reassembly"
+    ],
+    "signature_validator_fuzzed": false
+  },
+  "environment_failure": "Sandbox run completed 1638756 inputs in 61 seconds, then LeakSanitizer failed because ptrace was restricted. The same harness passed on the host without changing system settings.",
+  "native_qr_tests": "authored; not yet built/run",
+  "physical_camera_or_hardware_qualified": false,
+  "logs": {
+    "build/qr-check.log": "73677a71acdf9c789661c28c5714ee0454962b5fbc4934bb6bdf220534dd3af5",
+    "build/qr-regtest.log": "623377fdd9b4de2584a60d8e2f28b131926c476c47731631d0dc5fdda018e09f",
+    "build/qr-fuzz.log": "45d9719c2d08ba32f9b684e3f8ffee81e81d39f82edd3bd2b5b2526b89968b07",
+    "build/qr-fuzz-host.log": "0e10ff2c644489fd333ae137f4f611e6640a6054a59b32bd2ab9467dde97b473",
+    "build/qr-bindings.log": "ee446c4a4a6c6c3573f85b6358f342af21c00ac2da8e6c9162997750d5423b65",
+    "build/qr-audit.json": "09a14c108a58710e2577f04084921bbde71ec17f5390127456419d771baf1823"
+  }
+}
