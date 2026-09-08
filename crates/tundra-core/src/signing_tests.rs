@@ -687,33 +687,267 @@ fn schema_two_migration_preserves_approved_draft_and_reservations() {
 
 #[test]
 fn sync_invalidation_permanently_blocks_previously_valid_signatures() {
-    let dir = tempfile::tempdir().unwrap();
-    let (core, wallet, draft, signed) = saved_ledger(&dir.path().join("wallet.sqlite"));
+    for finalize in [false, true] {
+        let dir = tempfile::tempdir().unwrap();
+        let (core, wallet, draft, signed) = saved_ledger(&dir.path().join("wallet.sqlite"));
+        core.accept_signed_psbt(&wallet, &draft, &signed.serialize())
+            .unwrap();
+        if finalize {
+            core.finalize_draft(&wallet, &draft).unwrap();
+        }
+        {
+            let db = core.lock().unwrap();
+            let loaded = crate::engine::load(&db, &wallet).unwrap();
+            let empty = bdk_wallet::Wallet::create(
+                loaded
+                    .wallet
+                    .public_descriptor(bdk_wallet::KeychainKind::External)
+                    .to_string(),
+                loaded
+                    .wallet
+                    .public_descriptor(bdk_wallet::KeychainKind::Internal)
+                    .to_string(),
+            )
+            .network(bdk_wallet::bitcoin::Network::Signet)
+            .create_wallet_no_persist()
+            .unwrap();
+            crate::sync::invalidate_drafts(&db, &wallet, &empty).unwrap();
+        }
+        assert_eq!(core.drafts(&wallet).unwrap()[0].state, "invalidated");
+        assert!(core.export_signing_psbt(&wallet, &draft).is_err());
+        assert!(
+            core.accept_signed_psbt(&wallet, &draft, &signed.serialize())
+                .is_err()
+        );
+        assert!(core.signing_progress(&wallet, &draft).is_err());
+        assert!(core.finalized_draft(&wallet, &draft).is_err());
+        assert!(core.finalize_draft(&wallet, &draft).is_err());
+    }
+}
+
+#[test]
+fn finalization_matches_the_confirmed_multisig_transaction_byte_for_byte() {
+    use bdk_wallet::bitcoin::consensus::encode::deserialize_hex;
+    let (approved, response, trusted) = public_multisig();
+    let aggregate = merge_response(&approved, None, &response, &trusted).unwrap();
+    let transaction = finalize_transaction(&approved, Some(&aggregate), &trusted).unwrap();
+    let fixture: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../tests/fixtures/public-signed-multisig.json"
+    ))
+    .unwrap();
+    let expected: Transaction =
+        deserialize_hex(fixture["raw_transaction"].as_str().unwrap()).unwrap();
+    assert_eq!(transaction, expected);
+    assert_eq!(
+        transaction.compute_txid(),
+        approved.unsigned_tx.compute_txid()
+    );
+    assert_ne!(
+        transaction.compute_wtxid().to_string(),
+        transaction.compute_txid().to_string()
+    );
+    let mut incomplete = aggregate;
+    incomplete.inputs[0].partial_sigs.pop_last();
+    assert!(finalize_transaction(&approved, Some(&incomplete), &trusted).is_err());
+}
+
+#[test]
+fn finalization_requires_all_inputs_and_preserves_public_single_sig_witnesses() {
+    for (approved, signed, trusted) in [hwi(), ledger()] {
+        let transaction = finalize_transaction(&approved, Some(&signed), &trusted).unwrap();
+        assert_eq!(transaction.output, approved.unsigned_tx.output);
+        for (index, input) in transaction.input.iter().enumerate() {
+            let (key, signature) = signed.inputs[index].partial_sigs.first_key_value().unwrap();
+            assert_eq!(
+                input.witness,
+                Witness::from_slice(&[signature.to_vec(), key.to_bytes()])
+            );
+            assert_eq!(
+                input.previous_output,
+                approved.unsigned_tx.input[index].previous_output
+            );
+            assert!(input.script_sig.is_empty());
+            let mut partial = signed.clone();
+            partial.inputs[index].partial_sigs.clear();
+            assert!(finalize_transaction(&approved, Some(&partial), &trusted).is_err());
+        }
+        let mut modified = signed.clone();
+        modified.unsigned_tx.output[0].value += Amount::ONE_SAT;
+        assert!(finalize_transaction(&approved, Some(&modified), &trusted).is_err());
+    }
+}
+
+#[test]
+fn finalized_bytes_survive_restart_and_freeze_signature_changes() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("wallet.sqlite");
+    let (core, wallet, draft, signed) = saved_ledger(&path);
+    let original = core.export_unsigned_psbt(&wallet, &draft).unwrap();
+    assert!(core.finalized_draft(&wallet, &draft).unwrap().is_none());
+    assert!(core.finalize_draft(&wallet, &draft).is_err());
     core.accept_signed_psbt(&wallet, &draft, &signed.serialize())
         .unwrap();
-    {
-        let db = core.lock().unwrap();
-        let loaded = crate::engine::load(&db, &wallet).unwrap();
-        let empty = bdk_wallet::Wallet::create(
-            loaded
-                .wallet
-                .public_descriptor(bdk_wallet::KeychainKind::External)
-                .to_string(),
-            loaded
-                .wallet
-                .public_descriptor(bdk_wallet::KeychainKind::Internal)
-                .to_string(),
-        )
-        .network(bdk_wallet::bitcoin::Network::Signet)
-        .create_wallet_no_persist()
-        .unwrap();
-        crate::sync::invalidate_drafts(&db, &wallet, &empty).unwrap();
-    }
-    assert_eq!(core.drafts(&wallet).unwrap()[0].state, "invalidated");
-    assert!(core.export_signing_psbt(&wallet, &draft).is_err());
+    let finalized = core.finalize_draft(&wallet, &draft).unwrap();
+    assert_eq!(core.finalize_draft(&wallet, &draft).unwrap(), finalized);
+    assert_eq!(core.drafts(&wallet).unwrap()[0].state, "finalized");
+    assert_eq!(
+        finalized.txid,
+        signed.unsigned_tx.compute_txid().to_string()
+    );
+    assert_eq!(finalized.vsize, finalized.weight_wu.div_ceil(4));
+    assert_eq!(
+        finalized.fee_sats,
+        core.drafts(&wallet).unwrap()[0].fee_sats
+    );
+    assert_eq!(
+        core.coins(&wallet)
+            .unwrap()
+            .into_iter()
+            .filter(|coin| coin.status == crate::CoinStatus::Reserved)
+            .map(|coin| coin.outpoint)
+            .collect::<BTreeSet<_>>(),
+        signed
+            .unsigned_tx
+            .input
+            .iter()
+            .map(|input| input.previous_output.to_string())
+            .collect::<BTreeSet<_>>()
+    );
     assert!(
         core.accept_signed_psbt(&wallet, &draft, &signed.serialize())
             .is_err()
     );
-    assert!(core.signing_progress(&wallet, &draft).is_err());
+    let saved: String = core
+        .lock()
+        .unwrap()
+        .query_row("SELECT psbt FROM drafts WHERE id=?1", [&draft], |r| {
+            r.get(0)
+        })
+        .unwrap();
+    assert_eq!(saved, original);
+    drop(core);
+    let core = crate::Core::open(&path).unwrap();
+    assert_eq!(
+        core.finalized_draft(&wallet, &draft).unwrap(),
+        Some(finalized)
+    );
+    assert!(core.signing_progress(&wallet, &draft).unwrap().complete);
+    assert!(core.finalized_draft("other-wallet", &draft).is_err());
+    core.discard_draft(&wallet, &draft).unwrap();
+    let count: u32 = core
+        .lock()
+        .unwrap()
+        .query_row("SELECT COUNT(*) FROM finalized_drafts", [], |r| r.get(0))
+        .unwrap();
+    assert_eq!(count, 0);
+}
+
+#[test]
+fn finalization_rollback_preserves_signed_state_and_reservations() {
+    let directory = tempfile::tempdir().unwrap();
+    let (core, wallet, draft, signed) = saved_ledger(&directory.path().join("wallet.sqlite"));
+    core.accept_signed_psbt(&wallet, &draft, &signed.serialize())
+        .unwrap();
+    core.lock().unwrap().execute_batch("CREATE TRIGGER fail_final BEFORE UPDATE ON drafts BEGIN SELECT RAISE(ABORT,'rollback test'); END;").unwrap();
+    assert!(matches!(
+        core.finalize_draft(&wallet, &draft),
+        Err(Error::Storage)
+    ));
+    assert!(core.finalized_draft(&wallet, &draft).unwrap().is_none());
+    assert_eq!(core.drafts(&wallet).unwrap()[0].state, "signed");
+    assert!(core.signing_progress(&wallet, &draft).unwrap().complete);
+    assert_eq!(
+        core.coins(&wallet)
+            .unwrap()
+            .into_iter()
+            .filter(|coin| coin.status == crate::CoinStatus::Reserved)
+            .map(|coin| coin.outpoint)
+            .collect::<BTreeSet<_>>(),
+        signed
+            .unsigned_tx
+            .input
+            .iter()
+            .map(|input| input.previous_output.to_string())
+            .collect::<BTreeSet<_>>()
+    );
+    core.lock()
+        .unwrap()
+        .execute_batch("DROP TRIGGER fail_final")
+        .unwrap();
+    assert!(core.finalize_draft(&wallet, &draft).is_ok());
+}
+
+#[test]
+fn finalized_review_rejects_changed_bytes_signatures_and_missing_reservations() {
+    let directory = tempfile::tempdir().unwrap();
+    let (core, wallet, draft, signed) = saved_ledger(&directory.path().join("wallet.sqlite"));
+    core.accept_signed_psbt(&wallet, &draft, &signed.serialize())
+        .unwrap();
+    let finalized = core.finalize_draft(&wallet, &draft).unwrap();
+    let mut bytes = finalized.transaction_bytes.clone();
+    bytes[0] ^= 1;
+    core.lock()
+        .unwrap()
+        .execute("UPDATE finalized_drafts SET transaction_bytes=?1", [bytes])
+        .unwrap();
+    assert!(matches!(
+        core.finalized_draft(&wallet, &draft),
+        Err(Error::CorruptState)
+    ));
+    assert!(core.finalize_draft(&wallet, &draft).is_err());
+    core.lock()
+        .unwrap()
+        .execute(
+            "UPDATE finalized_drafts SET transaction_bytes=?1",
+            [finalized.transaction_bytes],
+        )
+        .unwrap();
+    let mut partial = signed.clone();
+    partial.inputs[0].partial_sigs.clear();
+    core.lock()
+        .unwrap()
+        .execute("UPDATE draft_signatures SET psbt=?1", [partial.to_string()])
+        .unwrap();
+    assert!(core.finalized_draft(&wallet, &draft).is_err());
+    core.lock()
+        .unwrap()
+        .execute("UPDATE draft_signatures SET psbt=?1", [signed.to_string()])
+        .unwrap();
+    let outpoint = signed.unsigned_tx.input[0].previous_output.to_string();
+    core.set_frozen(&wallet, &outpoint, true).unwrap();
+    assert!(core.finalized_draft(&wallet, &draft).is_err());
+    core.set_frozen(&wallet, &outpoint, false).unwrap();
+    assert!(core.finalized_draft(&wallet, &draft).unwrap().is_some());
+    core.lock()
+        .unwrap()
+        .execute("DELETE FROM reservations WHERE outpoint=?1", [&outpoint])
+        .unwrap();
+    assert!(core.finalized_draft(&wallet, &draft).is_err());
+}
+
+#[test]
+fn schema_three_migration_preserves_signatures_before_finalization() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("wallet.sqlite");
+    let (core, wallet, draft, signed) = saved_ledger(&path);
+    core.accept_signed_psbt(&wallet, &draft, &signed.serialize())
+        .unwrap();
+    core.lock()
+        .unwrap()
+        .execute_batch("DROP TABLE finalized_drafts; PRAGMA user_version=3;")
+        .unwrap();
+    drop(core);
+    let core = crate::Core::open(&path).unwrap();
+    assert!(core.signing_progress(&wallet, &draft).unwrap().complete);
+    assert!(core.finalized_draft(&wallet, &draft).unwrap().is_none());
+    core.finalize_draft(&wallet, &draft).unwrap();
+    core.lock()
+        .unwrap()
+        .execute_batch("DELETE FROM finalized_drafts")
+        .unwrap();
+    assert!(matches!(
+        core.finalized_draft(&wallet, &draft),
+        Err(Error::CorruptState)
+    ));
+    assert!(core.finalize_draft(&wallet, &draft).is_err());
 }

@@ -422,7 +422,7 @@ fn load_draft(db: &rusqlite::Connection, wallet_id: &str, draft_id: &str) -> Res
     let review: crate::DraftReview = from_json(&review)?;
     if !matches!(
         review.state.as_str(),
-        "unsigned" | "partially_signed" | "signed"
+        "unsigned" | "partially_signed" | "signed" | "finalized"
     ) {
         return Err(Error::UnavailableCoin);
     }
@@ -616,7 +616,149 @@ fn signing_progress(
     })
 }
 
+/// Assemble only the narrow policy already verified by merge_response. Re-validate the
+/// resulting final witness before returning bytes; no generic best-effort finalizer is used.
+fn finalize_transaction(
+    approved: &Psbt,
+    stored: Option<&Psbt>,
+    trusted: &[TrustedInput],
+) -> Result<Transaction> {
+    use bdk_wallet::bitcoin::Witness;
+    let merged = merge_response(approved, stored, approved, trusted)?;
+    if !signing_progress("", &merged, trusted)?.complete {
+        return Err(Error::Unavailable("all required signatures"));
+    }
+    let mut transaction = approved.unsigned_tx.clone();
+    let mut finalized = approved.clone();
+    for (index, policy) in trusted.iter().enumerate() {
+        let (keys, required) = policy.keys()?;
+        let signed: Vec<_> = keys
+            .iter()
+            .filter_map(|key| {
+                merged.inputs[index]
+                    .partial_sigs
+                    .get(key)
+                    .map(|signature| (key, signature))
+            })
+            .take(required)
+            .collect();
+        if signed.len() != required {
+            return Err(Error::CorruptState);
+        }
+        let stack = match &policy.descriptor {
+            Descriptor::Wpkh(_) => vec![signed[0].1.to_vec(), signed[0].0.to_bytes()],
+            Descriptor::Wsh(_) => {
+                let mut stack = vec![Vec::new()];
+                stack.extend(signed.iter().map(|(_, signature)| signature.to_vec()));
+                stack.push(
+                    policy
+                        .descriptor
+                        .explicit_script()
+                        .map_err(|_| Error::UnsupportedPolicy)?
+                        .into_bytes(),
+                );
+                stack
+            }
+            _ => return Err(Error::UnsupportedPolicy),
+        };
+        let witness = Witness::from_slice(&stack);
+        transaction.input[index].witness = witness.clone();
+        finalized.inputs[index].final_script_witness = Some(witness);
+    }
+    merge_response(approved, None, &finalized, trusted)?;
+    if transaction.compute_txid() != approved.unsigned_tx.compute_txid() {
+        return Err(Error::CorruptState);
+    }
+    Ok(transaction)
+}
+
+fn finalized_review(draft: &SigningDraft, transaction: &Transaction) -> crate::FinalizedReview {
+    crate::FinalizedReview {
+        wallet_id: draft.review.wallet_id.clone(),
+        draft_id: draft.review.id.clone(),
+        txid: transaction.compute_txid().to_string(),
+        wtxid: transaction.compute_wtxid().to_string(),
+        fee_sats: draft.review.fee_sats,
+        weight_wu: transaction.weight().to_wu(),
+        vsize: transaction.vsize() as u64,
+        transaction_bytes: bdk_wallet::bitcoin::consensus::serialize(transaction),
+    }
+}
+fn stored_finalized(
+    db: &rusqlite::Connection,
+    wallet_id: &str,
+    draft_id: &str,
+) -> Result<Option<Vec<u8>>> {
+    use rusqlite::{OptionalExtension, params};
+    Ok(db
+        .query_row(
+            "SELECT transaction_bytes FROM finalized_drafts WHERE wallet_id=?1 AND draft_id=?2",
+            params![wallet_id, draft_id],
+            |r| r.get(0),
+        )
+        .optional()?)
+}
+
 impl crate::Core {
+    /// Freeze exact final bytes and review state atomically. Requires every input's
+    /// signatures and current wallet eligibility. Does not contact a network or broadcast.
+    pub fn finalize_draft(
+        &self,
+        wallet_id: &str,
+        draft_id: &str,
+    ) -> Result<crate::FinalizedReview> {
+        use rusqlite::{TransactionBehavior, params};
+        let mut db = self.lock()?;
+        let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
+        let mut draft = load_draft(&tx, wallet_id, draft_id)?;
+        let transaction =
+            finalize_transaction(&draft.approved, draft.stored.as_ref(), &draft.trusted)?;
+        let result = finalized_review(&draft, &transaction);
+        match stored_finalized(&tx, wallet_id, draft_id)? {
+            Some(bytes)
+                if bytes == result.transaction_bytes && draft.review.state == "finalized" => {}
+            Some(_) => return Err(Error::CorruptState),
+            None if draft.review.state == "finalized" => return Err(Error::CorruptState),
+            None => {
+                tx.execute("INSERT INTO finalized_drafts(wallet_id,draft_id,transaction_bytes) VALUES(?1,?2,?3)",
+                    params![wallet_id, draft_id, result.transaction_bytes])?;
+                draft.review.state = "finalized".into();
+                tx.execute(
+                    "UPDATE drafts SET review_json=?1 WHERE wallet_id=?2 AND id=?3",
+                    params![crate::engine::json(&draft.review)?, wallet_id, draft_id],
+                )?;
+            }
+        }
+        tx.commit()?;
+        Ok(result)
+    }
+    /// Reopening a final review rechecks signatures, current coins and exact persisted bytes.
+    pub fn finalized_draft(
+        &self,
+        wallet_id: &str,
+        draft_id: &str,
+    ) -> Result<Option<crate::FinalizedReview>> {
+        let db = self.lock()?;
+        let draft = load_draft(&db, wallet_id, draft_id)?;
+        let Some(bytes) = stored_finalized(&db, wallet_id, draft_id)? else {
+            return if draft.review.state == "finalized" {
+                Err(Error::CorruptState)
+            } else {
+                Ok(None)
+            };
+        };
+        if draft.review.state != "finalized" {
+            return Err(Error::CorruptState);
+        }
+        let transaction =
+            finalize_transaction(&draft.approved, draft.stored.as_ref(), &draft.trusted)?;
+        let result = finalized_review(&draft, &transaction);
+        if bytes != result.transaction_bytes {
+            return Err(Error::CorruptState);
+        }
+        Ok(Some(result))
+    }
+
     /// Import a response atomically after verifying every supplied signature. This does not
     /// request device signing, finalize, or broadcast. Repeated responses are idempotent.
     pub fn accept_signed_psbt(
@@ -630,6 +772,9 @@ impl crate::Core {
         let mut db = self.lock()?;
         let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
         let mut draft = load_draft(&tx, wallet_id, draft_id)?;
+        if draft.review.state == "finalized" {
+            return Err(Error::Unavailable("signature changes after finalization"));
+        }
         let merged = merge_response(
             &draft.approved,
             draft.stored.as_ref(),

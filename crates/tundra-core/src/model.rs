@@ -143,7 +143,7 @@ pub struct DraftReview {
     pub fee_sat_per_kwu: Option<u64>,
     pub label: String,
     pub is_consolidation: bool,
-    /// unsigned, partially_signed, signed, or invalidated. Signed does not mean broadcast.
+    /// unsigned, partially_signed, signed, finalized, or invalidated. None means broadcast.
     pub state: String,
 }
 
@@ -158,4 +158,17 @@ pub struct SigningProgress {
     pub draft_id: String,
     pub inputs: Vec<InputSigningProgress>,
     pub complete: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct FinalizedReview {
+    pub wallet_id: String,
+    pub draft_id: String,
+    pub txid: String,
+    pub wtxid: String,
+    pub fee_sats: u64,
+    pub weight_wu: u64,
+    pub vsize: u64,
+    /// Exact transaction bytes, including the verified witnesses; private wallet metadata.
+    pub transaction_bytes: Vec<u8>,
 }

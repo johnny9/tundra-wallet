@@ -182,6 +182,31 @@ pub struct SigningInfo {
     pub inputs: Vec<InputSignatureInfo>,
     pub complete: bool,
 }
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct FinalTransactionInfo {
+    pub wallet_id: String,
+    pub draft_id: String,
+    pub txid: String,
+    pub wtxid: String,
+    pub fee_sats: u64,
+    pub weight_wu: u64,
+    pub vsize: u64,
+    pub transaction_bytes: Vec<u8>,
+}
+impl From<core::FinalizedReview> for FinalTransactionInfo {
+    fn from(value: core::FinalizedReview) -> Self {
+        Self {
+            wallet_id: value.wallet_id,
+            draft_id: value.draft_id,
+            txid: value.txid,
+            wtxid: value.wtxid,
+            fee_sats: value.fee_sats,
+            weight_wu: value.weight_wu,
+            vsize: value.vsize,
+            transaction_bytes: value.transaction_bytes,
+        }
+    }
+}
 #[derive(Debug, Clone, Copy, uniffi::Enum)]
 pub enum QrEncoding {
     Ur,
@@ -574,6 +599,23 @@ impl Tundra {
     }
     pub fn export_signing_psbt(&self, wallet_id: String, draft_id: String) -> Result<String> {
         Ok(self.core.export_signing_psbt(&wallet_id, &draft_id)?)
+    }
+    pub fn finalize_draft(
+        &self,
+        wallet_id: String,
+        draft_id: String,
+    ) -> Result<FinalTransactionInfo> {
+        Ok(self.core.finalize_draft(&wallet_id, &draft_id)?.into())
+    }
+    pub fn finalized_draft(
+        &self,
+        wallet_id: String,
+        draft_id: String,
+    ) -> Result<Option<FinalTransactionInfo>> {
+        Ok(self
+            .core
+            .finalized_draft(&wallet_id, &draft_id)?
+            .map(Into::into))
     }
     pub fn export_draft_qr(
         &self,

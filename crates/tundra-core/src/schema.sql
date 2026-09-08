@@ -50,4 +50,12 @@ CREATE TABLE IF NOT EXISTS draft_signatures (
     PRIMARY KEY (wallet_id, draft_id),
     FOREIGN KEY (wallet_id, draft_id) REFERENCES drafts(wallet_id, id) ON DELETE CASCADE
 );
-PRAGMA user_version = 3;
+-- A finalized transaction freezes the exact witness bytes for later explicit review.
+CREATE TABLE IF NOT EXISTS finalized_drafts (
+    wallet_id TEXT NOT NULL,
+    draft_id TEXT NOT NULL,
+    transaction_bytes BLOB NOT NULL,
+    PRIMARY KEY (wallet_id, draft_id),
+    FOREIGN KEY (wallet_id, draft_id) REFERENCES drafts(wallet_id, id) ON DELETE CASCADE
+);
+PRAGMA user_version = 4;

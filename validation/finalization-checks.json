@@ -1,0 +1,26 @@
+{
+  "recorded_at": "2026-09-08T22:20:16.848609+00:00",
+  "rust_toolchain": "1.93.1",
+  "core_unit_tests": 101,
+  "new_finalization_tests": 6,
+  "process_crash_tests": 1,
+  "http_tests": 5,
+  "separate_real_regtest_tests": 1,
+  "total_executed_rust_tests": 108,
+  "offline_checks": 23,
+  "schema_version": 4,
+  "fmt": "passed",
+  "clippy": "passed; all targets/features; warnings denied",
+  "bindings": "Kotlin and Swift generated from compiled Rust library",
+  "finalized_transaction_fixture": "Byte-for-byte equality with the public confirmed 2-of-3 transaction in public-signed-multisig.json",
+  "native_finalization": "authored; compilation/runtime check pending",
+  "finalization_or_signature_validator_fuzzed": false,
+  "broadcast_implemented": false,
+  "hardware_qualified": false,
+  "logs": {
+    "build/finalization-check.log": "5204d1642f4e52a160f5d6c42eae51ba1c37bbc7b4e434f32a70b665ca524c24",
+    "build/finalization-regtest.log": "552e57edff7872a2fa41e3e54533e2341d2e8d91e097b7163e2046e41de227f0",
+    "build/finalization-bindings.log": "c0f377a005b72d58e1b597c4e1081ab7862ebf721ad93cd8d2200792eaf0a147",
+    "build/finalization-offline.log": "e19a7efb9522a18fdd24b575adb7c184a4695493cb3579045dd32adb6ef85687"
+  }
+}
