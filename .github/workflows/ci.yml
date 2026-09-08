@@ -121,6 +121,7 @@ jobs:
           cat build/native-chain.log
           exit 1
       - run: ./scripts/check-ios-runtime.sh
+        timeout-minutes: 20
       - uses: actions/upload-artifact@v4
         if: always()
         with:
