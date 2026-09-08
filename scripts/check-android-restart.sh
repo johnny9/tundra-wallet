@@ -2,8 +2,16 @@
 # Run after instrumentation, on its disposable emulator with the real saved draft.
 set -euo pipefail
 cd "$(dirname "$0")/.."
+mkdir -p build
+if ! adb shell pm path dev.johnny9.tundra.dev | grep -q '^package:'; then
+  echo 'Tundra is not installed. Preserve the instrumented app with -Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true.' >&2
+  exit 1
+fi
 adb shell am force-stop dev.johnny9.tundra.dev
-adb shell am start -W -n dev.johnny9.tundra.dev/dev.johnny9.tundra.MainActivity > build/android-restart-launch.log
+if ! adb shell am start -W -n dev.johnny9.tundra.dev/dev.johnny9.tundra.MainActivity > build/android-restart-launch.log 2>&1; then
+  cat build/android-restart-launch.log >&2
+  exit 1
+fi
 for attempt in $(seq 1 15); do
   adb shell uiautomator dump /sdcard/tundra-runtime.xml >/dev/null
   adb pull /sdcard/tundra-runtime.xml build/android-restart.xml >/dev/null 2>&1

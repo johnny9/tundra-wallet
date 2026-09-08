@@ -45,6 +45,8 @@ need reproducibility review.
 - CI audits the lock with cargo-audit 0.22.2 and the current RustSec database; a clean audit
   is not an independent review or a guarantee that dependencies have no vulnerabilities.
 - `scripts/build-android.sh`: bindings + cargo-ndk libraries for arm64 and x86_64.
+- `scripts/check-android-apks.sh`: reuse matching CI app/test APKs on an explicitly
+  disposable ADB target; see [Waydroid setup and limits](07-waydroid.md).
 - `scripts/build-ios.sh`: Apple static libraries + XCFramework; macOS/Xcode required.
 - Publish commits using normal Git pushes to the configured origin; no creation helper exists.
 

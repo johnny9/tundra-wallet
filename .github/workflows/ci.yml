@@ -83,9 +83,10 @@ jobs:
           disable-animations: true
           script: |
             adb reverse tcp:3002 tcp:3002
-            ./apps/android/gradlew --no-daemon -p apps/android :app:connectedDebugAndroidTest
+            ./apps/android/gradlew --no-daemon -p apps/android -Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true :app:connectedDebugAndroidTest
             ./scripts/check-android-restart.sh
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: tundra-development-apk
           path: apps/android/app/build/outputs/apk/debug/*.apk
@@ -103,7 +104,10 @@ jobs:
         if: always()
         with:
           name: tundra-android-runtime-results
-          path: apps/android/app/build/outputs/androidTest-results/connected/**
+          path: |
+            apps/android/app/build/outputs/androidTest-results/connected/**
+            build/android-restart*.log
+            build/android-restart.xml
   ios:
     runs-on: macos-15
     steps:
