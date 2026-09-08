@@ -84,6 +84,7 @@ jobs:
           script: |
             adb reverse tcp:3002 tcp:3002
             ./apps/android/gradlew --no-daemon -p apps/android :app:connectedDebugAndroidTest
+            ./scripts/check-android-restart.sh
       - uses: actions/upload-artifact@v4
         with:
           name: tundra-development-apk
