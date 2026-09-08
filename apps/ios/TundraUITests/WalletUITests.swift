@@ -58,7 +58,8 @@ final class WalletUITests: XCTestCase {
         app.buttons["Consolidate"].tap()
         enable(app.switches["consolidationConsent"])
         app.buttons["Review payment"].tap()
-        XCTAssertTrue(app.staticTexts["Inputs · 2"].waitForExistence(timeout: 10))
+        let inputCount = app.staticTexts.matching(NSPredicate(format: "label ==[c] %@", "Inputs · 2")).firstMatch
+        XCTAssertTrue(inputCount.waitForExistence(timeout: 10))
         app.buttons["Save for later"].tap()
         app.terminate()
         app.launch()
