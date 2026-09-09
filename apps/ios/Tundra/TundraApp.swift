@@ -28,6 +28,7 @@ struct WalletView: View {
     @State private var paying = false
     @State private var paymentMode = 0
     @State private var labels = false
+    @State private var backup = false
     private var background: Color { dark ? Color(red: 0.055, green: 0.067, blue: 0.082) : Color(red: 0.984, green: 0.988, blue: 0.992) }
     var body: some View {
         NavigationStack {
@@ -44,6 +45,7 @@ struct WalletView: View {
                     Menu {
                         Toggle("Dark appearance", isOn: $dark)
                         Button("Labels") { labels = true }.disabled(model.wallet == nil || model.busy)
+                        Button("Backup and recovery") { backup = true }.disabled(model.busy)
                         Text("Development build · test descriptors only")
                     } label: { Image(systemName: "gearshape").frame(width: 44, height: 44) }
                     .accessibilityLabel("Settings")
@@ -118,6 +120,7 @@ struct WalletView: View {
             .sheet(isPresented: $syncing) { SyncView(model: model) }
             .sheet(isPresented: $paying, onDismiss: { model.review = nil }) { PaymentView(model: model, mode: paymentMode) }
             .sheet(isPresented: $labels, onDismiss: { model.cancelLabels() }) { LabelsView(model: model) }
+            .sheet(isPresented: $backup, onDismiss: { model.cancelBackup() }) { BackupView(model: model) }
             .sheet(isPresented: Binding(get: { model.received != nil }, set: { if !$0 { model.received = nil } })) {
                 VStack(alignment: .leading, spacing: 20) {
                     Text("Unverified address").font(.title2)

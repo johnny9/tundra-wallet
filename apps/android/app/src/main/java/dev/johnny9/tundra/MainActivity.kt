@@ -48,6 +48,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
 @Composable private fun WalletApp(vm: WalletViewModel, s: WalletState) {
     var tab by rememberSaveable { mutableIntStateOf(0) }
     var settings by remember { mutableStateOf(false) }
+    var backup by remember { mutableStateOf(false) }
     var add by remember { mutableStateOf(false) }
     var menu by remember { mutableStateOf(false) }
     var editing by remember { mutableStateOf<CoinInfo?>(null) }
@@ -182,6 +183,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
         confirmButton = { TextButton(onClick = { vm.bulkEdit(labelText, null); bulkLabel = false }) { Text("Apply") } },
         dismissButton = { TextButton(onClick = { bulkLabel = false }) { Text("Cancel") } })
     usbTarget?.let { (walletId, index) -> UsbHardwareDialog(vm, walletId, index, onClose = { usbTarget = null }) }
+    if (backup) BackupSheet(vm, s) { backup = false }
     if (settings) ModalBottomSheet(onDismissRequest = { settings = false }) {
         Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Text("Tundra", style = MaterialTheme.typography.headlineSmall)
@@ -190,6 +192,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
                 Text("Dark appearance", Modifier.weight(1f)); Switch(checked = s.dark, onCheckedChange = vm::appearance)
             }
             OutlinedButton(onClick = { s.wallet?.let { usbTarget = it.id to null; settings = false } }, enabled = s.wallet != null && !s.busy) { Text("USB hardware") }
+            OutlinedButton(onClick = { settings = false; backup = true }, enabled = !s.busy) { Text("Backup and recovery") }
             Text("Labels", style = MaterialTheme.typography.titleMedium)
             Text("Exports are unencrypted and privacy-sensitive. Only known references are matched; origin-tagged records must match this wallet's policy and key origins.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { importLabels.launch(arrayOf("*/*")) }, enabled = s.wallet != null && !s.busy) { Text("Import labels") }

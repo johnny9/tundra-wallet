@@ -20,6 +20,8 @@ data class WalletState(
     val coins: List<CoinInfo> = emptyList(), val activity: List<ActivityInfo> = emptyList(),
     val busy: Boolean = false, val error: String? = null, val dark: Boolean = true,
     val storageReady: Boolean = false,
+    val backupPreview: BackupInfo? = null, val backupExportReady: Boolean = false,
+    val backupMessage: String? = null,
     val importPreview: WalletPreview? = null, val receive: AddressInfo? = null,
     val labelPreview: LabelImportPreview? = null,
     val endpoint: String = "", val sync: SyncInfo? = null,
@@ -39,6 +41,8 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     private var pendingChain = Chain.SIGNET
     private var pendingLabels: String? = null
     private var pendingLabelsWallet: String? = null
+    private var pendingBackup: java.io.File? = null
+    private var exportedBackup: java.io.File? = null
     init { openStorage() }
     fun openStorage() = run {
         if (mutable.value.storageReady) return@run
@@ -63,6 +67,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
                 // Do not log descriptors, labels, addresses, database paths or native stack traces.
                 mutable.value = mutable.value.copy(error = when (e) {
                     is StorageAccessException -> e.message
+                    is BackupAccessException, is BackupSaveException -> e.message
                     is AppException.Operation -> e.detail
                     else -> "Operation failed. Please try again."
                 })
@@ -198,6 +203,66 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         try { withContext(Dispatchers.IO) { engine().resumeRecoveredSubmission(request) } }
         finally { refresh() }
     }
+    fun inspectBackupFile(uri: Uri, password: String) = run {
+        clearBackupFiles()
+        mutable.value = mutable.value.copy(backupPreview = null, backupExportReady = false, backupMessage = null)
+        val file = withContext(Dispatchers.IO) { BackupFiles.stage(getApplication<Application>(), uri) }
+        try {
+            val info = withContext(Dispatchers.IO) { inspectBackup(file.path, password) }
+            pendingBackup = file
+            mutable.value = mutable.value.copy(backupPreview = info)
+        } catch (_: Exception) { file.delete(); throw BackupAccessException() }
+    }
+    fun prepareBackup(password: String) = run {
+        check(mutable.value.storageReady)
+        clearBackupFiles()
+        mutable.value = mutable.value.copy(backupPreview = null, backupExportReady = false, backupMessage = null)
+        val file = withContext(Dispatchers.IO) { BackupFiles.exportPath(getApplication<Application>()) }
+        try {
+            withContext(Dispatchers.IO) { engine().exportBackup(file.path, password) }
+            exportedBackup = file
+            mutable.value = mutable.value.copy(backupExportReady = true)
+        } catch (error: Exception) { file.delete(); throw error }
+    }
+    fun saveBackup(uri: Uri?) = run {
+        val file = checkNotNull(exportedBackup)
+        try {
+            if (uri != null) {
+                withContext(Dispatchers.IO) { BackupFiles.save(getApplication<Application>(), file, uri) }
+                mutable.value = mutable.value.copy(backupMessage = "Encrypted backup saved and read back successfully. Keep its password separately.")
+            }
+        } finally {
+            file.delete(); exportedBackup = null
+            mutable.value = mutable.value.copy(backupExportReady = false)
+        }
+    }
+    fun restoreBackup(password: String, acknowledged: Boolean) = run {
+        check(acknowledged && mutable.value.backupPreview != null)
+        val file = checkNotNull(pendingBackup)
+        // run serializes all wallet/sync/broadcast work. No old view or handle survives
+        // a switch, including errors after the selector's atomic replacement.
+        val previous = core; core = null
+        pendingDescriptor = null; pendingLabels = null; pendingLabelsWallet = null
+        mutable.value = WalletState(dark = mutable.value.dark, busy = true)
+        try {
+            core = withContext(Dispatchers.IO) {
+                previous?.close()
+                StorageVault.restoreActive(getApplication<Application>(), file, password)
+            }
+            refresh()
+            mutable.value = mutable.value.copy(storageReady = true,
+                backupMessage = "Backup restored. Balances are unknown until you sync. Saved payments require fresh review.")
+        } finally { file.delete(); pendingBackup = null }
+    }
+    fun cancelBackup() {
+        if (mutable.value.busy) return
+        clearBackupFiles()
+        mutable.value = mutable.value.copy(backupPreview = null, backupExportReady = false, backupMessage = null)
+    }
+    private fun clearBackupFiles() {
+        pendingBackup?.delete(); pendingBackup = null
+        exportedBackup?.delete(); exportedBackup = null
+    }
     fun closeQr() { mutable.value = mutable.value.copy(qrFrames = null) }
     fun sync(endpoint: String, consent: Boolean) = run {
         val id = checkNotNull(mutable.value.selectedId)
@@ -221,7 +286,8 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     }
     fun cancelSync() {
         val id = mutable.value.sync?.id ?: return
-        viewModelScope.launch { withContext(Dispatchers.IO) { core?.cancelSync(id) } }
+        val target = core ?: return
+        viewModelScope.launch { withContext(Dispatchers.IO) { runCatching { target.cancelSync(id) } } }
     }
     override fun onCleared() {
         mutable.value.sync?.id?.let { core?.cancelSync(it) }

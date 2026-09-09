@@ -3,13 +3,18 @@ import Foundation
 /// Database and wallet work never run on the main UI actor.
 actor CoreService {
     private var core: Tundra?
+    private var pendingBackup: URL?
+    private var exportedBackup: URL?
+
+    private func storageDirectory() throws -> URL {
+        try FileManager.default.url(for: .applicationSupportDirectory,
+            in: .userDomainMask, appropriateFor: nil, create: true)
+            .appendingPathComponent("Tundra", isDirectory: true)
+    }
 
     private func engine() throws -> Tundra {
         if let core { return core }
-        let fm = FileManager.default
-        let directory = try fm.url(for: .applicationSupportDirectory,
-                                   in: .userDomainMask, appropriateFor: nil, create: true)
-            .appendingPathComponent("Tundra", isDirectory: true)
+        let directory = try storageDirectory()
         let result = try StorageVault.openActive(directory: directory)
         core = result
         return result
@@ -64,6 +69,45 @@ actor CoreService {
         try engine().importLabels(walletId: id, payload: payload, apply: apply)
     }
     func exportLabels(_ id: String) throws -> String { try engine().exportLabels(walletId: id) }
+    func inspectBackupFile(_ source: URL, password: String) throws -> BackupInfo {
+        clearBackupFiles()
+        let staged = try BackupFiles.stage(source)
+        do {
+            let info = try inspectBackup(path: staged.path, password: password)
+            pendingBackup = staged
+            return info
+        } catch {
+            try? FileManager.default.removeItem(at: staged)
+            throw BackupAccessError.unreadable
+        }
+    }
+    func prepareBackup(password: String) throws -> URL {
+        clearBackupFiles()
+        let file = try BackupFiles.exportPath()
+        do {
+            _ = try engine().exportBackup(path: file.path, password: password)
+            exportedBackup = file
+            return file
+        } catch { try? FileManager.default.removeItem(at: file); throw error }
+    }
+    func finishBackupExport(_ destination: URL?) throws {
+        guard let file = exportedBackup else { throw BackupAccessError.unverifiedSave }
+        defer { try? FileManager.default.removeItem(at: file); exportedBackup = nil }
+        if let destination { try BackupFiles.verifySaved(destination, source: file) }
+    }
+    func restoreBackup(password: String) throws {
+        guard let file = pendingBackup else { throw BackupAccessError.unreadable }
+        defer { try? FileManager.default.removeItem(at: file); pendingBackup = nil }
+        // WalletModel serializes operations and finishes network work before switching.
+        // No old handle is retained if activation reports an ambiguous filesystem error.
+        core = nil
+        core = try StorageVault.restoreActive(source: file, password: password, directory: storageDirectory())
+    }
+    func clearBackupFiles() {
+        if let pendingBackup { try? FileManager.default.removeItem(at: pendingBackup) }
+        if let exportedBackup { try? FileManager.default.removeItem(at: exportedBackup) }
+        pendingBackup = nil; exportedBackup = nil
+    }
     func readDescriptor(_ url: URL) throws -> String { try readText(url, max: 32_768) }
     func readLabels(_ url: URL) throws -> String { try readText(url, max: 2 * 1024 * 1024) }
     private func readText(_ url: URL, max: Int) throws -> String {

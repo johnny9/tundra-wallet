@@ -11,6 +11,9 @@ final class WalletModel: ObservableObject {
     @Published var received: AddressInfo?
     @Published var busy = false
     @Published var storageReady = false
+    @Published var backupPreview: BackupInfo?
+    @Published var exportedBackup: URL?
+    @Published var backupMessage: String?
     @Published var error: String?
     @Published var endpoint = ""
     @Published var sync: SyncInfo?
@@ -44,6 +47,7 @@ final class WalletModel: ObservableObject {
             do { try await operation() }
             catch is CancellationError { }
             catch is StorageAccessError { self.error = StorageAccessError.message }
+            catch let error as BackupAccessError { self.error = error.message }
             catch let error as AppError {
                 switch error { case .Operation(_, let detail): self.error = detail }
             }
@@ -244,6 +248,56 @@ final class WalletModel: ObservableObject {
         }
     }
     func cancelLabels() { pendingLabels = nil; labelsWalletID = nil; labelPreview = nil }
+    func inspectBackupFile(_ source: URL, password: String) {
+        run {
+            self.backupPreview = nil; self.backupMessage = nil; self.exportedBackup = nil
+            self.backupPreview = try await self.service.inspectBackupFile(source, password: password)
+        }
+    }
+    func prepareBackup(password: String) {
+        guard storageReady else { return }
+        run {
+            self.backupPreview = nil; self.backupMessage = nil; self.exportedBackup = nil
+            self.exportedBackup = try await self.service.prepareBackup(password: password)
+        }
+    }
+    func finishBackupExport(_ destination: URL?) {
+        run {
+            defer { self.exportedBackup = nil }
+            try await self.service.finishBackupExport(destination)
+            if destination != nil {
+                self.backupMessage = "Encrypted backup saved and read back successfully. Keep its password separately."
+            }
+        }
+    }
+    func failedBackupExport() {
+        run {
+            self.exportedBackup = nil
+            await self.service.clearBackupFiles()
+            throw BackupAccessError.unverifiedSave
+        }
+    }
+    func restoreBackup(password: String, acknowledged: Bool) {
+        guard acknowledged && backupPreview != nil else { return }
+        run {
+            self.storageReady = false; self.wallets = []; self.selectedID = nil
+            self.coins = []; self.activity = []; self.drafts = []; self.selectedCoins = []
+            self.received = nil; self.closeReview(); self.cancelImport(); self.cancelLabels()
+            self.outputSource = nil; self.sourceOutpoint = nil; self.exportedPSBT = nil; self.exportedLabels = nil
+            self.endpoint = ""; self.sync = nil; self.backupPreview = nil; self.exportedBackup = nil; self.backupMessage = nil
+            try await self.service.restoreBackup(password: password)
+            try await self.refresh()
+            self.storageReady = true
+            self.backupMessage = "Backup restored. Balances are unknown until you sync. Saved payments require fresh review."
+        }
+    }
+    func cancelBackup() {
+        guard !busy else { return }
+        run {
+            await self.service.clearBackupFiles()
+            self.backupPreview = nil; self.exportedBackup = nil; self.backupMessage = nil
+        }
+    }
     func exportLabels() {
         run {
             guard let id = self.selectedID else { return }
