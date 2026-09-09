@@ -6,6 +6,25 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
+The [restore run at 03d3732](https://github.com/johnny9/tundra-wallet/actions/runs/34307207286)
+is **fully green**. Android passes **8 JVM tests, all 11 instrumentation tests and cold
+restart**, without launcher ANR recovery. iOS passes builds, **6 host FFI checks and all
+10 runtime tests**. Both normal apps open protected storage, retain payment/receive state
+across restart, and execute the backup restore assertions. Apple CommonCrypto successfully
+restores the Linux/OpenSSL fixture. Rust, all three sanitizer targets and audit pass too.
+See [`backup-restore-native-passing-checks.json`](../validation/backup-restore-native-passing-checks.json).
+
+Atomic store selection at `19b8152` passes **186 Rust tests including real keyless regtest**,
+**26 offline checks**, formatting, strict Clippy and both binding generators. Four actual
+process-kill boundaries preserve a complete old or new selected store. Missing/corrupt
+selectors fail closed; explicit restore can establish a new selection without deleting the
+old data. Native key retention for restored generations (`9cc8500`) and explicit recovered
+submission review (`dacfcae`) are authored and await the next CI run. Native backup document
+exchange and the positive recovery-review UI scenario remain open. See
+[`store-selection-checks.json`](../validation/store-selection-checks.json).
+
+## Preceding restore and protected-startup checkpoints
+
 Encrypted backup/restore at `de6b619` passes **179 Rust tests including real keyless
 regtest**, **26 offline checks**, formatting, strict Clippy and both binding generators.
 Restore verifies a private encrypted copy, retains the source, migrates the pinned schema-7

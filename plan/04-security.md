@@ -32,7 +32,7 @@
 
 Native startup now requests SQLCipher storage through the tested platform key vaults and
 upgrades legacy plaintext only after durably retaining its key. The isolated vault tests pass;
-the newly adopted normal startup/restart path still awaits CI. Android uses `noBackupFilesDir`,
+the normal protected startup/restart path passes on both virtual platforms. Android uses `noBackupFilesDir`,
 disables Android backup and sets FLAG_SECURE. iOS excludes the support directory from backup
 and requests complete file protection. This is not an independently audited metadata design;
 physical lock/power-loss qualification and restore remain open. iOS screenshot prevention

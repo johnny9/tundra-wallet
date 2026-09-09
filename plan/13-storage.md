@@ -5,8 +5,8 @@
 `Core::open_protected` and the typed UniFFI constructor accept a 32-byte database encryption
 key. These are storage keys, never Bitcoin signing keys. Native platforms own their
 generation, wrapping and retention. Both key vaults pass isolated platform tests; `322bf83`
-now connects them to normal app startup and explicit plaintext upgrade. That app startup
-and restart gate is pending. Legacy `open` remains for test fixtures and migration checks.
+connects them to normal app startup and explicit plaintext upgrade. Protected startup
+and all payment/restart flows now pass on both virtual platforms at `03d3732`. Legacy `open` remains for test fixtures and migration checks.
 
 The [pinned SQLCipher build](../crates/tundra-sqlcipher/README.md) supplies page and WAL
 encryption with authenticated pages. Every connection checks the linked implementation;
@@ -88,7 +88,7 @@ the protected core opens, and refuse lost/corrupt key material or a missing DB a
 marker is set. Existing empty database files are still refused, including during interrupted
 setup. Both are now connected to normal startup in source; the app shows a persistent
 unavailable/retry state until protected open and the first wallet read succeed. It cannot
-offer a fresh-wallet flow after a storage failure. The new startup tests await CI.
+offer a fresh-wallet flow after a storage failure. The startup tests and complete payment/restart scenarios pass at `03d3732`.
 
 Android uses `setUnlockedDeviceRequired(true)` on API 35+, following Google's documented
 API 31–34 bugs; older targets use credential-encrypted app storage and an explicit keyguard
@@ -99,9 +99,9 @@ and [Apple's Keychain accessibility](https://developer.apple.com/documentation/s
 
 - Run protected normal startup, all payment modes and restart after adopting the tested
   vaults. Physical device interruption and lock qualification remain separate.
-- Encrypted export/inspection now pass core tests; execute the new native provider checks.
-  Implement restore and its suspended approvals/uncertain-input holds before exposing
-  backup/recovery UX. See [14-backup.md](14-backup.md).
+- Encrypted export/inspection/restore and native provider checks pass. Atomic generation
+  selection passes core tests; native generation keys and explicit recovery review await
+  CI. Complete document exchange and recovery UX; see [14-backup.md](14-backup.md).
 - Native startup/restart/lock behavior with protected storage, accessibility and recovery UX.
 - Dependency notice packaging, reproducible native builds and independent security review.
 
@@ -111,4 +111,4 @@ protection until the corresponding native and recovery gates pass.
 The historical native failures above are retained in the validation report. The subsequent
 run at `d441d6c` passes both platform vaults: Android uses supported `fstat`/`S_ISDIR` before
 directory fsync; iOS Keychain access succeeds with app-scoped entitlements and ad hoc
-simulator signing. Normal protected startup at `322bf83` is the next executed gate.
+simulator signing. Normal protected startup, all payment modes and restart pass at `03d3732`.

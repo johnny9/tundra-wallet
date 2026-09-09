@@ -59,24 +59,37 @@ generators. No Bitcoin signing key is generated or imported. See
 [restore evidence](../validation/backup-restore-checks.json).
 
 Kotlin/Swift host and mobile export/inspection tests pass, including the pinned Linux/OpenSSL
-fixture read on Apple CommonCrypto. Native restore assertions are authored and await CI.
-Normal iOS protected startup and payment/restart pass; Android's full scenario needs its
-remaining test-only plaintext reads changed to the vault. See
-[native startup evidence](../validation/protected-startup-checks.json).
+fixture read on Apple CommonCrypto. Native restore assertions, normal protected startup and all payment/restart flows pass
+on both virtual platforms at `03d3732`. See
+[native restore evidence](../validation/backup-restore-native-passing-checks.json).
 
-## Native recovery still to implement
+## Active store selection and native recovery
 
-Do not expose export as a recoverable backup product until native document exchange and
-restore pass. Restore must use a new protected generation with a durably retained storage
-key. Active-store selection must switch atomically and retain the old protected data if
-interrupted, including when its native key is unavailable. Lost or malformed selectors must
-not silently create an empty wallet. Active network work must finish before switching.
+The core resolves a bounded, metadata-free selector in app-private storage. An explicit
+restore holds an exclusive selection lock, records the existing default before allocating
+a unique candidate, and keeps every old/candidate directory. Only a successful restore can
+activate. Activation reopens the installed protected database, syncs it and its directory,
+then atomically replaces the selector and syncs the parent. Errors after replacement may
+mean the new selection won: native callers must reopen selection rather than continue an
+old core handle. Missing/corrupt selectors and absent/aliased generations fail closed.
+An explicit successful restore can replace a missing or malformed regular selector.
 
-Native recovery must show suspended reviews and make resumption an explicit fresh review.
-An old backup cannot know receive addresses issued after it was made. A new scan cannot
-discover previously issued but unused addresses; recovery UX must explain that limit instead
-of promising no address reuse. Hardware receive/policy verification remains a separate gate.
+Android and iOS vault methods retain a new generation's storage key before restoration and
+mark it initialized before activation. The selected generation must have both an existing
+protected database and initialized key record; opening it cannot create either. Native apps
+serialize wallet operations and must finish active work and release the old core before
+switching. Arbitrary concurrent app-data writers are unsupported. The selector contains no
+wallet metadata and is not an anti-rollback mechanism: a privileged attacker replaying old
+app data remains outside the storage freshness guarantee.
 
-Wrong passwords, corrupt/unsupported backups, disk faults, interruption at installation and
-selection boundaries, lost native keys and active network operations need native coverage
-before exposing restore. M7 remains incomplete.
+Seven selection tests pass, including injected faults and four actual process-kill
+boundaries. The complete gate now passes 186 Rust tests, 26 offline checks and both bindings.
+Native lost-key/selector/generation tests and explicit submission recovery controls are
+authored and await CI. See [selection evidence](../validation/store-selection-checks.json).
+
+Native document exchange and the positive recovery-review UI scenario remain to implement
+and validate before exposing backup as a recoverable product. Password confirmation,
+provider partial-write handling and interrupted active operations need coverage. Recovery
+must explain that an old backup cannot know receive addresses issued after it was made:
+a new scan cannot discover previously issued but unused addresses. Hardware receive/policy
+verification remains separate. M7 remains incomplete.

@@ -1,0 +1,49 @@
+{
+  "recorded_at": "2026-09-09T03:44:16.255184+00:00",
+  "source": "03d3732195ee5f388f325c09fde86fb9010affff",
+  "run_id": 34307207286,
+  "run_url": "https://github.com/johnny9/tundra-wallet/actions/runs/34307207286",
+  "conclusion": "success",
+  "android": {
+    "jvm_passed": 8,
+    "instrumentation_passed": 11,
+    "failures": 0,
+    "cold_restart": "passed",
+    "launcher_anr_recovery": "not observed",
+    "checks": [
+      "Protected normal startup and all payment modes",
+      "Keystore reopen/migration and lost/corrupt keys",
+      "Public portable backup inspection/export/restore through actual Android FFI",
+      "Restored balance unknown and receive index/label retained"
+    ]
+  },
+  "ios": {
+    "host_ffi_passed": 6,
+    "runtime_passed": 10,
+    "failures": 0,
+    "checks": [
+      "Normal Keychain protected startup",
+      "All payment modes and process restart",
+      "CommonCrypto reads/restores Linux OpenSSL backup and exports its own snapshot",
+      "Isolated Keychain reopen/migration and lost/corrupt keys"
+    ]
+  },
+  "rust": "179 tests including real keyless regtest; 26 offline checks; fmt/strict Clippy/bindings passed",
+  "parser_and_audit_job": "passed",
+  "pending": [
+    "New generation switching and recovery review UI",
+    "Native backup document exchange",
+    "Positive signed native submission/provenance scenario",
+    "Physical hardware qualification"
+  ],
+  "logs": [
+    {
+      "path": "build/backup-restore-android-passing.log",
+      "sha256": "dac851161fdb0d33b02c4ec6ece41d2dc46166b4f28036fc1dbce800dc2334fc"
+    },
+    {
+      "path": "build/backup-restore-ios-passing.log",
+      "sha256": "e57e96defca2b550c406b81bfdb6234208be8bccf4126ad47c3fcd4d728c136c"
+    }
+  ]
+}

@@ -16,7 +16,7 @@ approval system, or cloud account.
 
 - Source: descriptor-first watch-only engine, metadata, unsigned-draft core, UniFFI API,
   Android native import shell, iOS native starter, tests and CI.
-- Verified: 179 Rust tests including real regtest, 26 offline checks, parser fuzzing/audit,
+- Verified: 186 Rust tests including real regtest, 26 offline checks, parser fuzzing/audit,
   Android debug APK and iOS simulator builds, host FFI smoke tests, all four payment modes on both virtual platforms and initial process-restart checks.
   See [VALIDATION.md](VALIDATION.md) for the exact results and remaining gates.
 - Added: bounded opt-in Esplora scans, cancellation, cached timestamps, coinbase maturity,
@@ -33,10 +33,10 @@ approval system, or cloud account.
   reorg and migration tests pass; native coin-detail presentation awaits validation.
 - Added: pinned SQLCipher, protected Rust storage and atomic plaintext migration with
   process-kill tests; both native vaults pass platform key-retention tests. Protected
-  normal startup passes on iOS; Android startup passes but its payment test needs a vault-aware read fix.
+  normal startup and all payment/restart flows pass on both virtual platforms.
 - Added: encrypted backup export, inspection and protected restore with suspended approvals
-  and durable recovery holds. Rust checks and native export/provider checks pass; native
-  restore assertions, store switching and backup/recovery UX remain.
+  and durable recovery holds. Native restore/provider checks pass. Atomic store selection
+  passes Rust tests; native generation keys and recovery review await CI, and document UX remains.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Not performed locally: Android build or Xcode build.
 - **No real-funds use. No supported hardware devices yet.**

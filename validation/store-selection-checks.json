@@ -1,0 +1,46 @@
+{
+  "recorded_at": "2026-09-09T03:44:16.255184+00:00",
+  "source": "dacfcae8f3390274fb56796b24be1281c371d87c",
+  "core_source": "19b8152",
+  "native_vault_source": "9cc8500",
+  "native_review_source": "dacfcae",
+  "rust": {
+    "core_unit_passed": 178,
+    "ignored_core_helpers": 6,
+    "crash_integration_passed": 2,
+    "http_integration_passed": 5,
+    "separately_executed_keyless_regtest_passed": 1,
+    "total_passed": 186
+  },
+  "offline_passed": 26,
+  "fmt_and_strict_clippy": "passed",
+  "bindings": "Both languages generated from compiled API",
+  "selection_checks": [
+    "Explicit successful restore required before activation",
+    "Old/candidate stores retained after errors and cancellation",
+    "Missing/corrupt selector and missing/symlinked generation fail closed",
+    "New restore can recover a missing/corrupt regular selector",
+    "Exclusive attempt lock; no simultaneous selection/restore",
+    "Injected errors and actual kills at four boundaries leave complete old or new store"
+  ],
+  "native": "Generation retention and lost-key/selector tests authored; CI pending",
+  "limitations": [
+    "Selector is app-private metadata-free plaintext, not an anti-rollback mechanism",
+    "Native apps serialize operations and release the old core before switching; arbitrary concurrent writers unsupported",
+    "Native document exchange and positive recovery review flow still open"
+  ],
+  "logs": [
+    {
+      "path": "build/store-selection-final.log",
+      "sha256": "8e67d0f54120e72ac3e5ad6d64d6697e5d3106262b6b43c8688557998e05bbe6"
+    },
+    {
+      "path": "build/store-selection-regtest.log",
+      "sha256": "e192925be535e9a4422dcc0245362463d26eaddf14f4cee2857bec34e995cce9"
+    },
+    {
+      "path": "build/store-selection-bindings.log",
+      "sha256": "1c0621d09e64d35b935c16706ddfe90ca183d0e3f99c027e228044f8f8c272f7"
+    }
+  ]
+}
