@@ -6,31 +6,42 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
-The [run at dd562f9](https://github.com/johnny9/tundra-wallet/actions/runs/34315184796)
+The [run at 5177836](https://github.com/johnny9/tundra-wallet/actions/runs/34316621577)
 passes Rust (**189 tests / 29 offline**), parser/audit, Cargo notice regeneration and both
-native builds. Android passes **10 JVM / all 15 instrumentation tests** and the cold
-restart check. Its real backup save, readback, import and reviewed restore pass, with
-**no launcher ANR recovery used**.
+native builds. Android passes **10 JVM / all 16 instrumentation tests**, including the new
+published-file signature counters and actual finalization control. Its system backup
+round-trip and cold restart pass, with **no launcher recovery used**.
 
 iOS passes **6 host FFI / all 13 hosted runtime tests**, including published signatures,
-Keychain restore, explicit recovery/submission and provenance. The UI passes all payment
-modes, restart, actual Files export/readback and Restore-mode selection. It then fails
-looking for the exported filename: the public recording shows Files retained the random
-staging name. Both wrapper filename properties are now set to the intended backup name;
-this correction and complete system restore/restart await the next native run.
-See [`backup-roundtrip-platform-checks.json`](../validation/backup-roundtrip-platform-checks.json).
+Keychain restore, explicit recovery/submission and provenance. Its UI confirms retained
+coin filters across tab switches, then fails because Receive remains discoverable while
+Activity is hidden. The new explicit accessibility container awaits validation. This run
+does not reach the backup filename correction or repeat every payment mode.
+See [`signing-screen-platform-checks.json`](../validation/signing-screen-platform-checks.json).
 
-The new Android positive signing/finalization screen test and iOS independent tab views
-are committed but not yet compiled or executed. Their offline checks pass. Tab-filter
-retention assertions do not establish exact long-list scroll retention or accessibility
-qualification. The manual Gradle lock/checksum collection workflow is also authored;
-its generated review artifacts and normal-build enforcement remain pending.
+Both native coin lists now have explicit Select mode, a combined filter/sort control,
+selected count/amount and More for bulk actions. The updated tests check that selection
+does not move the tabs. This source passes offline checks; native compilation and runtime
+are pending. Exact long-list scroll restoration, broad accessibility and layout qualification
+remain open.
 
-An additional Android recovery screen scenario is authored with an independent local
-published-signature server: disabled unsynced review, explicit resumption without network
-submission, separate privacy/retry confirmation, observed output provenance and retained
-label edits. It invokes the real wallet UI and model, with protected restore as test setup;
-it does not replace the separate system backup picker test. Native execution is pending.
+The Android recovery screen scenario is also authored: disabled unsynced review, explicit
+resumption without submission, separate privacy/retry confirmation, observed input history
+and retained label edits. It uses the real UI/model and an independent public fixture server.
+Protected restore is setup here; the passing backup picker test covers that separate flow.
+Native execution remains pending.
+
+The first Gradle review collection failed on Android self-project artifact variants. Its
+complete-graph/strict-external-artifact correction passes a local Gradle 8.13 fixture for
+exact lock/checksum output and missing-dependency refusal. The corrected Android collection
+and normal-build enforcement remain pending. See [collector evidence](../validation/gradle-review-checks.json).
+
+The [preceding run at dd562f9](https://github.com/johnny9/tundra-wallet/actions/runs/34315184796)
+passes all Android backup steps and Apple Files export/readback. The Apple restore-mode
+selector works; import then fails because Files retained the random staging filename.
+The correction now sets both wrapper filename properties to the intended backup name.
+Complete system restore/restart is still unverified. See
+[`backup-roundtrip-platform-checks.json`](../validation/backup-roundtrip-platform-checks.json).
 
 ## Earlier document and fixture checkpoints
 

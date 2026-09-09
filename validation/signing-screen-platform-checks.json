@@ -1,0 +1,46 @@
+{
+  "recorded_at": "2026-09-09T06:08:09.357631+00:00",
+  "run_id": 34316621577,
+  "source": "517783655fdf2ad4966d50268b86c8e0a8f0f65b",
+  "conclusion": "failure",
+  "rust": "189 tests, 29 offline, formatting/Clippy and both bindings pass",
+  "parser_audit_notice_inventory": "passed",
+  "android": {
+    "build": "passed",
+    "jvm_passed": 10,
+    "instrumentation_passed": 16,
+    "instrumentation_failed": 0,
+    "published_file_signature_counters_and_finalize_controls": "passed",
+    "backup_document_roundtrip": "passed",
+    "cold_restart": "passed",
+    "launcher_anr_recovery_used": false
+  },
+  "ios": {
+    "app_build": "passed",
+    "host_ffi_passed": 6,
+    "hosted_runtime_passed": 13,
+    "ui_failed": 1,
+    "tab_filter_retention": "passed",
+    "failure": "Receive remained discoverable while Activity was hidden; inactive-tab accessibility assertion failed",
+    "backup_filename_correction": "not reached in this run"
+  },
+  "pending_native_changes": [
+    "Explicit iOS Activity accessibility container",
+    "Android recovery/resubmission/provenance screen scenario with isolated server",
+    "Both platforms: explicit Select mode, one filter/sort menu, selected amount and More actions; tests check fixed tabs"
+  ],
+  "logs": [
+    {
+      "path": "build/signing-screen-android.log",
+      "sha256": "e9559223dd90c27183f8c9b30902d81cf76770497670b83d9defca1b606b409d"
+    },
+    {
+      "path": "build/signing-screen-ios.log",
+      "sha256": "c3f5eeb8084d65761b99636bafe2fd84074570f08a86015be2e7b6938bc6d509"
+    },
+    {
+      "path": "build/coin-controls-final-offline.log",
+      "sha256": "669e094388863736f1acc29016de2227b46e917ddc826ae54a55eede3985cbee"
+    }
+  ]
+}
