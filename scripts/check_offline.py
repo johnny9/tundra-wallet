@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import re
@@ -10,6 +11,7 @@ import shutil
 import sqlite3
 import subprocess
 import time
+import tempfile
 import tomllib
 import unittest
 
@@ -141,6 +143,36 @@ class SchemaChecks(unittest.TestCase):
 
 
 class FixtureAndSourceChecks(unittest.TestCase):
+    def test_android_locks_and_checksum_policy_reject_missing_coverage_and_bypasses(self):
+        spec = importlib.util.spec_from_file_location("android_dependencies", ROOT / "scripts/check-android-dependencies.py")
+        checker = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(checker)
+        original = ROOT / "apps/android"
+        report = checker.check(original)
+        self.assertGreater(report["locked_components"], 0)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for relative in (*checker.LOCKS, "gradle/verification-metadata.xml"):
+                destination = root / relative
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(original / relative, destination)
+            metadata = root / "gradle/verification-metadata.xml"
+            valid = metadata.read_text()
+            for invalid in (
+                valid.replace("<verify-metadata>true", "<verify-metadata>false"),
+                valid.replace("</configuration>", "<trusted-artifacts/></configuration>"),
+                valid.replace('<sha256 value="', '<sha256 value="bad', 1),
+                re.sub(r'(<component[^>]*version=")[^"]+', r'\g<1>1.0-SNAPSHOT', valid, count=1),
+            ):
+                metadata.write_text(invalid)
+                with self.assertRaises(ValueError):
+                    checker.check(root)
+            metadata.write_text(valid)
+            lock = root / "app/gradle.lockfile"
+            lock.write_text(lock.read_text() + "dev.tundra.test:unreviewed:1.0=debugRuntimeClasspath\n")
+            with self.assertRaises(ValueError):
+                checker.check(root)
+
     def test_checksum_known_example(self):
         self.assertEqual(descriptor_checksum("raw(deadbeef)"), "89f8spxm")
     def test_public_fixture_checksums(self):

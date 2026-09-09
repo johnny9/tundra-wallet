@@ -89,6 +89,8 @@ For the subset that can run without Rust, use `python3 scripts/check_offline.py`
 
 Use JDK 17+, Android SDK 36, build-tools 36.0.0 and NDK 27.2.12479018.
 The committed wrapper supplies Gradle 8.13 and verifies its distribution checksum.
+Reviewed Gradle locks and SHA-256 metadata are required; missing files or disabled verification
+fail the build. See the build plan for intentional dependency updates.
 For local runtime checks using CI-built APKs, see [Waydroid validation](plan/07-waydroid.md).
 The scripts do not silently accept SDK licenses or download executables with `curl | sh`.
 

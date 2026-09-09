@@ -1,4 +1,4 @@
-// Explicit review-only bootstrap. Normal builds never run this init script.
+// Explicit bootstrap and read-only validation of the complete dependency graph.
 // See Gradle's dependency_locking and dependency_verification user guides.
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier
 import org.gradle.api.artifacts.result.UnresolvedDependencyResult
@@ -12,31 +12,37 @@ gradle.beforeProject { project ->
 
 gradle.projectsEvaluated {
     gradle.rootProject.allprojects { project ->
-        project.tasks.register('resolveDependencyReview') {
-            notCompatibleWithConfigurationCache('Explicitly resolves configurations for dependency review')
-            doFirst {
-                if (!gradle.startParameter.writeDependencyLocks) {
-                    throw new GradleException('Dependency review requires --write-locks')
-                }
-            }
-            doLast {
-                def resolveModules = { configuration ->
-                    logger.lifecycle("Reviewing dependency configuration ${project.path}:${configuration.name}")
-                    configuration.incoming.resolutionResult.allDependencies.each { dependency ->
-                        if (dependency instanceof UnresolvedDependencyResult) {
-                            throw new GradleException('Dependency graph could not be resolved', dependency.failure)
-                        }
+        ['resolveDependencyReview', 'verifyDependencyReview'].each { taskName ->
+            project.tasks.register(taskName) {
+                notCompatibleWithConfigurationCache('Explicitly resolves configurations for dependency review')
+                doFirst {
+                    if (taskName == 'resolveDependencyReview' && !gradle.startParameter.writeDependencyLocks) {
+                        throw new GradleException('Dependency review requires --write-locks')
                     }
-                    // Android test configurations depend on this project's own
-                    // unbuilt variants. Lock their complete graph, but collect only
-                    // external module artifacts; normal CI builds project outputs.
-                    // This view is strict: external artifact failures still fail.
-                    configuration.incoming.artifactView {
-                        componentFilter { it instanceof ModuleComponentIdentifier }
-                    }.files.files
+                    if (taskName == 'verifyDependencyReview' && (gradle.startParameter.writeDependencyLocks ||
+                            !gradle.startParameter.writeDependencyVerifications.empty)) {
+                        throw new GradleException('Dependency verification must not write locks or checksums')
+                    }
                 }
-                project.configurations.findAll { it.canBeResolved }.each(resolveModules)
-                project.buildscript.configurations.findAll { it.canBeResolved }.each(resolveModules)
+                doLast {
+                    def resolveModules = { configuration ->
+                        logger.lifecycle("Reviewing dependency configuration ${project.path}:${configuration.name}")
+                        configuration.incoming.resolutionResult.allDependencies.each { dependency ->
+                            if (dependency instanceof UnresolvedDependencyResult) {
+                                throw new GradleException('Dependency graph could not be resolved', dependency.failure)
+                            }
+                        }
+                        // Android test configurations depend on this project's own
+                        // unbuilt variants. Lock their complete graph, but collect only
+                        // external module artifacts; normal CI builds project outputs.
+                        // This view is strict: external artifact failures still fail.
+                        configuration.incoming.artifactView {
+                            componentFilter { it instanceof ModuleComponentIdentifier }
+                        }.files.files
+                    }
+                    project.configurations.findAll { it.canBeResolved }.each(resolveModules)
+                    project.buildscript.configurations.findAll { it.canBeResolved }.each(resolveModules)
+                }
             }
         }
     }

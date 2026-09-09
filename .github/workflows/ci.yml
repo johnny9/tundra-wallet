@@ -116,7 +116,13 @@ jobs:
       - run: cargo install cargo-ndk --version 4.1.2 --locked
       - run: ./scripts/build-android.sh
       - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
+      - name: Verify all locked Android dependency configurations
+        run: >-
+          ./apps/android/gradlew --no-daemon -p apps/android
+          -I "$GITHUB_WORKSPACE/scripts/gradle-dependency-review.init.gradle"
+          verifyDependencyReview :app:verifyDependencyReview
       - run: ./apps/android/gradlew --no-daemon -p apps/android :app:assembleDebug :app:testDebugUnitTest
+      - run: python3 scripts/check-gradle-enforcement.py
       - name: Enable KVM for the hosted Android emulator
         run: sudo chmod 666 /dev/kvm
       - run: ./scripts/install-bitcoin-ci.sh
@@ -166,6 +172,7 @@ jobs:
             build/android-public-test-diagnostics/
             build/published-native-server.log
             build/published-screen-server.log
+            build/gradle-enforcement/*.log
       - uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         if: ${{ !cancelled() && steps.rust-cache.outputs.cache-hit != 'true' && steps.rust-cache.outputs.cache-primary-key != '' }}
         with:

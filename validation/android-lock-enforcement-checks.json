@@ -1,0 +1,114 @@
+{
+  "recorded_at": "2026-09-09T07:11:41.646429+00:00",
+  "collector_run": 34321570870,
+  "collector_source": "457049257a7773d80f447f4ecc57e3e15311edeb",
+  "collector_conclusion": "success",
+  "collector_artifact": 10092079764,
+  "current_inventory": {
+    "locked_components": 440,
+    "verified_components": 584,
+    "verified_artifacts": 1006,
+    "nonempty_configurations": {
+      "buildscript-gradle.lockfile": 1,
+      "app/buildscript-gradle.lockfile": 0,
+      "app/gradle.lockfile": 39
+    }
+  },
+  "local_gradle": "8.13 / JDK 17",
+  "real_android_help": "passed with strict locks/checksums",
+  "isolated_real_gradle": [
+    "baseline passed",
+    "missing lock refused",
+    "disabled verification refused",
+    "altered Android plugin checksum refused"
+  ],
+  "offline_passed": 30,
+  "all_configurations": "blocked locally at androidJdkImage because Android SDK is absent; earlier missing metadata refusals preserved",
+  "native_locked_build": "not run yet",
+  "metadata_additions": [
+    {
+      "url": "https://repo.maven.apache.org/maven2/com/google/guava/guava-parent/33.3.1-jre/guava-parent-33.3.1-jre.pom",
+      "sha256": "55441db27e8869dfefe053059bdf478bdc7e95585642bf391f0023345fd56287",
+      "cache_bytes_match": true
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/junit/junit-bom/5.10.2/junit-bom-5.10.2.module",
+      "sha256": "de23b114b3e4119a8fe6eb17bed5a3852816698bace67071579d6d927ebb080a",
+      "cache_bytes_match": true
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/junit/junit-bom/5.9.2/junit-bom-5.9.2.module",
+      "sha256": "ab137ba5a8e32c9b066bf9126a1c76dd5614b724ba5c0b02549772b5e9f4cf1f",
+      "cache_bytes_match": true
+    }
+  ],
+  "trust_limit": "Checksums pin reviewed downloads; no publisher-signature authentication or completed license review is claimed",
+  "reviewed_files": [
+    {
+      "path": "apps/android/buildscript-gradle.lockfile",
+      "sha256": "acc9d42408ee0e8666f51fbf735001c75f337675da1613750c3da174a2fd3335"
+    },
+    {
+      "path": "apps/android/app/buildscript-gradle.lockfile",
+      "sha256": "e4a6c3491a87c07fba697ac1da0e01cc29dde400f5d3a08031a0c7b46961f9f9"
+    },
+    {
+      "path": "apps/android/app/gradle.lockfile",
+      "sha256": "08fea39a805394744ad8e21d552601b3ca321f4c6f417eb14c7e797c6c27d516"
+    },
+    {
+      "path": "apps/android/gradle/verification-metadata.xml",
+      "sha256": "a05b6128626e642d99cbf865cfd3f9bdb3eee4a137a662e8736a08fa1e1caa7e"
+    }
+  ],
+  "logs": [
+    {
+      "path": "build/gradle-dependency-review-fourth.log",
+      "sha256": "77ea6d463e71b526f12552c9f4b317667839e5b12ceb055ab630f507b6a39a20"
+    },
+    {
+      "path": "build/gradle-dependency-review-fourth.zip",
+      "sha256": "bf9d89db7aacd717bb054b74a45f0617824cc782e76d2840a54e58e76b957d7e"
+    },
+    {
+      "path": "build/android-locked-help-first.log",
+      "sha256": "5c360f6624f3f8f7397eb0b95305a526f63841ff4f72bc0412e61ae04fe0b517"
+    },
+    {
+      "path": "build/android-locked-help-second.log",
+      "sha256": "0656c919d4f0b7f8981c8c9f8c5d863a139ed4305315d02c650267568f28f70c"
+    },
+    {
+      "path": "build/android-locked-all-configurations-first.log",
+      "sha256": "a772777edc3212f70350a1568dfcfdb4161d644a95fe9efc2f6346b751883b8d"
+    },
+    {
+      "path": "build/android-locked-all-configurations-second.log",
+      "sha256": "63d5391ec7664f4ac24b07316f011a7fefb1f4e20b271c7d0809cd17ca10eaf1"
+    },
+    {
+      "path": "build/gradle-enforcement-first.log",
+      "sha256": "c75746d049b00704606966eba56d27de3ddef8213cc11c1916218c02a2ae96f1"
+    },
+    {
+      "path": "build/android-locks-offline-first.log",
+      "sha256": "b78fb7c3a123f226df95d50e083bfdf3c4b7c512f2ef01c0e17b17cfef7c6c8f"
+    },
+    {
+      "path": "build/gradle-enforcement/baseline.log",
+      "sha256": "4a59f8e24d49ca056251c55d5f1f49221887e3912230d43f30edc7c5e10dfebc"
+    },
+    {
+      "path": "build/gradle-enforcement/missing-lock.log",
+      "sha256": "c33de4d46a8be4dbdbd0d609e8f0f5c235eb8c49dbf6c496efaf47cae79e22e7"
+    },
+    {
+      "path": "build/gradle-enforcement/verification-disabled.log",
+      "sha256": "5fb1f5125f834d86f7e53889991733c7d70d49a9bc17d0d4ecc5c164fc163072"
+    },
+    {
+      "path": "build/gradle-enforcement/checksum-mismatch.log",
+      "sha256": "b15fc1ee07350a6ecf5d3b8c7e8d1579db4badb7d673a2be58219997769ccb12"
+    }
+  ]
+}

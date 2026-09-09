@@ -41,21 +41,35 @@ Formatting and Clippy warnings are required checks. Workflow actions are now pin
 exact commit SHAs already executed in run 34311969023; `.github/action-pins.json` records
 upstream versions and revisions, and an offline guard rejects unreviewed/floating references.
 The Rust action revision explicitly selects 1.93.1. This prevents tag movement, not malicious
-behavior inside an action. The Gradle wrapper is pinned, but Gradle dependencies, SDK
+behavior inside an action. The Gradle wrapper and dependency baseline are pinned. SDK
 downloads, cargo-ndk installation and the Xcode host still need reproducibility review.
 
 The manually dispatched `Collect Android dependency review` workflow prepares candidate
 Gradle locks (including plugin classpaths) and SHA-256 verification metadata on an Android
-SDK host. It resolves every resolvable configuration's graph and external module artifacts,
-failing on dependency errors. Application outputs are built by normal native CI. This
-collection is not a native build or a trust decision: inspect the downloaded artifacts,
-review their provenance, then commit the files and enable normal-build enforcement.
-It never commits or pushes generated files. See Gradle's [locking guide](https://docs.gradle.org/current/userguide/dependency_locking.html)
+SDK host. It resolves every configuration's graph and external module artifacts, failing
+on dependency errors, and never commits or pushes generated files. The fourth collection
+at `4570492` passes. Earlier failures and corrections remain in the validation evidence.
+
+Normal builds now require committed locks and strict checksum verification. The baseline
+locks **440 distinct components** across plugin and application configurations. Verification
+covers **584 metadata components / 1,006 artifacts**, including parent/BOM metadata not itself
+in a resolved graph. Three metadata artifacts missing from the CI bootstrap were separately
+fetched from Maven Central, identity-checked and byte-compared with the local cache; the
+pinned Compose BOM was independently compared with Google Maven. These are checksums of the
+reviewed downloads, not publisher signature authentication or a completed license review.
+
+Local Gradle 8.13 configures the real Android project successfully. Isolated copies of the
+same build configuration pass a baseline and refuse missing locks, disabled verification and
+an altered plugin checksum. The offline checker also rejects mutable versions, unreviewed
+components and broad verification exceptions. The local all-configuration check reaches the
+missing Android SDK and cannot complete; normal native CI now runs that read-only gate before
+building, then runs the same refusal checks. Its first full locked native run is pending.
+See [exact lock/enforcement evidence](../validation/android-lock-enforcement-checks.json).
+
+For an intentional update, dispatch the collector, inspect its artifacts and version changes,
+review exact additional checksums, then commit the updated files. `verifyDependencyReview`
+refuses lock/checksum-writing flags. See Gradle's [locking guide](https://docs.gradle.org/current/userguide/dependency_locking.html)
 and [verification guide](https://docs.gradle.org/current/userguide/dependency_verification.html).
-The first collection at `5177836` failed on Android's self-project artifact variants;
-the graph/strict-module-artifact correction is authored and awaits its next Android run.
-The corrected script passes a local Gradle 8.13 fixture: exact module lock/checksum and
-missing-dependency refusal. See [collector evidence](../validation/gradle-review-checks.json).
 
 Both complete Cargo locks now have a deterministic declared-license/notice inventory,
 including all features and the fuzz graph. CI regenerates it from locked package metadata;
@@ -102,13 +116,3 @@ These are authoritative design/API references, not evidence that this source com
 
 No Google/Apple account, package-name ownership, App Store name, trademark clearance or
 open-source license choice is implied by the development identifiers.
-
-The second Android collection at `cc89bfc` passed the self-project artifact boundary, then
-failed on a versionless Compose tooling dependency in a plugin configuration. Configuration
-names are now reported before resolution; the complete Android lock/checksum review remains
-open. Do not treat the local collector fixture as an Android dependency qualification.
-
-The third collection identifies `debugImplementationDependenciesMetadata`: Kotlin resolves
-that scope independently, without the app's implementation BOM. Debug dependencies now
-declare the same pinned Compose BOM explicitly. All configurations remain part of the
-collection. Validation is pending.
