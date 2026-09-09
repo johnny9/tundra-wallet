@@ -1,0 +1,72 @@
+{
+  "recorded_at": "2026-09-09T06:58:01.393611+00:00",
+  "run_id": 34319248315,
+  "source": "825be01ab853b2c2fc9ee78fe7818691f4398925",
+  "conclusion": "failure",
+  "rust": "189 tests, 29 offline, formatting/Clippy and bindings pass",
+  "parser_audit_notice_inventory": "passed",
+  "android": {
+    "job_id": 102362032840,
+    "app_build": "passed",
+    "jvm_passed": 10,
+    "instrumentation_passed": 16,
+    "instrumentation_failed": 1,
+    "updated_payment_modes": "all four passed",
+    "published_signing_finalization_screen": "passed",
+    "backup_document_roundtrip": "passed",
+    "failure": "RecoveryRuntimeTest initial fixture status request rejected by Java cleartext HTTP policy, before recovery UI execution",
+    "correction": "Fixed loopback test socket with 3-second IO deadlines and 4 KiB response bound; production policy unchanged",
+    "cold_restart": "not run"
+  },
+  "ios": {
+    "job_id": 102362032885,
+    "app_and_test_host_build": "passed",
+    "fixture_boundary": "passed",
+    "host_ffi_passed": 6,
+    "hosted_runtime_passed": 12,
+    "hosted_runtime_failed": 1,
+    "runtime_failure": "Published fixture scan failed or timed out; cause unconfirmed",
+    "wallet_ui_failed": 1,
+    "wallet_failure": "Fee field Cut menu unavailable; later hidden-control/backup checks not reached",
+    "public_ui_passed": 0,
+    "public_ui_failed": 2,
+    "signing_partial": "Both signature counters, actual finalization and exact displayed txid pass; expected fee omitted locale grouping separator",
+    "recovery_partial": "Unsynced refusal, sync, explicit resume and no POST after resume pass; endpoint replacement fails before submission",
+    "corrections": "Trailing-edge keyboard replacement with exact-value guards, locale-aware stats, typed scan diagnostics and test-server backlog 64; next native run pending"
+  },
+  "gradle": {
+    "run_id": 34319247481,
+    "conclusion": "failure",
+    "configuration": ":app:debugImplementationDependenciesMetadata",
+    "failure": "Unresolved versionless androidx.compose.ui:ui-tooling",
+    "correction": "Same pinned Compose BOM explicitly included in debugImplementation; candidates not generated"
+  },
+  "local_corrections": {
+    "published_rust_integrations_passed": 2,
+    "offline_passed": 29,
+    "diff_check": "passed"
+  },
+  "waydroid": "Session restarted with existing user-local compositor; running container, IP UNKNOWN, no ADB device, no instrumentation run",
+  "logs": [
+    {
+      "path": "build/public-screen-android-first.log",
+      "sha256": "270e1dad65154584c977c5d8ba35942d2933d34b7e109c453db06b374477ef02"
+    },
+    {
+      "path": "build/public-screen-ios-first.log",
+      "sha256": "c61435cfd38cf7ecddb761c2a59323bf101660e2788d060a47359482d69a9150"
+    },
+    {
+      "path": "build/gradle-dependency-review-third.log",
+      "sha256": "86fcab728fd10a9e222799ca4ade13eae6bc4818b5fe9e9207159366f9cc47ce"
+    },
+    {
+      "path": "build/public-screen-fixture-check.log",
+      "sha256": "8ff20f58ab1e3c0bc2e38951c08a0cf1c57f30501f6c3da0151906a3186f3ebc"
+    },
+    {
+      "path": "build/public-screen-corrections-offline.log",
+      "sha256": "9a7cd30ab4097c32c11d83e6cf99b3cda05f3763982e7a19b1dd7336897280b4"
+    }
+  ]
+}

@@ -62,7 +62,8 @@ A later recheck confirmed API 33 responds through Waydroid, but no IPv4 lease or
 appeared. Both observed IPv6 link-local bridge addresses were also tried; neither established
 an ADB connection. No additional sudo operation or firewall change was performed.
 
-The September 9 recheck still reports a running session/container, `IP address: UNKNOWN`
+On September 9 at 06:37 UTC, the existing user-local session was restarted and the full UI
+request woke the frozen container. The subsequent recheck still reports a running session/container, `IP address: UNKNOWN`
 and no ADB devices. Waydroid has not executed the native validation suite. CI emulators
 and the Apple simulator remain the source of the recorded native test results.
 

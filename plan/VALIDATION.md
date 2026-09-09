@@ -6,43 +6,41 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
-The [run at cc89bfc](https://github.com/johnny9/tundra-wallet/actions/runs/34317779262)
+The [run at 825be01](https://github.com/johnny9/tundra-wallet/actions/runs/34319248315)
 passes Rust (**189 tests / 29 offline**), parser/audit, Cargo notice regeneration and both
-native app builds. Android's **10 JVM tests** pass. Instrumentation does **not run** because
-the new recovery test chains a keyboard action after a Unit-returning text replacement.
-The two calls are now separate; native recompilation is pending.
+native app builds. Android passes **10 JVM / 16 of 17 instrumentation tests**, including
+all updated payment modes, published-file signature counters/finalization and system backup
+round-trip. Its new recovery screen test stops at its first diagnostic request because Java
+cleartext HTTP is blocked. That fixed loopback-only diagnostic now uses a bounded test socket;
+the app's network policy is unchanged. Cold restart did not run after the suite failure.
 
-iOS passes **6 host FFI / all 13 hosted runtime tests**. The UI confirms explicit Select
-mode, the combined filter menu and retained filters, then still finds Receive while
-Activity is hidden. Direct button visibility/disabled modifiers and a bounded accessibility
-update wait are authored. This run does not reach every updated payment flow or the backup
-filename correction. See [exact evidence](../validation/coin-controls-platform-checks.json).
+iOS passes **6 host FFI / 12 of 13 hosted runtime tests**. The published recovery runtime
+scan fails or times out; its cause is unconfirmed. Typed scan-state diagnostics and a larger
+local fixture connection backlog are authored; production timeouts remain unchanged.
+The normal wallet UI test stops at fee-field editing, before the pending hidden-Activity
+control and backup filename checks. The two new screen tests compile: published signature
+counters and actual finalization pass before a locale-format assertion fails (`1,768` versus
+`1768`); recovery sync, explicit resumption and no submission on resume pass before an endpoint
+edit fails. Trailing-edge keyboard replacement and locale-aware assertions correct these test
+interactions; their next native execution is pending. No complete positive recovery screen
+or complete Apple system restore/restart is claimed.
+
+The new Apple test host and generated-Xcode-phase boundary check pass. Public fixtures and
+its setup entry point are excluded from the normal app. Test-only fixture delivery exercises
+the native file reader and production views, not the system PSBT picker. Exact long-list
+scroll restoration, broad accessibility, layouts and real provider/device transport remain
+open. See [exact evidence](../validation/public-screen-platform-checks.json).
+
+The third Gradle collector run identifies `debugImplementationDependenciesMetadata` as the
+configuration missing a Compose tooling version. The same pinned BOM is now explicitly added
+to `debugImplementation`; candidate collection, review and normal-build enforcement remain
+pending. The collector's local Gradle 8.13 lock/checksum and missing-dependency checks pass.
 
 The [previous run at 5177836](https://github.com/johnny9/tundra-wallet/actions/runs/34316621577)
-passes **all 16 Android instrumentation tests**, including published-file signature counters,
-actual finalization, system backup round-trip and cold restart, without launcher recovery.
-Its new Apple tab test failed at the same hidden-control assertion. See
-[preceding evidence](../validation/signing-screen-platform-checks.json).
-
-The Android recovery screen test is authored: explicit resumption without submission,
-separate privacy/retry confirmation, observed input history and retained label edits.
-A new separate `TundraTestHost` and two Apple UI tests cover corresponding published-response
-and recovery controls using the production views/model. Fixture setup and file delivery are
-test-specific; the normal app excludes that entry point and its public fixture resources.
-A generated-Xcode-phase boundary check is authored. These additions pass offline/source
-checks but await native compilation/runtime validation. Exact long-list scroll restoration,
-broad accessibility, layouts and real provider/device transport remain open.
-
-The corrected Gradle collector passes a local Gradle 8.13 fixture for exact lock/checksum
-output and missing-dependency refusal. Its second Android run finds an unresolved versionless
-Compose tooling dependency; configuration-name diagnostics are now added. Collection,
-reviewed locks/checksums and normal-build enforcement remain open.
-
-The [earlier run at dd562f9](https://github.com/johnny9/tundra-wallet/actions/runs/34315184796)
-passes all Android backup steps and Apple Files export/readback. Apple import then fails
-because Files retained the random staging filename. Both wrapper filename properties are
-now set to the intended name, but complete system restore/restart remains unverified. See
-[backup evidence](../validation/backup-roundtrip-platform-checks.json).
+passes all 16 then-existing Android instrumentation tests and cold restart without launcher
+recovery. Earlier Apple Files export/readback passed, but complete system import/restore did
+not. The wrapper filename correction has not yet been reached by a subsequent complete UI
+run. Earlier failures remain in the revision-specific evidence files.
 
 ## Earlier document and fixture checkpoints
 

@@ -22,7 +22,8 @@ approval system, or cloud account.
 - Added: bounded opt-in Esplora scans, cancellation, cached timestamps, coinbase maturity,
   reorg-safe draft invalidation, and a keyless Bitcoin Core regtest integration test.
 - Added: native search/filter/selection, payment/max/consolidation review and saved drafts;
-  explicit Select mode and grouped filter/bulk controls are authored for the next native run;
+  explicit Select mode and grouped filter/bulk controls pass Android runtime checks;
+  Apple controls remain under validation;
   decimal fee rates and atomic bulk coin metadata. Broader native qualification remains.
 - Added: bounded external PSBT validation, per-input cryptographic signature progress,
   immutable approvals and atomic signature persistence. Native file integration and both initial payment/restart UI scenarios pass; broader coverage remains.
