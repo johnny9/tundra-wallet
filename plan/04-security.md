@@ -66,3 +66,12 @@ these invariants instead of attempting a best-effort signing shortcut.
 
 An independent review and a test-only real-hardware trial are release gates. No claims of
 security, hardware compatibility or money safety are made by the existence of this source.
+
+## Explicit document exports
+
+The iOS Files integration shares only Documents/Backups and other user-managed Documents
+contents. Wallet databases, native keys and import/export staging remain in private support
+storage, excluded from automatic backup. Exported backup files use their separate password;
+users must retain a verified copy outside the app/device. Provider reads are coordinated,
+and successful export requires destination readback. Native system-picker tests are an open
+gate; see [backup recovery](14-backup.md).

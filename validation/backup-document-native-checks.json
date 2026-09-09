@@ -1,0 +1,47 @@
+{
+  "recorded_at": "2026-09-09T04:17:43.867506+00:00",
+  "source": "56ffb8966a86665497e0a67d94efe7536cc58082",
+  "run_id": 34309306089,
+  "conclusion": "failure",
+  "android": {
+    "build": "passed",
+    "jvm_passed": 10,
+    "instrumentation_passed": 12,
+    "instrumentation_failed": 1,
+    "generation_recovery": "passed, including lost key/selector and missing DB checks",
+    "file_helper_tests": "2 passed on JVM",
+    "failure": "Existing payment UI waitForPayment timed out at WalletRuntimeTest.kt:164; first log does not distinguish maximum-send from consolidation or whether busy persisted",
+    "correction": "ef1259f accounts for IME in payment viewport, clears focus on review, asserts actionable button and adds bounded timeout diagnostics",
+    "cold_restart": "not run"
+  },
+  "ios": {
+    "build": "passed",
+    "host_ffi_passed": 6,
+    "runtime_passed": 13,
+    "runtime_failed": 0,
+    "generation_recovery": "passed, including lost key/selector and missing DB checks",
+    "file_helper_tests": "2 passed",
+    "payment_modes_and_restart": "passed"
+  },
+  "rust_and_parser_audit_jobs": "passed",
+  "next_source": "8c29fba4c3674c15f754e2c23d20d97213797b36",
+  "next_gate": [
+    "Android real ViewModel/system picker save/readback/restore with isolated public wallet",
+    "iOS local Files export/import, review consent, unknown balances, suspended drafts, restart and post-backup unused-address limit",
+    "Native keyboard/file-coordination/local-export improvements"
+  ],
+  "logs": [
+    {
+      "path": "build/backup-document-android-first.log",
+      "sha256": "0580a2fd1ab231daff91af70f0ce75fab8ff1243639c96e8c6e5824ef3d7de31"
+    },
+    {
+      "path": "build/backup-document-ios-first.log",
+      "sha256": "da46a14b43031bd1952cd98625754ef25c978be741a111b6112bbe1449d5449e"
+    },
+    {
+      "path": "build/backup-picker-offline.log",
+      "sha256": "ab3caae75b4d61c2fbd8d3bbc8aa402775ceee96397b01962baeae9e0e7434d3"
+    }
+  ]
+}

@@ -103,12 +103,21 @@ regression and the complete local gate pass 187 Rust tests and 26 offline checks
 helper tests and the system document-picker/recovery flow await execution. Apple uses the
 [iOS 17 FileDocument export/cancellation API](https://developer.apple.com/documentation/swiftui/view/fileexporter(ispresented:document:contenttypes:defaultfilename:oncompletion:oncancellation:)).
 
-The first generation run built both apps and exercised restoration, but its old-store byte
-comparison included a legitimate core reopen. The corrected baseline is authored; see
-[exact native results](../validation/store-selection-native-checks.json).
+The corrected generation tests pass on both platforms at `56ffb89`. Two file helper tests
+pass on each platform; Apple passes all 13 runtime tests. Android's payment scenario timed
+out and its keyboard/diagnostic correction awaits CI. Actual system picker round-trips are
+now authored. See [native document results](../validation/backup-document-native-checks.json).
+
+Apple provider reads use NSFileCoordinator while holding security-scoped access. The Files
+integration exposes only the Documents directory; an empty Backups folder supplies a local
+export destination without an account. Core databases, native key material and staging stay
+in private support storage. Exported documents are user-managed files, and the UI advises
+retaining a verified copy outside the app/device because uninstall removes local files.
+This follows [Apple's Files integration](https://developer.apple.com/documentation/fileprovider)
+and [in-place document coordination requirements](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/LaunchServicesKeys.html).
+
 
 The recovery screens explain that an old backup cannot know receive addresses issued after
 it was made, and a scan cannot discover unused addresses. Positive native recovered-payment
 review/submission, provider interruption, physical hardware and independent security review
 remain open. M7 remains incomplete.
-

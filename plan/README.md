@@ -36,8 +36,8 @@ approval system, or cloud account.
   normal startup and all payment/restart flows pass on both virtual platforms.
 - Added: encrypted backup export, inspection and protected restore with suspended approvals
   and durable recovery holds. Native restore/provider checks pass. Atomic store selection
-  passes Rust tests; native generation tests need the recorded ciphertext-baseline correction.
-  Native document exchange and recovery review are authored and await full runtime validation.
+  passes Rust tests and native generation recovery now passes on both platforms. File
+  helpers pass; system document-picker flows and positive payment recovery review remain under validation.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Not performed locally: Android build or Xcode build.
 - **No real-funds use. No supported hardware devices yet.**

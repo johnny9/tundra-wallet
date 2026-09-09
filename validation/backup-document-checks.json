@@ -24,7 +24,7 @@
   ],
   "native_validation": "Document exchange/helper tests authored, not yet compiled or run; next CI gate",
   "api_review": "Apple contentTypes plural fileExporter cancellation overload supports iOS17; singular overload with cancellation is iOS27-only and was replaced before native compilation",
-  "waydroid": "Session/container running; IP UNKNOWN; no ADB targets at 2026-09-09 03:54 UTC; no sudo changes",
+  "waydroid": "Session/container running; IP UNKNOWN; no ADB targets at this checkpoint; no sudo changes",
   "remaining": [
     "Run native build/helper tests",
     "Exercise native system document picker/save/recovery flows",

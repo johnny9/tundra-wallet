@@ -6,6 +6,23 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
+The [document-helper run at 56ffb89](https://github.com/johnny9/tundra-wallet/actions/runs/34309306089)
+passes both builds, **10 Android JVM tests** and **13 iOS runtime tests**. Both generation
+recovery tests now pass, including lost keys/selectors and missing databases. Apple host FFI,
+all payment modes and restart pass; bounded file helpers pass on both platforms. Android
+passes **12 of 13 instrumentation tests**: its existing payment scenario times out at a
+review request. `ef1259f` accounts for the keyboard in the payment sheet and adds actionable
+button assertions plus bounded diagnostics; a keyboard cause is not yet confirmed.
+Android cold restart did not run. See
+[`backup-document-native-checks.json`](../validation/backup-document-native-checks.json).
+
+System document-picker scenarios at `8c29fba` are authored and await their first run.
+Android uses an isolated real ViewModel, Keystore and Rust core. iOS will save/import through
+Files, confirm recovery, check unknown balances/suspended drafts/restart, and exercise the
+stated limit for unused receive addresses issued after a backup. Native source also adds
+coordinated Apple provider reads, keyboard controls and a local Documents/Backups destination;
+private wallet databases and keys remain outside the shared Documents directory.
+
 Native backup document exchange at `3fc9a83` is authored: secure password/confirmation,
 bounded staging, completed ciphertext export with destination readback, reviewed restore
 and cleared old native state. Its helper tests and system picker flows await native CI.
