@@ -1,0 +1,50 @@
+{
+  "recorded_at": "2026-09-09T06:28:12.431683+00:00",
+  "run_id": 34317779262,
+  "source": "cc89bfcb0c4d4bf17eb250fe275c65d9907aecfa",
+  "conclusion": "failure",
+  "rust": "189 tests, 29 offline, formatting/Clippy and bindings pass",
+  "parser_audit_notice_inventory": "passed",
+  "android": {
+    "app_build": "passed",
+    "jvm_passed": 10,
+    "instrumentation": "not run; test compilation failed",
+    "failure": "RecoveryRuntimeTest chained performImeAction after the Unit-returning performTextReplacement",
+    "correction": "Separate native text replacement and IME calls; next compile pending"
+  },
+  "ios": {
+    "app_build": "passed",
+    "host_ffi_passed": 6,
+    "hosted_runtime_passed": 13,
+    "ui_failed": 1,
+    "explicit_select_and_retained_filter_menu": "passed before hidden-control assertion",
+    "failure": "Receive still discoverable on Coins; container-level accessibility modifier was insufficient",
+    "correction": "Apply visibility and disabled state directly to Activity buttons; allow bounded AX update time",
+    "backup_filename_correction": "not reached"
+  },
+  "gradle_collection": {
+    "run_id": 34317778986,
+    "conclusion": "failure",
+    "failure": "Unresolved versionless androidx.compose.ui:ui-tooling in a collected configuration",
+    "next_step": "Record configuration names to distinguish build inputs from plugin-created metadata configurations"
+  },
+  "new_ios_test_host": "authored; compile/runtime and generated-project boundary check pending",
+  "logs": [
+    {
+      "path": "build/coin-controls-android-first.log",
+      "sha256": "05a411e79278a79c239930abc9006bdd849a934283f53a01f82014a8896425a9"
+    },
+    {
+      "path": "build/coin-controls-ios-first.log",
+      "sha256": "9d4de3be62b0780400feef02a772e13ac2b64ad0c1bc56a62b0aca634331d9c0"
+    },
+    {
+      "path": "build/gradle-dependency-review-second.log",
+      "sha256": "29bef4fdda2fbad479862928de231f587d92e3b2980c84429f7ea8f3a08271ef"
+    },
+    {
+      "path": "build/ios-public-screen-final-offline.log",
+      "sha256": "90f3987a160e046dea8b56afd871ce436ca1b5f6f13175429ac229c3b9e0e597"
+    }
+  ]
+}

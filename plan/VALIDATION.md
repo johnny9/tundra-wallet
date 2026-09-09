@@ -6,42 +6,43 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
-The [run at 5177836](https://github.com/johnny9/tundra-wallet/actions/runs/34316621577)
+The [run at cc89bfc](https://github.com/johnny9/tundra-wallet/actions/runs/34317779262)
 passes Rust (**189 tests / 29 offline**), parser/audit, Cargo notice regeneration and both
-native builds. Android passes **10 JVM / all 16 instrumentation tests**, including the new
-published-file signature counters and actual finalization control. Its system backup
-round-trip and cold restart pass, with **no launcher recovery used**.
+native app builds. Android's **10 JVM tests** pass. Instrumentation does **not run** because
+the new recovery test chains a keyboard action after a Unit-returning text replacement.
+The two calls are now separate; native recompilation is pending.
 
-iOS passes **6 host FFI / all 13 hosted runtime tests**, including published signatures,
-Keychain restore, explicit recovery/submission and provenance. Its UI confirms retained
-coin filters across tab switches, then fails because Receive remains discoverable while
-Activity is hidden. The new explicit accessibility container awaits validation. This run
-does not reach the backup filename correction or repeat every payment mode.
-See [`signing-screen-platform-checks.json`](../validation/signing-screen-platform-checks.json).
+iOS passes **6 host FFI / all 13 hosted runtime tests**. The UI confirms explicit Select
+mode, the combined filter menu and retained filters, then still finds Receive while
+Activity is hidden. Direct button visibility/disabled modifiers and a bounded accessibility
+update wait are authored. This run does not reach every updated payment flow or the backup
+filename correction. See [exact evidence](../validation/coin-controls-platform-checks.json).
 
-Both native coin lists now have explicit Select mode, a combined filter/sort control,
-selected count/amount and More for bulk actions. The updated tests check that selection
-does not move the tabs. This source passes offline checks; native compilation and runtime
-are pending. Exact long-list scroll restoration, broad accessibility and layout qualification
-remain open.
+The [previous run at 5177836](https://github.com/johnny9/tundra-wallet/actions/runs/34316621577)
+passes **all 16 Android instrumentation tests**, including published-file signature counters,
+actual finalization, system backup round-trip and cold restart, without launcher recovery.
+Its new Apple tab test failed at the same hidden-control assertion. See
+[preceding evidence](../validation/signing-screen-platform-checks.json).
 
-The Android recovery screen scenario is also authored: disabled unsynced review, explicit
-resumption without submission, separate privacy/retry confirmation, observed input history
-and retained label edits. It uses the real UI/model and an independent public fixture server.
-Protected restore is setup here; the passing backup picker test covers that separate flow.
-Native execution remains pending.
+The Android recovery screen test is authored: explicit resumption without submission,
+separate privacy/retry confirmation, observed input history and retained label edits.
+A new separate `TundraTestHost` and two Apple UI tests cover corresponding published-response
+and recovery controls using the production views/model. Fixture setup and file delivery are
+test-specific; the normal app excludes that entry point and its public fixture resources.
+A generated-Xcode-phase boundary check is authored. These additions pass offline/source
+checks but await native compilation/runtime validation. Exact long-list scroll restoration,
+broad accessibility, layouts and real provider/device transport remain open.
 
-The first Gradle review collection failed on Android self-project artifact variants. Its
-complete-graph/strict-external-artifact correction passes a local Gradle 8.13 fixture for
-exact lock/checksum output and missing-dependency refusal. The corrected Android collection
-and normal-build enforcement remain pending. See [collector evidence](../validation/gradle-review-checks.json).
+The corrected Gradle collector passes a local Gradle 8.13 fixture for exact lock/checksum
+output and missing-dependency refusal. Its second Android run finds an unresolved versionless
+Compose tooling dependency; configuration-name diagnostics are now added. Collection,
+reviewed locks/checksums and normal-build enforcement remain open.
 
-The [preceding run at dd562f9](https://github.com/johnny9/tundra-wallet/actions/runs/34315184796)
-passes all Android backup steps and Apple Files export/readback. The Apple restore-mode
-selector works; import then fails because Files retained the random staging filename.
-The correction now sets both wrapper filename properties to the intended backup name.
-Complete system restore/restart is still unverified. See
-[`backup-roundtrip-platform-checks.json`](../validation/backup-roundtrip-platform-checks.json).
+The [earlier run at dd562f9](https://github.com/johnny9/tundra-wallet/actions/runs/34315184796)
+passes all Android backup steps and Apple Files export/readback. Apple import then fails
+because Files retained the random staging filename. Both wrapper filename properties are
+now set to the intended name, but complete system restore/restart remains unverified. See
+[backup evidence](../validation/backup-roundtrip-platform-checks.json).
 
 ## Earlier document and fixture checkpoints
 
