@@ -465,8 +465,30 @@ mod tests {
         assert!(preview_import(SINGLE, Network::Mainnet).is_err());
     }
     #[test]
-    fn rejects_private_material() {
-        assert!(preview_import("wpkh(xprv123/0/*)#aaaaaaaa", Network::Signet).is_err());
+    fn rejects_secret_key_markers_after_valid_descriptor_checksums() {
+        // Deliberately invalid/truncated markers, never usable signing keys.
+        // A bad descriptor checksum would stop before the public-key parser and
+        // would not test this boundary at all.
+        for marker in [
+            "xprv123", "tprv123", "5invalid", "Kinvalid", "Linvalid", "cinvalid",
+        ] {
+            for key in [
+                marker.to_owned(),
+                format!("[deadbeef/84h/1h/0h]{marker}/<0;1>/*"),
+            ] {
+                let single = checksummed(&format!("wpkh({key})"));
+                assert!(matches!(
+                    preview_import(&single, Network::Signet),
+                    Err(Error::Descriptor)
+                ));
+                let mut keys = multi_keys();
+                keys[1] = key;
+                assert!(matches!(
+                    preview_import(&multi(&keys), Network::Signet),
+                    Err(Error::Descriptor)
+                ));
+            }
+        }
     }
     #[test]
     fn no_missing_change_guess() {
