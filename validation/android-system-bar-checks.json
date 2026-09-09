@@ -1,0 +1,38 @@
+{
+  "recorded_at": "2026-09-09T09:02:25.616870+00:00",
+  "trigger": "Passing Android layout screenshots show white status icons over the light app surface",
+  "change": "System bar styles follow the app appearance through the native AndroidX edge-to-edge API; existing layout test asserts both status/navigation icon modes",
+  "local_validation": "Strict offline app and instrumentation APK compilation passes; native binary/notice checks pass; 10 JVM tests remain passing",
+  "runtime": "Updated system-bar assertions and rendering pending",
+  "screenshots": "Evidence shows pre-correction public fixture state",
+  "files": [
+    {
+      "path": "apps/android/app/src/main/java/dev/johnny9/tundra/Theme.kt",
+      "sha256": "fbdc8c80539c04517659326b4ab781f03644a0b9a0839d979f0c8943b258d871"
+    },
+    {
+      "path": "apps/android/app/src/androidTest/java/dev/johnny9/tundra/LongListRuntimeTest.kt",
+      "sha256": "2e1f4946c75f348e264168157f8b52270fb1fd8c381597aee22e2fb060db901b"
+    },
+    {
+      "path": "build/android-system-bars-local-build.log",
+      "sha256": "fd1acc0b1d19a23379e36d03490c541105f8f42b412715a1defe094b1dfc0b88"
+    },
+    {
+      "path": "build/android-system-bars-native-artifacts.json",
+      "sha256": "d9ba81812d1a4aabda7d2bb5832eb7442172cc9f3fb321a5820c69418e6970ab"
+    },
+    {
+      "path": "build/android-system-bars-notices.log",
+      "sha256": "95f41fe9990b3d07b0d6b1b9c40d41490c00347958bc94672f358c4f7f41d31d"
+    },
+    {
+      "path": "build/android-locked-native-passing-results/long-list-light.png",
+      "sha256": "41427e904f209ec9c6958af4f8e808d5bcd914b394526ac38a528c1962828aa8"
+    },
+    {
+      "path": "build/android-locked-native-passing-results/long-list-large-text.png",
+      "sha256": "f1e95443ae22fa2242abec70de7d47ead4209f21f38ff5fa998b51b3d5c6ee3c"
+    }
+  ]
+}

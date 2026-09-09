@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.Density
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
+import androidx.core.view.WindowCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import dev.johnny9.tundra.generated.*
@@ -83,9 +84,19 @@ class LongListRuntimeTest {
             compose.runOnUiThread { vm.appearance(false) }
             compose.waitForIdle()
             assertEquals(coinPosition, position("coinList"), 0.01f)
+            compose.runOnUiThread {
+                val bars = WindowCompat.getInsetsController(compose.activity.window, compose.activity.window.decorView)
+                assertTrue("Light appearance requires dark status icons", bars.isAppearanceLightStatusBars)
+                assertTrue("Light appearance requires dark navigation icons", bars.isAppearanceLightNavigationBars)
+            }
             capturePublicFixtureScreenshot("long-list-light")
             compose.runOnUiThread { vm.appearance(true); fontScale = 2f }
             compose.waitForIdle()
+            compose.runOnUiThread {
+                val bars = WindowCompat.getInsetsController(compose.activity.window, compose.activity.window.decorView)
+                assertFalse("Dark appearance requires light status icons", bars.isAppearanceLightStatusBars)
+                assertFalse("Dark appearance requires light navigation icons", bars.isAppearanceLightNavigationBars)
+            }
             compose.onNodeWithText("Activity").assertIsDisplayed()
             compose.onNodeWithText("Coins").assertIsDisplayed()
             compose.onNodeWithTag("coinList").assertIsDisplayed()
