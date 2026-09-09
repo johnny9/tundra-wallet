@@ -29,16 +29,27 @@ final class WalletUITests: XCTestCase {
         }
         return true
     }
-    @MainActor private func enterPayment(_ app: XCUIApplication, recipient: String, amount: String?) {
+    @MainActor private func enterPayment(_ app: XCUIApplication, recipient: String, amount: String?) -> Bool {
         let address = app.textFields["Recipient address"]
         XCTAssertTrue(address.waitForExistence(timeout: 10)); address.tap(); address.typeText(recipient)
         if let amount { let field = app.textFields["Amount in BTC"]; field.tap(); field.typeText(amount) }
         let fee = app.textFields["Fee rate in sat/vB"]
-        fee.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
-        let previous = fee.value as? String ?? ""
-        fee.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: previous.count) + "2.5")
-        XCTAssertEqual(fee.value as? String, "2.5")
+        // A coordinate tap can place the caret before the initial value. Select and
+        // replace the whole field through the edit menu, then assert the actual value.
+        fee.doubleTap()
+        let selectAll = app.descendants(matching: .any).matching(identifier: "Select All").firstMatch
+        if selectAll.exists { selectAll.tap() }
+        let cut = app.descendants(matching: .any).matching(identifier: "Cut").firstMatch
+        guard cut.waitForExistence(timeout: 3) else {
+            XCTFail("The fee value could not be selected for replacement"); return false
+        }
+        cut.tap()
+        fee.typeText("2.5")
+        guard fee.value as? String == "2.5" else {
+            XCTFail("The fee field did not contain the exact requested decimal rate"); return false
+        }
         app.buttons["Done"].tap()
+        return true
     }
 
     @MainActor func testImportRestartAndReceive() async throws {
@@ -100,7 +111,7 @@ final class WalletUITests: XCTestCase {
         app.buttons["Send"].tap()
         XCTAssertTrue(app.switches["automaticInputs"].waitForExistence(timeout: 10))
         XCTAssertEqual(app.switches["automaticInputs"].value as? String, "1")
-        enterPayment(app, recipient: recipient, amount: "0.001")
+        guard enterPayment(app, recipient: recipient, amount: "0.001") else { return }
         guard await tapVisible(app.buttons["Review payment"], in: app) else { return }
         XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label ==[c] %@", "Inputs · 1")).firstMatch.waitForExistence(timeout: 10))
         guard await discardAndClose(app) else { return }
@@ -112,7 +123,7 @@ final class WalletUITests: XCTestCase {
             app.buttons["Send"].tap()
             if max { app.buttons["paymentMode"].tap(); app.buttons["Max"].tap() }
             else { XCTAssertEqual(app.switches["automaticInputs"].value as? String, "0") }
-            enterPayment(app, recipient: recipient, amount: max ? nil : "0.001")
+            guard enterPayment(app, recipient: recipient, amount: max ? nil : "0.001") else { return }
             guard await tapVisible(app.buttons["Review payment"], in: app) else { return }
             XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label ==[c] %@", "Inputs · 2")).firstMatch.waitForExistence(timeout: 10))
             guard await discardAndClose(app) else { return }
