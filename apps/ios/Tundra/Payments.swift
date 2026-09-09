@@ -47,7 +47,7 @@ struct PaymentView: View {
                             VStack(alignment: .leading) {
                                 Text(input.label.isEmpty ? "Unlabeled coin" : input.label)
                                 Text("\(formatBalance(sats: input.sats)) BTC").monospacedDigit()
-                                Text(input.outpoint).font(.caption).foregroundStyle(.secondary)
+                                Text(input.outpoint).font(.caption).foregroundStyle(TundraSecondaryStyle())
                             }
                         }
                     }
@@ -126,7 +126,7 @@ struct PaymentView: View {
                                 TextField("Amount in BTC", text: $amount).keyboardType(.decimalPad)
                                     .focused($editing, equals: .amount)
                                     .multilineTextAlignment(.trailing)
-                                Text("BTC").foregroundStyle(.secondary)
+                                Text("BTC").foregroundStyle(TundraSecondaryStyle())
                             }
                             Toggle("Automatic eligible inputs", isOn: $automatic).accessibilityIdentifier("automaticInputs")
                         }
@@ -141,7 +141,7 @@ struct PaymentView: View {
                             TextField("Fee rate in sat/vB", text: $fee).keyboardType(.decimalPad)
                                 .focused($editing, equals: .fee)
                                 .multilineTextAlignment(.trailing)
-                            Text("sat/vB").foregroundStyle(.secondary)
+                            Text("sat/vB").foregroundStyle(TundraSecondaryStyle())
                         }
                         TextField("Payment label", text: $label).focused($editing, equals: .label)
                         Text("Review reserves inputs and saves an unsigned draft. It does not sign or broadcast.").font(.caption)
@@ -152,7 +152,7 @@ struct PaymentView: View {
                         }.disabled(model.busy)
                     }
                 }
-                if let error = model.error { Text(error).foregroundStyle(.red) }
+                if let error = model.error { TundraErrorText(error: error) }
             }
             .navigationTitle("Review payment")
             .toolbar {
@@ -239,7 +239,7 @@ struct CoinsView: View {
                 let selectedSats = model.coins.filter { model.selectedCoins.contains($0.outpoint) }.reduce(UInt64(0)) { $0 + $1.sats }
                 Text("\(model.selectedCoins.count) selected · \(formatBalance(sats: selectedSats)) BTC")
                 HStack {
-                    Button("Send selected") { send(0) }.buttonStyle(.borderedProminent)
+                    Button("Send selected") { send(0) }.buttonStyle(TundraPrimaryButtonStyle())
                     Menu("More") {
                         Button("Label selected") { label = ""; bulkLabel = true }
                         Button("Consolidate") { send(2) }.disabled(model.selectedCoins.count < 2)
@@ -252,7 +252,7 @@ struct CoinsView: View {
                 Text(!model.coins.isEmpty ? "No coins match this search and filters."
                     : model.wallet?.synced == true ? "No coins were found at the last successful sync."
                     : "Sync this wallet with your chosen test endpoint to load its coins.")
-                    .font(.subheadline).foregroundStyle(.secondary)
+                    .font(.subheadline).foregroundStyle(TundraSecondaryStyle())
             }
             ForEach(visible, id: \.outpoint) { coin in
                 HStack(alignment: .top) {
@@ -264,10 +264,10 @@ struct CoinsView: View {
                     }
                     Button { label = coin.label; editing = coin; model.loadOutputSource(coin.outpoint) } label: {
                         VStack(alignment: .leading, spacing: 5) {
-                            Text(coin.label.isEmpty ? "Add a label" : coin.label).foregroundStyle(.primary)
-                            Text(String(describing: coin.state).capitalized).font(.caption).foregroundStyle(.secondary)
+                            Text(coin.label.isEmpty ? "Add a label" : coin.label)
+                            Text(String(describing: coin.state).capitalized).font(.caption).foregroundStyle(TundraSecondaryStyle())
                             Text("\(formatBalance(sats: coin.sats)) BTC").monospacedDigit()
-                        }.frame(maxWidth: .infinity, alignment: .leading)
+                        }.frame(maxWidth: .infinity, alignment: .leading).foregroundStyle(Color.primary)
                     }.disabled(model.busy).accessibilityIdentifier("coinDetails")
                 }
             }

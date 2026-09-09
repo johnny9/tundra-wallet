@@ -18,7 +18,7 @@ struct FixtureApp: App {
     var body: some Scene {
         WindowGroup {
             if prepared {
-                FixtureView(model: model, layout: ProcessInfo.processInfo.environment["TUNDRA_PUBLIC_UI_SCENARIO"] == "layout").tint(.orange)
+                FixtureView(model: model, layout: ProcessInfo.processInfo.environment["TUNDRA_PUBLIC_UI_SCENARIO"] == "layout")
             }
             else { Text("Public fixture preparation failed") }
         }
@@ -111,6 +111,7 @@ private struct FixtureView: View {
             else { Text(model.error == nil ? "Public fixture ready" : "Public fixture operation failed") }
         }
         .preferredColorScheme(dark ? .dark : .light)
+        .tint(TundraColors.accent(dark: dark))
         .task {
             model.load()
             while model.busy { try? await Task.sleep(for: .milliseconds(25)) }

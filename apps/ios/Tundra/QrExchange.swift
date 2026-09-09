@@ -169,7 +169,7 @@ struct QrScanView: View {
                     Text("\(scan.info?.resolvedFragments ?? 0) / \(scan.info?.totalFragments.map(String.init) ?? "?") fragments")
                 }
                 if let error = scan.error {
-                    Text(error).foregroundStyle(.red)
+                    TundraErrorText(error: error)
                     if scan.allowed { Button("Start a new scan") { scan.restart() } }
                 }
                 Spacer()
@@ -216,7 +216,7 @@ struct QrDisplayView: View {
                     Image(decorative: bitmap, scale: 1).interpolation(.none).resizable().scaledToFit()
                         .accessibilityLabel("PSBT QR frame")
                 }
-                if let error { Text(error).foregroundStyle(.red) }
+                if let error { TundraErrorText(error: error) }
                 Text("Frame \(index + 1) of \(frames.count). Compare the transaction on your hardware.")
                 if frames.count > 1 { Button(paused ? "Resume" : "Pause") { paused.toggle() } }
                 Spacer()

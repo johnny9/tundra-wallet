@@ -78,7 +78,7 @@ struct BackupView: View {
                 if model.busy { ProgressView().accessibilityLabel("Working") }
                 Text("Keep a verified copy outside this app and device. Deleting the app removes its local files.").font(.footnote)
                 if let message = model.backupMessage { Text(message).accessibilityIdentifier("backupResult") }
-                if let error = model.error { Text(error).foregroundStyle(.red) }
+                if let error = model.error { TundraErrorText(error: error) }
             }
             .navigationTitle("Backup and recovery")
             .toolbar {

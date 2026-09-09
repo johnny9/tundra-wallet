@@ -46,6 +46,10 @@ These are ordered work packages, not time estimates.
   regtest node, with isolated native vaults and no production balance-injection API.
 - Native coin selection, review, PSBT file export and saved drafts are implemented; validate
   every mode on both platforms and compare layouts/accessibility against the reference.
+- Apple layout screenshots exposed inherited orange coin text and weak light-theme contrast.
+  Explicit neutral coin text and the approved accent/secondary/error/primary-button colors
+  are now authored. Source color-pair calculations and offline checks pass; native compilation
+  and rendered comparison remain pending. See [color evidence](../validation/ios-semantic-color-checks.json).
 - Observed submissions now apply payment labels to history and wallet-owned outputs once,
   retaining their saved input provenance through edits/reorgs. Rust, migration and rollback
   tests pass; native provenance presentation and a real device submission remain to qualify.

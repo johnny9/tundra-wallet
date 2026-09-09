@@ -1,0 +1,99 @@
+{
+  "recorded_at": "2026-09-09T08:46:35.578703+00:00",
+  "trigger": "Passing layout screenshots show inherited orange coin text and bright orange controls on the light background",
+  "change": "Use approved semantic accent/secondary/error pairs, explicit neutral coin text, and primary button fills with dark readable labels; normal app and public test host share the theme",
+  "source": "design/web-source/tokens.css",
+  "contrast_method": "sRGB relative luminance and (lighter + 0.05) / (darker + 0.05)",
+  "methodology_url": "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+  "calculated_pairs": [
+    {
+      "pair": "dark accent",
+      "foreground": "#F89B2A",
+      "background": "#0E1115",
+      "ratio": 8.753206694266959
+    },
+    {
+      "pair": "light accent",
+      "foreground": "#975000",
+      "background": "#FBFCFD",
+      "ratio": 5.903104747699533
+    },
+    {
+      "pair": "dark primary label",
+      "foreground": "#171717",
+      "background": "#F89B2A",
+      "ratio": 8.292277574415149
+    },
+    {
+      "pair": "light primary label",
+      "foreground": "#171717",
+      "background": "#F7931A",
+      "ratio": 7.805640792469091
+    },
+    {
+      "pair": "dark error",
+      "foreground": "#FF9696",
+      "background": "#0E1115",
+      "ratio": 9.0611125448648
+    },
+    {
+      "pair": "light error",
+      "foreground": "#B72C2C",
+      "background": "#FBFCFD",
+      "ratio": 5.995245190953528
+    },
+    {
+      "pair": "dark secondary",
+      "foreground": "#ADB7C3",
+      "background": "#0E1115",
+      "ratio": 9.316436246869399
+    },
+    {
+      "pair": "light secondary",
+      "foreground": "#566372",
+      "background": "#FBFCFD",
+      "ratio": 5.971944396659325
+    }
+  ],
+  "offline_passed": 34,
+  "native_compile_rendering": "pending",
+  "limits": "Source color-pair calculations only; not a full native accessibility qualification, and screenshots cited show the pre-correction state",
+  "files": [
+    {
+      "path": "apps/ios/Tundra/Theme.swift",
+      "sha256": "507a00fbbac8678106722749b8d8e7cb2cca59b0e0d541f9ae020461e31cfd57"
+    },
+    {
+      "path": "apps/ios/Tundra/TundraApp.swift",
+      "sha256": "83b4aefb0e40a85b256afd75b6926f9b6e0e610c19d991f182fdfbca339c0edb"
+    },
+    {
+      "path": "apps/ios/Tundra/Payments.swift",
+      "sha256": "ca377970badcade2e4f8ff6a2ed2f00b0f526f714d32fd68e7b15e211291e123"
+    },
+    {
+      "path": "apps/ios/Tundra/WalletViews.swift",
+      "sha256": "6a7329c02b842f646d4a4404e2fbfbd3892d00c902e034404365988f46511312"
+    },
+    {
+      "path": "apps/ios/TundraTestHost/FixtureApp.swift",
+      "sha256": "f5c240e89ba54a4ff24df15be4d520d1aa52b4f75325e845d35c5d2a26275450"
+    },
+    {
+      "path": "build/native-semantic-color-ratios.json",
+      "sha256": "08d31ae9df163421c063a8000326946a9666936781e8919d531217a426a7e630"
+    },
+    {
+      "path": "build/ios-semantic-theme-final-offline.log",
+      "sha256": "79039f7c0625d4cc36547fe7ed4adf4097b567cc26947923ef9f3061fe336842"
+    },
+    {
+      "path": "build/public-screen-ios-fifth-results/20A4ADC2-B63E-4A8C-8054-91576A582C54.png",
+      "sha256": "6c63eb8c853b58ebef1b68e6b7024e061723dd7b439151b846518feaef76b507"
+    },
+    {
+      "path": "build/public-screen-ios-fifth-results/FE710B62-6BE1-45F3-89B5-8ECC4D938A34.png",
+      "sha256": "a82b7def610e61bd6694654c313fa1521332bbe773304713dc5ff25ac75af3e4"
+    }
+  ]
+}

@@ -38,7 +38,7 @@ struct WalletView: View {
                         .font(.system(size: 32, weight: .medium, design: .rounded)).monospacedDigit()
                         .accessibilityIdentifier("balance")
                     Text(model.wallet == nil ? "Your bitcoin. Your hardware." : model.wallet?.syncedAt.map { "Cached · last sync \(Date(timeIntervalSince1970: TimeInterval($0)).formatted())" } ?? "Not synced · balance unknown")
-                        .font(.subheadline).foregroundStyle(.secondary)
+                        .font(.subheadline).foregroundStyle(TundraSecondaryStyle())
                     if model.wallet != nil {
                         HStack {
                             Button("Sync test network") { syncing = true }.disabled(model.busy)
@@ -54,11 +54,11 @@ struct WalletView: View {
                 if !model.storageReady {
                     ContentUnavailableView(model.busy ? "Opening wallet storage" : "Wallet storage unavailable", systemImage: "lock",
                         description: Text(model.error ?? "Unlock this device to open your wallet storage."))
-                    Button("Retry storage") { model.load() }.disabled(model.busy).buttonStyle(.borderedProminent)
+                    Button("Retry storage") { model.load() }.disabled(model.busy).buttonStyle(TundraPrimaryButtonStyle())
                 } else if model.wallet == nil {
                     ContentUnavailableView("Add a wallet", systemImage: "wallet.pass",
                         description: Text("Import a public test descriptor. Private signing keys stay on hardware."))
-                    Button("Import descriptor") { adding = true }.buttonStyle(.borderedProminent)
+                    Button("Import descriptor") { adding = true }.buttonStyle(TundraPrimaryButtonStyle())
                 } else {
                     // Keep both tab subtrees alive so their independent scroll offsets
                     // and in-memory coin filters survive a tab switch. A wallet change
@@ -69,7 +69,7 @@ struct WalletView: View {
                                 HStack {
                                     Button("Receive", systemImage: "arrow.down") { model.receive() }.buttonStyle(.bordered)
                                         .disabled(model.busy)
-                                    Button("Send", systemImage: "arrow.up") { model.review = nil; paymentMode = 0; paying = true }.buttonStyle(.borderedProminent)
+                                    Button("Send", systemImage: "arrow.up") { model.review = nil; paymentMode = 0; paying = true }.buttonStyle(TundraPrimaryButtonStyle())
                                         .disabled(model.busy || model.wallet?.synced != true)
                                 }.frame(maxWidth: .infinity)
                                 .background(GeometryReader { geometry in
@@ -93,11 +93,11 @@ struct WalletView: View {
                                     ForEach(model.activity, id: \.txid) { row in
                                         VStack(alignment: .leading) {
                                             Text(row.label.isEmpty ? "Unlabeled transaction" : row.label).accessibilityIdentifier("activityLabel")
-                                            Text(row.confirmed ? "Confirmed" : "Pending").font(.caption).foregroundStyle(.secondary)
+                                            Text(row.confirmed ? "Confirmed" : "Pending").font(.caption).foregroundStyle(TundraSecondaryStyle())
                                         }
                                     }
                                     Text("Hardware signing is not qualified. Use disposable test wallets only.")
-                                        .font(.footnote).foregroundStyle(.secondary)
+                                        .font(.footnote).foregroundStyle(TundraSecondaryStyle())
                                 }.frame(maxWidth: .infinity, alignment: .leading)
                             }.accessibilityIdentifier("activityScroll")
                         }
@@ -110,7 +110,7 @@ struct WalletView: View {
                                     model.review = nil; paymentMode = mode; paying = true
                                 }
                                 Text("Hardware signing is not qualified. Use disposable test wallets only.")
-                                    .font(.footnote).foregroundStyle(.secondary)
+                                    .font(.footnote).foregroundStyle(TundraSecondaryStyle())
                             }.frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .scrollDismissesKeyboard(.interactively)
@@ -121,8 +121,8 @@ struct WalletView: View {
                 }
                 Spacer(minLength: 0)
                 if model.busy { ProgressView().accessibilityLabel("Working") }
-                if let error = model.error { Text(error).font(.footnote).foregroundStyle(.red) }
-                Text("Development only. Do not fund these addresses.").font(.caption).foregroundStyle(.secondary)
+                if let error = model.error { TundraErrorText(error: error).font(.footnote) }
+                Text("Development only. Do not fund these addresses.").font(.caption).foregroundStyle(TundraSecondaryStyle())
             }
             .padding(24).background(background.ignoresSafeArea())
             .sheet(isPresented: $adding, onDismiss: { model.cancelImport() }) { ImportView(model: model) }
@@ -210,7 +210,7 @@ struct ImportView: View {
                         Button("Use a different descriptor") { model.cancelImport() }.disabled(model.busy)
                     }
                 }
-                if let error = model.error { Text(error).foregroundStyle(.red) }
+                if let error = model.error { TundraErrorText(error: error) }
                 Text("Use disposable test wallets. This development build is not qualified for real funds.").font(.footnote)
             }
             .navigationTitle("Add a wallet")
@@ -231,6 +231,7 @@ struct ImportView: View {
 }
 
 struct TundraMark: View {
+    @Environment(\.colorScheme) private var scheme
     var body: some View {
         Canvas { context, size in
             let x = size.width / 24
@@ -245,7 +246,7 @@ struct TundraMark: View {
             path.addLine(to: CGPoint(x: 19*x, y: 17*y))
             path.move(to: CGPoint(x: 8*x, y: 21*y))
             path.addLine(to: CGPoint(x: 16*x, y: 21*y))
-            context.stroke(path, with: .color(Color(red: 0.973, green: 0.608, blue: 0.165)),
+            context.stroke(path, with: .color(TundraColors.accent(dark: scheme == .dark)),
                            style: StrokeStyle(lineWidth: 1.8*x, lineCap: .round, lineJoin: .round))
         }
     }

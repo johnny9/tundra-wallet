@@ -17,7 +17,7 @@ struct LabelsView: View {
                     Button("Apply labels") { model.applyLabels() }.disabled(model.busy)
                     Button("Cancel import") { model.cancelLabels() }.disabled(model.busy)
                 }
-                if let error = model.error { Text(error).foregroundStyle(.red) }
+                if let error = model.error { TundraErrorText(error: error) }
             }
             .navigationTitle("Labels")
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Close") { model.cancelLabels(); dismiss() }.disabled(model.busy) } }

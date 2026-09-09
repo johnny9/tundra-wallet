@@ -10,7 +10,7 @@ struct TundraApp: App {
         WindowGroup {
             WalletView(model: model, dark: $dark)
                 .preferredColorScheme(dark ? .dark : .light)
-                .tint(Color(red: 0.973, green: 0.608, blue: 0.165))
+                .tint(TundraColors.accent(dark: dark))
                 .privacySensitive()
                 .blur(radius: phase == .active ? 0 : 18)
                 .task { model.load() }
