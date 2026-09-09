@@ -1,0 +1,36 @@
+{
+  "recorded_at": "2026-09-09T04:00:41.436233+00:00",
+  "source": "2890d704b43561e231c5a79f27cc10cf404c3035",
+  "run_id": 34308278331,
+  "conclusion": "failure",
+  "android": {
+    "build_and_jvm": "passed",
+    "jvm_passed": 8,
+    "instrumentation_passed": 12,
+    "instrumentation_failed": 1,
+    "failure": "Generation test ciphertext comparison at StorageVaultTest.kt:130; old DB had been legitimately reopened since baseline",
+    "cold_restart": "not run"
+  },
+  "ios": {
+    "build_and_host_ffi": "passed",
+    "host_ffi_passed": 6,
+    "runtime_passed": 10,
+    "runtime_failed": 1,
+    "failed_assertions": 2,
+    "failure": "Generation test compares old ciphertext at StorageVaultTests.swift:138 and :162 after a legitimate old-core reopen",
+    "all_payment_modes_and_restart": "passed",
+    "generation_lost_key_and_selector_checks": "Executed; only the two old-ciphertext comparisons failed"
+  },
+  "rust_and_parser_audit_jobs": "passed",
+  "correction": "7d03aca asserts failed restore leaves bytes unchanged, then resnapshots after explicitly reopening old core; subsequent restores must retain that new baseline",
+  "logs": [
+    {
+      "path": "build/store-selection-android-first.log",
+      "sha256": "0cea10bb952f6ad2547034fdc704c70fbaaf123edfca3b883968e1ad61ce79dd"
+    },
+    {
+      "path": "build/store-selection-ios-first.log",
+      "sha256": "379092dd2f57cfe0f67153893fd8dfa6093dbfe3733249270677b923fd7ca1af"
+    }
+  ]
+}

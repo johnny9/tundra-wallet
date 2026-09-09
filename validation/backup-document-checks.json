@@ -1,0 +1,52 @@
+{
+  "recorded_at": "2026-09-09T04:00:41.436233+00:00",
+  "source": "3fc9a836e1558c63e7429c4dca40a0b225d86123",
+  "sync_fix": "ae0f4a9",
+  "rust": {
+    "core_unit_passed": 179,
+    "ignored_core_helpers": 6,
+    "crash_integration_passed": 2,
+    "http_integration_passed": 5,
+    "separately_executed_keyless_regtest_passed": 1,
+    "total_passed": 187
+  },
+  "offline_passed": 26,
+  "fmt_and_strict_clippy": "passed",
+  "bindings": "Both generated from compiled library",
+  "native_source": [
+    "Bounded streaming document staging",
+    "Completed encrypted export with destination readback hash/length verification",
+    "Secure password/confirmation fields and explicit backup review",
+    "New protected generation activation with prior native views/handles released",
+    "Unknown restored balances and suspended-approval explanation",
+    "Receive address reuse limitation explicitly shown",
+    "Backup helper tests for bounds, stalls, closed writes, mutation and truncation"
+  ],
+  "native_validation": "Document exchange/helper tests authored, not yet compiled or run; next CI gate",
+  "api_review": "Apple contentTypes plural fileExporter cancellation overload supports iOS17; singular overload with cancellation is iOS27-only and was replaced before native compilation",
+  "waydroid": "Session/container running; IP UNKNOWN; no ADB targets at 2026-09-09 03:54 UTC; no sudo changes",
+  "remaining": [
+    "Run native build/helper tests",
+    "Exercise native system document picker/save/recovery flows",
+    "Positive signed native recovery/submission/provenance scenario",
+    "Physical hardware and independent review"
+  ],
+  "logs": [
+    {
+      "path": "build/backup-documents-core.log",
+      "sha256": "955e836c7a6e705c55ddc28073364d494f6418c90e1e73b7a7de2cd7cd972b9c"
+    },
+    {
+      "path": "build/backup-documents-regtest.log",
+      "sha256": "427e0295ca8d884cbfa4807859ea1ce106a27f889e29fca7c55c4e502f9216e4"
+    },
+    {
+      "path": "build/backup-documents-bindings.log",
+      "sha256": "a9ee3afbd8b9d62ba6a957d8446ccc321bacc67c34eafb207e7ee18da88e05ea"
+    },
+    {
+      "path": "build/backup-documents-offline.log",
+      "sha256": "73e9ad4792cf2c68e10f23e9b0606b9d75f8927056df02b29f883eb39d328a2c"
+    }
+  ]
+}

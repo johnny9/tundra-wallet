@@ -6,6 +6,26 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
+Native backup document exchange at `3fc9a83` is authored: secure password/confirmation,
+bounded staging, completed ciphertext export with destination readback, reviewed restore
+and cleared old native state. Its helper tests and system picker flows await native CI.
+A sync callback regression at `ae0f4a9` makes operation IDs unique across cores within the
+process: stale run/status/cancel requests cannot select a restored store's new operation.
+The local gate passes **187 Rust tests including keyless regtest**, **26 offline checks**,
+formatting, strict Clippy and both bindings. See
+[`backup-document-checks.json`](../validation/backup-document-checks.json).
+
+The [generation run at 2890d70](https://github.com/johnny9/tundra-wallet/actions/runs/34308278331)
+passes both native builds, host FFI, Rust and parser/audit. Android passes **12 of 13
+instrumentation tests**; iOS passes **10 of 11 runtime tests**, including payment/restart.
+Each new generation test compares ciphertext across a legitimate reopen of the old core,
+so that preservation baseline is invalid. `7d03aca` now checks failed-restore preservation
+before reopening, then captures the baseline used for subsequent restore assertions after
+that explicit reopen. The remaining assertions stay in place and await the next run.
+See [`store-selection-native-checks.json`](../validation/store-selection-native-checks.json).
+
+## Last fully passing native checkpoint
+
 The [restore run at 03d3732](https://github.com/johnny9/tundra-wallet/actions/runs/34307207286)
 is **fully green**. Android passes **8 JVM tests, all 11 instrumentation tests and cold
 restart**, without launcher ANR recovery. iOS passes builds, **6 host FFI checks and all

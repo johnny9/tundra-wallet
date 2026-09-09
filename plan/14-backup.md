@@ -87,9 +87,28 @@ boundaries. The complete gate now passes 186 Rust tests, 26 offline checks and b
 Native lost-key/selector/generation tests and explicit submission recovery controls are
 authored and await CI. See [selection evidence](../validation/store-selection-checks.json).
 
-Native document exchange and the positive recovery-review UI scenario remain to implement
-and validate before exposing backup as a recoverable product. Password confirmation,
-provider partial-write handling and interrupted active operations need coverage. Recovery
-must explain that an old backup cannot know receive addresses issued after it was made:
-a new scan cannot discover previously issued but unused addresses. Hardware receive/policy
-verification remains separate. M7 remains incomplete.
+## Native document exchange gate
+
+Native password/confirmation fields, bounded streaming import, backup summary/consent and
+new-generation restore are authored. Only a completed encrypted export reaches a document
+provider. A saved file is successful only after readback matches its byte count and SHA-256;
+partial writes or unavailable readback produce a bounded failure and never a success message.
+Owned staging files are removed on completion/cancellation; process-kill cleanup and provider
+qualification remain open. Passwords stay in transient memory, never saved UI state or
+preferences; not all platform string copies can be wiped.
+
+The apps serialize wallet operations before replacing the core and clear old views on switch.
+Process-wide sync IDs reject delayed callbacks targeting a new core after restoration. This
+regression and the complete local gate pass 187 Rust tests and 26 offline checks. Native file
+helper tests and the system document-picker/recovery flow await execution. Apple uses the
+[iOS 17 FileDocument export/cancellation API](https://developer.apple.com/documentation/swiftui/view/fileexporter(ispresented:document:contenttypes:defaultfilename:oncompletion:oncancellation:)).
+
+The first generation run built both apps and exercised restoration, but its old-store byte
+comparison included a legitimate core reopen. The corrected baseline is authored; see
+[exact native results](../validation/store-selection-native-checks.json).
+
+The recovery screens explain that an old backup cannot know receive addresses issued after
+it was made, and a scan cannot discover unused addresses. Positive native recovered-payment
+review/submission, provider interruption, physical hardware and independent security review
+remain open. M7 remains incomplete.
+
