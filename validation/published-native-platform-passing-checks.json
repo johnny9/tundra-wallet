@@ -1,0 +1,50 @@
+{
+  "recorded_at": "2026-09-09T05:30:51.046580+00:00",
+  "run_id": 34314049044,
+  "source": "ffc08e66ae7ac3def257dcb44199c99a653163e6",
+  "conclusion": "failure",
+  "rust": "189 tests, 29 offline, formatting/Clippy and both bindings pass",
+  "parser_audit_notice_inventory": "passed",
+  "android": {
+    "build": "passed",
+    "jvm_passed": 10,
+    "instrumentation_passed": 14,
+    "instrumentation_failed": 1,
+    "all_payment_modes": "passed after modal focus fix",
+    "published_signatures_vault_recovery_submission_provenance": "passed",
+    "failure": "System filename control blocked by Quickstep ANR; public screenshot shows DocumentsUI behind the exact launcher dialog",
+    "cold_restart": "not run"
+  },
+  "ios": {
+    "app_build": "passed",
+    "host_ffi_passed": 6,
+    "runtime_passed": 13,
+    "ui_failed": 1,
+    "published_signatures_vault_recovery_submission_provenance": "passed",
+    "payment_modes_and_restart": "passed before backup extension",
+    "system_backup_export_readback": "passed before later Restore-mode selection failure",
+    "failure": "Backup action picker lacked the expected test identifier; import/restore UI did not run"
+  },
+  "pending_corrections": [
+    "One bounded, artifact-recorded exact Quickstep ANR recovery; repeated launcher failure fails",
+    "Explicit backupAction accessibility identifier on Apple mode picker"
+  ],
+  "logs": [
+    {
+      "path": "build/modal-focus-android-first.log",
+      "sha256": "c02adc974fcc4f8125dcafc8a6cabfb0c830333a9233115d8fddf6c9d59c8b2a"
+    },
+    {
+      "path": "build/modal-focus-ios-first.log",
+      "sha256": "2ffbd10be9029642782e732ea0c5dccbe47f4af666d0b3e2fac4ef3b411df291"
+    },
+    {
+      "path": "build/modal-focus-backup-document-control.png",
+      "sha256": "0a63c6470bd60d6f33240d9e1752b91b29d1285880b364af0c919732c712bee8"
+    },
+    {
+      "path": "build/launcher-recovery-offline.log",
+      "sha256": "1bf1f5fd57478c5030d3ef845be5ef38aac950795ebbb4991a57de03b6e9bf69"
+    }
+  ]
+}

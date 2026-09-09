@@ -6,6 +6,21 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
+The [next native run at ffc08e6](https://github.com/johnny9/tundra-wallet/actions/runs/34314049044)
+passes Rust (**189 tests / 29 offline**), parser/audit and the notice-regeneration gate.
+Both native app builds and published-signature/vault scenarios pass. Android passes **10 JVM
+and 14 of 15 instrumentation tests**, including all payment modes after the focus correction.
+The sole failure is its system picker: a public screenshot shows the exact Quickstep ANR
+dialog covering DocumentsUI. A bounded one-time launcher recovery is now authored, with
+a screenshot/artifact flag; a second launcher failure fails the test. Cold restart did not run.
+
+iOS passes **6 host FFI and all 13 hosted runtime tests**, including the new Keychain signature,
+restore, sync, explicit reapproval/submission and provenance scenario. Its UI scenario passes
+payment modes/restart and actual local Files backup export/readback, then fails finding the
+Restore-mode picker by its label. An explicit `backupAction` identifier corrects that selector.
+**Complete system import/reviewed restore and positive payment UI controls remain open.**
+See [`published-native-platform-passing-checks.json`](../validation/published-native-platform-passing-checks.json).
+
 Workflow action pins and both complete Cargo license/notice inventories pass their local
 checks: **29 offline tests**, deterministic inventory regeneration for **243 packages** and
 **165 retained texts**. The CI action SHAs exactly match those already executed in run

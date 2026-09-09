@@ -34,7 +34,7 @@ struct BackupView: View {
                 Picker("Backup action", selection: $restoring) {
                     Text("Export").tag(false).disabled(!model.storageReady)
                     Text("Restore").tag(true)
-                }.disabled(locked)
+                }.disabled(locked).accessibilityIdentifier("backupAction")
                 Text(restoring
                     ? "Restore public wallets and their private metadata from an encrypted Tundra backup. Hardware signing keys are never in this file."
                     : "Export all wallets, labels, freezes and saved payment history. The file is encrypted with its own password.")

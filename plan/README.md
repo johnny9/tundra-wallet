@@ -37,7 +37,9 @@ approval system, or cloud account.
 - Added: encrypted backup export, inspection and protected restore with suspended approvals
   and durable recovery holds. Native restore/provider checks pass. Atomic store selection
   passes Rust tests and native generation recovery now passes on both platforms. File
-  helpers pass; system document-picker flows and positive payment recovery review remain under validation.
+  helpers and Apple system export/readback pass. Both native vaults pass published-signature
+  finalization/recovery/submission/provenance; complete system restore and positive payment UI
+  controls remain under validation.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Build review: workflow actions pinned to executed revisions; both full Cargo locks have
   a checked license/notice inventory. Native dependency and binary distribution review remains.

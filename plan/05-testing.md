@@ -38,8 +38,8 @@ and synthetic confirmation/observation data for the native vault tests. It is no
 Core or a valid Signet chain, and accepts only the exact published final transaction. Start
 it with `bash scripts/start-published-native-fixture.sh` on a fresh test host; both native
 CI jobs do this explicitly. Android forwards both ports. Rust exercises the same fixture
-through real HTTP with isolated ephemeral ports. Android's first vault scenario passes;
-Apple runtime and positive UI controls remain pending as recorded in `VALIDATION.md`.
+through real HTTP with isolated ephemeral ports. Both native vault scenarios pass;
+positive UI controls remain pending as recorded in `VALIDATION.md`.
 
 ## Existing Rust source tests
 

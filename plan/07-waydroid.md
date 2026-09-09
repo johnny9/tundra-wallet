@@ -2,8 +2,8 @@
 
 Waydroid can reuse the Android APKs from CI for local app, Rust/UniFFI, lifecycle and
 regtest checks. It does not replace physical-phone camera/USB qualification or Xcode/iOS
-tests. Use a disposable development instance: the instrumentation test clears Tundra's
-development database before importing public fixtures.
+tests. Use a fresh disposable development installation: instrumentation refuses existing
+wallet storage and never resets a protected database or deletes its retained key.
 
 ## Run matching CI artifacts
 
@@ -23,7 +23,10 @@ in user-owned directories; Android SDK/NDK/Gradle are unnecessary for this path.
    `bitcoin-cli` on PATH. Wait for `build/native-chain-port`. This creates a fresh,
    keyless 103-block regtest chain on loopback port 3002; it refuses an occupied endpoint
    and removes its own temporary chain on termination.
-5. Select the disposable target explicitly and run:
+5. Run `bash scripts/start-published-native-fixture.sh` once on the fresh test host. It
+   starts the separate published-signature fixture on loopback port 3003. This server uses
+   synthetic confirmation/observation data and is not a valid Signet chain or real broadcast.
+6. Select the disposable target explicitly and run:
 
 ```sh
 ANDROID_SERIAL='<Waydroid-IP>:5555' TUNDRA_DISPOSABLE_ANDROID=1 \
@@ -31,11 +34,11 @@ ANDROID_SERIAL='<Waydroid-IP>:5555' TUNDRA_DISPOSABLE_ANDROID=1 \
   build/tests/app-debug-androidTest.apk
 ```
 
-The script installs both APKs, forwards port 3002, runs instrumentation through the real
+The script installs both APKs, forwards ports 3002 and 3003, runs instrumentation through the real
 Android ABI, then force-stops and relaunches the app to check the saved balance/draft.
-It rejects instrumentation failures even if ADB exits successfully. Existing app data is
-only appropriate if it is disposable; the script does not resolve signing conflicts by
-uninstalling an existing application.
+It rejects instrumentation failures even if ADB exits successfully. Existing wallet data
+fails the fresh-installation gate; the script does not resolve that by resetting storage
+or uninstalling an existing application.
 
 The matching CI path uses Gradle's
 `-Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true` so the actual saved state
@@ -56,5 +59,9 @@ survives Gradle's test cleanup. Reinstalling an empty app is not restart validat
 A later recheck confirmed API 33 responds through Waydroid, but no IPv4 lease or ADB device
 appeared. Both observed IPv6 link-local bridge addresses were also tried; neither established
 an ADB connection. No additional sudo operation or firewall change was performed.
+
+The September 9 recheck still reports a running session/container, `IP address: UNKNOWN`
+and no ADB devices. Waydroid has not executed the native validation suite. CI emulators
+and the Apple simulator remain the source of the recorded native test results.
 
 Keep the [validation report](VALIDATION.md) as the authority for tests actually executed.

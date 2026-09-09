@@ -29,6 +29,27 @@ import java.util.UUID
 /** Real document picker, provider readback, Keystore and Rust; isolated public wallet. */
 class BackupDocumentRuntimeTest {
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
+    private var recoveredLauncher = false
+
+    private fun visibleNodes(root: AccessibilityNodeInfo?): List<AccessibilityNodeInfo> {
+        val queue = java.util.ArrayDeque<AccessibilityNodeInfo>()
+        root?.let(queue::add)
+        val nodes = mutableListOf<AccessibilityNodeInfo>()
+        while (queue.isNotEmpty() && nodes.size < 1024) {
+            val node = queue.removeFirst(); nodes.add(node)
+            for (index in 0 until node.childCount) node.getChild(index)?.let(queue::add)
+        }
+        return nodes
+    }
+
+    private fun clickNode(start: AccessibilityNodeInfo) {
+        var node: AccessibilityNodeInfo? = start
+        repeat(6) {
+            if (node?.isClickable == true && node?.performAction(AccessibilityNodeInfo.ACTION_CLICK) == true) return
+            node = node?.parent
+        }
+        throw AssertionError("Expected system document control was not clickable")
+    }
 
     private fun systemNode(predicate: (AccessibilityNodeInfo) -> Boolean): AccessibilityNodeInfo {
         val automation = InstrumentationRegistry.getInstrumentation().uiAutomation
@@ -37,6 +58,19 @@ class BackupDocumentRuntimeTest {
         }
         val deadline = SystemClock.uptimeMillis() + 15_000
         while (SystemClock.uptimeMillis() < deadline) {
+            val active = automation.rootInActiveWindow
+            val activeNodes = visibleNodes(active)
+            if (active?.packageName?.toString() == "android" && activeNodes.any { it.text?.toString() == "Quickstep isn't responding" }) {
+                check(!recoveredLauncher) { "The emulator launcher stopped responding more than once" }
+                capturePublicFixtureScreenshot("backup-launcher-before-recovery")
+                clickNode(checkNotNull(activeNodes.firstOrNull { it.text?.toString() == "Close app" }))
+                recoveredLauncher = true
+                val directory = File(checkNotNull(InstrumentationRegistry.getInstrumentation().targetContext.getExternalFilesDir(null)), "public-test-diagnostics")
+                check(directory.isDirectory || directory.mkdirs())
+                File(directory, "backup-launcher-recovery.txt").writeText("Recovered the exact Quickstep ANR dialog once before continuing the real document flow.\n")
+                SystemClock.sleep(200)
+                continue
+            }
             val queue = java.util.ArrayDeque<AccessibilityNodeInfo>()
             automation.windows.filter { it.type == AccessibilityWindowInfo.TYPE_APPLICATION }.forEach { window ->
                 window.root?.takeIf { it.packageName?.toString()?.contains("documentsui", ignoreCase = true) == true }?.let(queue::add)
@@ -55,12 +89,7 @@ class BackupDocumentRuntimeTest {
     }
 
     private fun clickSystemText(text: String) {
-        var node: AccessibilityNodeInfo? = systemNode { it.text?.toString()?.equals(text, ignoreCase = true) == true }
-        repeat(6) {
-            if (node?.isClickable == true && node?.performAction(AccessibilityNodeInfo.ACTION_CLICK) == true) return
-            node = node?.parent
-        }
-        throw AssertionError("Expected system document control was not clickable")
+        clickNode(systemNode { it.text?.toString()?.equals(text, ignoreCase = true) == true })
     }
 
     @Test fun encryptedDocumentSaveReadbackAndReviewedRestoreUseNewProtectedGeneration() {

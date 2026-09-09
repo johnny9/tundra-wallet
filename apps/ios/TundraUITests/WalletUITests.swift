@@ -73,7 +73,9 @@ final class WalletUITests: XCTestCase {
         let laterAddress = app.staticTexts["receiveAddress"].label
         app.buttons["Close"].tap()
         guard await openBackup(app) else { return false }
-        app.buttons["Backup action"].tap(); app.buttons["Restore"].tap()
+        let action = app.buttons["backupAction"]
+        guard action.waitForExistence(timeout: 10) else { XCTFail("Backup mode picker missing"); return false }
+        action.tap(); app.buttons["Restore"].tap()
         guard first.waitForExistence(timeout: 10) else { return false }
         first.tap(); first.typeText(password); app.buttons["Done"].tap()
         guard await tapVisible(app.buttons["Choose backup file"], in: app) else { return false }
