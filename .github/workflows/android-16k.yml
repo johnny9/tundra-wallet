@@ -77,6 +77,32 @@ jobs:
           test -f build/native-chain-port
           bash scripts/start-published-native-fixture.sh
           bash scripts/start-published-native-fixture.sh --screen
+      - name: Prepare bounded disposable-runtime diagnostics
+        run: |
+          cat > build/run-android-16k.sh <<'SH'
+          #!/usr/bin/env bash
+          set -euo pipefail
+          adb root
+          adb wait-for-device
+          test "$(adb shell getconf PAGE_SIZE | tr -d '\r')" = 16384
+          adb shell setprop bionic.linker.16kb.app_compat.enabled false
+          adb shell setprop pm.16kb.app_compat.disabled true
+          test "$(adb shell getprop bionic.linker.16kb.app_compat.enabled | tr -d '\r')" = false
+          test "$(adb shell getprop pm.16kb.app_compat.disabled | tr -d '\r')" = true
+          adb shell getconf PAGE_SIZE > build/android-16k-page-size.log
+          adb shell getprop ro.build.fingerprint > build/android-16k-system.log
+          adb shell getprop ro.product.cpu.abilist > build/android-16k-abis.log
+          if ! ANDROID_SERIAL=emulator-5554 TUNDRA_DISPOSABLE_ANDROID=1 ./scripts/check-android-apks.sh build/16k-apks/app/app-debug.apk build/16k-apks/tests/app-debug-androidTest.apk; then
+            # Disposable public tests only; no UI trees, memory/register dumps or
+            # unrestricted logs. Give asynchronous native crash reporting time.
+            sleep 3
+            adb logcat -b all -d -t 2000 -v brief AndroidRuntime:E linker:E libc:F ActivityManager:I lmkd:I TestRunner:I AndroidJUnitRunner:I '*:S' > build/android-16k-launch.log
+            adb logcat -b crash -d -t 200 | rg 'FATAL EXCEPTION|Process: dev\.johnny9\.tundra|Caused by:|Abort message:|signal [0-9]+|#[0-9]{2} pc|java\.lang\.|java\.io\.' > build/android-16k-crash.log || true
+            adb shell cat /proc/meminfo > build/android-16k-memory.log
+            exit 1
+          fi
+          SH
+          bash -n build/run-android-16k.sh
       - uses: reactivecircus/android-emulator-runner@b530d96654c385303d652368551fb075bc2f0b6b # v2.35.0
         with:
           api-level: 35
@@ -85,17 +111,7 @@ jobs:
           avd-name: tundra-16k
           force-avd-creation: false
           disable-animations: true
-          script: |
-            adb root
-            adb wait-for-device
-            test "$(adb shell getconf PAGE_SIZE | tr -d '\r')" = 16384
-            adb shell setprop bionic.linker.16kb.app_compat.enabled false
-            adb shell setprop pm.16kb.app_compat.disabled true
-            test "$(adb shell getprop bionic.linker.16kb.app_compat.enabled | tr -d '\r')" = false
-            test "$(adb shell getprop pm.16kb.app_compat.disabled | tr -d '\r')" = true
-            adb shell getconf PAGE_SIZE > build/android-16k-page-size.log
-            adb shell getprop ro.build.fingerprint > build/android-16k-system.log
-            ANDROID_SERIAL=emulator-5554 TUNDRA_DISPOSABLE_ANDROID=1 ./scripts/check-android-apks.sh build/16k-apks/app/app-debug.apk build/16k-apks/tests/app-debug-androidTest.apk || { adb logcat -b crash -d -t 200 | rg 'FATAL EXCEPTION|Process: dev\.johnny9\.tundra|Caused by:|Abort message:|signal [0-9]+|#[0-9]{2} pc|java\.lang\.|java\.io\.' > build/android-16k-crash.log; exit 1; }
+          script: bash build/run-android-16k.sh
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
