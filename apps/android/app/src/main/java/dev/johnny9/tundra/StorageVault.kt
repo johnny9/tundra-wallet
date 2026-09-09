@@ -140,8 +140,13 @@ internal object StorageVault {
             }
             Files.move(temporary.toPath(), file.toPath(), StandardCopyOption.ATOMIC_MOVE,
                 *if (replacing) arrayOf(StandardCopyOption.REPLACE_EXISTING) else emptyArray())
-            val directory = Os.open(checkNotNull(file.parent), OsConstants.O_RDONLY or OsConstants.O_DIRECTORY, 0)
-            try { Os.fsync(directory) } finally { Os.close(directory) }
+            // O_DIRECTORY is not a public Android SDK constant. Check the opened
+            // descriptor using the supported fstat API before syncing its directory.
+            val directory = Os.open(checkNotNull(file.parent), OsConstants.O_RDONLY or OsConstants.O_CLOEXEC, 0)
+            try {
+                check(OsConstants.S_ISDIR(Os.fstat(directory).st_mode))
+                Os.fsync(directory)
+            } finally { Os.close(directory) }
         } finally { temporary.delete() }
     }
 }
