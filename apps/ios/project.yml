@@ -52,6 +52,14 @@ targets:
         buildPhase: resources
       - path: ../../tests/fixtures/backup-v1.tundra
         buildPhase: resources
+      - path: ../../tests/fixtures/native-unsigned.sqlite
+        buildPhase: resources
+      - path: ../../tests/fixtures/native-signed-response.psbt
+        buildPhase: resources
+      - path: ../../tests/fixtures/native-signed-backup.tundra
+        buildPhase: resources
+      - path: ../../tests/fixtures/native-signing.json
+        buildPhase: resources
     dependencies:
       - target: Tundra
   TundraUITests:

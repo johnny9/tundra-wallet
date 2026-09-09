@@ -4,6 +4,97 @@ import Security
 
 /// Real simulator Keychain with disposable public descriptors. No Bitcoin signing keys.
 final class StorageVaultTests: XCTestCase {
+    func testPublishedSignaturesRestoreReviewSubmissionAndProvenanceCrossKeychain() throws {
+        struct Fixture: Decodable {
+            let walletId: String, draftId: String, password: String
+            let transaction: Transaction
+            struct Transaction: Decodable { let txid: String, wtxid: String, raw: String }
+            enum CodingKeys: String, CodingKey { case walletId, draftId, password; case transaction = "final" }
+        }
+        func resource(_ name: String, _ extensionName: String) throws -> URL {
+            try XCTUnwrap(Bundle(for: Self.self).url(forResource: name, withExtension: extensionName))
+        }
+        let decoder = JSONDecoder(); decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let fixture = try decoder.decode(Fixture.self, from: Data(contentsOf: resource("native-signing", "json")))
+        let wallet = fixture.walletId, draft = fixture.draftId, txid = fixture.transaction.txid
+        let signed = try Data(contentsOf: resource("native-signed-response", "psbt"))
+        func exact(_ value: FinalTransactionInfo) {
+            XCTAssertEqual(value.txid, txid); XCTAssertEqual(value.wtxid, fixture.transaction.wtxid)
+            XCTAssertEqual(value.transactionBytes.map { String(format: "%02x", $0) }.joined(), fixture.transaction.raw)
+        }
+        let endpoint = "http://127.0.0.1:3003" // Synthetic local fixture, NOT a Signet broadcast.
+        func sync(_ core: Tundra) throws {
+            let operation = try core.prepareSync(walletId: wallet, endpoint: endpoint, privacyConsent: true)
+            try core.runSync(operationId: operation.id)
+            let deadline = ProcessInfo.processInfo.systemUptime + 30
+            while true {
+                let progress = try core.syncProgress(operationId: operation.id)
+                if progress.state == .complete { return }
+                guard progress.state != .failed && progress.state != .cancelled,
+                      ProcessInfo.processInfo.systemUptime < deadline else {
+                    XCTFail("Public fixture scan failed or timed out"); throw StorageAccessError.unavailable
+                }
+                Thread.sleep(forTimeInterval: 0.01)
+            }
+        }
+        try isolated { directory, service in
+            let database = directory.appendingPathComponent("wallet.sqlite")
+            try FileManager.default.copyItem(at: resource("native-unsigned", "sqlite"), to: database)
+            var core: Tundra? = try StorageVault.openActive(directory: directory, service: service)
+            XCTAssertEqual(try core!.drafts(walletId: wallet).first?.state, "unsigned")
+            XCTAssertFalse(try core!.signingProgress(walletId: wallet, draftId: draft).complete)
+            XCTAssertThrowsError(try core!.finalizeDraft(walletId: wallet, draftId: draft))
+            let progress = try core!.acceptSignedPsbt(walletId: wallet, draftId: draft, payload: signed)
+            XCTAssertTrue(progress.complete); XCTAssertEqual(progress.inputs.count, 2)
+            XCTAssertTrue(progress.inputs.allSatisfy { $0.validSignatures == $0.requiredSignatures })
+            exact(try core!.finalizeDraft(walletId: wallet, draftId: draft))
+            XCTAssertNil(try core!.broadcastStatus(walletId: wallet, draftId: draft))
+            core = nil
+            XCTAssertEqual(try inspectStorage(path: database.path), .protectedOrUnknown)
+            core = try StorageVault.openActive(directory: directory, service: service)
+            exact(try XCTUnwrap(core!.finalizedDraft(walletId: wallet, draftId: draft)))
+            core = nil
+            core = try StorageVault.restoreActive(source: resource("native-signed-backup", "tundra"), password: fixture.password, directory: directory, service: service)
+            XCTAssertNil(try core!.wallets().first?.totalSats)
+            XCTAssertEqual(try core!.drafts(walletId: wallet).first?.state, "invalidated")
+            XCTAssertTrue(try core!.recoveryRequired(walletId: wallet, draftId: draft))
+            var review = RecoveryReviewRequest(walletId: wallet, draftId: draft, expectedTxid: txid, expectedAttempt: 1, reviewAcknowledged: true)
+            XCTAssertThrowsError(try core!.resumeRecoveredSubmission(request: review))
+            try sync(core!)
+            XCTAssertEqual(try core!.coins(walletId: wallet).filter { $0.state == .reserved }.count, 2)
+            review.reviewAcknowledged = false
+            XCTAssertThrowsError(try core!.resumeRecoveredSubmission(request: review))
+            review.reviewAcknowledged = true
+            exact(try core!.resumeRecoveredSubmission(request: review))
+            XCTAssertFalse(try core!.recoveryRequired(walletId: wallet, draftId: draft))
+            XCTAssertFalse(try XCTUnwrap(core!.broadcastStatus(walletId: wallet, draftId: draft)).acknowledged)
+            var request = BroadcastRequest(walletId: wallet, draftId: draft, endpoint: endpoint, expectedTxid: txid, previousAttempt: 1, privacyConsent: false, retryAcknowledged: false)
+            XCTAssertThrowsError(try core!.broadcastDraft(request: request))
+            request.privacyConsent = true
+            XCTAssertThrowsError(try core!.broadcastDraft(request: request))
+            request.retryAcknowledged = true
+            let sent = try core!.broadcastDraft(request: request)
+            XCTAssertTrue(sent.acknowledged); XCTAssertEqual(sent.observation, .notSeen); XCTAssertEqual(sent.attemptId, 2)
+            core = nil
+            XCTAssertNotEqual(try selectedStorage(root: directory.path).generation, "default")
+            core = try StorageVault.openActive(directory: directory, service: service)
+            let retained = try XCTUnwrap(core!.broadcastStatus(walletId: wallet, draftId: draft))
+            XCTAssertTrue(retained.acknowledged); XCTAssertEqual(retained.attemptId, 2)
+            try sync(core!)
+            XCTAssertEqual(try core!.broadcastStatus(walletId: wallet, draftId: draft)?.observation, .mempool)
+            XCTAssertEqual(try core!.drafts(walletId: wallet).first?.state, "observed")
+            let coins = try core!.coins(walletId: wallet)
+            XCTAssertFalse(coins.contains { $0.state == .reserved })
+            let output = try XCTUnwrap(coins.first { $0.outpoint.hasPrefix(txid + ":") })
+            let source = try XCTUnwrap(core!.outputSource(walletId: wallet, outpoint: output.outpoint))
+            XCTAssertEqual(source.id, draft); XCTAssertEqual(source.inputs.count, 2); XCTAssertEqual(output.label, source.label)
+            try core!.setLabel(walletId: wallet, kind: "output", reference: output.outpoint, label: "Public native user edit")
+            try sync(core!)
+            XCTAssertEqual(try core!.coins(walletId: wallet).first { $0.outpoint == output.outpoint }?.label, "Public native user edit")
+            core = nil
+        }
+    }
+
     private func isolated(_ operation: (URL, String) throws -> Void) throws {
         let id = UUID().uuidString
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent("vault-test-" + id)
