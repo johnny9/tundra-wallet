@@ -71,4 +71,10 @@ The September 9 09:17 UTC recheck still reports a running session/container, unk
 no ADB devices. Local Rust/Android builds and hosted native validation can continue without
 further sudo installation; Waydroid connectivity is a separate optional local-runtime gate.
 
+The same `check-android-apks.sh` path now passes all 18 instrumentation tests and retained-state
+cold restart on a fresh hosted experimental 16 KiB emulator with 4 GiB RAM. It uses the exact
+matching APKs from the passing main CI run. This validates APK reuse on that emulator, not
+Waydroid itself; the local connection/fresh-installation prerequisites still apply. See the
+[runtime evidence](../validation/android-16k-passing-checks.json).
+
 Keep the [validation report](VALIDATION.md) as the authority for tests actually executed.

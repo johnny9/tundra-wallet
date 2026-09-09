@@ -50,6 +50,9 @@ These are ordered work packages, not time estimates.
 - Native coin selection, review, PSBT file export and saved drafts are implemented; all four
   modes and interrupted-draft restart pass on both platforms. Broader layouts/accessibility
   and physical file-provider qualification remain.
+- The same Android APKs also pass all 18 tests and cold restart on the experimental 16 KiB
+  x86_64 image with 4 GiB RAM and compatibility fallback disabled. Physical ARM64 page-size
+  and low-memory qualification remain separate.
 - Apple layout screenshots exposed inherited orange coin text and weak light-theme contrast.
   Explicit neutral coin text and the approved accent/secondary/error/primary-button colors
   now compile and render in the passing native suite. Source color-pair calculations and

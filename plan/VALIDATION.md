@@ -35,12 +35,24 @@ in both appearance modes, and its light screenshot shows readable status icons. 
 screenshots and comparison limits are [retained in the repository](../validation/native-2026-09-09/README.md).
 The Android builder removes two unused BBQr cdylibs; all ten remaining APK libraries pass
 correct-ABI, 16 KiB ELF/ZIP alignment, nonexecutable-stack and relocation checks. The trimmed
-APK passes the complete runtime suite. This is not 16 KiB runtime qualification. Earlier
+APK passes the complete ordinary runtime suite; the separate 16 KiB result follows below. Earlier
 source/local-check records are retained at
 [iOS colors](../validation/ios-semantic-color-checks.json),
 [Android system icons](../validation/android-system-bar-checks.json) and
 [native packaging](../validation/android-native-packaging-checks.json); their pending statements
 are superseded by this run.
+
+The additional experimental **16 KiB Android runtime gate now passes** in
+[run 34337878825](https://github.com/johnny9/tundra-wallet/actions/runs/34337878825): the exact
+same app/test APKs pass **all 18 instrumentation tests and retained-state cold restart**.
+The emulator reports 16384-byte pages, with compatibility fallback explicitly disabled and
+checked. The image's default 2.5 GiB allocation caused Android to terminate instrumentation
+with `LOW_MEMORY`; the unchanged tests pass with a 4 GiB guest. Setup failures and diagnostic
+corrections remain in the [initial](../validation/android-16k-first-checks.json) and
+[diagnostic](../validation/android-16k-diagnostic-checks.json) records. Exact passing hashes,
+counts and limits are in [the 16 KiB result](../validation/android-16k-passing-checks.json).
+This qualifies the recorded experimental x86_64 environment, not physical ARM64 page-size or
+low-memory behavior. No application gate or test expectation changed.
 
 The three 61-second AddressSanitizer runs complete **1,469,122 parser / 1,220 USB protocol /
 503,608 signature cases** without crashes. The recorded RustSec audit reports zero

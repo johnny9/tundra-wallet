@@ -1,0 +1,55 @@
+{
+  "recorded_at": "2026-09-09T09:41:59.660404+00:00",
+  "application_source": "1a9499c8694dd6d26a86040c61d890d3d5653050",
+  "source_ci_run": 34332720770,
+  "dispatch_correction": "First dispatch at e65cd97 was rejected with HTTP 422 because runner.temp is unavailable in job env; moved path setup into a step before the first actual run",
+  "setup_run": {
+    "id": 34335342115,
+    "workflow_source": "58e1cdc701623e1c899df643f52fb3d6257b7229",
+    "job": 102413309243,
+    "result": "FAIL before boot: pinned action overrode the custom AVD directory and recreated it with an invalid ABI tag"
+  },
+  "runtime_run": {
+    "id": 34335668768,
+    "workflow_source": "9244b0fb11929787934f3d00caba187a51637cb0",
+    "job": 102414349992,
+    "result": "FAIL: instrumentation process crashed before reporting tests",
+    "page_size": 16384,
+    "compatibility_fallback": "Both disabling properties were set and their values checked",
+    "image": "google/sdk_gphone16k_x86_64/emu64xa16k:15/AE3A.240806.043/12960925:userdebug/dev-keys",
+    "apk_sha256": "367f559a07cc49ecee1865c5d07f0e715e2164c57de7a07365fdac36fe9bebe5",
+    "cold_restart": "NOT RUN"
+  },
+  "next_gate": "Run 34336051607 collects bounded crash diagnostics; no confirmed cause or 16 KiB application compatibility claimed",
+  "reference": "https://developer.android.com/guide/practices/page-sizes",
+  "files": [
+    {
+      "path": "build/android-16k-first.log",
+      "sha256": "b8484136df7342eb5b6b08b91087d9a2b3e24f564312650b27f51afb315d2eec"
+    },
+    {
+      "path": "build/android-16k-second.log",
+      "sha256": "2a9fe05451196938402717e71199b93d4eb61785871efe63289cd364ed3e7a70"
+    },
+    {
+      "path": "build/android-16k-second.zip",
+      "sha256": "9c7b28c84b1a11a7f8409ef16043983080d8388599d67aa93ae8bcbae7a1069c"
+    },
+    {
+      "path": "build/android-16k-second-results/android-16k-system.log",
+      "sha256": "dd421ce1334c46172780b1f6599ae9de0e5eb852d9db44c7fa657e4c8960fee6"
+    },
+    {
+      "path": "build/android-16k-second-results/android-apk-instrumentation.log",
+      "sha256": "cc376fcd260b55a01f82c04af5e0a9ead88516f600131a38bdea1a3e05b10a8d"
+    },
+    {
+      "path": "build/android-16k-second-results/android-16k-page-size.log",
+      "sha256": "33f50728129313570f6b953c08b559d9cb5f673e981e647cee4dc10d6cd48e99"
+    },
+    {
+      "path": "build/android-16k-second-results/android-16k-source.json",
+      "sha256": "a34c7c44fce0a8268a05c4e91985f8dc32f11263ca42ce6e68f4be5b632b8c66"
+    }
+  ]
+}

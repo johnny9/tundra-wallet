@@ -50,6 +50,9 @@ approval system, or cloud account.
 - The final source checkpoint `1a9499c` passes all four CI jobs, including the iOS semantic
   colors, Android system-bar mode assertions and trimmed JNI packaging. Public appearance
   screenshots and their limits are retained with the validation evidence.
+- The same app/test APKs also pass all 18 tests and cold restart on the experimental 16 KiB
+  Android image with 4 GiB RAM and compatibility fallback disabled. Initial setup and
+  low-memory failures are retained in the separate compatibility evidence.
 - Not performed locally: Android instrumentation or an Xcode build.
 - **No real-funds use. No supported hardware devices yet.**
 

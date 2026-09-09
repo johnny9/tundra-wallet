@@ -94,8 +94,29 @@ are removed from generated output. The local APK passes actual ABI, ELF/ZIP 16 K
 nonexecutable stack and relocation protection checks for all ten remaining shared libraries.
 The trimmed APK also passes all 18 instrumentation tests and cold restart in
 [run 34332720770](https://github.com/johnny9/tundra-wallet/actions/runs/34332720770); see
-[binary inspection evidence](../validation/android-native-packaging-checks.json). A 16 KiB
-runtime remains a separate gate, following the [Android guidance](https://developer.android.com/guide/practices/page-sizes).
+[binary inspection evidence](../validation/android-native-packaging-checks.json). The separate
+16 KiB runtime gate also passes as described below, following the
+[Android guidance](https://developer.android.com/guide/practices/page-sizes).
+
+The manually dispatched `Validate Android APKs on 16 KiB emulator` workflow reuses the app
+and instrumentation APKs from one successful main CI run. It checks that the recorded source
+and local fixture/helper code match, creates a fresh experimental x86_64 16 KiB AVD, requires
+`getconf PAGE_SIZE` to return 16384 and disables page-size compatibility fallback before
+instrumentation and cold restart. It records source/APK hashes and bounded runtime results.
+The existing pinned emulator action supports a pre-created AVD; creation omits its inferred
+ABI tag because the experimental image uses a different tag. This does not qualify physical
+ARM64 memory-page behavior. Initial booted runs report 16384-byte pages and disable
+compatibility fallback, but Android terminates instrumentation. A subsequent process-exit
+record identifies `LOW_MEMORY` with the image's default 2.5 GiB allocation. With 4 GiB, the
+unchanged APKs pass all 18 instrumentation tests and retained-state cold restart in
+[run 34337878825](https://github.com/johnny9/tundra-wallet/actions/runs/34337878825). Exact
+results and earlier failures are retained in [the compatibility evidence](../validation/android-16k-passing-checks.json).
+
+```sh
+gh workflow run android-16k.yml --ref master \
+  -f source_run=34332720770 \
+  -f source_commit=1a9499c8694dd6d26a86040c61d890d3d5653050
+```
 
 ## Build commands
 

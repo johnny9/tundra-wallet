@@ -20,6 +20,8 @@ Latest tested application source: [`1a9499c`, all four CI jobs pass](https://git
 Results: **189 Rust + 34 offline**, **10 Android JVM + 18 instrumentation + cold restart**,
 and **6 Swift host FFI + 17 iOS simulator tests**. See the [validation report](plan/VALIDATION.md)
 for exact scope, screenshots and remaining acceptance gates.
+The same Android APKs also pass the [experimental 16 KiB runtime check](https://github.com/johnny9/tundra-wallet/actions/runs/34337878825),
+including all 18 instrumentation tests and cold restart.
 
 ## Start here
 

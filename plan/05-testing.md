@@ -9,6 +9,7 @@
 | Static Rust quality | `cargo fmt --all --check`, `cargo clippy --workspace --all-targets --all-features --locked -- -D warnings`; both are required |
 | FFI contract | Kotlin/JVM and macOS Swift tests call the real host library; Android/iOS tests exercise mobile ABIs and restart. Active-network lifecycle/cancellation on phones remains open |
 | Native apps | Android JVM/instrumentation plus emulator; iOS simulator tests; small/large screens, accessibility text, dark/light, file permissions |
+| Android memory-page compatibility | Actual APK ELF/ZIP checks and all 18 APK tests/cold restart pass on the experimental 16 KiB x86_64 emulator with 4 GiB RAM; physical ARM64 qualification remains |
 | Bitcoin integration | Regtest/signet synthetic funding, reorgs, conflicts, receive/change persistence, fee accounting, strict exact-input behavior |
 | Hardware | Physical devices and qualified firmware, not just emulators or a README support list |
 | Security | Fuzz descriptor/BIP329/PSBT/QR parsers, transaction mutation corpus, storage crash tests, privacy/network/log inspection |

@@ -1,0 +1,79 @@
+{
+  "recorded_at": "2026-09-09T10:01:25.681591+00:00",
+  "application_source": "1a9499c8694dd6d26a86040c61d890d3d5653050",
+  "unchanged_apk_sha256": "367f559a07cc49ecee1865c5d07f0e715e2164c57de7a07365fdac36fe9bebe5",
+  "runs": [
+    {
+      "id": 34336051607,
+      "source": "2f080f4db9bbb8717dff6f2e4a8e71e4141a6ed4",
+      "result": "Instrumentation process termination; crash filter unavailable because hosted runner has no rg. Empty crash report is not evidence of an empty crash buffer."
+    },
+    {
+      "id": 34336490309,
+      "source": "171a3764c3fa1455acc93578f27cda4a1c1bdfe3",
+      "result": "18 tests discovered, first backup-document test starts, process terminates. Retained process-launch/memory diagnostics; crash filter still unavailable."
+    },
+    {
+      "id": 34337068728,
+      "source": "b94ef554e10f1c59076895c49078fe3760c9f69c",
+      "result": "Initial adb root connection closed before runtime page-size gate. No application tests run."
+    },
+    {
+      "id": 34337388302,
+      "source": "4627f4b759ba1868ebd9638077819eb47023919b",
+      "job": 102419875635,
+      "result": "Verified root/page-size/disabled compatibility fallback; process-exit metadata identifies Android LOW_MEMORY termination",
+      "exit_reason": "reason=3 (LOW_MEMORY), subreason=0 (UNKNOWN), importance=100",
+      "guest_memory_kib": 2532420,
+      "artifact": 10098346992
+    }
+  ],
+  "correction": "Configure 4096M emulator RAM at 0eb1661; next runtime run pending. No application library or validation gate changed.",
+  "limits": "No completed 16 KiB app suite, cold restart or physical low-memory behavior is claimed by this diagnostic record. No memory/register contents or UI trees were inspected.",
+  "files": [
+    {
+      "path": "build/android-16k-third.log",
+      "sha256": "8938411a435a1634fa18a29be2fd6bdb2737531072d6575f7e077c310b739fb0"
+    },
+    {
+      "path": "build/android-16k-third.zip",
+      "sha256": "db916d77ba24ce0251a7ea51e0873a146a91864a57d05dbef0bf881473dfc7a8"
+    },
+    {
+      "path": "build/android-16k-fourth.log",
+      "sha256": "ee2d23cb5dd32b989d3b951ff8197ba612458abfd90fdef8708ccc1d3aa92b93"
+    },
+    {
+      "path": "build/android-16k-fourth.zip",
+      "sha256": "4b3808fd78d8142356fc26eb43c4bf487effdae749949dd5f1358b86b2560e3b"
+    },
+    {
+      "path": "build/android-16k-fifth.log",
+      "sha256": "9b300c514b200375621fc912af8b7573d82c412d840a1cfa410f0dbc3321c24c"
+    },
+    {
+      "path": "build/android-16k-fifth.zip",
+      "sha256": "0d906a889afefcd063624243667cf05aabd5f5b0fb480b398a0e26aea11ec50c"
+    },
+    {
+      "path": "build/android-16k-sixth.log",
+      "sha256": "26ff85cebb150e6592390d31925db29e4743704f2fbb24fd517ed008b2fa844c"
+    },
+    {
+      "path": "build/android-16k-sixth.zip",
+      "sha256": "8161bb596e47840d2b56b67e2a4f5055b69dd5599aec3cd582ad8a6f904455c7"
+    },
+    {
+      "path": "build/android-16k-sixth-results/android-16k-exit-info.log",
+      "sha256": "cdcfc05890730e5bef9e54a75c7a705038385c29a0ccb1bf369c6962ef380c4c"
+    },
+    {
+      "path": "build/android-16k-sixth-results/android-16k-memory.log",
+      "sha256": "354620d2014265038442edf3b850ca790b40c2c9840c97284dd7deabdfc12510"
+    },
+    {
+      "path": "build/android-16k-sixth-results/android-16k-launch.log",
+      "sha256": "cf665f6d413f18855da0b4fc41f3abcac93da61ea1a5ae8048f2644f60d2dff4"
+    }
+  ]
+}

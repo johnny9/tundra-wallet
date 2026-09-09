@@ -1,0 +1,90 @@
+{
+  "recorded_at": "2026-09-09T10:08:26.824918+00:00",
+  "run": 34337878825,
+  "url": "https://github.com/johnny9/tundra-wallet/actions/runs/34337878825",
+  "job": 102421459809,
+  "workflow_source": "0eb1661fc9aeabad6c40133a8e8b9fa05c3da26a",
+  "application_source": "1a9499c8694dd6d26a86040c61d890d3d5653050",
+  "source_ci_run": 34332720770,
+  "artifact": 10098624913,
+  "result": "PASS: all 18 instrumentation tests and retained-state cold restart",
+  "instrumentation": {
+    "passed": 18,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 132.562,
+    "runner": "Matching prebuilt APKs via scripts/check-android-apks.sh, not a Gradle rebuild"
+  },
+  "cold_restart": {
+    "result": "PASS",
+    "launch_state": "COLD",
+    "launch_ms": 2575,
+    "assertions": "Retained synced fixture balance and exact-input draft"
+  },
+  "environment": {
+    "target": "system-images;android-35;google_apis_ps16k;x86_64",
+    "fingerprint": "google/sdk_gphone16k_x86_64/emu64xa16k:15/AE3A.240806.043/12960925:userdebug/dev-keys",
+    "memory": "4096M",
+    "verified_page_size": 16384,
+    "compatibility_fallback": "bionic.linker.16kb.app_compat.enabled=false and pm.16kb.app_compat.disabled=true; both values checked before testing"
+  },
+  "apk_sha256": "367f559a07cc49ecee1865c5d07f0e715e2164c57de7a07365fdac36fe9bebe5",
+  "test_apk_sha256": "0e848219a522699f3171e0f89e685d1e4afaddc5d72126b812e68c0ba84ea72e",
+  "correction": "The earlier diagnostic run recorded Android LOW_MEMORY termination with the image default of 2.5 GiB. Increasing the disposable guest to 4 GiB allows the unchanged APKs and unchanged 18 tests to pass.",
+  "prior_evidence": [
+    "validation/android-16k-first-checks.json",
+    "validation/android-16k-diagnostic-checks.json"
+  ],
+  "limits": [
+    "Experimental x86_64 16 KiB environment, not physical ARM64 page behavior",
+    "No physical low-memory, device, camera or USB qualification",
+    "Waydroid still has no IP/ADB connection; this validates its reusable APK script on the hosted emulator only",
+    "No application code, signature policy, storage gate or test expectation was weakened"
+  ],
+  "reference": "https://developer.android.com/guide/practices/page-sizes",
+  "files": [
+    {
+      "path": "build/android-16k-passing.log",
+      "sha256": "44a34517cbcd39dcffef34d795ba95982ddc69f7483011f0f428c5e2c55d0762"
+    },
+    {
+      "path": "build/android-16k-passing.zip",
+      "sha256": "2e53f9b4ef4c126e23915eb1daa9725764ba2963d8bbaa058e558abe9dbc9b4b"
+    },
+    {
+      "path": "build/android-16k-passing-results/android-16k-system.log",
+      "sha256": "dd421ce1334c46172780b1f6599ae9de0e5eb852d9db44c7fa657e4c8960fee6"
+    },
+    {
+      "path": "build/android-16k-passing-results/android-16k-abis.log",
+      "sha256": "79861d534dd25845f4329d0546f2202124ad6e6af060fdcd362e176faf1f0b14"
+    },
+    {
+      "path": "build/android-16k-passing-results/android-apk-instrumentation.log",
+      "sha256": "d4f2166381419f045c0654989231a4ac612a27d6749f66bce61abd7646941172"
+    },
+    {
+      "path": "build/android-16k-passing-results/android-16k-page-size.log",
+      "sha256": "33f50728129313570f6b953c08b559d9cb5f673e981e647cee4dc10d6cd48e99"
+    },
+    {
+      "path": "build/android-16k-passing-results/android-16k-source.json",
+      "sha256": "a34c7c44fce0a8268a05c4e91985f8dc32f11263ca42ce6e68f4be5b632b8c66"
+    },
+    {
+      "path": "build/android-16k-passing-results/android-restart-launch.log",
+      "sha256": "b940158b84df5bafcf66abe9ac5400fcad6258a22281cd65db90b06a0ff63b66"
+    },
+    {
+      "path": "build/android-16k-handoff-offline.log",
+      "sha256": "51b981abf9ab9c303f805bc50cefdf42b9cd0edf75dacba84546a8183bd4b771"
+    }
+  ],
+  "documentation_validation": {
+    "offline_passed": 34,
+    "relative_links_verified": 85,
+    "prior_evidence_hashes_verified": 26,
+    "workflow_and_embedded_shell_syntax": "PASS",
+    "scope": "Documentation/evidence follow-up only; the dispatched workflow and application source are identified above"
+  }
+}
