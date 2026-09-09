@@ -22,6 +22,7 @@ final class WalletModel: ObservableObject {
     @Published var signing: SigningInfo?
     @Published var finalized: FinalTransactionInfo?
     @Published var submission: BroadcastInfo?
+    @Published var recoveryRequired = false
     @Published var qrFrames: [String]?
     @Published var exportedPSBT: String?
     @Published var labelPreview: LabelImportPreview?
@@ -51,7 +52,7 @@ final class WalletModel: ObservableObject {
     }
     func load() { run { try await self.refresh(); self.storageReady = true } }
     private func refresh() async throws {
-        signing = nil; finalized = nil; submission = nil
+        signing = nil; finalized = nil; submission = nil; recoveryRequired = false
         wallets = try await service.wallets()
         if !wallets.contains(where: { $0.id == selectedID }) { selectedID = wallets.first?.id }
         if let id = selectedID {
@@ -61,7 +62,10 @@ final class WalletModel: ObservableObject {
             drafts = try await service.drafts(id)
             selectedCoins.formIntersection(coins.filter { $0.state == .available }.map(\.outpoint))
             if let old = review { review = drafts.first { $0.id == old.id } }
-            if let review { submission = try await service.broadcastStatus(review.walletId, draftID: review.id) }
+            if let review {
+                submission = try await service.broadcastStatus(review.walletId, draftID: review.id)
+                recoveryRequired = try await service.recoveryRequired(review.walletId, draftID: review.id)
+            }
             if let review, !["invalidated", "observed"].contains(review.state), submission == nil {
                 let progress = try await service.signingProgress(review.walletId, draftID: review.id)
                 let finalized = try await service.finalized(review.walletId, draftID: review.id)
@@ -177,7 +181,7 @@ final class WalletModel: ObservableObject {
         }
     }
     func openReview(_ review: PaymentReview) {
-        self.review = review; signing = nil; finalized = nil; submission = nil
+        self.review = review; signing = nil; finalized = nil; submission = nil; recoveryRequired = false
         run { try await self.refresh() }
     }
     func importSignedDraft(_ url: URL, walletID: String, draftID: String) {
@@ -215,7 +219,15 @@ final class WalletModel: ObservableObject {
             try await self.refresh()
         }
     }
-    func closeReview() { review = nil; signing = nil; finalized = nil; submission = nil; qrFrames = nil }
+    func resumeRecovery(_ request: RecoveryReviewRequest) {
+        run {
+            guard self.selectedID == request.walletId, self.review?.id == request.draftId else { return }
+            do { try await self.service.resumeRecovery(request) }
+            catch { try await self.refresh(); throw error }
+            try await self.refresh()
+        }
+    }
+    func closeReview() { review = nil; signing = nil; finalized = nil; submission = nil; recoveryRequired = false; qrFrames = nil }
     func inspectLabels(_ url: URL) {
         run {
             guard let id = self.selectedID else { return }

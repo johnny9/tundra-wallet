@@ -112,6 +112,9 @@ import dev.johnny9.tundra.generated.*
                     Text(submission.txid, style = MaterialTheme.typography.bodySmall)
                     Text(submission.endpoint, style = MaterialTheme.typography.bodySmall)
                     Text(submissionMessage(submission))
+                    if (s.recoveryRequired) {
+                        RecoveryReviewSection(review, submission, s.wallet?.synced == true, s.busy, vm::resumeRecovery)
+                    }
                 }
                 val transactionId = s.finalized?.txid ?: s.submission?.txid
                 if (review.state == "finalized" && transactionId != null) {

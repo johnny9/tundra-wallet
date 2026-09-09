@@ -25,6 +25,7 @@ data class WalletState(
     val endpoint: String = "", val sync: SyncInfo? = null,
     val selected: Set<String> = emptySet(), val drafts: List<PaymentReview> = emptyList(),
     val review: PaymentReview? = null, val signing: SigningInfo? = null,
+    val recoveryRequired: Boolean = false,
     val outputSource: PaymentReview? = null, val sourceOutpoint: String? = null,
     val finalized: FinalTransactionInfo? = null, val submission: BroadcastInfo? = null, val qrFrames: List<String>? = null
 ) { val wallet: WalletInfo? get() = wallets.firstOrNull { it.id == selectedId } }
@@ -79,7 +80,8 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         val review = mutable.value.review?.let { old -> drafts.firstOrNull { it.id == old.id } }
         mutable.value = mutable.value.copy(wallets = wallets, selectedId = id, coins = coins, activity = activity, endpoint = endpoint, drafts = drafts, selected = selected, review = review, signing = null, finalized = null, submission = null)
         val submission = review?.let { withContext(Dispatchers.IO) { engine().broadcastStatus(it.walletId, it.id) } }
-        mutable.value = mutable.value.copy(submission = submission)
+        val recoveryRequired = review?.let { withContext(Dispatchers.IO) { engine().recoveryRequired(it.walletId, it.id) } } ?: false
+        mutable.value = mutable.value.copy(submission = submission, recoveryRequired = recoveryRequired)
         if (review != null && review.state !in listOf("invalidated", "observed") && submission == null) {
             val signing = withContext(Dispatchers.IO) { engine().signingProgress(review.walletId, review.id) }
             val finalized = withContext(Dispatchers.IO) { engine().finalizedDraft(review.walletId, review.id) }
@@ -136,8 +138,8 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         withContext(Dispatchers.IO) { engine().editCoins(checkNotNull(s.selectedId), s.selected.toList(), label, frozen) }
         refresh()
     }
-    fun openReview(review: PaymentReview) { mutable.value = mutable.value.copy(review = review, signing = null, finalized = null, submission = null); run { refresh() } }
-    fun closeReview() { mutable.value = mutable.value.copy(review = null, signing = null, finalized = null, submission = null, qrFrames = null) }
+    fun openReview(review: PaymentReview) { mutable.value = mutable.value.copy(review = review, signing = null, finalized = null, submission = null, recoveryRequired = false); run { refresh() } }
+    fun closeReview() { mutable.value = mutable.value.copy(review = null, signing = null, finalized = null, submission = null, recoveryRequired = false, qrFrames = null) }
     fun createPayment(mode: Int, address: String, amount: String, fee: String, label: String, automatic: Boolean, acknowledge: Boolean) = run {
         val s = mutable.value
         val review = withContext(Dispatchers.IO) {
@@ -190,6 +192,11 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         check(mutable.value.review?.id == request.draftId && mutable.value.selectedId == request.walletId)
         try { withContext(Dispatchers.IO) { engine().broadcastDraft(request) } }
         finally { refresh() } // Re-read durable uncertainty even if acknowledgement persistence failed.
+    }
+    fun resumeRecovery(request: RecoveryReviewRequest) = run {
+        check(mutable.value.review?.id == request.draftId && mutable.value.selectedId == request.walletId)
+        try { withContext(Dispatchers.IO) { engine().resumeRecoveredSubmission(request) } }
+        finally { refresh() }
     }
     fun closeQr() { mutable.value = mutable.value.copy(qrFrames = null) }
     fun sync(endpoint: String, consent: Boolean) = run {

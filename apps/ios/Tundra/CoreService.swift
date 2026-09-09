@@ -40,6 +40,10 @@ actor CoreService {
     func finalized(_ walletID: String, draftID: String) throws -> FinalTransactionInfo? { try engine().finalizedDraft(walletId: walletID, draftId: draftID) }
     func broadcastStatus(_ walletID: String, draftID: String) throws -> BroadcastInfo? { try engine().broadcastStatus(walletId: walletID, draftId: draftID) }
     func broadcast(_ request: BroadcastRequest) throws { _ = try engine().broadcastDraft(request: request) }
+    func recoveryRequired(_ walletID: String, draftID: String) throws -> Bool {
+        try engine().recoveryRequired(walletId: walletID, draftId: draftID)
+    }
+    func resumeRecovery(_ request: RecoveryReviewRequest) throws { _ = try engine().resumeRecoveredSubmission(request: request) }
     func importSignedQr(_ walletID: String, draftID: String, payload: Data) throws {
         _ = try engine().acceptSignedPsbt(walletId: walletID, draftId: draftID, payload: payload)
     }

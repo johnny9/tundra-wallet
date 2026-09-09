@@ -83,6 +83,11 @@ struct PaymentView: View {
                             Text(submission.txid).font(.caption)
                             Text(submission.endpoint).font(.caption)
                             Text(submissionMessage(submission))
+                            if model.recoveryRequired {
+                                RecoveryReviewSection(review: review, submission: submission, synced: model.wallet?.synced == true,
+                                    busy: model.busy, resume: model.resumeRecovery)
+                                    .id("\(review.walletId):\(review.id):\(submission.attemptId):\(model.wallet?.syncedAt ?? 0)")
+                            }
                         }
                         if review.state == "finalized", let transactionID = model.finalized?.txid ?? model.submission?.txid {
                             Button(model.submission == nil ? "Review test-network broadcast" : "Review resubmission") {
