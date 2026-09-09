@@ -8,8 +8,8 @@ It never imports or generates Bitcoin private signing keys.
 
 > **Development source, not a released wallet. Use disposable test descriptors only.**
 > Rust tests and recorded native builds, payment modes and initial restart checks pass.
-> Current backup document UI checks still fail; see the exact validation report below.
-> Android's published-signature/vault submission test passes; positive submission UI remains open.
+> Android backup document exchange and restore pass. iOS import/restore UI remains under validation.
+> Both native published-signature/vault submission tests pass; positive submission UI remains open.
 > Explicit test-network sync and external signature validation are implemented. Hardware
 > signing remains unavailable. Explicit test-network broadcast has software validation;
 > USB device and camera qualification remain open.

@@ -6,6 +6,31 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
+The [run at dd562f9](https://github.com/johnny9/tundra-wallet/actions/runs/34315184796)
+passes Rust (**189 tests / 29 offline**), parser/audit, Cargo notice regeneration and both
+native builds. Android passes **10 JVM / all 15 instrumentation tests** and the cold
+restart check. Its real backup save, readback, import and reviewed restore pass, with
+**no launcher ANR recovery used**.
+
+iOS passes **6 host FFI / all 13 hosted runtime tests**, including published signatures,
+Keychain restore, explicit recovery/submission and provenance. The UI passes all payment
+modes, restart, actual Files export/readback and Restore-mode selection. It then fails
+looking for the exported filename: the public recording shows Files retained the random
+staging name. Both wrapper filename properties are now set to the intended backup name;
+this correction and complete system restore/restart await the next native run.
+See [`backup-roundtrip-platform-checks.json`](../validation/backup-roundtrip-platform-checks.json).
+
+The new Android positive signing/finalization screen test and iOS independent tab views
+are committed but not yet compiled or executed. Their offline checks pass. Tab-filter
+retention assertions do not establish exact long-list scroll retention or accessibility
+qualification. The manual Gradle lock/checksum collection workflow is also authored;
+its generated review artifacts and normal-build enforcement remain pending.
+
+## Earlier document and fixture checkpoints
+
+The following entries describe the results and pending work at each earlier source revision.
+The current checkpoint above supersedes their then-pending validation statements.
+
 The [next native run at ffc08e6](https://github.com/johnny9/tundra-wallet/actions/runs/34314049044)
 passes Rust (**189 tests / 29 offline**), parser/audit and the notice-regeneration gate.
 Both native app builds and published-signature/vault scenarios pass. Android passes **10 JVM

@@ -1,0 +1,51 @@
+{
+  "recorded_at": "2026-09-09T05:51:31.256231+00:00",
+  "run_id": 34315184796,
+  "source": "dd562f93d959d117ca060b9cca822dcf5f390130",
+  "conclusion": "failure",
+  "rust": "189 tests, 29 offline, formatting/Clippy and both bindings pass",
+  "parser_audit_notice_inventory": "passed",
+  "android": {
+    "build": "passed",
+    "jvm_passed": 10,
+    "instrumentation_passed": 15,
+    "instrumentation_failed": 0,
+    "system_backup_export_readback_import_reviewed_restore": "passed",
+    "cold_restart": "passed",
+    "launcher_anr_recovery_used": false,
+    "published_signatures_vault_recovery_submission_provenance": "passed"
+  },
+  "ios": {
+    "app_build": "passed",
+    "host_ffi_passed": 6,
+    "hosted_runtime_passed": 13,
+    "ui_failed": 1,
+    "payment_modes_and_restart": "passed before backup extension",
+    "system_backup_export_readback": "passed",
+    "restore_mode_and_import_picker_open": "passed",
+    "failure": "Public recording shows exported ciphertext in Files under its random export-UUID filename; expected tundra-backup name was not found, so review/restore/restart did not execute"
+  },
+  "pending_native_changes": [
+    "FileWrapper filename as well as preferredFilename set to tundra-backup.tundra; bounded named-file lookup",
+    "Android positive file-response signature counters and finalization controls",
+    "iOS independent tab views and retained-filter/accessibility assertions"
+  ],
+  "logs": [
+    {
+      "path": "build/launcher-recovery-android.log",
+      "sha256": "85091f4035bcd16f4aa596750577467ff42f9f87360812e6d1523505c29f2318"
+    },
+    {
+      "path": "build/launcher-recovery-ios.log",
+      "sha256": "b51260158c08e80a6400b18090e9e1123dd0485c1182261e2fdd67b6f6d612a0"
+    },
+    {
+      "path": "build/ios-backup-import-last.png",
+      "sha256": "d76da4e4932f2c56a7a857dacb5beb866951d3424a5687feead9c443d1a472e4"
+    },
+    {
+      "path": "build/backup-filename-offline.log",
+      "sha256": "669e094388863736f1acc29016de2227b46e917ddc826ae54a55eede3985cbee"
+    }
+  ]
+}
