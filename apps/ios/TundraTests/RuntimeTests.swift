@@ -4,6 +4,30 @@ import UIKit
 @testable import Tundra
 
 final class RuntimeTests: XCTestCase {
+    func testPortableBackupAndNativeExportCrossCommonCryptoProvider() throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let source = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "backup-v1", withExtension: "tundra"))
+        let imported = directory.appendingPathComponent("imported.tundra")
+        try FileManager.default.copyItem(at: source, to: imported)
+        let password = "Public backup test password 🧊 ' spaces "
+        let info = try inspectBackup(path: imported.path, password: password)
+        XCTAssertEqual(info.wallets.count, 1)
+        XCTAssertEqual(info.wallets.first?.name, "Backup public fixture")
+        XCTAssertFalse(try XCTUnwrap(info.wallets.first).synced)
+        XCTAssertNil(info.wallets.first?.totalSats)
+        let before = try Data(contentsOf: imported)
+        XCTAssertThrowsError(try inspectBackup(path: imported.path, password: "incorrect public test password"))
+        XCTAssertEqual(try Data(contentsOf: imported), before)
+        let fixtureURL = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "single-sig", withExtension: "txt"))
+        let fixture = try String(contentsOf: fixtureURL, encoding: .utf8)
+        let core = try Tundra.openProtected(path: directory.appendingPathComponent("wallet.sqlite").path, storageKey: Data(repeating: 0x11, count: 32))
+        let wallet = try core.importWallet(name: "Mobile backup fixture", payload: fixture, network: .signet)
+        let output = directory.appendingPathComponent("exported.tundra")
+        XCTAssertEqual(try core.exportBackup(path: output.path, password: password).wallets.first?.id, wallet.id)
+        XCTAssertEqual(try inspectBackup(path: output.path, password: password).wallets.first?.id, wallet.id)
+    }
     func testPlaintextUpgradeRefusesLiveHandlesAndPreservesMobileState() throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)

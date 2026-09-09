@@ -10,7 +10,7 @@ use std::{
 };
 use zeroize::Zeroizing;
 
-fn backend(conn: &Connection) -> Result<()> {
+pub(crate) fn backend(conn: &Connection) -> Result<()> {
     // A plain SQLite build ignores PRAGMA key. Verify the linked implementation first.
     let version: String = conn.query_row("PRAGMA cipher_version", [], |r| r.get(0))?;
     if version != tundra_sqlcipher::VERSION
@@ -88,7 +88,7 @@ pub(crate) fn open_protected(path: &Path, storage_key: &[u8]) -> Result<Connecti
     Ok(conn)
 }
 
-fn canonical_path(path: &Path) -> Result<PathBuf> {
+pub(crate) fn canonical_path(path: &Path) -> Result<PathBuf> {
     // Android's app-data roots and Apple's /var can be directory symlinks. Resolve
     // only the parent: the final database component must still pass NOFOLLOW.
     let parent = path
@@ -311,7 +311,7 @@ fn migrate(
     Ok(())
 }
 
-fn integrity(db: &Connection) -> Result<()> {
+pub(crate) fn integrity(db: &Connection) -> Result<()> {
     let mut cipher = db.prepare("PRAGMA cipher_integrity_check")?;
     if cipher.query([])?.next()?.is_some() {
         return Err(Error::CorruptState);

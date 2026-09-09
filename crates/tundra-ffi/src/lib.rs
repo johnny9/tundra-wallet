@@ -26,6 +26,29 @@ pub fn upgrade_storage(path: String, storage_key: Vec<u8>) -> Result<()> {
     Ok(core::migrate_plaintext_storage(path, storage_key)?)
 }
 
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct BackupInfo {
+    pub created_at: u64,
+    pub wallets: Vec<WalletInfo>,
+    pub drafts: u32,
+    pub submissions: u32,
+}
+impl From<core::BackupSummary> for BackupInfo {
+    fn from(value: core::BackupSummary) -> Self {
+        Self {
+            created_at: value.created_at,
+            wallets: value.wallets.into_iter().map(Into::into).collect(),
+            drafts: value.drafts,
+            submissions: value.submissions,
+        }
+    }
+}
+/// Read-only inspection; this does not restore or approve any stored transaction.
+#[uniffi::export]
+pub fn inspect_backup(path: String, password: String) -> Result<BackupInfo> {
+    Ok(core::inspect_backup(path, password)?.into())
+}
+
 #[derive(Debug, Clone, Copy, uniffi::Enum)]
 pub enum Chain {
     Mainnet,
@@ -680,6 +703,9 @@ impl Tundra {
             .core
             .output_source(&wallet_id, &outpoint)?
             .map(Into::into))
+    }
+    pub fn export_backup(&self, path: String, password: String) -> Result<BackupInfo> {
+        Ok(self.core.export_backup(path, password)?.into())
     }
     pub fn activity(&self, wallet_id: String) -> Result<Vec<ActivityInfo>> {
         Ok(self

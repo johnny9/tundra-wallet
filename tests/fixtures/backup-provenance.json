@@ -1,0 +1,16 @@
+{
+  "purpose": "Public disposable watch-only encrypted backup interoperability fixture; no Bitcoin signing keys",
+  "generator": "backup::tests::export_interop_fixture (explicit ignored Rust test requiring TUNDRA_PUBLIC_BACKUP_OUTPUT)",
+  "sqlcipher_version": "4.19.0 community",
+  "provider": "OpenSSL 3.6.3 on Linux x86_64",
+  "profile_version": 1,
+  "app_schema": 7,
+  "password_utf8": "Public backup test password 🧊 ' spaces ",
+  "password_note": "Public fixture password including its trailing space; never use this password for personal data",
+  "size": 122880,
+  "sha256": "f983964d15120a5e1a4dc9a47fecd7bd8b8056e344f42169775a6b3143fd67b1",
+  "source_descriptor": "single-sig.txt",
+  "schema_sha256": "d5719840d9e785c2ffc04806fe60d204bc2d8bf19be9c2dc09e979ce89cbb9e3",
+  "contents": "One public watch-only wallet, receive index 0, one synthetic label, no transactions/drafts/signatures/submissions",
+  "randomization": "Random SQLCipher salt; regenerating creates different ciphertext. Validate contents/profile and preserve the committed hash."
+}

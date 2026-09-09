@@ -5,3 +5,4 @@
 # Preserve upstream generated files byte for byte; their hashes are checked by build.rs.
 crates/tundra-sqlcipher/vendor/sqlite3.c -whitespace
 crates/tundra-sqlcipher/vendor/sqlite3.h -whitespace
+tests/fixtures/backup-v1.tundra binary

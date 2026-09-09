@@ -48,6 +48,8 @@ targets:
         buildPhase: resources
       - path: ../../tests/fixtures/hwi-signed-wpkh.psbt
         buildPhase: resources
+      - path: ../../tests/fixtures/backup-v1.tundra
+        buildPhase: resources
     dependencies:
       - target: Tundra
   TundraUITests:

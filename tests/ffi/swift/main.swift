@@ -107,10 +107,34 @@ func testStorageUpgrade(_ payload: String) throws {
 }
 
 precondition(CommandLine.arguments.count == 2, "Pass the public single-sig fixture path")
+func testBackup(_ payload: String, source: URL) throws {
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let imported = directory.appendingPathComponent("imported.tundra")
+    try FileManager.default.copyItem(at: source, to: imported)
+    let password = "Public backup test password 🧊 ' spaces "
+    let info = try inspectBackup(path: imported.path, password: password)
+    precondition(info.wallets.count == 1 && info.wallets[0].name == "Backup public fixture")
+    precondition(!info.wallets[0].synced && info.wallets[0].totalSats == nil)
+    let before = try Data(contentsOf: imported)
+    do {
+        _ = try inspectBackup(path: imported.path, password: "incorrect public test password")
+        preconditionFailure("Wrong backup password succeeded")
+    } catch AppError.Operation(_, _) { }
+    let after = try Data(contentsOf: imported); precondition(before == after)
+    let core = try Tundra.open(path: ":memory:")
+    let wallet = try core.importWallet(name: "Host backup fixture", payload: payload, network: .signet)
+    let output = directory.appendingPathComponent("exported.tundra")
+    let exported = try core.exportBackup(path: output.path, password: password)
+    let reopened = try inspectBackup(path: output.path, password: password)
+    precondition(exported.wallets.first?.id == wallet.id && reopened.wallets.first?.id == wallet.id)
+}
 let fixture = try String(contentsOfFile: CommandLine.arguments[1], encoding: .utf8)
 try testReopen(fixture)
 try testErrors()
 try testAmounts()
 try testProtectedStorage(fixture)
 try testStorageUpgrade(fixture)
-print("5 Swift FFI smoke tests passed")
+try testBackup(fixture, source: URL(fileURLWithPath: CommandLine.arguments[1]).deletingLastPathComponent().appendingPathComponent("backup-v1.tundra"))
+print("6 Swift FFI smoke tests passed")

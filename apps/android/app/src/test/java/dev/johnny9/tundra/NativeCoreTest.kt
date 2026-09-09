@@ -11,6 +11,25 @@ class NativeCoreTest {
     @get:Rule val temporary = TemporaryFolder()
     private val fixture get() = checkNotNull(javaClass.getResource("/single-sig.txt")).readText()
 
+    @Test fun portableEncryptedBackupCrossesHostFfi() {
+        val password = "Public backup test password 🧊 ' spaces "
+        val imported = java.io.File(temporary.root, "imported.tundra")
+        imported.writeBytes(checkNotNull(javaClass.getResource("/backup-v1.tundra")).readBytes())
+        val info = inspectBackup(imported.path, password)
+        assertEquals("Backup public fixture", info.wallets.single().name)
+        assertFalse(info.wallets.single().synced)
+        assertNull(info.wallets.single().totalSats)
+        val before = imported.readBytes()
+        assertThrows(AppException.Operation::class.java) { inspectBackup(imported.path, "incorrect public test password") }
+        assertArrayEquals(before, imported.readBytes())
+        Tundra.open(":memory:").use { core ->
+            val wallet = core.importWallet("Native backup fixture", fixture, Chain.SIGNET)
+            val output = java.io.File(temporary.root, "exported.tundra")
+            assertEquals(wallet.id, core.exportBackup(output.path, password).wallets.single().id)
+            assertEquals(wallet.id, inspectBackup(output.path, password).wallets.single().id)
+        }
+    }
+
     @Test fun importAndReopenPreserveUnicodeUnknownBalanceAndReceiveIndex() {
         val path = temporary.newFile("wallet.sqlite").absolutePath
         val imported = Tundra.open(path).use { core ->

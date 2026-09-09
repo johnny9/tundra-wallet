@@ -25,3 +25,13 @@ registry (© 2020 Blockchain Commons; Wolf McNally and Christopher Allen).
 `qr-bbqr-vectors.json` independently encodes the existing public HWI response with Python
 base64/hex/raw zlib following the BBQr specification. `qr-provenance.json` records sources
 and hashes. None of these QR vectors contains a private signing key.
+
+`backup-v1.tundra` is an encrypted SQLCipher snapshot generated on Linux with OpenSSL
+from the public single-sig descriptor, one issued address and a synthetic label. It contains
+no transactions, drafts, signatures or Bitcoin signing keys. `backup-provenance.json` records
+its public test password (including the trailing space), hash, provider and schema hash.
+The explicit ignored Rust generator requires `TUNDRA_PUBLIC_BACKUP_OUTPUT` and refuses an
+existing output. SQLCipher uses a random salt, so regeneration changes the ciphertext.
+The offline check verifies the committed hash; actual decryption and supported descriptor
+checks belong to Rust/native tests. This is not a recoverable personal wallet or a safe
+password for personal data. Native tests use it to check provider interoperability.

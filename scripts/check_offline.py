@@ -163,7 +163,14 @@ class FixtureAndSourceChecks(unittest.TestCase):
     def test_no_private_extended_keys_in_fixtures(self):
         for path in (ROOT/"tests/fixtures").iterdir():
             if path.is_file():
-                self.assertIsNone(re.search(r"(?:xprv|tprv|yprv|zprv)[1-9A-HJ-NP-Za-km-z]{40,}", path.read_text()))
+                self.assertIsNone(re.search(rb"(?:xprv|tprv|yprv|zprv)[1-9A-HJ-NP-Za-km-z]{40,}", path.read_bytes()))
+    def test_public_backup_fixture_hash_and_versioned_schema(self):
+        fixtures = ROOT/"tests/fixtures"
+        record = json.loads((fixtures/"backup-provenance.json").read_text())
+        data = (fixtures/"backup-v1.tundra").read_bytes()
+        self.assertEqual(len(data), record["size"])
+        self.assertEqual(hashlib.sha256(data).hexdigest(), record["sha256"])
+        self.assertEqual(hashlib.sha256((ROOT/"crates/tundra-core/src/backup_schema_v1.sql").read_bytes()).hexdigest(), record["schema_sha256"])
     def test_cargo_manifest_syntax_and_private_packages(self):
         root = tomllib.loads((ROOT/"Cargo.toml").read_text())
         self.assertFalse(root["workspace"]["package"]["publish"])
