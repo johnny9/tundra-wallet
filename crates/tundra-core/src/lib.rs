@@ -1,6 +1,8 @@
 //! Tundra's UI-independent, public-descriptor-only application core.
 //! Test-network development; hardware qualification and release gates remain open.
 pub mod amount;
+mod broadcast;
+pub use broadcast::{BroadcastInfo, BroadcastObservation, BroadcastRequest};
 pub mod descriptor;
 mod engine;
 mod error;

@@ -66,4 +66,17 @@ CREATE TABLE IF NOT EXISTS hardware_registrations (
     hmac BLOB NOT NULL CHECK(length(hmac)=32),
     PRIMARY KEY (wallet_id, fingerprint, policy_id)
 );
-PRAGMA user_version = 5;
+-- Record uncertainty durably before network submission. Acknowledgement is not confirmation.
+CREATE TABLE IF NOT EXISTS broadcast_attempts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    wallet_id TEXT NOT NULL,
+    draft_id TEXT NOT NULL,
+    endpoint TEXT NOT NULL,
+    txid TEXT NOT NULL CHECK(length(txid)=64),
+    wtxid TEXT NOT NULL CHECK(length(wtxid)=64),
+    requested_at INTEGER NOT NULL,
+    acknowledged INTEGER NOT NULL DEFAULT 0 CHECK(acknowledged IN (0,1)),
+    FOREIGN KEY (wallet_id,draft_id) REFERENCES finalized_drafts(wallet_id,draft_id) ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS broadcast_draft_attempts ON broadcast_attempts(wallet_id,draft_id,id);
+PRAGMA user_version = 6;

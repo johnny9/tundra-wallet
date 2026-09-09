@@ -65,7 +65,7 @@ impl Core {
         )?;
         let migration = conn.transaction_with_behavior(TransactionBehavior::Immediate)?;
         let version: i64 = migration.query_row("PRAGMA user_version", [], |r| r.get(0))?;
-        if version > 5 {
+        if version > 6 {
             return Err(Error::CorruptState);
         }
         migration.execute_batch(include_str!("schema.sql"))?;
@@ -597,6 +597,16 @@ impl Core {
     pub fn discard_draft(&self, id: &str, draft_id: &str) -> Result<()> {
         let mut db = self.lock()?;
         let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
+        let submitted: bool = tx.query_row(
+            "SELECT EXISTS(SELECT 1 FROM broadcast_attempts WHERE wallet_id=?1 AND draft_id=?2)",
+            params![id, draft_id],
+            |r| r.get(0),
+        )?;
+        if submitted {
+            return Err(Error::InvalidInput(
+                "a submission record cannot be discarded; the transaction may already be broadcast",
+            ));
+        }
         let n = tx.execute(
             "DELETE FROM drafts WHERE wallet_id=?1 AND id=?2",
             params![id, draft_id],
@@ -1004,7 +1014,7 @@ mod tests {
                 .unwrap()
                 .query_row("PRAGMA user_version", [], |r| r.get::<_, u32>(0))
                 .unwrap(),
-            5
+            6
         );
     }
     #[test]

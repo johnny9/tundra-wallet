@@ -323,7 +323,7 @@ fn transaction_vector_limits_are_checked_before_typed_parsing() {
 // Build a test-only wallet snapshot from the published Ledger public account and funding
 // transactions. The saved review is the fixture's already approved transaction; no keys
 // are generated/imported, and this injection is never exposed by the application API.
-fn saved_ledger(path: &std::path::Path) -> (crate::Core, String, String, Psbt) {
+pub(crate) fn saved_ledger(path: &std::path::Path) -> (crate::Core, String, String, Psbt) {
     use crate::{
         engine::{json, load, save},
         *,

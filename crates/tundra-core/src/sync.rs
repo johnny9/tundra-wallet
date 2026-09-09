@@ -75,7 +75,7 @@ pub(crate) struct Operations {
 
 /// HTTPS, or loopback HTTP for local test nodes/emulators. Credentials, queries,
 /// fragments, redirects and implicit environment proxies are deliberately unsupported.
-fn endpoint(value: &str, network: Network, consent: bool) -> Result<String> {
+pub(crate) fn endpoint(value: &str, network: Network, consent: bool) -> Result<String> {
     if !consent {
         return Err(Error::InvalidInput(
             "explicit endpoint privacy consent required",
@@ -337,10 +337,14 @@ pub(crate) fn invalidate_drafts(
         .collect::<std::result::Result<Vec<_>, _>>()?;
     for (draft_id, value) in drafts {
         let mut review: DraftReview = from_json(&value)?;
-        if review
-            .inputs
-            .iter()
-            .any(|i| !eligible.contains(&i.outpoint))
+        if crate::broadcast::observe_draft(db, id, &mut review, wallet)? {
+            continue;
+        }
+        if review.state == "observed"
+            || review
+                .inputs
+                .iter()
+                .any(|i| !eligible.contains(&i.outpoint))
         {
             review.state = "invalidated".into();
             db.execute(

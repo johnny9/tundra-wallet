@@ -699,6 +699,30 @@ fn stored_finalized(
         .optional()?)
 }
 
+pub(crate) fn validated_finalized(
+    db: &rusqlite::Connection,
+    wallet_id: &str,
+    draft_id: &str,
+) -> Result<Option<crate::FinalizedReview>> {
+    let draft = load_draft(db, wallet_id, draft_id)?;
+    let Some(bytes) = stored_finalized(db, wallet_id, draft_id)? else {
+        return if draft.review.state == "finalized" {
+            Err(Error::CorruptState)
+        } else {
+            Ok(None)
+        };
+    };
+    if draft.review.state != "finalized" {
+        return Err(Error::CorruptState);
+    }
+    let transaction = finalize_transaction(&draft.approved, draft.stored.as_ref(), &draft.trusted)?;
+    let result = finalized_review(&draft, &transaction);
+    if bytes != result.transaction_bytes {
+        return Err(Error::CorruptState);
+    }
+    Ok(Some(result))
+}
+
 impl crate::Core {
     /// Freeze exact final bytes and review state atomically. Requires every input's
     /// signatures and current wallet eligibility. Does not contact a network or broadcast.
@@ -739,24 +763,7 @@ impl crate::Core {
         draft_id: &str,
     ) -> Result<Option<crate::FinalizedReview>> {
         let db = self.lock()?;
-        let draft = load_draft(&db, wallet_id, draft_id)?;
-        let Some(bytes) = stored_finalized(&db, wallet_id, draft_id)? else {
-            return if draft.review.state == "finalized" {
-                Err(Error::CorruptState)
-            } else {
-                Ok(None)
-            };
-        };
-        if draft.review.state != "finalized" {
-            return Err(Error::CorruptState);
-        }
-        let transaction =
-            finalize_transaction(&draft.approved, draft.stored.as_ref(), &draft.trusted)?;
-        let result = finalized_review(&draft, &transaction);
-        if bytes != result.transaction_bytes {
-            return Err(Error::CorruptState);
-        }
-        Ok(Some(result))
+        validated_finalized(&db, wallet_id, draft_id)
     }
 
     /// Import a response atomically after verifying every supplied signature. This does not
@@ -833,7 +840,7 @@ impl crate::Core {
 
 #[cfg(test)]
 #[path = "signing_tests.rs"]
-mod tests;
+pub(crate) mod tests;
 
 #[cfg(any(test, fuzzing))]
 #[path = "../../../tests/signing_fixtures.rs"]

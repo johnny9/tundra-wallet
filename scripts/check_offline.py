@@ -63,7 +63,7 @@ class SchemaChecks(unittest.TestCase):
     def draft(self, wallet="a", ident="draft"):
         self.db.execute("INSERT INTO drafts VALUES(?,?, 'UNSIGNED_TEST_MARKER','{}','',1)", (ident, wallet))
     def test_version_and_foreign_keys(self):
-        self.assertEqual(self.db.execute("PRAGMA user_version").fetchone()[0], 5)
+        self.assertEqual(self.db.execute("PRAGMA user_version").fetchone()[0], 6)
         self.assertEqual(self.db.execute("PRAGMA foreign_keys").fetchone()[0], 1)
     def test_unknown_sync_is_null_not_zero(self):
         self.assertIsNone(self.db.execute("SELECT synced_at FROM wallets WHERE id='a'").fetchone()[0])

@@ -207,6 +207,66 @@ impl From<core::FinalizedReview> for FinalTransactionInfo {
         }
     }
 }
+#[derive(Debug, Clone, Copy, uniffi::Enum)]
+pub enum ChainObservation {
+    NotSeen,
+    Mempool,
+    Confirmed,
+}
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct BroadcastRequest {
+    pub wallet_id: String,
+    pub draft_id: String,
+    pub endpoint: String,
+    pub expected_txid: String,
+    pub previous_attempt: Option<u64>,
+    pub privacy_consent: bool,
+    pub retry_acknowledged: bool,
+}
+impl From<BroadcastRequest> for core::BroadcastRequest {
+    fn from(value: BroadcastRequest) -> Self {
+        Self {
+            wallet_id: value.wallet_id,
+            draft_id: value.draft_id,
+            endpoint: value.endpoint,
+            expected_txid: value.expected_txid,
+            previous_attempt: value.previous_attempt,
+            privacy_consent: value.privacy_consent,
+            retry_acknowledged: value.retry_acknowledged,
+        }
+    }
+}
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct BroadcastInfo {
+    pub attempt_id: u64,
+    pub wallet_id: String,
+    pub draft_id: String,
+    pub endpoint: String,
+    pub txid: String,
+    pub wtxid: String,
+    pub requested_at: u64,
+    pub acknowledged: bool,
+    pub observation: ChainObservation,
+}
+impl From<core::BroadcastInfo> for BroadcastInfo {
+    fn from(value: core::BroadcastInfo) -> Self {
+        Self {
+            attempt_id: value.attempt_id,
+            wallet_id: value.wallet_id,
+            draft_id: value.draft_id,
+            endpoint: value.endpoint,
+            txid: value.txid,
+            wtxid: value.wtxid,
+            requested_at: value.requested_at,
+            acknowledged: value.acknowledged,
+            observation: match value.observation {
+                core::BroadcastObservation::NotSeen => ChainObservation::NotSeen,
+                core::BroadcastObservation::Mempool => ChainObservation::Mempool,
+                core::BroadcastObservation::Confirmed => ChainObservation::Confirmed,
+            },
+        }
+    }
+}
 #[derive(Debug, Clone, uniffi::Enum)]
 pub enum UsbOperation {
     Inspect,
@@ -710,6 +770,19 @@ impl Tundra {
     ) -> Result<Vec<String>> {
         let payload = self.core.export_signing_psbt(&wallet_id, &draft_id)?;
         Ok(core::qr::encode_psbt(payload.as_bytes(), encoding.into())?)
+    }
+    pub fn broadcast_draft(&self, request: BroadcastRequest) -> Result<BroadcastInfo> {
+        Ok(self.core.broadcast_draft(request.into())?.into())
+    }
+    pub fn broadcast_status(
+        &self,
+        wallet_id: String,
+        draft_id: String,
+    ) -> Result<Option<BroadcastInfo>> {
+        Ok(self
+            .core
+            .broadcast_status(&wallet_id, &draft_id)?
+            .map(Into::into))
     }
     pub fn discard_draft(&self, wallet_id: String, draft_id: String) -> Result<()> {
         Ok(self.core.discard_draft(&wallet_id, &draft_id)?)

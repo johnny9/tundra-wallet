@@ -143,7 +143,8 @@ pub struct DraftReview {
     pub fee_sat_per_kwu: Option<u64>,
     pub label: String,
     pub is_consolidation: bool,
-    /// unsigned, partially_signed, signed, finalized, or invalidated. None means broadcast.
+    /// unsigned, partially_signed, signed, finalized, observed, or invalidated.
+    /// Only synchronized chain state can mark a submitted transaction observed.
     pub state: String,
 }
 

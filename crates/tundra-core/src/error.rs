@@ -35,6 +35,8 @@ pub enum Error {
     SyncLimit,
     #[error("Wallet changed during sync; retry with the current state")]
     StaleSync,
+    #[error("Broadcast preflight failed; this request did not submit a transaction")]
+    BroadcastPreflight,
     #[error("Another sync is already in progress")]
     SyncBusy,
     #[error("Not implemented in this development milestone: {0}")]
