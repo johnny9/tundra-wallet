@@ -6,6 +6,28 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
+Output provenance at `eea54c5` passes **159 Rust tests including real keyless regtest**,
+**24 offline checks**, formatting, strict Clippy and generation of both bindings. Schema 7
+applies the saved payment label to history and wallet-owned outputs only after sync observes
+the exact submitted transaction. A durable marker prevents later scans from overwriting
+user edits or restoring removed labels. Input history, rollback, wallet isolation and schema-6
+upgrade are tested. Native coin-detail presentation is authored and awaits its build/runtime
+gate. See [`output-provenance-checks.json`](../validation/output-provenance-checks.json).
+
+The [native vault run at 6be8612](https://github.com/johnny9/tundra-wallet/actions/runs/34301737203)
+passes Rust, all sanitizer targets and audit. Android Rust ABI builds pass, but Kotlin stops
+on an unavailable `OsConstants.O_DIRECTORY`; no JVM/instrumentation tests run. `98f01ed`
+uses supported descriptor inspection before directory synchronization. Apple host/FFI and
+iOS builds pass, as do **six runtime tests**, including protected storage, plaintext upgrade
+and the existing all-mode/restart UI scenario. **Two Keychain tests fail** with a bounded
+storage error. `93931ac` adds app-scoped Keychain entitlements, ad hoc simulator signing and
+a non-secret status probe; the unsigned host is a suspected cause, not a confirmed diagnosis.
+Both fixes await the next run. Normal startup still uses legacy plaintext storage.
+[`storage-vault-native-checks.json`](../validation/storage-vault-native-checks.json) retains
+the exact source, results and log hashes.
+
+## Previous storage checkpoints
+
 The SQLCipher storage boundary and atomic plaintext migration pass **155 Rust tests including real regtest**,
 23 offline checks, formatting, strict Clippy and generation of both bindings. Added checks
 cover encrypted DB/WAL, wrong/missing keys, tampering, symlink refusal, rollback, keyed

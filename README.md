@@ -30,7 +30,7 @@ It never imports or generates Bitcoin private signing keys.
 | Area | Authored | Important limitation |
 |---|---|---|
 | `tundra-core` | BDK public descriptor validation, receive/change derivation, SQLite snapshots, bounded opt-in Esplora sync | Test networks only; chosen endpoint supplies the chain view |
-| Metadata | Wallet-scoped labels, BIP 329 origins and patch import/export, atomic bulk edits, user freezes | Known references only; development DB is not encrypted |
+| Metadata | Wallet-scoped labels, BIP 329, bulk edits, user freezes and observed-output input provenance | Core provenance tests pass; native presentation validation pending; current app DB remains plaintext |
 | Transactions | Exact/manual and automatic eligible inputs, max/consolidation, saved reviews/reservations, verified external PSBT signatures and immutable final transaction bytes | All four native modes pass; positive signed submission and hardware qualification remain |
 | QR exchange | Bounded UR/BBQr codecs, native camera/display and independent barcode tests | Both native barcode tests pass; physical interoperability pending |
 | USB exchange | Pinned bhwi Ledger protocol, registration persistence and Android adapter source | Android native tests pass; physical USB qualification pending; signing remains blocked |

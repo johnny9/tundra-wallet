@@ -1,0 +1,51 @@
+{
+  "recorded_at": "2026-09-09T02:27:14.802769+00:00",
+  "source": "eea54c5802e92cf6866cecbe53bed6f2f78e3e5d",
+  "checks": {
+    "rust": {
+      "core_unit_passed": 151,
+      "core_child_helpers_ignored": 2,
+      "crash_integration_passed": 2,
+      "crash_child_helper_ignored": 1,
+      "http_integration_passed": 5,
+      "real_keyless_regtest_passed": 1,
+      "total_passed": 159
+    },
+    "offline_passed": 24,
+    "rustfmt": "passed",
+    "clippy": "passed with warnings denied",
+    "kotlin_and_swift_bindings": "generated from compiled library",
+    "native_provenance_display": "authored; build/runtime pending"
+  },
+  "coverage": [
+    "exact observed submitted transaction labels wallet-owned outputs and history once",
+    "original input labels remain in saved approval",
+    "user/imported labels including empty values win",
+    "deleted labels do not return on repeat observation, reopen or eviction/reappearance",
+    "injected provenance failure rolls back chain, labels, markers and reservations",
+    "schema six migration and wallet-scoped foreign keys/deletion"
+  ],
+  "limitations": [
+    "Public existing signatures and synthetic chain observations only; no Bitcoin private signing keys",
+    "Native positive signed/provenance UI tests remain",
+    "No new sanitizer campaign; existing targets do not fuzz these DB operations"
+  ],
+  "initial_failures": [
+    "Rollback test incorrectly assumed every fixture coin was reserved; corrected to compare full before/after coin state",
+    "Version-one migration assertion expected schema six; updated for schema seven and added a schema-six regression"
+  ],
+  "logs": [
+    {
+      "path": "build/output-label-complete-fixed.log",
+      "sha256": "7ee18f664ed1c7b9207683bd522d2302fd0e585a0705577c287901204aeafb13"
+    },
+    {
+      "path": "build/output-label-regtest.log",
+      "sha256": "07b44cf35765d9d9af7c267c3a2ad2f0181de8ababf7ee61ffdf5dd10f886a27"
+    },
+    {
+      "path": "build/output-label-bindings.log",
+      "sha256": "edc384536bf44e3d0ccd28265e05e5a26062e2132a9fd7b7a4378b1155561679"
+    }
+  ]
+}

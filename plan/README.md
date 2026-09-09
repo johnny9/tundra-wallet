@@ -16,7 +16,7 @@ approval system, or cloud account.
 
 - Source: descriptor-first watch-only engine, metadata, unsigned-draft core, UniFFI API,
   Android native import shell, iOS native starter, tests and CI.
-- Verified: 155 Rust tests including real regtest, 23 offline checks, parser fuzzing/audit,
+- Verified: 159 Rust tests including real regtest, 24 offline checks, parser fuzzing/audit,
   Android debug APK and iOS simulator builds, host FFI smoke tests, all four payment modes on both virtual platforms and initial process-restart checks.
   See [VALIDATION.md](VALIDATION.md) for the exact results and remaining gates.
 - Added: bounded opt-in Esplora scans, cancellation, cached timestamps, coinbase maturity,
@@ -29,8 +29,11 @@ approval system, or cloud account.
 - Added: immutable finalized transaction bytes and native final-review source; software tests pass.
 - Added: pinned bhwi Ledger protocol, registration persistence and Android USB adapter source; Android build/FFI/runtime checks pass; physical device qualification remains open.
 - Added: explicit test-network broadcast, durable uncertainty and observed-spend handling; Rust tests and native builds pass; positive submission UI qualification remains open.
+- Added: observed payment/output labels and durable input provenance; local rollback,
+  reorg and migration tests pass; native coin-detail presentation awaits validation.
 - Added: pinned SQLCipher, protected Rust storage and atomic plaintext migration with
-  process-kill tests; native key retention and backup/recovery remain before app protection.
+  process-kill tests; Apple protected/migration runtime checks pass. Native vault fixes
+  and backup/recovery remain before normal app storage protection.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Not performed locally: Android build or Xcode build.
 - **No real-funds use. No supported hardware devices yet.**

@@ -51,5 +51,21 @@ The HTTP servers are local protocol fixtures; they do not prove Bitcoin network 
 Both native forms show the transaction ID and endpoint and require fresh consent. Changing
 the endpoint clears consent; a retry has an additional acknowledgement. No automatic
 broadcast follows signing, finalization, startup or sync. Android dialog and mobile FFI
-refusal tests are authored. Positive native signed-review/submission coverage, output-label
-provenance and a hardware-funded signet round trip remain to qualify/complete.
+refusal tests are authored. Positive native signed-review/submission coverage and a
+hardware-funded signet round trip remain to qualify/complete.
+
+## Observed labels and provenance
+
+Schema 7 records the first label application alongside the synchronized chain state. Only
+an observed exact submitted transaction can apply its saved payment label to the transaction
+and wallet-owned outputs. A server acknowledgement alone applies nothing. Existing labels,
+including explicitly empty labels, win; repeated scans, restarts and reorgs cannot overwrite
+later edits or restore removed labels. Empty payment labels still retain output provenance.
+
+Each owned output links to its wallet-scoped saved approval, preserving original input
+labels independently of current metadata. The typed `output_source` API returns this
+historical review; native coin details now show its input labels. This is not a current
+confirmation or eligibility claim. New-output provenance and labels roll back together
+with the chain snapshot, review state and reservation changes on an injected write failure.
+Four additional Rust tests and expanded offline foreign-key/deletion checks pass. Native
+presentation is authored; positive signed native observation remains to qualify.

@@ -42,8 +42,9 @@ These are ordered work packages, not time estimates.
   Native QR and broadcast qualification remain separate acceptance gates.
 - Native coin selection, review, PSBT file export and saved drafts are implemented; validate
   every mode on both platforms and compare layouts/accessibility against the reference.
-- Label provenance is captured on draft inputs. New-output labeling after a real broadcast
-  and resulting history linkage remain to implement.
+- Observed submissions now apply payment labels to history and wallet-owned outputs once,
+  retaining their saved input provenance through edits/reorgs. Rust, migration and rollback
+  tests pass; native provenance presentation and a real device submission remain to qualify.
 
 ## Release blockers
 

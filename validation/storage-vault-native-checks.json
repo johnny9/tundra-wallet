@@ -1,0 +1,37 @@
+{
+  "recorded_at": "2026-09-09T02:27:14.803114+00:00",
+  "source": "6be8612160cd630932ebb6a73ef5897db2bdfc27",
+  "run": "https://github.com/johnny9/tundra-wallet/actions/runs/34301737203",
+  "rust": "155 tests including keyless regtest passed",
+  "parser_and_audit": "all three sanitizer targets and cargo-audit passed",
+  "android": {
+    "rust_abis": "arm64/x86_64 passed",
+    "app": "Kotlin compilation failed: StorageVault.kt unresolved OsConstants.O_DIRECTORY",
+    "jvm_and_instrumentation": "NOT RUN after compilation failure",
+    "fix": "98f01ed uses supported Os.open, Os.fstat and S_ISDIR before directory fsync"
+  },
+  "ios": {
+    "host_library_and_bindings": "passed",
+    "host_ffi": "5 smoke checks passed",
+    "ios_build": "passed with aligned C/Rust deployment targets",
+    "runtime_passed": 6,
+    "runtime_failed": 2,
+    "passing": "5 RuntimeTests including SQLCipher protected storage and plaintext migration, plus all-mode/restart WalletUITests scenario",
+    "failures": [
+      "StorageVaultTests.testKeychainReopenPendingMarkerAndLostOrCorruptKeyNeverResetWallet: unavailable",
+      "StorageVaultTests.testKeychainUpgradeAndInitializedMarkerRefuseMissingDatabase: unavailable"
+    ],
+    "fix_pending": "93931ac enables ad hoc simulator signing, declares only the app Keychain group, and adds a non-secret OSStatus probe. Unsigned host is a suspected cause, not yet verified."
+  },
+  "native_startup": "Still uses legacy plaintext storage; vaults are isolated until native tests pass",
+  "logs": [
+    {
+      "path": "build/android-storage-vault-first.log",
+      "sha256": "097b8281a591bbdcf1a6f3e35eff86a1252d1dc5f4111af7ab64b004a26391c5"
+    },
+    {
+      "path": "build/ios-storage-vault-first.log",
+      "sha256": "95c7de3a0843e44a908e2ba2449f2df23411fcfee74f813035ce29693aa7fae6"
+    }
+  ]
+}

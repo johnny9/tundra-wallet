@@ -105,3 +105,11 @@ and [Apple's Keychain accessibility](https://developer.apple.com/documentation/s
 
 M7 remains incomplete. The app must not advertise recoverable backups or production storage
 protection until the corresponding native and recovery gates pass.
+
+The run at `6be8612` now passes Apple's protected-storage and plaintext-migration runtime
+tests. Both Keychain adapter tests fail with a bounded storage error; the app was unsigned.
+The follow-up enables ad hoc simulator signing with only the app's own Keychain group and
+adds a non-secret OSStatus probe. This is a hypothesis awaiting the next executed test.
+Android ABI builds pass, but Kotlin compilation stops on the unavailable `O_DIRECTORY`
+SDK constant; the fix uses supported `fstat`/`S_ISDIR` before directory fsync. Neither vault
+is adopted in normal startup yet. These failures are retained in the validation report.
