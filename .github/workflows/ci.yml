@@ -22,6 +22,8 @@ jobs:
             target
             fuzz/target
           key: rust-${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-1.93.1-${{ hashFiles('Cargo.lock', 'fuzz/Cargo.lock') }}
+          restore-keys: |
+            rust-${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-1.93.1-
       - uses: dtolnay/rust-toolchain@1.93.1
       - run: cargo install cargo-audit --version 0.22.2 --locked --no-default-features
       - run: mkdir -p build && cargo audit --json > build/audit.json
@@ -59,6 +61,8 @@ jobs:
             target
             fuzz/target
           key: rust-${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-1.93.1-${{ hashFiles('Cargo.lock', 'fuzz/Cargo.lock') }}
+          restore-keys: |
+            rust-${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-1.93.1-
       - uses: dtolnay/rust-toolchain@1.93.1
         with:
           components: rustfmt, clippy
@@ -95,6 +99,8 @@ jobs:
             ~/.cargo/git
             target
           key: rust-${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-1.93.1-${{ hashFiles('Cargo.lock') }}
+          restore-keys: |
+            rust-${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-1.93.1-
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -177,6 +183,8 @@ jobs:
             target
             fuzz/target
           key: rust-${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-1.93.1-${{ hashFiles('Cargo.lock', 'fuzz/Cargo.lock') }}
+          restore-keys: |
+            rust-${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-1.93.1-
       - uses: dtolnay/rust-toolchain@1.93.1
         with:
           targets: aarch64-apple-ios, aarch64-apple-ios-sim, x86_64-apple-ios

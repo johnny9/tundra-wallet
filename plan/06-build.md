@@ -33,8 +33,9 @@ packages, three workspace packages and the two immutable Git revisions recorded 
 pins are unchanged. Build/check scripts require the committed lock and use `--locked`.
 
 CI caches Cargo registries/Git checkouts and build artifacts by OS, architecture, job,
-Rust toolchain and lockfile hash. It still runs every build/test command with the reviewed
-lock; cache hits are not validation results.
+Rust toolchain and lockfile hash, with a fallback for the same OS/architecture/job/toolchain
+when the lock changes. Cargo revalidates changed dependency/build inputs. Every build/test
+command still runs with the reviewed lock; cache hits are not validation results.
 
 Formatting and Clippy warnings are required checks. Third-party CI actions still use version
 tags; pin their commit SHAs after review before a release. The Gradle wrapper is pinned,
