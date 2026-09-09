@@ -3,8 +3,8 @@
   "limits": "Publisher authentication, full artifact notices and binary distribution review remain separate gates",
   "gradle": {
     "locked_components": 440,
-    "verified_components": 584,
-    "verified_artifacts": 1006,
+    "verified_components": 585,
+    "verified_artifacts": 1263,
     "nonempty_configurations": {
       "buildscript-gradle.lockfile": 1,
       "app/buildscript-gradle.lockfile": 0,
@@ -338,6 +338,7 @@
     "com.google.guava:guava-parent:26.0-android",
     "com.google.guava:guava-parent:32.0.1-android",
     "com.google.guava:guava-parent:32.0.1-jre",
+    "com.google.guava:guava-parent:33.3.1-android",
     "com.google.guava:guava-parent:33.3.1-jre",
     "com.google.guava:guava:32.0.1-android",
     "com.google.guava:guava:32.0.1-jre",
@@ -603,7 +604,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/activity/activity-compose/1.10.1/activity-compose-1.10.1.pom",
       "sha256": "e64db6b7126fb512394bc3cf4332a38828009daa8dd56ecbe6c0c7300b2127f5",
       "path": "third-party/android-poms/e64db6b7126fb512394bc3cf4332a38828009daa8dd56ecbe6c0c7300b2127f5.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -619,7 +620,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/activity/activity-ktx/1.10.1/activity-ktx-1.10.1.pom",
       "sha256": "4213490e4ce2b5750e4445246dfe9de4f6655c2123c04a79a8248cc8893e2bf4",
       "path": "third-party/android-poms/4213490e4ce2b5750e4445246dfe9de4f6655c2123c04a79a8248cc8893e2bf4.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -635,7 +636,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/activity/activity/1.10.1/activity-1.10.1.pom",
       "sha256": "0ae4de888974f5cef982660900ec32a33f10968750db7afa9438daec183f14e7",
       "path": "third-party/android-poms/0ae4de888974f5cef982660900ec32a33f10968750db7afa9438daec183f14e7.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -651,7 +652,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/activity/activity/1.2.1/activity-1.2.1.pom",
       "sha256": "9edbb5f2e96cadc0e1ca045b27e78c64a21a90e479b3fd06833dee7cd0b2efbe",
       "path": "third-party/android-poms/9edbb5f2e96cadc0e1ca045b27e78c64a21a90e479b3fd06833dee7cd0b2efbe.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -667,7 +668,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation-experimental/1.4.1/annotation-experimental-1.4.1.pom",
       "sha256": "fe57b228417f4d7c677903dc61fb4a7cf993d603499de26d8d8113e477cc4f1b",
       "path": "third-party/android-poms/fe57b228417f4d7c677903dc61fb4a7cf993d603499de26d8d8113e477cc4f1b.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -683,7 +684,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation-jvm/1.8.1/annotation-jvm-1.8.1.pom",
       "sha256": "d49203733aa6fae046c3a3de4e796eed347595755486a64273989844759750b4",
       "path": "third-party/android-poms/d49203733aa6fae046c3a3de4e796eed347595755486a64273989844759750b4.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -699,7 +700,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation-jvm/1.9.1/annotation-jvm-1.9.1.pom",
       "sha256": "89b99c218d60019316b50aab79816707bc21696c896a030e1b1ae038961bcb8e",
       "path": "third-party/android-poms/89b99c218d60019316b50aab79816707bc21696c896a030e1b1ae038961bcb8e.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -731,7 +732,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation/1.7.0/annotation-1.7.0.pom",
       "sha256": "21c618ac8c7092dd95193f05c0b196183a7ce8f1366a7a912c800ebee368a858",
       "path": "third-party/android-poms/21c618ac8c7092dd95193f05c0b196183a7ce8f1366a7a912c800ebee368a858.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -747,7 +748,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation/1.8.1/annotation-1.8.1.pom",
       "sha256": "b71225974ec087eb96c25ef6819f55b1c22f530e85ca446ba735fb66ed04ff5c",
       "path": "third-party/android-poms/b71225974ec087eb96c25ef6819f55b1c22f530e85ca446ba735fb66ed04ff5c.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -763,7 +764,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation/1.9.1/annotation-1.9.1.pom",
       "sha256": "c733881c2e17d5f7c8661cc02a9159cb160b7b2094a27d593916c87d3e250636",
       "path": "third-party/android-poms/c733881c2e17d5f7c8661cc02a9159cb160b7b2094a27d593916c87d3e250636.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -827,7 +828,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/arch/core/core-common/2.2.0/core-common-2.2.0.pom",
       "sha256": "1e17d4af8d6425be2a69f8af4d654a87e0456259a9eef1542869bcb023547e28",
       "path": "third-party/android-poms/1e17d4af8d6425be2a69f8af4d654a87e0456259a9eef1542869bcb023547e28.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -843,7 +844,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/arch/core/core-runtime/2.2.0/core-runtime-2.2.0.pom",
       "sha256": "0f953706598140d9d8735cdd5aeb1fa35933f4e2f31c0bf3eb81a053a4c8c1a5",
       "path": "third-party/android-poms/0f953706598140d9d8735cdd5aeb1fa35933f4e2f31c0bf3eb81a053a4c8c1a5.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -875,7 +876,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/camera/featurecombinationquery/featurecombinationquery/1.6.2/featurecombinationquery-1.6.2.pom",
       "sha256": "a8e3d3e223d274beb4109073489eb6c67f264c6e32e84920eb81ea0851864e1b",
       "path": "third-party/android-poms/a8e3d3e223d274beb4109073489eb6c67f264c6e32e84920eb81ea0851864e1b.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -891,7 +892,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/camera/viewfinder/viewfinder-core/1.5.1/viewfinder-core-1.5.1.pom",
       "sha256": "064073c759c8a10cfe0faa49e63a2377a2863e7cf3843bb408bb87d131c917c7",
       "path": "third-party/android-poms/064073c759c8a10cfe0faa49e63a2377a2863e7cf3843bb408bb87d131c917c7.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -907,7 +908,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-camera2-pipe/1.6.2/camera-camera2-pipe-1.6.2.pom",
       "sha256": "c3bc970a6a0657ff9b6df2cd8241098746f8e54bc5b74e56899050d76fdb9f66",
       "path": "third-party/android-poms/c3bc970a6a0657ff9b6df2cd8241098746f8e54bc5b74e56899050d76fdb9f66.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -923,7 +924,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-camera2/1.6.2/camera-camera2-1.6.2.pom",
       "sha256": "23020a27494b69f7b77c3c1598923789bfada5c145d31d0893fae1ee895213df",
       "path": "third-party/android-poms/23020a27494b69f7b77c3c1598923789bfada5c145d31d0893fae1ee895213df.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -939,7 +940,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-core/1.6.2/camera-core-1.6.2.pom",
       "sha256": "cddb5bb0653654d8b7c2833484f4684d881dc7509411132e73a5fb4b167fd13c",
       "path": "third-party/android-poms/cddb5bb0653654d8b7c2833484f4684d881dc7509411132e73a5fb4b167fd13c.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -960,7 +961,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-lifecycle/1.6.2/camera-lifecycle-1.6.2.pom",
       "sha256": "7562a6960db6bd8f46441c3467a2b51d33b98ece1c118ac30538dd6c54b49ce0",
       "path": "third-party/android-poms/7562a6960db6bd8f46441c3467a2b51d33b98ece1c118ac30538dd6c54b49ce0.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -976,7 +977,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-video/1.6.2/camera-video-1.6.2.pom",
       "sha256": "9b237fa922df0019ff3e5dba4043dca082836b7b93b9ed045061f706da831c8d",
       "path": "third-party/android-poms/9b237fa922df0019ff3e5dba4043dca082836b7b93b9ed045061f706da831c8d.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -992,7 +993,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-view/1.6.2/camera-view-1.6.2.pom",
       "sha256": "c342ccc94ecaf4dbc9d9ef4b7d292eaeb2db266ee91e59229f232e13b180419d",
       "path": "third-party/android-poms/c342ccc94ecaf4dbc9d9ef4b7d292eaeb2db266ee91e59229f232e13b180419d.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1008,7 +1009,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/collection/collection-jvm/1.5.0/collection-jvm-1.5.0.pom",
       "sha256": "11c415864d3402f61d426e67210158dce1b04680412526a994f1823ecd3cb388",
       "path": "third-party/android-poms/11c415864d3402f61d426e67210158dce1b04680412526a994f1823ecd3cb388.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1024,7 +1025,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/collection/collection-ktx/1.5.0/collection-ktx-1.5.0.pom",
       "sha256": "983f8d0630d072d5bfcd166a498ac7213f3a44a98c09051004ce96429d867cea",
       "path": "third-party/android-poms/983f8d0630d072d5bfcd166a498ac7213f3a44a98c09051004ce96429d867cea.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1072,7 +1073,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/collection/collection/1.4.5/collection-1.4.5.pom",
       "sha256": "0c0dfdce57da50b7e9ca27d3b19bffbe3b98f31ddc7e03cd584cf77809a7b349",
       "path": "third-party/android-poms/0c0dfdce57da50b7e9ca27d3b19bffbe3b98f31ddc7e03cd584cf77809a7b349.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1088,7 +1089,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/collection/collection/1.5.0/collection-1.5.0.pom",
       "sha256": "2d65c8d0b36d4b4faadc44aff9bade23d871d7159eedf2b3f02d802b34b77a57",
       "path": "third-party/android-poms/2d65c8d0b36d4b4faadc44aff9bade23d871d7159eedf2b3f02d802b34b77a57.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1104,7 +1105,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/animation/animation-android/1.10.0/animation-android-1.10.0.pom",
       "sha256": "0df8729ef973d6efbd3bb70a59475619e5ac534166ee749d9bbafbc637be8ac6",
       "path": "third-party/android-poms/0df8729ef973d6efbd3bb70a59475619e5ac534166ee749d9bbafbc637be8ac6.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1120,7 +1121,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/animation/animation-core-android/1.10.0/animation-core-android-1.10.0.pom",
       "sha256": "f51a15d1041900dac6b83fb64b8b291d4743d38511c6b7b07321542fafb91108",
       "path": "third-party/android-poms/f51a15d1041900dac6b83fb64b8b291d4743d38511c6b7b07321542fafb91108.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1136,7 +1137,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/animation/animation-core/1.10.0/animation-core-1.10.0.pom",
       "sha256": "cb5efb3eafb71a7cb0d0150bab4ea377d6788ac397d30a9cb94c3d77c130788f",
       "path": "third-party/android-poms/cb5efb3eafb71a7cb0d0150bab4ea377d6788ac397d30a9cb94c3d77c130788f.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1152,7 +1153,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/animation/animation/1.10.0/animation-1.10.0.pom",
       "sha256": "ac1c3ef4e26c377b0947e5a054a075ec0614b87823629b6bce0ca50b08ee56e4",
       "path": "third-party/android-poms/ac1c3ef4e26c377b0947e5a054a075ec0614b87823629b6bce0ca50b08ee56e4.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1168,7 +1169,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/foundation/foundation-android/1.10.0/foundation-android-1.10.0.pom",
       "sha256": "e1abf54347a061e9dc57216c0dae704f421b912e895f0126ec7f1d4993a06b60",
       "path": "third-party/android-poms/e1abf54347a061e9dc57216c0dae704f421b912e895f0126ec7f1d4993a06b60.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1184,7 +1185,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/foundation/foundation-layout-android/1.10.0/foundation-layout-android-1.10.0.pom",
       "sha256": "c98f8a732ce325841e522123fa9fff2ef34c4aaaefad6982b51e2c9d10a4010a",
       "path": "third-party/android-poms/c98f8a732ce325841e522123fa9fff2ef34c4aaaefad6982b51e2c9d10a4010a.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1200,7 +1201,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/foundation/foundation-layout/1.10.0/foundation-layout-1.10.0.pom",
       "sha256": "1c5d36f0b8b1fb516b5835b240e04bf3b2b72a2d7468fbaebbf1e9c534e01265",
       "path": "third-party/android-poms/1c5d36f0b8b1fb516b5835b240e04bf3b2b72a2d7468fbaebbf1e9c534e01265.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1216,7 +1217,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/foundation/foundation/1.10.0/foundation-1.10.0.pom",
       "sha256": "ce51c3ad01ae0b99a1b6c224c37ec2ff844a7f11a29f898c1a055b84b34d6601",
       "path": "third-party/android-poms/ce51c3ad01ae0b99a1b6c224c37ec2ff844a7f11a29f898c1a055b84b34d6601.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1232,7 +1233,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material3/material3-android/1.4.0/material3-android-1.4.0.pom",
       "sha256": "cc0362653240708a010de50fee8caf884a610fbb10b6013e86694d77c43febc7",
       "path": "third-party/android-poms/cc0362653240708a010de50fee8caf884a610fbb10b6013e86694d77c43febc7.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1248,7 +1249,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material3/material3/1.4.0/material3-1.4.0.pom",
       "sha256": "672b431f59c8e0a8522690b2f46f1b7966710638893c60c31c5f19f8472d62cc",
       "path": "third-party/android-poms/672b431f59c8e0a8522690b2f46f1b7966710638893c60c31c5f19f8472d62cc.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1264,7 +1265,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-android/1.10.0/material-android-1.10.0.pom",
       "sha256": "2fe252cbc716a5f08a323f9930788133da94a477f999520756503a5162068fdb",
       "path": "third-party/android-poms/2fe252cbc716a5f08a323f9930788133da94a477f999520756503a5162068fdb.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1280,7 +1281,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-icons-core-android/1.7.8/material-icons-core-android-1.7.8.pom",
       "sha256": "df671e1144120b43f83464e1e94ff828d0ded8132b3b15b86de07f1b82d0d932",
       "path": "third-party/android-poms/df671e1144120b43f83464e1e94ff828d0ded8132b3b15b86de07f1b82d0d932.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1296,7 +1297,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-icons-core/1.7.8/material-icons-core-1.7.8.pom",
       "sha256": "eeefc6cd1c66baf21dbf4e916c46504017787784cd2327233cec23806422299a",
       "path": "third-party/android-poms/eeefc6cd1c66baf21dbf4e916c46504017787784cd2327233cec23806422299a.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1312,7 +1313,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-icons-extended-android/1.7.8/material-icons-extended-android-1.7.8.pom",
       "sha256": "e1582bfe84d5df59487c3ed2d3399601dc2a16241708ecb6721a25809df8558e",
       "path": "third-party/android-poms/e1582bfe84d5df59487c3ed2d3399601dc2a16241708ecb6721a25809df8558e.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1328,7 +1329,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-icons-extended/1.7.8/material-icons-extended-1.7.8.pom",
       "sha256": "dad3723163c1b04d0c4cce4d280e7ddc1041b08d73b8c4f8d07a67c755758515",
       "path": "third-party/android-poms/dad3723163c1b04d0c4cce4d280e7ddc1041b08d73b8c4f8d07a67c755758515.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1344,7 +1345,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-ripple-android/1.10.0/material-ripple-android-1.10.0.pom",
       "sha256": "d93096692e8c155e1bd4616bee6ec4e179c6fda62f69af6a4859689881ff1878",
       "path": "third-party/android-poms/d93096692e8c155e1bd4616bee6ec4e179c6fda62f69af6a4859689881ff1878.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1360,7 +1361,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-ripple/1.10.0/material-ripple-1.10.0.pom",
       "sha256": "3c64b2927940790bbdcd0894b05ac9e066c4aa5e791c48c61b995bc2eb4bcef2",
       "path": "third-party/android-poms/3c64b2927940790bbdcd0894b05ac9e066c4aa5e791c48c61b995bc2eb4bcef2.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1376,7 +1377,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material/1.10.0/material-1.10.0.pom",
       "sha256": "e73931adb75e21003c9dfb4030b618b25403e150420a735b82fb14847b79ffbf",
       "path": "third-party/android-poms/e73931adb75e21003c9dfb4030b618b25403e150420a735b82fb14847b79ffbf.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1392,7 +1393,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-android/1.10.0/runtime-android-1.10.0.pom",
       "sha256": "1b27134b632fc4b3993d411eb82a801440b2798373323d91fc84db553f1c9ee5",
       "path": "third-party/android-poms/1b27134b632fc4b3993d411eb82a801440b2798373323d91fc84db553f1c9ee5.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1408,7 +1409,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-annotation-android/1.10.0/runtime-annotation-android-1.10.0.pom",
       "sha256": "3c1bb50eb9ac796a75d43d36efa2f284ae0dc818214344499b72274d2c8d4c71",
       "path": "third-party/android-poms/3c1bb50eb9ac796a75d43d36efa2f284ae0dc818214344499b72274d2c8d4c71.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1424,7 +1425,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-annotation/1.10.0/runtime-annotation-1.10.0.pom",
       "sha256": "85fbb72b3bd2eec47a92327f5bcfdffcccdd492be366d7b5ca6923fcc065750f",
       "path": "third-party/android-poms/85fbb72b3bd2eec47a92327f5bcfdffcccdd492be366d7b5ca6923fcc065750f.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1440,7 +1441,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-retain-android/1.10.0/runtime-retain-android-1.10.0.pom",
       "sha256": "64fbe0525621d9060b1e0691d06d46e06e5527ecff89e4adb19c6f1a06408048",
       "path": "third-party/android-poms/64fbe0525621d9060b1e0691d06d46e06e5527ecff89e4adb19c6f1a06408048.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1456,7 +1457,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-retain/1.10.0/runtime-retain-1.10.0.pom",
       "sha256": "f23be7d957ad233d7dcf1313ab16edc108e8dbda1bbce9e06d185a6256c8b2f6",
       "path": "third-party/android-poms/f23be7d957ad233d7dcf1313ab16edc108e8dbda1bbce9e06d185a6256c8b2f6.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1472,7 +1473,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-saveable-android/1.10.0/runtime-saveable-android-1.10.0.pom",
       "sha256": "b0b61249f8bd5d125666e00945bcff639666961483b2a416f59a74bc0f80f48b",
       "path": "third-party/android-poms/b0b61249f8bd5d125666e00945bcff639666961483b2a416f59a74bc0f80f48b.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1488,7 +1489,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-saveable/1.10.0/runtime-saveable-1.10.0.pom",
       "sha256": "13a0e832251e583d6b45cac205465906c245959477cf55bebb837ffe099aeeac",
       "path": "third-party/android-poms/13a0e832251e583d6b45cac205465906c245959477cf55bebb837ffe099aeeac.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1504,7 +1505,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime/1.10.0/runtime-1.10.0.pom",
       "sha256": "f3def3171b012b8b616e2cdf4ada2bc9445999411d080cfb22b8522ba64e3acb",
       "path": "third-party/android-poms/f3def3171b012b8b616e2cdf4ada2bc9445999411d080cfb22b8522ba64e3acb.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1520,7 +1521,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-android/1.10.0/ui-android-1.10.0.pom",
       "sha256": "0c1e66c5a8ef34ed0bd7b638c891645709a68a470cfc1995c651d001432bfc12",
       "path": "third-party/android-poms/0c1e66c5a8ef34ed0bd7b638c891645709a68a470cfc1995c651d001432bfc12.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1536,7 +1537,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-geometry-android/1.10.0/ui-geometry-android-1.10.0.pom",
       "sha256": "8297119d6867ccd7244996bb3c42714d8f15d2f5ce99bc1ee2522ca3d77d57f9",
       "path": "third-party/android-poms/8297119d6867ccd7244996bb3c42714d8f15d2f5ce99bc1ee2522ca3d77d57f9.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1552,7 +1553,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-geometry/1.10.0/ui-geometry-1.10.0.pom",
       "sha256": "0e9d249938e89772b298b8f1153f7ba5ed5b3c3b9625faafa3b24f7cbd5834ca",
       "path": "third-party/android-poms/0e9d249938e89772b298b8f1153f7ba5ed5b3c3b9625faafa3b24f7cbd5834ca.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1568,7 +1569,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-graphics-android/1.10.0/ui-graphics-android-1.10.0.pom",
       "sha256": "1755cab302f45596b38e8fe1cce64641742487af8b938d352c807a435685ffe0",
       "path": "third-party/android-poms/1755cab302f45596b38e8fe1cce64641742487af8b938d352c807a435685ffe0.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1584,7 +1585,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-graphics/1.10.0/ui-graphics-1.10.0.pom",
       "sha256": "2050afa2832e5a2efa55361bbe765d803a735a5abe7e99ac2213d6c781debd54",
       "path": "third-party/android-poms/2050afa2832e5a2efa55361bbe765d803a735a5abe7e99ac2213d6c781debd54.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1600,7 +1601,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-test-android/1.10.0/ui-test-android-1.10.0.pom",
       "sha256": "8ab4339d73638e3c6b0f6e58a0a34a70d69b1989dd1a2f72b3255fb728dda2f5",
       "path": "third-party/android-poms/8ab4339d73638e3c6b0f6e58a0a34a70d69b1989dd1a2f72b3255fb728dda2f5.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1616,7 +1617,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-test-junit4-android/1.10.0/ui-test-junit4-android-1.10.0.pom",
       "sha256": "b04ad3b9cb6bb4f8e5e77ab64fd3b83ed489d7e662ece192ecc02e5861a0f0bf",
       "path": "third-party/android-poms/b04ad3b9cb6bb4f8e5e77ab64fd3b83ed489d7e662ece192ecc02e5861a0f0bf.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1632,7 +1633,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-test-junit4/1.10.0/ui-test-junit4-1.10.0.pom",
       "sha256": "fb8ce83a5b95197830a7bc3ef715c3f03536cbd3c80e5411250ad79beeeef0e3",
       "path": "third-party/android-poms/fb8ce83a5b95197830a7bc3ef715c3f03536cbd3c80e5411250ad79beeeef0e3.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1648,7 +1649,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-test-manifest/1.10.0/ui-test-manifest-1.10.0.pom",
       "sha256": "4940451b0d94175b1af796bdc9465748f1e869a7c9cf23b5a0a4b6a98550e258",
       "path": "third-party/android-poms/4940451b0d94175b1af796bdc9465748f1e869a7c9cf23b5a0a4b6a98550e258.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1664,7 +1665,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-test/1.10.0/ui-test-1.10.0.pom",
       "sha256": "8576a2a2b6885e96483315e88a7ebccc4616527b7e8e1635cf428586fb808232",
       "path": "third-party/android-poms/8576a2a2b6885e96483315e88a7ebccc4616527b7e8e1635cf428586fb808232.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1680,7 +1681,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-text-android/1.10.0/ui-text-android-1.10.0.pom",
       "sha256": "727c9e9def4e4a1420cfe3ce7f693046365fead4d1db9682eb11cd23946f5c6a",
       "path": "third-party/android-poms/727c9e9def4e4a1420cfe3ce7f693046365fead4d1db9682eb11cd23946f5c6a.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1696,7 +1697,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-text/1.10.0/ui-text-1.10.0.pom",
       "sha256": "aa612a600a243c1258c7bcb0ed09e160b2d638a3023c45c18e876cc81e5b623e",
       "path": "third-party/android-poms/aa612a600a243c1258c7bcb0ed09e160b2d638a3023c45c18e876cc81e5b623e.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1712,7 +1713,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-tooling-android/1.10.0/ui-tooling-android-1.10.0.pom",
       "sha256": "8554fe30b4d47da6b0dfddbaeb63c43f4d734264a821c5256e03101028fe9b56",
       "path": "third-party/android-poms/8554fe30b4d47da6b0dfddbaeb63c43f4d734264a821c5256e03101028fe9b56.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1728,7 +1729,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-tooling-data-android/1.10.0/ui-tooling-data-android-1.10.0.pom",
       "sha256": "d9ebe4616914dcf8e3eb7acc3d93b3d46561c4114a27ee2d82b031c64308f9bf",
       "path": "third-party/android-poms/d9ebe4616914dcf8e3eb7acc3d93b3d46561c4114a27ee2d82b031c64308f9bf.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1744,7 +1745,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-tooling-data/1.10.0/ui-tooling-data-1.10.0.pom",
       "sha256": "349d056c946e746049554e054578e8112863c321622f10edea0d423935d82427",
       "path": "third-party/android-poms/349d056c946e746049554e054578e8112863c321622f10edea0d423935d82427.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1760,7 +1761,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-tooling-preview-android/1.10.0/ui-tooling-preview-android-1.10.0.pom",
       "sha256": "464acc93443a921aa80ab3661cfa745e71ee56b977f5078e56db54336de3cb9a",
       "path": "third-party/android-poms/464acc93443a921aa80ab3661cfa745e71ee56b977f5078e56db54336de3cb9a.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1776,7 +1777,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-tooling-preview/1.10.0/ui-tooling-preview-1.10.0.pom",
       "sha256": "eadf2e08785fd430f13613265ff7a2e276d28d1a8f23d45ba88c4820a6fb5d97",
       "path": "third-party/android-poms/eadf2e08785fd430f13613265ff7a2e276d28d1a8f23d45ba88c4820a6fb5d97.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1792,7 +1793,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-tooling/1.10.0/ui-tooling-1.10.0.pom",
       "sha256": "6073601974689105e1c5156583a4c494308915f692db5ef9212f2fb79ef4eb0b",
       "path": "third-party/android-poms/6073601974689105e1c5156583a4c494308915f692db5ef9212f2fb79ef4eb0b.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1808,7 +1809,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-unit-android/1.10.0/ui-unit-android-1.10.0.pom",
       "sha256": "54c45c00df55d2b7f949208e47ce89a60f9cc19662943f40adcb35a060ec2127",
       "path": "third-party/android-poms/54c45c00df55d2b7f949208e47ce89a60f9cc19662943f40adcb35a060ec2127.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1824,7 +1825,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-unit/1.10.0/ui-unit-1.10.0.pom",
       "sha256": "a5b90de028f81b39eed1ea893afa1010936476d12e35604971cf5049c601c913",
       "path": "third-party/android-poms/a5b90de028f81b39eed1ea893afa1010936476d12e35604971cf5049c601c913.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1840,7 +1841,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-util-android/1.10.0/ui-util-android-1.10.0.pom",
       "sha256": "20227336a29be197b0e9d90c6fb18a3b77d5d1f710ca213609d2b4b8c4a67f75",
       "path": "third-party/android-poms/20227336a29be197b0e9d90c6fb18a3b77d5d1f710ca213609d2b4b8c4a67f75.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1856,7 +1857,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-util/1.10.0/ui-util-1.10.0.pom",
       "sha256": "01cf1677f1ce77c8e8c975483fa34e1bde9dbf94123ef11b51e1e16290684063",
       "path": "third-party/android-poms/01cf1677f1ce77c8e8c975483fa34e1bde9dbf94123ef11b51e1e16290684063.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1872,7 +1873,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui/1.10.0/ui-1.10.0.pom",
       "sha256": "319b5077e116cbd57446207e62de9ff86ff4b078a73cf0cf73b50a0510fedf1b",
       "path": "third-party/android-poms/319b5077e116cbd57446207e62de9ff86ff4b078a73cf0cf73b50a0510fedf1b.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1904,7 +1905,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/concurrent/concurrent-futures-ktx/1.1.0/concurrent-futures-ktx-1.1.0.pom",
       "sha256": "c903f8f51e3f4ea5e7e1f0a6fe3be873c357221227d103d08d7fd042f4b7570c",
       "path": "third-party/android-poms/c903f8f51e3f4ea5e7e1f0a6fe3be873c357221227d103d08d7fd042f4b7570c.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1920,7 +1921,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/concurrent/concurrent-futures-ktx/1.2.0/concurrent-futures-ktx-1.2.0.pom",
       "sha256": "7869d39aa7a7754a4f311771abfd9d95ccbd7ffb27e970f8cb15fdf5b5355b6d",
       "path": "third-party/android-poms/7869d39aa7a7754a4f311771abfd9d95ccbd7ffb27e970f8cb15fdf5b5355b6d.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1936,7 +1937,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/concurrent/concurrent-futures/1.1.0/concurrent-futures-1.1.0.pom",
       "sha256": "748a34eb5d13d19d187adecaea82667fded5f1b0b98a655e13ed2e4a8b3d8ae6",
       "path": "third-party/android-poms/748a34eb5d13d19d187adecaea82667fded5f1b0b98a655e13ed2e4a8b3d8ae6.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1952,7 +1953,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/concurrent/concurrent-futures/1.2.0/concurrent-futures-1.2.0.pom",
       "sha256": "6be9a98d6cd75a787eeae2a1a0a3440ebe1ab4639740df9ec028094ab59b622f",
       "path": "third-party/android-poms/6be9a98d6cd75a787eeae2a1a0a3440ebe1ab4639740df9ec028094ab59b622f.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1968,7 +1969,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/core/core-backported-fixes/1.0.0/core-backported-fixes-1.0.0.pom",
       "sha256": "539ad0c516cb9465acf63ca651a97e4d168e284e3a1c63c2326668acd046f68e",
       "path": "third-party/android-poms/539ad0c516cb9465acf63ca651a97e4d168e284e3a1c63c2326668acd046f68e.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -1984,7 +1985,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/core/core-ktx/1.13.0/core-ktx-1.13.0.pom",
       "sha256": "7cf6d4fb2f61ab4924232b92d6580b65df9103c0437cdae60ce14388c3731210",
       "path": "third-party/android-poms/7cf6d4fb2f61ab4924232b92d6580b65df9103c0437cdae60ce14388c3731210.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2000,7 +2001,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/core/core-ktx/1.16.0/core-ktx-1.16.0.pom",
       "sha256": "4660cfb606ed89828ba3e10f79b29809ffb677ee5d2346fe9bcb03dfc4b9b645",
       "path": "third-party/android-poms/4660cfb606ed89828ba3e10f79b29809ffb677ee5d2346fe9bcb03dfc4b9b645.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2032,7 +2033,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/core/core-viewtree/1.0.0/core-viewtree-1.0.0.pom",
       "sha256": "d4f2ed1176fa8c5612b80f74c952a8799142a9ed36022a1a238fde5b140580d9",
       "path": "third-party/android-poms/d4f2ed1176fa8c5612b80f74c952a8799142a9ed36022a1a238fde5b140580d9.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2064,7 +2065,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/core/core/1.13.0/core-1.13.0.pom",
       "sha256": "4502e4ed8b59122021ac9a1c1312e2326e4b0f43f7ecbbbc9b50ee77429574d4",
       "path": "third-party/android-poms/4502e4ed8b59122021ac9a1c1312e2326e4b0f43f7ecbbbc9b50ee77429574d4.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2080,7 +2081,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/core/core/1.16.0/core-1.16.0.pom",
       "sha256": "074974a1550221af7aa85ded6903c3d84c9bdedf9e6b4ff3b0cb471329b5ac77",
       "path": "third-party/android-poms/074974a1550221af7aa85ded6903c3d84c9bdedf9e6b4ff3b0cb471329b5ac77.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2144,7 +2145,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/customview/customview-poolingcontainer/1.0.0/customview-poolingcontainer-1.0.0.pom",
       "sha256": "9fa62196c4c4e79b6a58dbb38a8c022bef8db21989d7dae2da0f6f5b66289a9c",
       "path": "third-party/android-poms/9fa62196c4c4e79b6a58dbb38a8c022bef8db21989d7dae2da0f6f5b66289a9c.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2256,7 +2257,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/emoji2/emoji2/1.2.0/emoji2-1.2.0.pom",
       "sha256": "faf5955d2c9b09bba92e51569f2b928419ded05b5c9649c0453c925c7da62360",
       "path": "third-party/android-poms/faf5955d2c9b09bba92e51569f2b928419ded05b5c9649c0453c925c7da62360.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2272,7 +2273,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/emoji2/emoji2/1.3.0/emoji2-1.3.0.pom",
       "sha256": "14ebbea8234f013211965fdd08b42ee907ce0075af321018c8c2865c2e5db0eb",
       "path": "third-party/android-poms/14ebbea8234f013211965fdd08b42ee907ce0075af321018c8c2865c2e5db0eb.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2288,7 +2289,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/emoji2/emoji2/1.4.0/emoji2-1.4.0.pom",
       "sha256": "1f67221484f7d1260eb6e2b490cd4e7046bf5cb536276d79f972ad3f198b474d",
       "path": "third-party/android-poms/1f67221484f7d1260eb6e2b490cd4e7046bf5cb536276d79f972ad3f198b474d.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2304,7 +2305,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/exifinterface/exifinterface/1.4.2/exifinterface-1.4.2.pom",
       "sha256": "b11c0763f3094d28664412b7d3316bb5d1a785810fb7b4fe5f356cd5cbcd1725",
       "path": "third-party/android-poms/b11c0763f3094d28664412b7d3316bb5d1a785810fb7b4fe5f356cd5cbcd1725.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2336,7 +2337,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/graphics/graphics-path/1.0.1/graphics-path-1.0.1.pom",
       "sha256": "866fb357c7146f5f7678ad44e4bc6c2823d568defce1ed2805bb6c899606b228",
       "path": "third-party/android-poms/866fb357c7146f5f7678ad44e4bc6c2823d568defce1ed2805bb6c899606b228.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2384,7 +2385,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common-java8/2.9.0/lifecycle-common-java8-2.9.0.pom",
       "sha256": "cf39cf63ce66ddeb9f3b307d62c1044657acfee1fd9bfe438956cfa27955ef3d",
       "path": "third-party/android-poms/cf39cf63ce66ddeb9f3b307d62c1044657acfee1fd9bfe438956cfa27955ef3d.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2400,7 +2401,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common-java8/2.9.2/lifecycle-common-java8-2.9.2.pom",
       "sha256": "512bc9d7d9878f686b817f3376cfc2a0df69b421358ec57f1eb1613dc059434e",
       "path": "third-party/android-poms/512bc9d7d9878f686b817f3376cfc2a0df69b421358ec57f1eb1613dc059434e.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2416,7 +2417,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common-java8/2.9.4/lifecycle-common-java8-2.9.4.pom",
       "sha256": "f7a0077f2b20312c30ea74c9fe77626fbe2ad09bb48922851cde20bcd1a33266",
       "path": "third-party/android-poms/f7a0077f2b20312c30ea74c9fe77626fbe2ad09bb48922851cde20bcd1a33266.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2432,7 +2433,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common-jvm/2.9.0/lifecycle-common-jvm-2.9.0.pom",
       "sha256": "54beadc62da90fbe038dc30ead0605522b3697b61d91f76e4969b60202483cc1",
       "path": "third-party/android-poms/54beadc62da90fbe038dc30ead0605522b3697b61d91f76e4969b60202483cc1.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2448,7 +2449,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common-jvm/2.9.4/lifecycle-common-jvm-2.9.4.pom",
       "sha256": "31735e9953aaeeab4e07fcffa4c6ab3519f90b331c4b1da8173df911607d3906",
       "path": "third-party/android-poms/31735e9953aaeeab4e07fcffa4c6ab3519f90b331c4b1da8173df911607d3906.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2464,7 +2465,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common/2.3.0/lifecycle-common-2.3.0.pom",
       "sha256": "85d6060dc192cef03990a1d25b519098c01d831f66daca62769a5cbf9b6bd143",
       "path": "third-party/android-poms/85d6060dc192cef03990a1d25b519098c01d831f66daca62769a5cbf9b6bd143.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2480,7 +2481,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common/2.3.1/lifecycle-common-2.3.1.pom",
       "sha256": "8cd23d889a14095c6ce16840d29b1a6388fa5e115144c1309d4d6d469c1bc351",
       "path": "third-party/android-poms/8cd23d889a14095c6ce16840d29b1a6388fa5e115144c1309d4d6d469c1bc351.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2496,7 +2497,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common/2.6.1/lifecycle-common-2.6.1.pom",
       "sha256": "3e66830d59fae52e1030b4be724b1e577ac814d27335fdf81a71283dc0829f1a",
       "path": "third-party/android-poms/3e66830d59fae52e1030b4be724b1e577ac814d27335fdf81a71283dc0829f1a.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2512,7 +2513,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common/2.8.7/lifecycle-common-2.8.7.pom",
       "sha256": "f55cff4af288525d425c4678ddb36ba864591f5f0eda1b9220567c36c8513b49",
       "path": "third-party/android-poms/f55cff4af288525d425c4678ddb36ba864591f5f0eda1b9220567c36c8513b49.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2528,7 +2529,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common/2.9.0/lifecycle-common-2.9.0.pom",
       "sha256": "68635facb41349b06b869ce8fb2c630edd25a57c97e5ff098bbad15ffcf31ff6",
       "path": "third-party/android-poms/68635facb41349b06b869ce8fb2c630edd25a57c97e5ff098bbad15ffcf31ff6.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2544,7 +2545,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common/2.9.2/lifecycle-common-2.9.2.pom",
       "sha256": "6cb922cb115ce8f61e7df8d1925e2d1d30ef3cfd08d86ed397aeaa737d95f92f",
       "path": "third-party/android-poms/6cb922cb115ce8f61e7df8d1925e2d1d30ef3cfd08d86ed397aeaa737d95f92f.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2560,7 +2561,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common/2.9.4/lifecycle-common-2.9.4.pom",
       "sha256": "0e3a0c8798d26f49238550a3dc4d6bd465d49b82bcb759ca3c463a31600e721c",
       "path": "third-party/android-poms/0e3a0c8798d26f49238550a3dc4d6bd465d49b82bcb759ca3c463a31600e721c.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2576,7 +2577,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata-core-ktx/2.9.0/lifecycle-livedata-core-ktx-2.9.0.pom",
       "sha256": "2377ddd0f460ea0fe4d16657e8f28cb6004b34e5713004f6d0b8d6b45b36a259",
       "path": "third-party/android-poms/2377ddd0f460ea0fe4d16657e8f28cb6004b34e5713004f6d0b8d6b45b36a259.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2592,7 +2593,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata-core-ktx/2.9.2/lifecycle-livedata-core-ktx-2.9.2.pom",
       "sha256": "d1d1cf0ca68b4ddf5267f5bce0d4a399dae4c3c36c5b3b1cab650faea9a5a18e",
       "path": "third-party/android-poms/d1d1cf0ca68b4ddf5267f5bce0d4a399dae4c3c36c5b3b1cab650faea9a5a18e.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2608,7 +2609,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata-core-ktx/2.9.4/lifecycle-livedata-core-ktx-2.9.4.pom",
       "sha256": "ca2073ac46d364107fdf4d832c5b729e610cdc7d12e736d9151b5a5119be80b9",
       "path": "third-party/android-poms/ca2073ac46d364107fdf4d832c5b729e610cdc7d12e736d9151b5a5119be80b9.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2640,7 +2641,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata-core/2.3.0/lifecycle-livedata-core-2.3.0.pom",
       "sha256": "14e55a313ca7a4749fd5ab575a70929c95fecdc6b27ad528a96041ccf7caadf9",
       "path": "third-party/android-poms/14e55a313ca7a4749fd5ab575a70929c95fecdc6b27ad528a96041ccf7caadf9.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2656,7 +2657,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata-core/2.3.1/lifecycle-livedata-core-2.3.1.pom",
       "sha256": "fb996222e3de47f1bdeb8b36590b8c11898a4f72f9138da187365d3103a143fb",
       "path": "third-party/android-poms/fb996222e3de47f1bdeb8b36590b8c11898a4f72f9138da187365d3103a143fb.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2672,7 +2673,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata-core/2.6.1/lifecycle-livedata-core-2.6.1.pom",
       "sha256": "e0f67e2b2e612f13bc0f3cea724daedefa5d4494051eb45f5bee6d88a6da8859",
       "path": "third-party/android-poms/e0f67e2b2e612f13bc0f3cea724daedefa5d4494051eb45f5bee6d88a6da8859.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2688,7 +2689,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata-core/2.8.7/lifecycle-livedata-core-2.8.7.pom",
       "sha256": "e5e30bd3c0adbb4246b4feaf5d38e0b3eab6e495b126ee94497f7490ca35156a",
       "path": "third-party/android-poms/e5e30bd3c0adbb4246b4feaf5d38e0b3eab6e495b126ee94497f7490ca35156a.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2704,7 +2705,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata-core/2.9.0/lifecycle-livedata-core-2.9.0.pom",
       "sha256": "20363ac987c763e48870234a0ed8fc7fd9a0597583e7c8b3b8416def7354a271",
       "path": "third-party/android-poms/20363ac987c763e48870234a0ed8fc7fd9a0597583e7c8b3b8416def7354a271.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2720,7 +2721,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata-core/2.9.2/lifecycle-livedata-core-2.9.2.pom",
       "sha256": "e1c299fdf5a39dba555fa6778519cc9d0017aec19fc1560a8cab02ab3ae612c5",
       "path": "third-party/android-poms/e1c299fdf5a39dba555fa6778519cc9d0017aec19fc1560a8cab02ab3ae612c5.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2736,7 +2737,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata-core/2.9.4/lifecycle-livedata-core-2.9.4.pom",
       "sha256": "cec1161148e3f6c4b7d513aa989729e84a8ee9471f0c47c03478b3fb3c49ea21",
       "path": "third-party/android-poms/cec1161148e3f6c4b7d513aa989729e84a8ee9471f0c47c03478b3fb3c49ea21.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2752,7 +2753,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata/2.3.1/lifecycle-livedata-2.3.1.pom",
       "sha256": "f8effc901d00ad433f3692b6cc22c792c2c5fbe0ac7bdab4c4da04b9b714510c",
       "path": "third-party/android-poms/f8effc901d00ad433f3692b6cc22c792c2c5fbe0ac7bdab4c4da04b9b714510c.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2768,7 +2769,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata/2.6.1/lifecycle-livedata-2.6.1.pom",
       "sha256": "33c731db91a120ad6eae8f0da72f094017bc3862e3677dbf588af17896a924a9",
       "path": "third-party/android-poms/33c731db91a120ad6eae8f0da72f094017bc3862e3677dbf588af17896a924a9.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2784,7 +2785,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata/2.9.0/lifecycle-livedata-2.9.0.pom",
       "sha256": "87056d33c5acdddde61b7b44599872b5b7271be27e140a393ca688d456aef908",
       "path": "third-party/android-poms/87056d33c5acdddde61b7b44599872b5b7271be27e140a393ca688d456aef908.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2800,7 +2801,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata/2.9.2/lifecycle-livedata-2.9.2.pom",
       "sha256": "06bfc01f705f4b0f9a3b10d45d2303f3f57efa034edfbb911bab800892bad8fb",
       "path": "third-party/android-poms/06bfc01f705f4b0f9a3b10d45d2303f3f57efa034edfbb911bab800892bad8fb.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2816,7 +2817,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata/2.9.4/lifecycle-livedata-2.9.4.pom",
       "sha256": "24f8b944549912ab683aa70e61d32b5e1aa83c2f1f9d42f09e8eda3237760ab1",
       "path": "third-party/android-poms/24f8b944549912ab683aa70e61d32b5e1aa83c2f1f9d42f09e8eda3237760ab1.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2832,7 +2833,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-process/2.9.2/lifecycle-process-2.9.2.pom",
       "sha256": "434cb905ea9c1d7928c872a85dd7647e887459f758a3e98f2281315eef1fd329",
       "path": "third-party/android-poms/434cb905ea9c1d7928c872a85dd7647e887459f758a3e98f2281315eef1fd329.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2848,7 +2849,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-process/2.9.4/lifecycle-process-2.9.4.pom",
       "sha256": "5eac5a0a27138477f40f0aa0e749cd07fbf5580d4a9adc6d2d59db64cac49b10",
       "path": "third-party/android-poms/5eac5a0a27138477f40f0aa0e749cd07fbf5580d4a9adc6d2d59db64cac49b10.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2864,7 +2865,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-android/2.9.0/lifecycle-runtime-android-2.9.0.pom",
       "sha256": "5db05802cf540514dcc2ea581a4f67f996546cba568d9bb14bf273b29cd0233c",
       "path": "third-party/android-poms/5db05802cf540514dcc2ea581a4f67f996546cba568d9bb14bf273b29cd0233c.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2880,7 +2881,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-android/2.9.4/lifecycle-runtime-android-2.9.4.pom",
       "sha256": "271e54009fdf3a2cd5ab414e8a09e6af4251b63d484a42c530ab868974a5ea1f",
       "path": "third-party/android-poms/271e54009fdf3a2cd5ab414e8a09e6af4251b63d484a42c530ab868974a5ea1f.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2896,7 +2897,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-compose-android/2.9.0/lifecycle-runtime-compose-android-2.9.0.pom",
       "sha256": "e3dbf11d16a7872fa98add5916522f4b179eb3d5f4fc1e04748d38f5910df060",
       "path": "third-party/android-poms/e3dbf11d16a7872fa98add5916522f4b179eb3d5f4fc1e04748d38f5910df060.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2912,7 +2913,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-compose-android/2.9.4/lifecycle-runtime-compose-android-2.9.4.pom",
       "sha256": "a7a073c7db10974627ba883f648a34fe8053f50c294d9192e183c901daea8c65",
       "path": "third-party/android-poms/a7a073c7db10974627ba883f648a34fe8053f50c294d9192e183c901daea8c65.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2928,7 +2929,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-compose/2.8.7/lifecycle-runtime-compose-2.8.7.pom",
       "sha256": "cec92fc6604d8eebb9589a6c11d4bbe6362280f63adbf86a9ecdc6cc3d143bab",
       "path": "third-party/android-poms/cec92fc6604d8eebb9589a6c11d4bbe6362280f63adbf86a9ecdc6cc3d143bab.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2944,7 +2945,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-compose/2.9.0/lifecycle-runtime-compose-2.9.0.pom",
       "sha256": "5d48bc6e62c8075b3b30bc9f12fc0c376a69a95388f47a442117bc6b18392099",
       "path": "third-party/android-poms/5d48bc6e62c8075b3b30bc9f12fc0c376a69a95388f47a442117bc6b18392099.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2960,7 +2961,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-compose/2.9.2/lifecycle-runtime-compose-2.9.2.pom",
       "sha256": "a828c6e717e3ec0c003422e161c10542793cc0bbc0571c43ad5cb8460d839db9",
       "path": "third-party/android-poms/a828c6e717e3ec0c003422e161c10542793cc0bbc0571c43ad5cb8460d839db9.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2976,7 +2977,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-compose/2.9.4/lifecycle-runtime-compose-2.9.4.pom",
       "sha256": "0ef3fb28f89b80b90c78ad6ba345164d5590889ee3459b027f26695936291575",
       "path": "third-party/android-poms/0ef3fb28f89b80b90c78ad6ba345164d5590889ee3459b027f26695936291575.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -2992,7 +2993,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-ktx-android/2.9.0/lifecycle-runtime-ktx-android-2.9.0.pom",
       "sha256": "8dd817a9b6767b2b9e93698bda6b6c9dd72306a530c028f807bcdf36b31cb119",
       "path": "third-party/android-poms/8dd817a9b6767b2b9e93698bda6b6c9dd72306a530c028f807bcdf36b31cb119.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3008,7 +3009,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-ktx-android/2.9.4/lifecycle-runtime-ktx-android-2.9.4.pom",
       "sha256": "78aace79fbced8eb8c17e0b02b2d55be9906fbdda053e6a617ee6e595fcace14",
       "path": "third-party/android-poms/78aace79fbced8eb8c17e0b02b2d55be9906fbdda053e6a617ee6e595fcace14.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3024,7 +3025,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-ktx/2.6.1/lifecycle-runtime-ktx-2.6.1.pom",
       "sha256": "505e84891c124d78b08af7c048930ecdcd3d1690e5045359a1fb46ae6cf26eba",
       "path": "third-party/android-poms/505e84891c124d78b08af7c048930ecdcd3d1690e5045359a1fb46ae6cf26eba.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3040,7 +3041,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-ktx/2.9.0/lifecycle-runtime-ktx-2.9.0.pom",
       "sha256": "b4545401dbd055fd04903d4698623d5bb406dde2e32800d80a61e5824f477da9",
       "path": "third-party/android-poms/b4545401dbd055fd04903d4698623d5bb406dde2e32800d80a61e5824f477da9.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3056,7 +3057,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-ktx/2.9.2/lifecycle-runtime-ktx-2.9.2.pom",
       "sha256": "77f8b950584c2e200ad6150d46b2caf02aaeec266ebf5ef65e7ce5d1a6be1507",
       "path": "third-party/android-poms/77f8b950584c2e200ad6150d46b2caf02aaeec266ebf5ef65e7ce5d1a6be1507.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3072,7 +3073,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-ktx/2.9.4/lifecycle-runtime-ktx-2.9.4.pom",
       "sha256": "0af68ccd282a3f98d832f391b6655098d476f19d91f40f909d3c695814a11cab",
       "path": "third-party/android-poms/0af68ccd282a3f98d832f391b6655098d476f19d91f40f909d3c695814a11cab.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3088,7 +3089,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime/2.3.0/lifecycle-runtime-2.3.0.pom",
       "sha256": "b2de520a3ef0c70649cc20ce50cb0c90a787a3803d832be16867a5e245b3b8ff",
       "path": "third-party/android-poms/b2de520a3ef0c70649cc20ce50cb0c90a787a3803d832be16867a5e245b3b8ff.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3104,7 +3105,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime/2.6.1/lifecycle-runtime-2.6.1.pom",
       "sha256": "41e71d003d437f169d4e8ada59cb1982f1b47b7d25c23010b8fc81d528a740d5",
       "path": "third-party/android-poms/41e71d003d437f169d4e8ada59cb1982f1b47b7d25c23010b8fc81d528a740d5.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3120,7 +3121,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime/2.8.7/lifecycle-runtime-2.8.7.pom",
       "sha256": "61e1069e9938a414d6bf83a6c088c8a4368a27ab238e62efb8de44e9d6ea31fa",
       "path": "third-party/android-poms/61e1069e9938a414d6bf83a6c088c8a4368a27ab238e62efb8de44e9d6ea31fa.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3136,7 +3137,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime/2.9.0/lifecycle-runtime-2.9.0.pom",
       "sha256": "d0142198185e44992924aa0e8c67b0795b127139203abc8715957c56756957f8",
       "path": "third-party/android-poms/d0142198185e44992924aa0e8c67b0795b127139203abc8715957c56756957f8.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3152,7 +3153,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime/2.9.2/lifecycle-runtime-2.9.2.pom",
       "sha256": "0bb586c7e6abc3df30d179ea9fbdae867444c279a817a2101c0cc943f92cefdc",
       "path": "third-party/android-poms/0bb586c7e6abc3df30d179ea9fbdae867444c279a817a2101c0cc943f92cefdc.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3168,7 +3169,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime/2.9.4/lifecycle-runtime-2.9.4.pom",
       "sha256": "d617a519ddb36a308213f5b9af99163b0a3a3739ce0381b6c8d0fa6814613a08",
       "path": "third-party/android-poms/d617a519ddb36a308213f5b9af99163b0a3a3739ce0381b6c8d0fa6814613a08.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3184,7 +3185,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-android/2.9.2/lifecycle-viewmodel-android-2.9.2.pom",
       "sha256": "d5de841c6188b1bee81010ddeea8b667fd458620a06d591adf4092fcea5bbdb8",
       "path": "third-party/android-poms/d5de841c6188b1bee81010ddeea8b667fd458620a06d591adf4092fcea5bbdb8.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3200,7 +3201,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-android/2.9.4/lifecycle-viewmodel-android-2.9.4.pom",
       "sha256": "9660b5a2d80ffe0f0e5b4f993b581d15972a8c14aae51784b6097bc97be0379e",
       "path": "third-party/android-poms/9660b5a2d80ffe0f0e5b4f993b581d15972a8c14aae51784b6097bc97be0379e.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3216,7 +3217,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-compose-android/2.9.0/lifecycle-viewmodel-compose-android-2.9.0.pom",
       "sha256": "f4b04cb11e1a921c09ea6739d4a80ce1529898434770772844c67d999d8b5dfc",
       "path": "third-party/android-poms/f4b04cb11e1a921c09ea6739d4a80ce1529898434770772844c67d999d8b5dfc.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3232,7 +3233,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-compose-android/2.9.4/lifecycle-viewmodel-compose-android-2.9.4.pom",
       "sha256": "b3640e3af379113aa2b4bff9403be9102ae989e8c87dae04711679bf0e8d7568",
       "path": "third-party/android-poms/b3640e3af379113aa2b4bff9403be9102ae989e8c87dae04711679bf0e8d7568.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3248,7 +3249,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-compose/2.9.0/lifecycle-viewmodel-compose-2.9.0.pom",
       "sha256": "d3375ede03d92b2d4f513e1eb1a6060545c78f068e75387f781dd6f43baa015b",
       "path": "third-party/android-poms/d3375ede03d92b2d4f513e1eb1a6060545c78f068e75387f781dd6f43baa015b.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3264,7 +3265,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-compose/2.9.2/lifecycle-viewmodel-compose-2.9.2.pom",
       "sha256": "51f031993ec10b6def0b9dba72ae038910575de6e2764e3585044d7ce0301d3d",
       "path": "third-party/android-poms/51f031993ec10b6def0b9dba72ae038910575de6e2764e3585044d7ce0301d3d.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3280,7 +3281,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-compose/2.9.4/lifecycle-viewmodel-compose-2.9.4.pom",
       "sha256": "88903aa2f881fc75beb1f05480edb0d759d6d0b1bacb5f788e0f13161305dc79",
       "path": "third-party/android-poms/88903aa2f881fc75beb1f05480edb0d759d6d0b1bacb5f788e0f13161305dc79.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3296,7 +3297,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-ktx/2.6.1/lifecycle-viewmodel-ktx-2.6.1.pom",
       "sha256": "0f45e224260af7cd1b79e37c55f9d23dff94fd41316ed9f600253faccff4c1cf",
       "path": "third-party/android-poms/0f45e224260af7cd1b79e37c55f9d23dff94fd41316ed9f600253faccff4c1cf.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3312,7 +3313,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-ktx/2.9.0/lifecycle-viewmodel-ktx-2.9.0.pom",
       "sha256": "99c4a88d509f4c43a681d14d20948182641691b74f6dd6c4d6996caabbd4c677",
       "path": "third-party/android-poms/99c4a88d509f4c43a681d14d20948182641691b74f6dd6c4d6996caabbd4c677.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3328,7 +3329,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-ktx/2.9.2/lifecycle-viewmodel-ktx-2.9.2.pom",
       "sha256": "915cd843dd10bd3d5a3e0acd510f7db5937ff14f681dbe86ade3e304e4683065",
       "path": "third-party/android-poms/915cd843dd10bd3d5a3e0acd510f7db5937ff14f681dbe86ade3e304e4683065.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3344,7 +3345,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-ktx/2.9.4/lifecycle-viewmodel-ktx-2.9.4.pom",
       "sha256": "0ccd0e9d361ad69b6a7253ab4ed2124a3bd4fbf9b338e36c1431b3c5ee7bc794",
       "path": "third-party/android-poms/0ccd0e9d361ad69b6a7253ab4ed2124a3bd4fbf9b338e36c1431b3c5ee7bc794.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3360,7 +3361,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-savedstate-android/2.9.0/lifecycle-viewmodel-savedstate-android-2.9.0.pom",
       "sha256": "02f383e140adfc2bd5c94e15ec994d9069a4d4538a3700f5cf31b2774f156768",
       "path": "third-party/android-poms/02f383e140adfc2bd5c94e15ec994d9069a4d4538a3700f5cf31b2774f156768.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3376,7 +3377,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-savedstate-android/2.9.4/lifecycle-viewmodel-savedstate-android-2.9.4.pom",
       "sha256": "34ab8491e6b631123ce5f7f0ae06dfa238c211dcf3e71033ed61656f9d47718c",
       "path": "third-party/android-poms/34ab8491e6b631123ce5f7f0ae06dfa238c211dcf3e71033ed61656f9d47718c.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3392,7 +3393,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-savedstate/2.3.0/lifecycle-viewmodel-savedstate-2.3.0.pom",
       "sha256": "8bfa4c856aa2050d4cb57059c6fffbe5e37361e2dcbf01a241be7a0fa7016bb5",
       "path": "third-party/android-poms/8bfa4c856aa2050d4cb57059c6fffbe5e37361e2dcbf01a241be7a0fa7016bb5.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3408,7 +3409,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-savedstate/2.8.7/lifecycle-viewmodel-savedstate-2.8.7.pom",
       "sha256": "9b91c558fc31cd9a4181a410ddb9368359cb02362a50af64a1a30a12c3d5c1a9",
       "path": "third-party/android-poms/9b91c558fc31cd9a4181a410ddb9368359cb02362a50af64a1a30a12c3d5c1a9.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3424,7 +3425,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-savedstate/2.9.0/lifecycle-viewmodel-savedstate-2.9.0.pom",
       "sha256": "76ca959ea12a33a3c608fd1f2448a48909d38e930d8f38c580374ea60f1a38cc",
       "path": "third-party/android-poms/76ca959ea12a33a3c608fd1f2448a48909d38e930d8f38c580374ea60f1a38cc.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3440,7 +3441,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-savedstate/2.9.2/lifecycle-viewmodel-savedstate-2.9.2.pom",
       "sha256": "f27a3a48f26351bd2de2912aee3f736ab26e7c37d78f87f3f55475f2988720a7",
       "path": "third-party/android-poms/f27a3a48f26351bd2de2912aee3f736ab26e7c37d78f87f3f55475f2988720a7.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3456,7 +3457,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-savedstate/2.9.4/lifecycle-viewmodel-savedstate-2.9.4.pom",
       "sha256": "6912b55c745c579ec6fcbeb0065d5a17d8b5f06dd0a58788037d41e40db50202",
       "path": "third-party/android-poms/6912b55c745c579ec6fcbeb0065d5a17d8b5f06dd0a58788037d41e40db50202.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3472,7 +3473,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel/2.3.0/lifecycle-viewmodel-2.3.0.pom",
       "sha256": "4860bca1411797459d4a6cf615064adf1178f26f959c20bd72e89e57ecb5a8f1",
       "path": "third-party/android-poms/4860bca1411797459d4a6cf615064adf1178f26f959c20bd72e89e57ecb5a8f1.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3488,7 +3489,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel/2.6.1/lifecycle-viewmodel-2.6.1.pom",
       "sha256": "dc2e8e65db53d21659a27ed93b966dee336c1c2e8e872861677389a99b8b9134",
       "path": "third-party/android-poms/dc2e8e65db53d21659a27ed93b966dee336c1c2e8e872861677389a99b8b9134.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3504,7 +3505,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel/2.8.7/lifecycle-viewmodel-2.8.7.pom",
       "sha256": "ee1dfb183b53aa6233ad52eda7a754f72d95a6db6dca2f39144a160deb4195fb",
       "path": "third-party/android-poms/ee1dfb183b53aa6233ad52eda7a754f72d95a6db6dca2f39144a160deb4195fb.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3520,7 +3521,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel/2.9.0/lifecycle-viewmodel-2.9.0.pom",
       "sha256": "f49d4b68b6854111e4d193c90c9a4b75840ad2f373b2ed1842cb56ac50b6a846",
       "path": "third-party/android-poms/f49d4b68b6854111e4d193c90c9a4b75840ad2f373b2ed1842cb56ac50b6a846.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3536,7 +3537,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel/2.9.2/lifecycle-viewmodel-2.9.2.pom",
       "sha256": "aac150544109b5642839ea39bb63fb7b907a8d22b7c17116983ed8a5a234ba7c",
       "path": "third-party/android-poms/aac150544109b5642839ea39bb63fb7b907a8d22b7c17116983ed8a5a234ba7c.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3552,7 +3553,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel/2.9.4/lifecycle-viewmodel-2.9.4.pom",
       "sha256": "054db6f92d9230103b3aca8b0dabcc0d63de26e440ff98eb5b19a2555d3eb037",
       "path": "third-party/android-poms/054db6f92d9230103b3aca8b0dabcc0d63de26e440ff98eb5b19a2555d3eb037.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3600,7 +3601,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-common/1.9.0/media3-common-1.9.0.pom",
       "sha256": "aed17d81e85da98ea766f9232f2a09fa9f1ab1433fbb824a8a4892d0e82ac0fc",
       "path": "third-party/android-poms/aed17d81e85da98ea766f9232f2a09fa9f1ab1433fbb824a8a4892d0e82ac0fc.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3616,7 +3617,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-container/1.9.0/media3-container-1.9.0.pom",
       "sha256": "0120edcd6ce534b59d9ad4f1c5d8e6683fac283fe1a99359616d21664d5a4fbe",
       "path": "third-party/android-poms/0120edcd6ce534b59d9ad4f1c5d8e6683fac283fe1a99359616d21664d5a4fbe.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3632,7 +3633,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-muxer/1.9.0/media3-muxer-1.9.0.pom",
       "sha256": "47ca0d154bf41be19dff266aef5ca76cc327460233e5db6a09cebfb81dd3b6e6",
       "path": "third-party/android-poms/47ca0d154bf41be19dff266aef5ca76cc327460233e5db6a09cebfb81dd3b6e6.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3664,7 +3665,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/profileinstaller/profileinstaller/1.3.0/profileinstaller-1.3.0.pom",
       "sha256": "12cbc01c8a5ae4b412caf3c5a0662ccd28002dedcff1dbe6c2ab3665be9f758c",
       "path": "third-party/android-poms/12cbc01c8a5ae4b412caf3c5a0662ccd28002dedcff1dbe6c2ab3665be9f758c.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3680,7 +3681,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/profileinstaller/profileinstaller/1.4.0/profileinstaller-1.4.0.pom",
       "sha256": "d5fe39981a3b4b7c39585130da0bfc93835054c834a438d3e63e065e5f78be55",
       "path": "third-party/android-poms/d5fe39981a3b4b7c39585130da0bfc93835054c834a438d3e63e065e5f78be55.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3696,7 +3697,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate-android/1.3.2/savedstate-android-1.3.2.pom",
       "sha256": "df09758721e2fe8d5714a2101dcc0941ac824a424b08466e2818876851cdb826",
       "path": "third-party/android-poms/df09758721e2fe8d5714a2101dcc0941ac824a424b08466e2818876851cdb826.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3712,7 +3713,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate-compose-android/1.3.2/savedstate-compose-android-1.3.2.pom",
       "sha256": "701c5a665f8f3d29bd7c622481f6e34785338738e899de3c44c3ce362f03d90a",
       "path": "third-party/android-poms/701c5a665f8f3d29bd7c622481f6e34785338738e899de3c44c3ce362f03d90a.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3728,7 +3729,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate-compose/1.3.0/savedstate-compose-1.3.0.pom",
       "sha256": "de0d5abbaa76bc12e2b400d2a856b1565ee6a3c2ffdb8dae995e5f0d88132296",
       "path": "third-party/android-poms/de0d5abbaa76bc12e2b400d2a856b1565ee6a3c2ffdb8dae995e5f0d88132296.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3744,7 +3745,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate-compose/1.3.2/savedstate-compose-1.3.2.pom",
       "sha256": "95ffc22b591ec37aeab8c7738f434d0ecd8831da2084f207396839a7f71c0083",
       "path": "third-party/android-poms/95ffc22b591ec37aeab8c7738f434d0ecd8831da2084f207396839a7f71c0083.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3760,7 +3761,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate-ktx/1.2.1/savedstate-ktx-1.2.1.pom",
       "sha256": "d09553211f6703b19aefd608d6007c77132d27a281556a8e689d92764ec27d3b",
       "path": "third-party/android-poms/d09553211f6703b19aefd608d6007c77132d27a281556a8e689d92764ec27d3b.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3776,7 +3777,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate-ktx/1.3.1/savedstate-ktx-1.3.1.pom",
       "sha256": "14cec91f73dde4d4c7a11ec660b6c5d083dddf30ef412cf6a1743dc10a62a5b8",
       "path": "third-party/android-poms/14cec91f73dde4d4c7a11ec660b6c5d083dddf30ef412cf6a1743dc10a62a5b8.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3792,7 +3793,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate-ktx/1.3.2/savedstate-ktx-1.3.2.pom",
       "sha256": "7c0d5190b3ea64e14782bcf93d9a8f336a026f5609bdaa1f35f63ff426015081",
       "path": "third-party/android-poms/7c0d5190b3ea64e14782bcf93d9a8f336a026f5609bdaa1f35f63ff426015081.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3808,7 +3809,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate/1.1.0/savedstate-1.1.0.pom",
       "sha256": "49784b75cb499bb9f8137d823a872f0c6da5ca6dba7c9acf2de3a683cb7db6dc",
       "path": "third-party/android-poms/49784b75cb499bb9f8137d823a872f0c6da5ca6dba7c9acf2de3a683cb7db6dc.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3824,7 +3825,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate/1.2.1/savedstate-1.2.1.pom",
       "sha256": "0d33bc285df1e12f22780f1624a6f0b38ea2a6181b0955ec6641caf620c50cbf",
       "path": "third-party/android-poms/0d33bc285df1e12f22780f1624a6f0b38ea2a6181b0955ec6641caf620c50cbf.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3840,7 +3841,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate/1.3.0/savedstate-1.3.0.pom",
       "sha256": "dc5a6c42f3f4ecd3747f6dfece0cdf68b67842c70945686af17c74030df9e515",
       "path": "third-party/android-poms/dc5a6c42f3f4ecd3747f6dfece0cdf68b67842c70945686af17c74030df9e515.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3856,7 +3857,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate/1.3.1/savedstate-1.3.1.pom",
       "sha256": "1a12e8ec533c6b552d497dfb47fad1a39cd0b996397b74b96037a8e1bade5b59",
       "path": "third-party/android-poms/1a12e8ec533c6b552d497dfb47fad1a39cd0b996397b74b96037a8e1bade5b59.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3872,7 +3873,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate/1.3.2/savedstate-1.3.2.pom",
       "sha256": "950c897dca07c256745da55b861b9e8a57fe7a41758ba098a3c30821d941e7f8",
       "path": "third-party/android-poms/950c897dca07c256745da55b861b9e8a57fe7a41758ba098a3c30821d941e7f8.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -3888,7 +3889,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/startup/startup-runtime/1.1.1/startup-runtime-1.1.1.pom",
       "sha256": "f4114b5c6859bb1bc3caf281cb6d6f25998fa7f7292c64ceaea74a93210e746b",
       "path": "third-party/android-poms/f4114b5c6859bb1bc3caf281cb6d6f25998fa7f7292c64ceaea74a93210e746b.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4048,7 +4049,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/tracing/tracing-android/1.3.0/tracing-android-1.3.0.pom",
       "sha256": "0d00de26db0b0440e97a1f57ba461afa8e1dc6bad9be0e7bd779295530a4027c",
       "path": "third-party/android-poms/0d00de26db0b0440e97a1f57ba461afa8e1dc6bad9be0e7bd779295530a4027c.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4064,7 +4065,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/tracing/tracing-ktx/1.2.0/tracing-ktx-1.2.0.pom",
       "sha256": "8958b5a0153c1a82cb133703d3d11155898738280a354e92ca1817d7ca6f4cb7",
       "path": "third-party/android-poms/8958b5a0153c1a82cb133703d3d11155898738280a354e92ca1817d7ca6f4cb7.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4080,7 +4081,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/tracing/tracing-ktx/1.3.0/tracing-ktx-1.3.0.pom",
       "sha256": "48c6be169601bb6f1f2b49f44379c17484381b7ebdd393aee814802622a3abd3",
       "path": "third-party/android-poms/48c6be169601bb6f1f2b49f44379c17484381b7ebdd393aee814802622a3abd3.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4096,7 +4097,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/tracing/tracing/1.1.0/tracing-1.1.0.pom",
       "sha256": "f1db502b5d539d94dfb6c659deb76872b1e9d8266d7aa4083868a29c33c22917",
       "path": "third-party/android-poms/f1db502b5d539d94dfb6c659deb76872b1e9d8266d7aa4083868a29c33c22917.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4112,7 +4113,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/tracing/tracing/1.3.0/tracing-1.3.0.pom",
       "sha256": "9206f270a96977187c2827d37275e2cafd2272e58c238728661af5310814363f",
       "path": "third-party/android-poms/9206f270a96977187c2827d37275e2cafd2272e58c238728661af5310814363f.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4128,7 +4129,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/transition/transition/1.6.0/transition-1.6.0.pom",
       "sha256": "070d7795010071edefbef94b8c9d5a2cac5cb5f3b1a2c5e558546438177c8ef8",
       "path": "third-party/android-poms/070d7795010071edefbef94b8c9d5a2cac5cb5f3b1a2c5e558546438177c8ef8.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4224,7 +4225,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/window/window-core-android/1.5.0/window-core-android-1.5.0.pom",
       "sha256": "463c50b22a969c6274ebdb7b5f56ba1ea1dde352e9679f0a0ba90f3971dbcd57",
       "path": "third-party/android-poms/463c50b22a969c6274ebdb7b5f56ba1ea1dde352e9679f0a0ba90f3971dbcd57.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4240,7 +4241,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/window/window-core/1.5.0/window-core-1.5.0.pom",
       "sha256": "e38a30fe9a9ccb575531b265fec8e23207bda9818977aae495f3fe74b9c9e1f3",
       "path": "third-party/android-poms/e38a30fe9a9ccb575531b265fec8e23207bda9818977aae495f3fe74b9c9e1f3.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4256,7 +4257,7 @@
       "url": "https://dl.google.com/dl/android/maven2/androidx/window/window/1.5.0/window-1.5.0.pom",
       "sha256": "d4f22b991a69600e2ffc36b42ac199626fd96d5f1648c3beeccd35de06fcc351",
       "path": "third-party/android-poms/d4f22b991a69600e2ffc36b42ac199626fd96d5f1648c3beeccd35de06fcc351.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4368,7 +4369,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/jetifier/jetifier-core/1.0.0-beta10/jetifier-core-1.0.0-beta10.pom",
       "sha256": "5c9d42e6b7e35d4d8d02e0a322cf26693b3ec3642b107c8f0be5a721d45a0c6d",
       "path": "third-party/android-poms/5c9d42e6b7e35d4d8d02e0a322cf26693b3ec3642b107c8f0be5a721d45a0c6d.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4384,7 +4385,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/jetifier/jetifier-processor/1.0.0-beta10/jetifier-processor-1.0.0-beta10.pom",
       "sha256": "33b17f396989404a49174748569bc8edf4e39a62a42a35ce93dca5c0e4ba0842",
       "path": "third-party/android-poms/33b17f396989404a49174748569bc8edf4e39a62a42a35ce93dca5c0e4ba0842.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4400,7 +4401,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/aapt2-proto/8.13.2-14304508/aapt2-proto-8.13.2-14304508.pom",
       "sha256": "f9fd57060bddec2182dcc9357416e99390d4ab8b7861654b67b72a74e090ffa5",
       "path": "third-party/android-poms/f9fd57060bddec2182dcc9357416e99390d4ab8b7861654b67b72a74e090ffa5.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4416,7 +4417,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/aaptcompiler/8.13.2/aaptcompiler-8.13.2.pom",
       "sha256": "b10fce40f5e791a958786948fcd6a74c473bc874cb49cb98a6778f181cf731e4",
       "path": "third-party/android-poms/b10fce40f5e791a958786948fcd6a74c473bc874cb49cb98a6778f181cf731e4.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4464,7 +4465,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/builder-model/8.13.2/builder-model-8.13.2.pom",
       "sha256": "4f259f431fcd2b9aba331096f10f97ab4b6d5fe927df637ecb2d3cf95c3cfde0",
       "path": "third-party/android-poms/4f259f431fcd2b9aba331096f10f97ab4b6d5fe927df637ecb2d3cf95c3cfde0.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4480,7 +4481,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/builder-test-api/8.13.2/builder-test-api-8.13.2.pom",
       "sha256": "135b6be83915c5916ee93053c544da41bd00bdcf18eb08c4b0d4fc4ac9cbc9bf",
       "path": "third-party/android-poms/135b6be83915c5916ee93053c544da41bd00bdcf18eb08c4b0d4fc4ac9cbc9bf.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4496,7 +4497,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/builder/8.13.2/builder-8.13.2.pom",
       "sha256": "1aab3df47a5a70c46c18e4fa06e363ad57f750fb460c71ef165f71a876f78726",
       "path": "third-party/android-poms/1aab3df47a5a70c46c18e4fa06e363ad57f750fb460c71ef165f71a876f78726.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4528,7 +4529,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle-api/8.13.2/gradle-api-8.13.2.pom",
       "sha256": "07a7f1b273369ad4fc123a4ccb47fb1e0d968b11a38c73cd45c8533d64cec78b",
       "path": "third-party/android-poms/07a7f1b273369ad4fc123a4ccb47fb1e0d968b11a38c73cd45c8533d64cec78b.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4544,7 +4545,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle-common-api/8.13.2/gradle-common-api-8.13.2.pom",
       "sha256": "0d36368a408d90ab7f7048641decd9e802e8219758575eb9d4218a4663655158",
       "path": "third-party/android-poms/0d36368a408d90ab7f7048641decd9e802e8219758575eb9d4218a4663655158.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4560,7 +4561,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle-settings-api/8.13.2/gradle-settings-api-8.13.2.pom",
       "sha256": "88994ec5cdb238edb7bd8e75471d8d09792fb525046b784135a6cdebe0d4c33f",
       "path": "third-party/android-poms/88994ec5cdb238edb7bd8e75471d8d09792fb525046b784135a6cdebe0d4c33f.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4576,7 +4577,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle/8.13.2/gradle-8.13.2.pom",
       "sha256": "fc7edba93c5b91ce7267fa7bfdc1fa49422efc633ac279a363e02eb0fd29bcad",
       "path": "third-party/android-poms/fc7edba93c5b91ce7267fa7bfdc1fa49422efc633ac279a363e02eb0fd29bcad.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4592,7 +4593,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/manifest-merger/31.13.2/manifest-merger-31.13.2.pom",
       "sha256": "704cf1b786d20c8046a3b325fc3290fa982e97095f64ad21987cf3ee3379ddb2",
       "path": "third-party/android-poms/704cf1b786d20c8046a3b325fc3290fa982e97095f64ad21987cf3ee3379ddb2.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4720,7 +4721,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-device-provider-ddmlib/31.13.2/android-device-provider-ddmlib-31.13.2.pom",
       "sha256": "d3e781713a4b6bd063543de4b547dcdc3b400f333fb921e8eb87cec978a1c5ce",
       "path": "third-party/android-poms/d3e781713a4b6bd063543de4b547dcdc3b400f333fb921e8eb87cec978a1c5ce.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4752,7 +4753,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-device-provider-profile/31.13.2/android-device-provider-profile-31.13.2.pom",
       "sha256": "b265737c1b5eff7cd7426f628b682be1aefd0ac475a1193fd1e40840e123f4d7",
       "path": "third-party/android-poms/b265737c1b5eff7cd7426f628b682be1aefd0ac475a1193fd1e40840e123f4d7.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4784,7 +4785,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-additional-test-output/31.13.2/android-test-plugin-host-additional-test-output-31.13.2.pom",
       "sha256": "34674292aa00fe340e59f70ba0e62996ca5d8ca4649ecda0b2a4c68ef3b04f38",
       "path": "third-party/android-poms/34674292aa00fe340e59f70ba0e62996ca5d8ca4649ecda0b2a4c68ef3b04f38.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4816,7 +4817,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-apk-installer/31.13.2/android-test-plugin-host-apk-installer-31.13.2.pom",
       "sha256": "6d726652d8eb9911afaef56c61d830870d0d73f7f6148cfe39d3071d2f7aa309",
       "path": "third-party/android-poms/6d726652d8eb9911afaef56c61d830870d0d73f7f6148cfe39d3071d2f7aa309.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4848,7 +4849,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-coverage/31.13.2/android-test-plugin-host-coverage-31.13.2.pom",
       "sha256": "29965480141e9d2b9961f3734c3fb9add90a4bade8d75a07babeee74fe8e9d0d",
       "path": "third-party/android-poms/29965480141e9d2b9961f3734c3fb9add90a4bade8d75a07babeee74fe8e9d0d.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4880,7 +4881,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-device-info/31.13.2/android-test-plugin-host-device-info-31.13.2.pom",
       "sha256": "3b77c6be87c9294a60a7a8e2a84a3f49ad23209cbb7c81bb585de54724974b36",
       "path": "third-party/android-poms/3b77c6be87c9294a60a7a8e2a84a3f49ad23209cbb7c81bb585de54724974b36.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4912,7 +4913,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-emulator-control/31.13.2/android-test-plugin-host-emulator-control-31.13.2.pom",
       "sha256": "7546ec6df0234e469b361e0f2c0fcbaf63780445f854eb2ac4c276b07c99f28e",
       "path": "third-party/android-poms/7546ec6df0234e469b361e0f2c0fcbaf63780445f854eb2ac4c276b07c99f28e.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4944,7 +4945,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-logcat/31.13.2/android-test-plugin-host-logcat-31.13.2.pom",
       "sha256": "2dae2630348e6cb1a1451e2024202393d45612b4546667719fa9ac13d81f8251",
       "path": "third-party/android-poms/2dae2630348e6cb1a1451e2024202393d45612b4546667719fa9ac13d81f8251.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -4976,7 +4977,7 @@
       "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-result-listener-gradle/31.13.2/android-test-plugin-result-listener-gradle-31.13.2.pom",
       "sha256": "6967401cc2fe9d18b350e3e542e7f6978e54c40e140cb11b82b0cf1039a4bfd9",
       "path": "third-party/android-poms/6967401cc2fe9d18b350e3e542e7f6978e54c40e140cb11b82b0cf1039a4bfd9.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -5136,7 +5137,7 @@
       "url": "https://repo.maven.apache.org/maven2/com/github/ben-manes/caffeine/caffeine/2.9.3/caffeine-2.9.3.pom",
       "sha256": "6fa4f1c10192806f8ef05b5d4be7bd9f5ce58b876f64364d4e90c3fc092323dc",
       "path": "third-party/android-poms/6fa4f1c10192806f8ef05b5d4be7bd9f5ce58b876f64364d4e90c3fc092323dc.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -5750,7 +5751,7 @@
       "url": "https://repo.maven.apache.org/maven2/com/google/guava/guava-parent/33.3.1-android/guava-parent-33.3.1-android.pom",
       "sha256": "6e11986ea7250b51f847157e2dc937f32a306804dfce0007a5e81ddb9b95c579",
       "path": "third-party/android-poms/6e11986ea7250b51f847157e2dc937f32a306804dfce0007a5e81ddb9b95c579.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -5802,7 +5803,7 @@
       "url": "https://repo.maven.apache.org/maven2/com/google/guava/guava/33.3.1-android/guava-33.3.1-android.pom",
       "sha256": "c728db6f2705ca3ea6a3cf2cf1260dbeff3a4524249a1b1b900edcfe9d72142f",
       "path": "third-party/android-poms/c728db6f2705ca3ea6a3cf2cf1260dbeff3a4524249a1b1b900edcfe9d72142f.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": "com.google.guava:guava-parent:33.3.1-android",
       "declared_licenses": [],
       "license_source": "com.google.guava:guava-parent:33.3.1-android"
@@ -5812,7 +5813,7 @@
       "url": "https://repo.maven.apache.org/maven2/com/google/guava/guava/33.3.1-jre/guava-33.3.1-jre.pom",
       "sha256": "313b67fc13eb3b0634eda715a1229971f5de9b8188bc280762815b83a275f193",
       "path": "third-party/android-poms/313b67fc13eb3b0634eda715a1229971f5de9b8188bc280762815b83a275f193.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": "com.google.guava:guava-parent:33.3.1-jre",
       "declared_licenses": [],
       "license_source": "com.google.guava:guava-parent:33.3.1-jre"
@@ -6988,7 +6989,7 @@
       "url": "https://repo.maven.apache.org/maven2/io/opentelemetry/opentelemetry-api/1.41.0/opentelemetry-api-1.41.0.pom",
       "sha256": "bc1ef0f77b3bd6db0b7a6f1652fdb421698a0e54374504a7419fb1beb4562993",
       "path": "third-party/android-poms/bc1ef0f77b3bd6db0b7a6f1652fdb421698a0e54374504a7419fb1beb4562993.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -7003,7 +7004,7 @@
       "url": "https://repo.maven.apache.org/maven2/io/opentelemetry/opentelemetry-context/1.41.0/opentelemetry-context-1.41.0.pom",
       "sha256": "cb3b396259983429594d62e476675cc00bb252c90d314d647a9b56dec23e5526",
       "path": "third-party/android-poms/cb3b396259983429594d62e476675cc00bb252c90d314d647a9b56dec23e5526.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -7018,7 +7019,7 @@
       "url": "https://repo.maven.apache.org/maven2/io/perfmark/perfmark-api/0.26.0/perfmark-api-0.26.0.pom",
       "sha256": "7edee48616e17b61297eae3a82eb483a85e56d2567929378aa46f30a950322da",
       "path": "third-party/android-poms/7edee48616e17b61297eae3a82eb483a85e56d2567929378aa46f30a950322da.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -7033,7 +7034,7 @@
       "url": "https://repo.maven.apache.org/maven2/io/perfmark/perfmark-api/0.27.0/perfmark-api-0.27.0.pom",
       "sha256": "22c175c2c1823667630c84e73225767f5970492d8e6cbffb81a6575dba472d26",
       "path": "third-party/android-poms/22c175c2c1823667630c84e73225767f5970492d8e6cbffb81a6575dba472d26.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -7649,7 +7650,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/checkerframework/checker-qual/3.33.0/checker-qual-3.33.0.pom",
       "sha256": "f55a922027a78fdd8b3ea15a0d8bfe3fec6a5ceac30c86aa8afa4a5b9b0df603",
       "path": "third-party/android-poms/f55a922027a78fdd8b3ea15a0d8bfe3fec6a5ceac30c86aa8afa4a5b9b0df603.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -7665,7 +7666,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/checkerframework/checker-qual/3.43.0/checker-qual-3.43.0.pom",
       "sha256": "9313bf53b3efd8aaca266eea8b96e307976b65c0b16510cc6f02319fbaebed43",
       "path": "third-party/android-poms/9313bf53b3efd8aaca266eea8b96e307976b65c0b16510cc6f02319fbaebed43.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -7981,7 +7982,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/compose-compiler-gradle-plugin/2.2.21/compose-compiler-gradle-plugin-2.2.21.pom",
       "sha256": "ea1b7f727c5272a9bf315f2174c3718c36c2fbee9801f6d4e32c92f2afea002e",
       "path": "third-party/android-poms/ea1b7f727c5272a9bf315f2174c3718c36c2fbee9801f6d4e32c92f2afea002e.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -7996,7 +7997,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/fus-statistics-gradle-plugin/2.2.21/fus-statistics-gradle-plugin-2.2.21.pom",
       "sha256": "250cec9a7e574c2c1117eecf0421e32001ea0f34b0a901c7fa4ead6fe8ddeda4",
       "path": "third-party/android-poms/250cec9a7e574c2c1117eecf0421e32001ea0f34b0a901c7fa4ead6fe8ddeda4.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8163,7 +8164,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-api/2.2.21/kotlin-gradle-plugin-api-2.2.21.pom",
       "sha256": "9bd45783982e175eee9faad45f5ff7415c96aeb6aef2e7cf8e3508afb639d617",
       "path": "third-party/android-poms/9bd45783982e175eee9faad45f5ff7415c96aeb6aef2e7cf8e3508afb639d617.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8193,7 +8194,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-idea/2.2.21/kotlin-gradle-plugin-idea-2.2.21.pom",
       "sha256": "28a5a2abba5b58293e24a9e06e6aac92626be182c65dfc8b2db694944e70ada5",
       "path": "third-party/android-poms/28a5a2abba5b58293e24a9e06e6aac92626be182c65dfc8b2db694944e70ada5.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8208,7 +8209,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-model/2.2.21/kotlin-gradle-plugin-model-2.2.21.pom",
       "sha256": "208453a36a6be49b071a1c10e9b4404106636c93bae5bf30c6dac574c40cf5b1",
       "path": "third-party/android-poms/208453a36a6be49b071a1c10e9b4404106636c93bae5bf30c6dac574c40cf5b1.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8223,7 +8224,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin/2.2.21/kotlin-gradle-plugin-2.2.21.pom",
       "sha256": "e5b59d3c9a46bb7f0f7b49cfc88d698da541a4bd090a5c17d9a00ab47210738c",
       "path": "third-party/android-poms/e5b59d3c9a46bb7f0f7b49cfc88d698da541a4bd090a5c17d9a00ab47210738c.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8463,7 +8464,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/2.2.0/kotlin-stdlib-common-2.2.0.pom",
       "sha256": "537ab4073a847a59ba76d99a645a8609b5382ffa5d2591a354b2fa311f499733",
       "path": "third-party/android-poms/537ab4073a847a59ba76d99a645a8609b5382ffa5d2591a354b2fa311f499733.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8478,7 +8479,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/2.2.21/kotlin-stdlib-common-2.2.21.pom",
       "sha256": "618dc3acc77345acadc30c0deef8a5a0e603f8eef3af42e576f058a1754c2c7c",
       "path": "third-party/android-poms/618dc3acc77345acadc30c0deef8a5a0e603f8eef3af42e576f058a1754c2c7c.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8583,7 +8584,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.9.21/kotlin-stdlib-1.9.21.pom",
       "sha256": "c807d92f7c6aa1b65c06cf87232363504e690fca3f3c1e27206630a1322fd7e0",
       "path": "third-party/android-poms/c807d92f7c6aa1b65c06cf87232363504e690fca3f3c1e27206630a1322fd7e0.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8598,7 +8599,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.0.21/kotlin-stdlib-2.0.21.pom",
       "sha256": "fcbada4cd2e9f39658293570ef613752331db69fd1dad1cabaa60548403e17da",
       "path": "third-party/android-poms/fcbada4cd2e9f39658293570ef613752331db69fd1dad1cabaa60548403e17da.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8613,7 +8614,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.2.0/kotlin-stdlib-2.2.0.pom",
       "sha256": "8c3c821007c13411558739b9f3d5382eb81551db3895cffb89561e56c0f4dc16",
       "path": "third-party/android-poms/8c3c821007c13411558739b9f3d5382eb81551db3895cffb89561e56c0f4dc16.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8628,7 +8629,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.2.21/kotlin-stdlib-2.2.21.pom",
       "sha256": "cf31f923196c63aedecd0a57c24269bd3702a4e47c0bf0bd64b5ada5de522272",
       "path": "third-party/android-poms/cf31f923196c63aedecd0a57c24269bd3702a4e47c0bf0bd64b5ada5de522272.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8718,7 +8719,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/atomicfu-jvm/0.22.0/atomicfu-jvm-0.22.0.pom",
       "sha256": "09233d37935a296878fc7ebef761021264fae2805bf926420328b7cb90d67a56",
       "path": "third-party/android-poms/09233d37935a296878fc7ebef761021264fae2805bf926420328b7cb90d67a56.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8734,7 +8735,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/atomicfu-jvm/0.28.0/atomicfu-jvm-0.28.0.pom",
       "sha256": "dd7fad5d5d4b21ca9db0788750b0997ba1db6882ded86e5212f5c83fc51facec",
       "path": "third-party/android-poms/dd7fad5d5d4b21ca9db0788750b0997ba1db6882ded86e5212f5c83fc51facec.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8750,7 +8751,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/atomicfu/0.22.0/atomicfu-0.22.0.pom",
       "sha256": "96c3f87d03628a83111c3df934e803d77e10d613420f7bc4d300598386c8ef37",
       "path": "third-party/android-poms/96c3f87d03628a83111c3df934e803d77e10d613420f7bc4d300598386c8ef37.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8766,7 +8767,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/atomicfu/0.23.1/atomicfu-0.23.1.pom",
       "sha256": "688b790019f417cec03e695d6567b173ba3bb24189541662f14ff66441b53dab",
       "path": "third-party/android-poms/688b790019f417cec03e695d6567b173ba3bb24189541662f14ff66441b53dab.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8782,7 +8783,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/atomicfu/0.27.0/atomicfu-0.27.0.pom",
       "sha256": "7b715b9fdb7d313afc8518d5fcabf42eb49fccd6cd7ff44736a105e8099405d8",
       "path": "third-party/android-poms/7b715b9fdb7d313afc8518d5fcabf42eb49fccd6cd7ff44736a105e8099405d8.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8798,7 +8799,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/atomicfu/0.28.0/atomicfu-0.28.0.pom",
       "sha256": "c9ba01ef3e6899d42cf070d59ba39d572fc5863bf296c729a99722c0647df6ca",
       "path": "third-party/android-poms/c9ba01ef3e6899d42cf070d59ba39d572fc5863bf296c729a99722c0647df6ca.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8814,7 +8815,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-android/1.10.2/kotlinx-coroutines-android-1.10.2.pom",
       "sha256": "b92d3672e7f9e8f4c4e2ab187c3e31fecc506496396f4a5f27ee1c957a42b319",
       "path": "third-party/android-poms/b92d3672e7f9e8f4c4e2ab187c3e31fecc506496396f4a5f27ee1c957a42b319.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8830,7 +8831,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-android/1.7.3/kotlinx-coroutines-android-1.7.3.pom",
       "sha256": "020515246d19e176d5626eb118f80f97f7876d1accd8cec15b1a4159257d5054",
       "path": "third-party/android-poms/020515246d19e176d5626eb118f80f97f7876d1accd8cec15b1a4159257d5054.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8910,7 +8911,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.10.2/kotlinx-coroutines-core-jvm-1.10.2.pom",
       "sha256": "658f576b96c832e7382406adb197d64d8e2e97de10e96dfa3700decfa2a60def",
       "path": "third-party/android-poms/658f576b96c832e7382406adb197d64d8e2e97de10e96dfa3700decfa2a60def.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8926,7 +8927,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.6.4/kotlinx-coroutines-core-jvm-1.6.4.pom",
       "sha256": "09d960f85922903c2e52e126b17e9fa5020b425c469ec61944b3c01835547224",
       "path": "third-party/android-poms/09d960f85922903c2e52e126b17e9fa5020b425c469ec61944b3c01835547224.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8942,7 +8943,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.7.3/kotlinx-coroutines-core-jvm-1.7.3.pom",
       "sha256": "753858753decbbb2397343e2b871f062f697812e9422e41c9ee46a66b93eee30",
       "path": "third-party/android-poms/753858753decbbb2397343e2b871f062f697812e9422e41c9ee46a66b93eee30.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8958,7 +8959,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.8.0/kotlinx-coroutines-core-jvm-1.8.0.pom",
       "sha256": "a5633abd53467ceb91622d81f2e982080877145e0b76e1b75788715434885d0b",
       "path": "third-party/android-poms/a5633abd53467ceb91622d81f2e982080877145e0b76e1b75788715434885d0b.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8974,7 +8975,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.8.1/kotlinx-coroutines-core-jvm-1.8.1.pom",
       "sha256": "47c6a50b14151e8faf7f350a95235c37d12abc38bfb055b668974293172daf2c",
       "path": "third-party/android-poms/47c6a50b14151e8faf7f350a95235c37d12abc38bfb055b668974293172daf2c.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -8990,7 +8991,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.9.0/kotlinx-coroutines-core-jvm-1.9.0.pom",
       "sha256": "19c4889941b3aa098bd57cc64f02f9adacc654d571a12a956de4b5bb148c6499",
       "path": "third-party/android-poms/19c4889941b3aa098bd57cc64f02f9adacc654d571a12a956de4b5bb148c6499.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -9006,7 +9007,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.10.2/kotlinx-coroutines-core-1.10.2.pom",
       "sha256": "519da5400096f3462a4dae80783ad050413d4bc81ec7ae53fae76aef0ccbed4c",
       "path": "third-party/android-poms/519da5400096f3462a4dae80783ad050413d4bc81ec7ae53fae76aef0ccbed4c.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -9022,7 +9023,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.6.4/kotlinx-coroutines-core-1.6.4.pom",
       "sha256": "136b4edb87a47e15251f0842f3189fa31979eb4ab51acfb4239b4bf8d16d4588",
       "path": "third-party/android-poms/136b4edb87a47e15251f0842f3189fa31979eb4ab51acfb4239b4bf8d16d4588.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -9038,7 +9039,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.7.3/kotlinx-coroutines-core-1.7.3.pom",
       "sha256": "ed6eb0398717035e29f1c1d60a4e3ddbb89858f3db9e07b57ad759d374dae829",
       "path": "third-party/android-poms/ed6eb0398717035e29f1c1d60a4e3ddbb89858f3db9e07b57ad759d374dae829.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -9054,7 +9055,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.9.0/kotlinx-coroutines-core-1.9.0.pom",
       "sha256": "770f2793d05e2b027b9c799938ec1d2d4ef141ce5819c780c32c3995cadb0a47",
       "path": "third-party/android-poms/770f2793d05e2b027b9c799938ec1d2d4ef141ce5819c780c32c3995cadb0a47.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -9070,7 +9071,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-test-jvm/1.10.2/kotlinx-coroutines-test-jvm-1.10.2.pom",
       "sha256": "63deb2a868abcbe2488ebcebaa75e731b2ef2104103b81738e7637fc9a25a5f3",
       "path": "third-party/android-poms/63deb2a868abcbe2488ebcebaa75e731b2ef2104103b81738e7637fc9a25a5f3.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -9086,7 +9087,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-test-jvm/1.9.0/kotlinx-coroutines-test-jvm-1.9.0.pom",
       "sha256": "e808f2810b1d6b94de8e4dc9718df5bd33eebdada3fdbf2f7eecfafd56982bfd",
       "path": "third-party/android-poms/e808f2810b1d6b94de8e4dc9718df5bd33eebdada3fdbf2f7eecfafd56982bfd.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -9102,7 +9103,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-test/1.10.2/kotlinx-coroutines-test-1.10.2.pom",
       "sha256": "bf25c8df0ec9f3eac7bbee539b601b6019b7e99f5f3f3011e2e8178b140750db",
       "path": "third-party/android-poms/bf25c8df0ec9f3eac7bbee539b601b6019b7e99f5f3f3011e2e8178b140750db.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -9118,7 +9119,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-test/1.9.0/kotlinx-coroutines-test-1.9.0.pom",
       "sha256": "e6b4aae143750cb1b64e0397d4b96dc6135ba6ab2c337386df54df0d98cdf121",
       "path": "third-party/android-poms/e6b4aae143750cb1b64e0397d4b96dc6135ba6ab2c337386df54df0d98cdf121.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -9150,7 +9151,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-core-jvm/1.7.3/kotlinx-serialization-core-jvm-1.7.3.pom",
       "sha256": "734f5f749208dd0bef3d98caa594cf9222afdf0fee5b6843347a8fe64e240427",
       "path": "third-party/android-poms/734f5f749208dd0bef3d98caa594cf9222afdf0fee5b6843347a8fe64e240427.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -9166,7 +9167,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-core/1.7.3/kotlinx-serialization-core-1.7.3.pom",
       "sha256": "31d111776b9af777ca167103f2d61fbeeaa32dae6dd6635906b76d8278ba5730",
       "path": "third-party/android-poms/31d111776b9af777ca167103f2d61fbeeaa32dae6dd6635906b76d8278ba5730.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {
@@ -9215,7 +9216,7 @@
       "url": "https://repo.maven.apache.org/maven2/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.pom",
       "sha256": "cdab929a3b95211f43d2090c5e2d0dfe8465960e378bc32b35841dab324433a6",
       "path": "third-party/android-poms/cdab929a3b95211f43d2090c5e2d0dfe8465960e378bc32b35841dab324433a6.xml",
-      "gradle_checksum_match": false,
+      "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [
         {

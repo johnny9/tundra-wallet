@@ -1,0 +1,56 @@
+{
+  "recorded_at": "2026-09-09T07:32:32.763540+00:00",
+  "first_locked_native_run": 34323294461,
+  "source": "77ce36c8c42ab4469232b65f4d58c88969465813",
+  "android_job": 102374643282,
+  "android_result": "failure before app compilation; missing guava-parent-33.3.1-android.pom checksum during complete configuration verification",
+  "correction": "Promote all 257 previously retained supplemental POMs to exact checksum entries; no module versions changed or trust exceptions added",
+  "metadata_components": 585,
+  "artifact_checksums": 1263,
+  "locked_components": 440,
+  "poms_retained_and_matched": 585,
+  "native_rerun": "pending",
+  "rust_passed": 189,
+  "offline_passed": 31,
+  "fmt_clippy_bindings": "passed",
+  "long_list_scenarios": "authored, not compiled or run",
+  "waydroid_recheck": "Running session/container, IP UNKNOWN, no ADB device; no Waydroid test execution",
+  "files": [
+    {
+      "path": "build/android-locked-ci-first.log",
+      "sha256": "618303665ec46d4ed950856e2615d9ba3ce649472fbfee19b432a02ecfbe349a"
+    },
+    {
+      "path": "build/gradle-retained-pom-additions.json",
+      "sha256": "e879b2a51d76684bbe41b9790ece5fcaf0eeb86fb8ea58c232d1dd6536090595"
+    },
+    {
+      "path": "build/android-parent-metadata-inventory.log",
+      "sha256": "8877786019c79543330af77c11c2a54cac70fa8f95eaec301af5bb83b3a6d2c8"
+    },
+    {
+      "path": "apps/android/gradle/verification-metadata.xml",
+      "sha256": "23ff4c0f88a83473833cf1f9c6587cf092868a3f38abe52547a91dca73c5d78f"
+    },
+    {
+      "path": "third-party/android-inventory.json",
+      "sha256": "3ed8dd7b63854b02c2c9f8d1d4880a79edb4e863ba4fbdb04d0d04751375d39c"
+    },
+    {
+      "path": "build/long-list-foundation-check.log",
+      "sha256": "b1fbd3fc186173e37139601898921e952ede5f5d816f4fc529cfd0b6165ccffa"
+    },
+    {
+      "path": "build/long-list-regtest-check.log",
+      "sha256": "e870687f4e0e1ef2f8456b68d8ab6728b298a237bfb120a183d92f1fa7c16ab1"
+    },
+    {
+      "path": "build/long-list-bindings-check.log",
+      "sha256": "0c7b78cba31b29467c06e4ee1861744167fd925cd349d2c21d16bf72cf055482"
+    },
+    {
+      "path": "build/long-list-both-authored-offline.log",
+      "sha256": "898e34034a80d4a2161420a1b3ed24eea071fe6f3dcc556ce32487c693b325a4"
+    }
+  ]
+}

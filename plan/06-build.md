@@ -52,7 +52,7 @@ at `4570492` passes. Earlier failures and corrections remain in the validation e
 
 Normal builds now require committed locks and strict checksum verification. The baseline
 locks **440 distinct components** across plugin and application configurations. Verification
-covers **584 metadata components / 1,006 artifacts**, including parent/BOM metadata not itself
+covers **585 metadata components / 1,263 artifacts**, including parent/BOM metadata not itself
 in a resolved graph. Three metadata artifacts missing from the CI bootstrap were separately
 fetched from Maven Central, identity-checked and byte-compared with the local cache; the
 pinned Compose BOM was independently compared with Google Maven. These are checksums of the
@@ -63,7 +63,10 @@ same build configuration pass a baseline and refuse missing locks, disabled veri
 an altered plugin checksum. The offline checker also rejects mutable versions, unreviewed
 components and broad verification exceptions. The local all-configuration check reaches the
 missing Android SDK and cannot complete; normal native CI now runs that read-only gate before
-building, then runs the same refusal checks. Its first full locked native run is pending.
+building, then runs the same refusal checks. Its first full locked native run refuses a Guava parent POM missing from the initial
+checksum set. That POM and all 256 other retained supplemental POMs now have explicit exact
+checksums. The next full locked native run is pending. See
+[parent-metadata correction](../validation/android-parent-metadata-checks.json).
 See [exact lock/enforcement evidence](../validation/android-lock-enforcement-checks.json).
 
 For an intentional update, dispatch the collector, inspect its artifacts and version changes,
