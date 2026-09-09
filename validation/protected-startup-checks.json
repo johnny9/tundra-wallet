@@ -1,0 +1,56 @@
+{
+  "recorded_at": "2026-09-09T03:27:25.088627+00:00",
+  "runs": [
+    {
+      "id": 34304964407,
+      "source": "679119f43e7b0daa52db22e406193c09761a012c",
+      "android": {
+        "jvm_passed": 8,
+        "instrumentation_passed": 10,
+        "instrumentation_failed": 1,
+        "failure": "Wallet scenario timed out after offscreen descriptor review button; fixed by scroll/display/enabled assertion in 0011762",
+        "startup": "Protected database and wrapped-key assertions passed",
+        "cold_restart": "not run"
+      },
+      "ios": {
+        "host_ffi_passed": 6,
+        "runtime_passed": 10,
+        "protected_startup": "passed",
+        "payment_modes_and_restart": "passed",
+        "backup_cross_provider_export_inspection": "passed"
+      }
+    },
+    {
+      "id": 34305883074,
+      "source": "0011762b6ee5b3db334e3aecc7771bdb07963907",
+      "android": {
+        "jvm_passed": 8,
+        "instrumentation_passed": 10,
+        "instrumentation_failed": 1,
+        "failure": "Wallet scenario advanced to direct plaintext database open at WalletRuntimeTest.kt:78; encrypted storage correctly refused it",
+        "fix": "042c4ce replaces five test-only app database reads with StorageVault.open",
+        "cold_restart": "not run"
+      },
+      "ios_job": "success",
+      "rust_and_parser_audit_jobs": "success"
+    }
+  ],
+  "logs": [
+    {
+      "path": "build/android-protected-startup-first.log",
+      "sha256": "4b7a81c007e321ae9c87b8f8896c0a06db0bd6cabd35cd40af55a7cbbcee19bb"
+    },
+    {
+      "path": "build/ios-protected-startup-first.log",
+      "sha256": "a3c66e43b596d7a616772110deb2ce85f6efc990f87054cc4b007468fd170e62"
+    },
+    {
+      "path": "build/android-protected-review-second.log",
+      "sha256": "904f4dde002a1c1a03b61e0101d8037198a4f95e09a7d538eb653a15d8b2ff08"
+    }
+  ],
+  "limits": [
+    "No native restore result yet",
+    "No hardware qualification"
+  ]
+}

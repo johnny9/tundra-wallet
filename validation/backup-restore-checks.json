@@ -1,0 +1,43 @@
+{
+  "recorded_at": "2026-09-09T03:27:25.087879+00:00",
+  "source": "de6b6199fac55bb6f444a5a1c47cd799ab50912c",
+  "rust": {
+    "core_unit_passed": 171,
+    "ignored_core_helpers": 5,
+    "crash_integration_passed": 2,
+    "http_integration_passed": 5,
+    "separately_executed_keyless_regtest_passed": 1,
+    "total_passed": 179
+  },
+  "offline_passed": 26,
+  "fmt_and_strict_clippy": "passed",
+  "bindings": "Kotlin and Swift generated from compiled library",
+  "restore_checks": [
+    "Pinned schema-7 backup restored to schema 8 with new raw storage key; source unchanged",
+    "Balances unknown; labels, indices, signatures, final bytes and submission history retained",
+    "All old reviews suspended; unresolved submission inputs remain held across reorgs",
+    "Explicit resume requires fresh sync, exact latest-attempt identity and valid signatures; concurrent resume has one winner",
+    "Wrong password/key, existing destination, hostile descriptors/schema/reviews and invalid signatures refused",
+    "Actual kills at three restore boundaries; temporary files remain encrypted; racing destination is retained"
+  ],
+  "native": "Restore assertions authored in host/mobile FFI tests; next CI pending",
+  "remaining": [
+    "Native document exchange and generation switching",
+    "Native explicit recovery review flow",
+    "Hardware qualification and independent security review"
+  ],
+  "logs": [
+    {
+      "path": "build/backup-restore-final.log",
+      "sha256": "49b1555285e504d589f672520bca4845d63ba90340a631664f9bb27afc9a0f7e"
+    },
+    {
+      "path": "build/backup-restore-regtest.log",
+      "sha256": "dd6a6426095503b6d59e5b73da7b81f234f5ce53fbf5062e141f1ff45f122980"
+    },
+    {
+      "path": "build/backup-restore-bindings.log",
+      "sha256": "fde43725648ec11cfb28c1555ada1c5e440f717481464bdd87b5b263fbe2d159"
+    }
+  ]
+}

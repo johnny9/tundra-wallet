@@ -6,22 +6,35 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
-Encrypted backup export/inspection at `0e59bae` passes **168 Rust tests including real
-keyless regtest**, **25 offline checks**, formatting, strict Clippy and both binding
-generators. This includes encrypted standalone files, hostile schema/password/bounds checks,
-preserved signing/submission records and actual kills at three export boundaries. New native
-tests will read the pinned Linux/OpenSSL fixture and export their own snapshots. Restore
-and native backup/recovery UX are **not implemented**. See
-[`backup-export-checks.json`](../validation/backup-export-checks.json) and [backup rules](14-backup.md).
+Encrypted backup/restore at `de6b619` passes **179 Rust tests including real keyless
+regtest**, **26 offline checks**, formatting, strict Clippy and both binding generators.
+Restore verifies a private encrypted copy, retains the source, migrates the pinned schema-7
+fixture to schema 8 and installs only into a new protected path. Cached balances become
+unknown, reviews are suspended and unresolved submission inputs remain held across reorgs.
+Explicit resumption revalidates freshness, signatures, approved bytes and the latest attempt.
+Actual process kills cover three restore boundaries. Native restore assertions are authored;
+store switching, document exchange and recovery UI remain open. See
+[`backup-restore-checks.json`](../validation/backup-restore-checks.json) and [backup rules](14-backup.md).
 
-The [native run at d441d6c](https://github.com/johnny9/tundra-wallet/actions/runs/34303410689)
-is fully green: **7 Android JVM tests, 10 instrumentation tests and cold restart**; Apple
-host/iOS builds, **5 host FFI checks and 8 runtime tests**; Rust, all sanitizer targets and
-audit. Both platform vaults pass real Keystore/Keychain create/reopen/migration and missing
-or corrupt key tests. Ad hoc simulator signing with app-scoped Keychain entitlements passes
-the previously failing Apple tests. These were isolated vault checks: `322bf83` now connects
-them to normal startup with an unavailable/retry state, and that protected startup/restart
-gate is pending. See [`storage-vault-passing-checks.json`](../validation/storage-vault-passing-checks.json).
+The [protected-startup run at 679119f](https://github.com/johnny9/tundra-wallet/actions/runs/34304964407)
+passes Apple builds, **6 host FFI checks and 10 runtime tests**, including normal Keychain
+protected startup, all payment modes/restart, and Linux/OpenSSL backup inspection plus native
+CommonCrypto export. Android builds and passes **8 JVM and 10 of 11 instrumentation tests**,
+including backup/Keystore checks and initial protected app startup. Its wallet scenario timed
+out at descriptor review; `0011762` scrolls that button into view.
+
+The [next run at 0011762](https://github.com/johnny9/tundra-wallet/actions/runs/34305883074)
+passes iOS, Rust and parser/audit jobs. Android again passes 10 of 11 instrumentation tests:
+the wallet scenario now passes import, receive, recreation and appearance, then correctly
+fails a test-only plaintext database read against the protected file. `042c4ce` changes all
+five such reads to the app's Keystore vault. Cold restart did not run after these failures.
+See [`protected-startup-checks.json`](../validation/protected-startup-checks.json).
+
+The earlier [fully green vault run at d441d6c](https://github.com/johnny9/tundra-wallet/actions/runs/34303410689)
+passes **7 Android JVM tests, 10 instrumentation tests and cold restart**; Apple builds,
+**5 host FFI checks and 8 runtime tests**; Rust, all sanitizer targets and audit. It tested
+isolated native vaults before normal protected startup was connected.
+See [`storage-vault-passing-checks.json`](../validation/storage-vault-passing-checks.json).
 
 ## Previous provenance and vault checkpoints
 

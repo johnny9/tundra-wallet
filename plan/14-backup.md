@@ -25,45 +25,58 @@ document-provider partial writes explicitly.
 Inspection opens read-only within a read transaction. It refuses wrong credentials, final
 symlinks, non-self-contained files with journal sidecars, files outside 4 KiB–256 MiB, changed
 schemas and unsupported versions. It checks authenticated pages, SQLite integrity, foreign
-keys, bounded schema/wallet counts, a 16 MiB per-wallet state bound and supported public
-descriptors. Returned summaries make no cached-balance or freshness claim. Inspection is
+keys, bounded schema/wallet counts (1,000 wallets and 10,000 drafts), a 16 MiB per-wallet
+state bound and supported public descriptors checked before loading BDK state. Returned summaries make no cached-balance or freshness claim. Inspection is
 not a reusable authorization token and does not restore a wallet.
 
 The versioned schema file preserves the initial schema-7 backup contract when the live app
 schema advances. Future readers must explicitly validate and migrate supported old versions.
 The first format has no older Tundra backup version to upgrade.
 
+## Implemented protected restore
+
+Restore copies bounded ciphertext to a private temporary file and validates that copy. The
+original is never modified. It exports into a new SQLCipher store using a caller-provided
+32-byte storage key, migrates supported schema 7 to schema 8, removes the backup manifest,
+verifies the result independently and installs without replacing an existing destination.
+The native caller must durably retain the new storage key before calling restore.
+
+Restored cached chain data becomes unsynced and every old review is invalidated. Labels,
+freezes, input provenance, signatures, final bytes and submission history remain. Separate
+recovery holds keep inputs of unresolved submissions unavailable even when a reorg clears
+ordinary reservations. Observing the exact transaction resolves its holds. Explicit recovery
+resumption requires a fresh chain view, current attempt/transaction identity, acknowledgement,
+and full signature, approval and eligibility validation. It changes no final bytes and
+performs no network request. Competing resumption requests cannot both succeed.
+
 ## Executed checks and pending native gate
 
-Nine Rust tests cover password handling, encryption, public signatures/final bytes, uncertain
-submissions, bounds, hostile schema changes, no-clobber installation, failure injection and
-three actual process-kill boundaries. The complete local gate passes 168 Rust tests including
-keyless regtest, 25 offline checks, formatting, strict Clippy and both binding generators.
-The public encrypted fixture is generated on Linux/OpenSSL, pinned by hash and inspected by
-Rust. New Kotlin/Swift host and mobile tests will read that same fixture and export their own
-snapshot; Apple CommonCrypto interoperability is still pending. No Bitcoin signing key is
-generated or imported. See [recorded checks](../validation/backup-export-checks.json).
+Nine export tests and eleven restore tests cover passwords, encryption, published public
+signatures, uncertainty, bounded hostile input, no-clobber races and actual process kills
+at three export and three restore boundaries. The complete local gate passes 179 Rust tests
+including keyless regtest, 26 offline checks, formatting, strict Clippy and both binding
+generators. No Bitcoin signing key is generated or imported. See
+[restore evidence](../validation/backup-restore-checks.json).
 
-## Restore still to implement
+Kotlin/Swift host and mobile export/inspection tests pass, including the pinned Linux/OpenSSL
+fixture read on Apple CommonCrypto. Native restore assertions are authored and await CI.
+Normal iOS protected startup and payment/restart pass; Android's full scenario needs its
+remaining test-only plaintext reads changed to the vault. See
+[native startup evidence](../validation/protected-startup-checks.json).
 
-Do not expose export as a recoverable backup product until restore and native document
-exchange pass. Restore must verify a fresh private copy, never mutate the source backup or
-overwrite an unreadable existing wallet, and install into a new protected store with a
-durably retained new storage key. Switching the active store must be atomic and leave the
-old protected data available if interrupted.
+## Native recovery still to implement
 
-Restored cached chain data must become unsynced. Old approvals must remain suspended until
-an explicit fresh review; restoring or syncing must not silently authorize signing,
-finalization or broadcast. Preserve labels, freezes, original input provenance, signatures,
-final bytes and all submission history. Inputs of unresolved restored submissions need
-separate durable holds; an old reservation disappearing during a reorg must not make those
-coins selectable. Observing the exact transaction or an explicit validated recovery action
-must resolve those holds deliberately.
+Do not expose export as a recoverable backup product until native document exchange and
+restore pass. Restore must use a new protected generation with a durably retained storage
+key. Active-store selection must switch atomically and retain the old protected data if
+interrupted, including when its native key is unavailable. Lost or malformed selectors must
+not silently create an empty wallet. Active network work must finish before switching.
 
+Native recovery must show suspended reviews and make resumption an explicit fresh review.
 An old backup cannot know receive addresses issued after it was made. A new scan cannot
 discover previously issued but unused addresses; recovery UX must explain that limit instead
 of promising no address reuse. Hardware receive/policy verification remains a separate gate.
 
-Wrong passwords, corrupt/unsupported backups, disk faults, interruption at each installation
-boundary, lost native keys and active network operations must be covered before exposing
-restore. M7 remains incomplete.
+Wrong passwords, corrupt/unsupported backups, disk faults, interruption at installation and
+selection boundaries, lost native keys and active network operations need native coverage
+before exposing restore. M7 remains incomplete.
