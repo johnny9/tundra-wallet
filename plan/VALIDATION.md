@@ -6,6 +6,19 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
+The [published-fixture native run at f86c34e](https://github.com/johnny9/tundra-wallet/actions/runs/34312982396)
+passes both app builds, **10 Android JVM / 13 Android instrumentation** checks and **6 Apple
+host FFI** checks. Android’s new published-signature/vault scenario passes: both signatures,
+exact finalization, retained generation restore, actual fixture HTTP sync, recovery review,
+separate submission consent, reopen and observed provenance with retained edits. Both Android
+UI failures now occur while waiting for keyboard dismissal. The sheets obtained the parent
+activity focus manager; the correction resolves it inside each modal’s composition.
+Apple runtime tests did **not run** because fixture startup exceeded 20 seconds. The fixture
+now avoids reverse DNS during loopback bind and records bounded startup markers. Its two Rust
+integration tests still pass. Android screenshot artifact collection also needs the corrected
+development package path. These native corrections await their next run. See
+[`published-native-platform-checks.json`](../validation/published-native-platform-checks.json).
+
 The [next picker run at d89cba6](https://github.com/johnny9/tundra-wallet/actions/runs/34311969023)
 passes both builds, **10 Android JVM / 12 Android instrumentation**, **6 Apple host FFI /
 12 iOS runtime** checks, Rust and parser/audit. Android still fails at the system filename

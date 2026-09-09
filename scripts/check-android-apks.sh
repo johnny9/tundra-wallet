@@ -5,7 +5,7 @@ cd "$(dirname "$0")/.."
 : "${ANDROID_SERIAL:?Set ANDROID_SERIAL to the disposable Waydroid/emulator ADB target}"
 if [[ ${TUNDRA_DISPOSABLE_ANDROID:-0} != 1 || $# != 2 ]]; then
   echo 'Usage: TUNDRA_DISPOSABLE_ANDROID=1 ANDROID_SERIAL=<target> scripts/check-android-apks.sh <app.apk> <androidTest.apk>' >&2
-  echo 'The instrumentation test clears Tundra development wallet data on this target.' >&2
+  echo 'Use a fresh disposable installation; the test refuses existing wallet storage and never resets it.' >&2
   exit 1
 fi
 test -f "$1"
@@ -13,6 +13,7 @@ test -f "$2"
 mkdir -p build
 adb get-state
 adb reverse tcp:3002 tcp:3002
+adb reverse tcp:3003 tcp:3003
 adb install -r "$1"
 adb install -r "$2"
 python3 - <<'PY'

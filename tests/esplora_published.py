@@ -9,6 +9,7 @@ import argparse
 import hashlib
 import http.server
 import json
+import socketserver
 import threading
 from pathlib import Path
 
@@ -136,7 +137,15 @@ def server(fixture, port=0):
             except (ValueError, TimeoutError):
                 self.respond("Public fixture submission refused", 400)
 
-    host = http.server.ThreadingHTTPServer(("127.0.0.1", port), Handler)
+    class LoopbackServer(http.server.ThreadingHTTPServer):
+        def server_bind(self):
+            # HTTPServer normally calls getfqdn here. A local test endpoint needs
+            # no reverse DNS, which can stall for tens of seconds on macOS hosts.
+            socketserver.TCPServer.server_bind(self)
+            self.server_name = "localhost"
+            self.server_port = self.server_address[1]
+
+    host = LoopbackServer(("127.0.0.1", port), Handler)
     host.fixture_index = index
     return host
 
@@ -147,8 +156,10 @@ if __name__ == "__main__":
     parser.add_argument("--port", type=int, default=3003)
     parser.add_argument("--port-file", type=Path, required=True)
     args = parser.parse_args()
+    print("Loading public fixture and binding loopback", flush=True)
     host = server(json.loads(args.fixture.read_text()), args.port)
     temporary = args.port_file.with_suffix(".tmp")
     temporary.write_text(str(host.server_port))
     temporary.replace(args.port_file)
+    print("Public fixture server ready", flush=True)
     host.serve_forever()

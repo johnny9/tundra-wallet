@@ -1,0 +1,45 @@
+{
+  "recorded_at": "2026-09-09T05:12:17.583066+00:00",
+  "run_id": 34312982396,
+  "source": "f86c34e3767976507660aad51b3063fd0c29afa1",
+  "conclusion": "failure",
+  "android": {
+    "build": "passed",
+    "jvm_passed": 10,
+    "instrumentation_passed": 13,
+    "instrumentation_failed": 2,
+    "published_signatures_vault_recovery_submission_provenance": "passed",
+    "failures": [
+      "Backup document test times out waiting for IME dismissal before export",
+      "Wallet payment entry times out waiting for IME dismissal"
+    ],
+    "cold_restart": "not run"
+  },
+  "ios": {
+    "app_build": "passed",
+    "host_ffi_passed": 6,
+    "runtime": "not run; local public fixture server did not become ready within 20 seconds",
+    "new_published_signature_runtime": "not compiled/executed by the skipped runtime step"
+  },
+  "rust": "189 passed including separate keyless regtest; 27 offline",
+  "parser_audit": "passed",
+  "corrections_pending": [
+    "Resolve LocalFocusManager inside each modal dialog composition",
+    "Avoid reverse DNS during loopback fixture server bind; add bounded startup markers",
+    "Correct public screenshot artifact pull path to development application ID"
+  ],
+  "logs": [
+    {
+      "path": "build/published-native-android-first.log",
+      "sha256": "bfa6510b4788070700f506d4d1319783c5f444f4301e533ceec963ad81b387b6"
+    },
+    {
+      "path": "build/published-native-ios-first.log",
+      "sha256": "21446e98295711819c9a83b96a785eb1f4bc43d156ad882be94861c9aaeda448"
+    },
+    {
+      "path": "build/published-native-dns-check.log",
+      "sha256": "731adc94a16a0f41de040bb8aec2c3d1372c079c67f69822271d4b1e13ed784e"
+    }
+  ]
+}

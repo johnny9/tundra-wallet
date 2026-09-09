@@ -21,7 +21,6 @@ import dev.johnny9.tundra.generated.*
 
 @Composable fun PaymentSheet(vm: WalletViewModel, s: WalletState, initialMode: Int, onClose: () -> Unit) {
     val scroll = rememberScrollState()
-    val focus = LocalFocusManager.current
     LaunchedEffect(s.review?.id) { scroll.scrollTo(0) }
     var broadcastTarget by remember { mutableStateOf<BroadcastRequest?>(null) }
     var mode by remember { mutableIntStateOf(initialMode) }
@@ -52,6 +51,7 @@ import dev.johnny9.tundra.generated.*
         }
     }
     ModalBottomSheet(onDismissRequest = { if (!s.busy) onClose() }, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+        val focus = LocalFocusManager.current
         Column(Modifier.padding(24.dp).imePadding().verticalScroll(scroll), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             val review = s.review
             if (review == null) {

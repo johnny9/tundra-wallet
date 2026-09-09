@@ -20,7 +20,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable internal fun BackupSheet(vm: WalletViewModel, state: WalletState, onClose: () -> Unit) {
-    val focus = LocalFocusManager.current
     var restoring by remember { mutableStateOf(!state.storageReady || state.backupPreview != null) }
     var password by remember { mutableStateOf("") }
     var confirmation by remember { mutableStateOf("") }
@@ -39,6 +38,7 @@ import androidx.compose.ui.unit.dp
     DisposableEffect(vm) { onDispose { vm.cancelBackup() } }
     ModalBottomSheet(onDismissRequest = { if (!locked) { password = ""; confirmation = ""; vm.cancelBackup(); onClose() } },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+        val focus = LocalFocusManager.current
         Column(Modifier.padding(24.dp).imePadding().verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Text("Backup and recovery", style = MaterialTheme.typography.headlineSmall)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

@@ -261,7 +261,6 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
     }
 }
 @Composable private fun ImportSheet(vm: WalletViewModel, s: WalletState, onClose: () -> Unit) {
-    val focus = LocalFocusManager.current
     var scanning by remember { mutableStateOf(false) }
     var payload by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("Savings") }
@@ -269,6 +268,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
     var chain by remember { mutableStateOf(Chain.SIGNET) }
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { it?.let { uri -> vm.inspectFile(uri, chain) } }
     ModalBottomSheet(onDismissRequest = { if (!s.busy) onClose() }, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+        val focus = LocalFocusManager.current
         Column(Modifier.padding(24.dp).verticalScroll(rememberScrollState()).imePadding(), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Text("Add wallet", style = MaterialTheme.typography.headlineSmall)
             Text("Public descriptors only. Never enter a seed or private key.", color = MaterialTheme.colorScheme.onSurfaceVariant)
