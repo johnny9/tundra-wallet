@@ -57,7 +57,9 @@ jobs:
       - name: Create the experimental 16 KiB AVD without an inferred ABI tag
         run: |
           set -euo pipefail
-          export ANDROID_AVD_HOME="$RUNNER_TEMP/tundra-16k-avd"
+          # The pinned runner sets this default internally, even if the caller
+          # supplies another path. Pre-create where it will actually look.
+          export ANDROID_AVD_HOME="$HOME/.android/avd"
           echo "ANDROID_AVD_HOME=$ANDROID_AVD_HOME" >> "$GITHUB_ENV"
           sdkmanager 'system-images;android-35;google_apis_ps16k;x86_64'
           mkdir -p "$ANDROID_AVD_HOME"
