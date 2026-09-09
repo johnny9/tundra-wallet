@@ -32,7 +32,8 @@ final class StorageVaultTests: XCTestCase {
                 if progress.state == .complete { return }
                 guard progress.state != .failed && progress.state != .cancelled,
                       ProcessInfo.processInfo.systemUptime < deadline else {
-                    XCTFail("Public fixture scan failed or timed out"); throw StorageAccessError.unavailable
+                    XCTFail("Public fixture scan ended as \(progress.state) after \(progress.scannedScripts) scripts or exceeded its deadline")
+                    throw StorageAccessError.unavailable
                 }
                 Thread.sleep(forTimeInterval: 0.01)
             }

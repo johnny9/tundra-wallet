@@ -149,17 +149,13 @@ final class WalletUITests: XCTestCase {
         XCTAssertTrue(address.waitForExistence(timeout: 10)); address.tap(); address.typeText(recipient)
         if let amount { let field = app.textFields["Amount in BTC"]; field.tap(); field.typeText(amount) }
         let fee = app.textFields["Fee rate in sat/vB"]
-        // A coordinate tap can place the caret before the initial value. Select and
-        // replace the whole field through the edit menu, then assert the actual value.
-        fee.doubleTap()
-        let selectAll = app.descendants(matching: .any).matching(identifier: "Select All").firstMatch
-        if selectAll.exists { selectAll.tap() }
-        let cut = app.descendants(matching: .any).matching(identifier: "Cut").firstMatch
-        guard cut.waitForExistence(timeout: 3) else {
-            XCTFail("The fee value could not be selected for replacement"); return false
+        // The value is trailing-aligned, so tapping the field's center can land in
+        // empty space. Place the caret at its trailing edge and use keyboard edits.
+        guard let current = fee.value as? String, current.count <= 32 else {
+            XCTFail("The fee field value was unavailable"); return false
         }
-        cut.tap()
-        fee.typeText("2.5")
+        fee.coordinate(withNormalizedOffset: CGVector(dx: 0.99, dy: 0.5)).tap()
+        fee.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: current.count) + "2.5")
         guard fee.value as? String == "2.5" else {
             XCTFail("The fee field did not contain the exact requested decimal rate"); return false
         }

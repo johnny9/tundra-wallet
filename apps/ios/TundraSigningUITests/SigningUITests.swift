@@ -47,11 +47,11 @@ final class SigningUITests: XCTestCase {
         guard element.value as? String == "1" else { throw ControlFailure.unavailable }
     }
     @MainActor private func replace(_ field: XCUIElement, with value: String, in app: XCUIApplication) throws {
-        try show(field, in: app); field.doubleTap()
-        let selectAll = app.descendants(matching: .any).matching(identifier: "Select All").firstMatch
-        if selectAll.exists { selectAll.tap() }
-        let cut = app.descendants(matching: .any).matching(identifier: "Cut").firstMatch
-        guard cut.waitForExistence(timeout: 3) else { throw ControlFailure.unavailable }; cut.tap(); field.typeText(value)
+        try show(field, in: app)
+        guard let current = field.value as? String, current.count <= 256 else { throw ControlFailure.unavailable }
+        // Avoid partial-word selection in URLs and trailing-aligned amount fields.
+        field.coordinate(withNormalizedOffset: CGVector(dx: 0.99, dy: 0.5)).tap()
+        field.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: current.count) + value)
         guard field.value as? String == value else { throw ControlFailure.unavailable }
         app.buttons["Done"].tap()
     }
@@ -59,6 +59,7 @@ final class SigningUITests: XCTestCase {
     @MainActor func testPublishedFileResponseUpdatesSignatureCountersAndFinalizationControl() async throws {
         let expected = try fixture().transaction
         let app = try launch("signing")
+        XCTAssertTrue(app.staticTexts["Network: Signet"].exists)
         try show(app.staticTexts["Input 1: 0 / 1"], in: app)
         try show(app.staticTexts["Input 2: 0 / 1"], in: app)
         XCTAssertFalse(app.buttons["Finalize for review"].exists)
@@ -70,7 +71,7 @@ final class SigningUITests: XCTestCase {
         try tap(app.buttons["Finalize for review"], in: app); try ready(app)
         try show(app.staticTexts["Final transaction"], in: app)
         try show(app.staticTexts[expected.txid].firstMatch, in: app)
-        try show(app.staticTexts["\(expected.vsize) vB · \(expected.fee_sats) sats fee"], in: app)
+        try show(app.staticTexts["\(expected.vsize.formatted()) vB · \(expected.fee_sats.formatted()) sats fee"], in: app)
         let count = try await posts(); XCTAssertEqual(count, 0)
         app.terminate(); app.launch(); try ready(app)
         try show(app.staticTexts["Final transaction"], in: app)

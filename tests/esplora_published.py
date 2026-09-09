@@ -138,6 +138,10 @@ def server(fixture, port=0):
                 self.respond("Public fixture submission refused", 400)
 
     class LoopbackServer(http.server.ThreadingHTTPServer):
+        # Accept the scanner's concurrent local connections even while a simulator
+        # host is busy. Wallet connection/request timeouts remain production values.
+        request_queue_size = 64
+
         def server_bind(self):
             # HTTPServer normally calls getfqdn here. A local test endpoint needs
             # no reverse DNS, which can stall for tens of seconds on macOS hosts.

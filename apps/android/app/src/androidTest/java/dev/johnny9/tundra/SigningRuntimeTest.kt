@@ -56,6 +56,7 @@ class SigningRuntimeTest {
                 val state by vm.state.collectAsState()
                 TundraTheme(true) { PaymentSheet(vm, state, 0, vm::closeReview) }
             }
+            compose.onNodeWithText("Network: Signet").assertIsDisplayed()
             for (index in 1..2) compose.onNodeWithText("Input $index: 0 / 1").performScrollTo().assertIsDisplayed()
             compose.onNodeWithText("Finalize for review").assertDoesNotExist()
             val response = File(root, "public-response.psbt")

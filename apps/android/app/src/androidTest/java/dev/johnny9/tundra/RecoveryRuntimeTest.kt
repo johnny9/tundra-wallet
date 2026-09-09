@@ -17,8 +17,9 @@ import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 import java.io.File
-import java.net.HttpURLConnection
-import java.net.URL
+import java.io.ByteArrayOutputStream
+import java.net.InetSocketAddress
+import java.net.Socket
 import java.security.KeyStore
 import java.util.UUID
 
@@ -28,12 +29,26 @@ class RecoveryRuntimeTest {
     private val endpoint = "http://127.0.0.1:3004"
 
     private fun posts(): Int {
-        val connection = URL("$endpoint/_fixture_state").openConnection() as HttpURLConnection
-        connection.connectTimeout = 3_000; connection.readTimeout = 3_000
-        try {
-            check(connection.responseCode == 200)
-            return connection.inputStream.bufferedReader().use { JSONObject(it.readText()).getInt("posts") }
-        } finally { connection.disconnect() }
+        // Test diagnostics only: a fixed loopback request with a 4 KiB bound.
+        // Keep the app's Java cleartext-HTTP policy unchanged. Wallet networking
+        // still runs through the consent-gated Rust API, as it does in production.
+        return Socket().use { socket ->
+            socket.connect(InetSocketAddress("127.0.0.1", 3004), 3_000); socket.soTimeout = 3_000
+            socket.getOutputStream().write("GET /_fixture_state HTTP/1.0\r\nHost: 127.0.0.1\r\nConnection: close\r\n\r\n".toByteArray(Charsets.US_ASCII))
+            val response = ByteArrayOutputStream()
+            val buffer = ByteArray(512)
+            while (true) {
+                val count = socket.getInputStream().read(buffer)
+                if (count < 0) break
+                check(response.size() + count <= 4096) { "Public fixture status exceeded its bound" }
+                response.write(buffer, 0, count)
+            }
+            val text = response.toString(Charsets.US_ASCII.name())
+            check(text.startsWith("HTTP/1.0 200 ")) { "Public fixture status request failed" }
+            val separator = text.indexOf("\r\n\r\n")
+            check(separator >= 0)
+            JSONObject(text.substring(separator + 4)).getInt("posts")
+        }
     }
 
     @Test fun recoveredReviewRequiresSyncAndSeparateSubmissionConsentThenShowsInputProvenance() {
