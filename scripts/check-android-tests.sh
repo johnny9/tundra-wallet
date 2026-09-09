@@ -8,5 +8,6 @@ collect_public_fixture_diagnostics() {
 trap collect_public_fixture_diagnostics EXIT
 adb reverse tcp:3002 tcp:3002
 adb reverse tcp:3003 tcp:3003
+adb reverse tcp:3004 tcp:3004
 ./apps/android/gradlew --no-daemon -p apps/android -Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true :app:connectedDebugAndroidTest
 ./scripts/check-android-restart.sh

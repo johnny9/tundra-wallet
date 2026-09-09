@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "Single signature" else "2 of 3 signatures"
-@Composable private fun WalletApp(vm: WalletViewModel, s: WalletState) {
+@Composable internal fun WalletApp(vm: WalletViewModel, s: WalletState) {
     var tab by rememberSaveable { mutableIntStateOf(0) }
     val activityScroll = rememberSaveable(s.selectedId, saver = LazyListState.Saver) { LazyListState() }
     val coinScroll = rememberSaveable(s.selectedId, saver = LazyListState.Saver) { LazyListState() }

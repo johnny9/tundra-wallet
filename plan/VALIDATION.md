@@ -26,6 +26,12 @@ retention assertions do not establish exact long-list scroll retention or access
 qualification. The manual Gradle lock/checksum collection workflow is also authored;
 its generated review artifacts and normal-build enforcement remain pending.
 
+An additional Android recovery screen scenario is authored with an independent local
+published-signature server: disabled unsynced review, explicit resumption without network
+submission, separate privacy/retry confirmation, observed output provenance and retained
+label edits. It invokes the real wallet UI and model, with protected restore as test setup;
+it does not replace the separate system backup picker test. Native execution is pending.
+
 ## Earlier document and fixture checkpoints
 
 The following entries describe the results and pending work at each earlier source revision.

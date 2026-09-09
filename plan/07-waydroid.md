@@ -26,6 +26,8 @@ in user-owned directories; Android SDK/NDK/Gradle are unnecessary for this path.
 5. Run `bash scripts/start-published-native-fixture.sh` once on the fresh test host. It
    starts the separate published-signature fixture on loopback port 3003. This server uses
    synthetic confirmation/observation data and is not a valid Signet chain or real broadcast.
+   Start `bash scripts/start-published-native-fixture.sh --screen` as well for the independent
+   recovery-screen scenario on port 3004. Both must be fresh for each complete suite run.
 6. Select the disposable target explicitly and run:
 
 ```sh
@@ -34,7 +36,7 @@ ANDROID_SERIAL='<Waydroid-IP>:5555' TUNDRA_DISPOSABLE_ANDROID=1 \
   build/tests/app-debug-androidTest.apk
 ```
 
-The script installs both APKs, forwards ports 3002 and 3003, runs instrumentation through the real
+The script installs both APKs, forwards ports 3002–3004, runs instrumentation through the real
 Android ABI, then force-stops and relaunches the app to check the saved balance/draft.
 It rejects instrumentation failures even if ADB exits successfully. Existing wallet data
 fails the fresh-installation gate; the script does not resolve that by resetting storage

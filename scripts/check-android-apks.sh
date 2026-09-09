@@ -14,6 +14,7 @@ mkdir -p build
 adb get-state
 adb reverse tcp:3002 tcp:3002
 adb reverse tcp:3003 tcp:3003
+adb reverse tcp:3004 tcp:3004
 adb install -r "$1"
 adb install -r "$2"
 python3 - <<'PY'
