@@ -234,20 +234,26 @@ final class WalletUITests: XCTestCase {
         app.buttons["Coins"].tap()
         // Coin filters belong to this tab and survive visiting Activity. Hidden
         // tab controls must leave the accessibility tree while inactive.
-        let largestFirst = app.switches["Largest first"]
-        enable(largestFirst)
+        XCTAssertEqual(app.buttons.matching(identifier: "Select coin").count, 0)
+        app.buttons["Select"].tap()
+        let filters = app.buttons["coinFilters"]
+        filters.tap(); app.buttons["Largest first"].tap()
+        XCTAssertEqual(filters.value as? String, "1 active")
         app.buttons["Activity"].tap()
-        XCTAssertFalse(largestFirst.exists)
+        XCTAssertFalse(filters.exists)
         XCTAssertTrue(app.buttons["Receive"].exists)
         app.buttons["Coins"].tap()
-        XCTAssertTrue(largestFirst.waitForExistence(timeout: 10))
-        XCTAssertEqual(largestFirst.value as? String, "1")
+        XCTAssertTrue(filters.waitForExistence(timeout: 10))
+        XCTAssertEqual(filters.value as? String, "1 active")
         XCTAssertFalse(app.buttons["Receive"].exists)
+        let tabsTop = app.buttons["Coins"].frame.minY
         for max in [true, false] {
             let coins = app.buttons.matching(identifier: "Select coin")
             XCTAssertEqual(coins.count, 3)
             coins.element(boundBy: 0).tap(); coins.element(boundBy: 1).tap()
-            app.buttons["Send"].tap()
+            XCTAssertTrue(app.staticTexts["2 selected · 100 BTC"].exists)
+            XCTAssertEqual(app.buttons["Coins"].frame.minY, tabsTop, accuracy: 1)
+            app.buttons["Send selected"].tap()
             if max { app.buttons["paymentMode"].tap(); app.buttons["Max"].tap() }
             else { XCTAssertEqual(app.switches["automaticInputs"].value as? String, "0") }
             guard enterPayment(app, recipient: recipient, amount: max ? nil : "0.001") else { return }
@@ -259,7 +265,7 @@ final class WalletUITests: XCTestCase {
         XCTAssertEqual(selections.count, 3)
         selections.element(boundBy: 0).tap()
         selections.element(boundBy: 1).tap()
-        app.buttons["Consolidate"].tap()
+        app.buttons["More"].tap(); app.buttons["Consolidate"].tap()
         XCTAssertTrue(app.staticTexts["Fee rate"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["sat/vB"].exists)
         enable(app.switches["consolidationConsent"])

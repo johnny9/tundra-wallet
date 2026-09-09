@@ -200,6 +200,7 @@ struct CoinsView: View {
     @State private var query = ""
     @State private var availableOnly = false
     @State private var largestFirst = false
+    @State private var selecting = false
     @State private var editing: CoinInfo?
     @State private var label = ""
     @State private var bulkLabel = false
@@ -214,29 +215,42 @@ struct CoinsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             TextField("Search labels, addresses, outpoints", text: $query).textFieldStyle(.roundedBorder)
+                .textInputAutocapitalization(.never).autocorrectionDisabled()
                 .focused($searching).submitLabel(.done).onSubmit { searching = false }
             HStack {
-                Toggle("Available", isOn: $availableOnly)
-                Toggle("Largest first", isOn: $largestFirst)
+                let active = (availableOnly ? 1 : 0) + (largestFirst ? 1 : 0)
+                Menu {
+                    Toggle("Available only", isOn: $availableOnly)
+                    Toggle("Largest first", isOn: $largestFirst)
+                } label: { Text(active == 0 ? "Filter and sort" : "Filter and sort · \(active) active") }
+                .accessibilityLabel("Filter and sort").accessibilityValue("\(active) active")
+                .accessibilityIdentifier("coinFilters")
+                Spacer()
+                Button(selecting ? "Done selecting" : "Select") {
+                    selecting.toggle(); if !selecting { model.selectedCoins = [] }
+                }.disabled(model.busy)
             }.font(.caption)
             if !model.selectedCoins.isEmpty {
-                Text("\(model.selectedCoins.count) selected")
+                let selectedSats = model.coins.filter { model.selectedCoins.contains($0.outpoint) }.reduce(UInt64(0)) { $0 + $1.sats }
+                Text("\(model.selectedCoins.count) selected · \(formatBalance(sats: selectedSats)) BTC")
                 HStack {
-                    Button("Send") { send(0) }
-                    Button("Consolidate") { send(2) }.disabled(model.selectedCoins.count < 2)
-                    Button("Label") { label = ""; bulkLabel = true }
-                }
-                HStack {
-                    Button("Freeze selected") { model.editCoins(Array(model.selectedCoins), label: nil, frozen: true) }
-                    Button("Clear selection") { model.selectedCoins = [] }
-                }.font(.caption)
+                    Button("Send selected") { send(0) }.buttonStyle(.borderedProminent)
+                    Menu("More") {
+                        Button("Label selected") { label = ""; bulkLabel = true }
+                        Button("Consolidate") { send(2) }.disabled(model.selectedCoins.count < 2)
+                        Button("Freeze selected") { model.editCoins(Array(model.selectedCoins), label: nil, frozen: true) }
+                        Button("Clear selection") { model.selectedCoins = [] }
+                    }.buttonStyle(.bordered)
+                }.disabled(model.busy)
             }
             ForEach(visible, id: \.outpoint) { coin in
                 HStack(alignment: .top) {
+                    if selecting {
                     Button { model.toggleCoin(coin) } label: {
                         Image(systemName: model.selectedCoins.contains(coin.outpoint) ? "checkmark.square.fill" : "square")
                             .frame(width: 44, height: 44)
                     }.disabled(coin.state != .available || model.busy).accessibilityLabel("Select \(coin.label.isEmpty ? "coin" : coin.label)")
+                    }
                     Button { label = coin.label; editing = coin; model.loadOutputSource(coin.outpoint) } label: {
                         VStack(alignment: .leading, spacing: 5) {
                             Text(coin.label.isEmpty ? "Add a label" : coin.label).foregroundStyle(.primary)

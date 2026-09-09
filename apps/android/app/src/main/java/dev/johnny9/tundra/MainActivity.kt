@@ -64,9 +64,12 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
     var syncSheet by remember { mutableStateOf(false) }
     var paymentSheet by remember { mutableStateOf(false) }
     var paymentMode by remember { mutableIntStateOf(0) }
-    var query by remember { mutableStateOf("") }
-    var largestFirst by remember { mutableStateOf(false) }
-    var availableOnly by remember { mutableStateOf(false) }
+    var query by remember(s.selectedId) { mutableStateOf("") }
+    var largestFirst by remember(s.selectedId) { mutableStateOf(false) }
+    var availableOnly by remember(s.selectedId) { mutableStateOf(false) }
+    var selecting by rememberSaveable(s.selectedId) { mutableStateOf(false) }
+    var filters by remember(s.selectedId) { mutableStateOf(false) }
+    var more by remember(s.selectedId) { mutableStateOf(false) }
     var bulkLabel by remember { mutableStateOf(false) }
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner, vm) {
@@ -146,20 +149,35 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
                     }
                 } else {
                     OutlinedTextField(query, { query = it }, label = { Text("Search labels, addresses, outpoints") }, singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 12.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        FilterChip(availableOnly, { availableOnly = !availableOnly }, label = { Text("Available") })
-                        FilterChip(largestFirst, { largestFirst = !largestFirst }, label = { Text("Largest first") })
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Box {
+                            val active = (if (availableOnly) 1 else 0) + (if (largestFirst) 1 else 0)
+                            TextButton(onClick = { filters = true }) { Text(if (active == 0) "Filter and sort" else "Filter and sort · $active active") }
+                            DropdownMenu(expanded = filters, onDismissRequest = { filters = false }) {
+                                DropdownMenuItem(text = { Text("Available only") }, onClick = { availableOnly = !availableOnly; filters = false },
+                                    trailingIcon = { if (availableOnly) Icon(Icons.Outlined.Check, contentDescription = "Enabled") })
+                                DropdownMenuItem(text = { Text("Largest first") }, onClick = { largestFirst = !largestFirst; filters = false },
+                                    trailingIcon = { if (largestFirst) Icon(Icons.Outlined.Check, contentDescription = "Enabled") })
+                            }
+                        }
+                        TextButton(onClick = { selecting = !selecting; if (!selecting) vm.clearSelection() }, enabled = !s.busy) {
+                            Text(if (selecting) "Done selecting" else "Select")
+                        }
                     }
                     if (s.selected.isNotEmpty()) {
                         Text("${s.selected.size} selected · ${formatBalance(s.coins.filter { it.outpoint in s.selected }.fold(0uL) { total, coin -> total + coin.sats })} BTC")
                         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                            TextButton(onClick = { vm.closeReview(); paymentMode = 0; paymentSheet = true }, enabled = !s.busy) { Text("Send") }
-                            TextButton(onClick = { vm.closeReview(); paymentMode = 2; paymentSheet = true }, enabled = !s.busy && s.selected.size >= 2) { Text("Consolidate") }
-                            TextButton(onClick = { labelText = ""; bulkLabel = true }, enabled = !s.busy) { Text("Label") }
-                        }
-                        Row {
-                            TextButton(onClick = { vm.bulkEdit(null, true) }, enabled = !s.busy) { Text("Freeze selected") }
-                            TextButton(onClick = vm::clearSelection) { Text("Clear selection") }
+                            Button(onClick = { vm.closeReview(); paymentMode = 0; paymentSheet = true }, enabled = !s.busy) { Text("Send selected") }
+                            Box {
+                                OutlinedButton(onClick = { more = true }, enabled = !s.busy) { Text("More") }
+                                DropdownMenu(expanded = more, onDismissRequest = { more = false }) {
+                                    DropdownMenuItem(text = { Text("Label selected") }, onClick = { more = false; labelText = ""; bulkLabel = true })
+                                    DropdownMenuItem(text = { Text("Consolidate") }, enabled = s.selected.size >= 2,
+                                        onClick = { more = false; vm.closeReview(); paymentMode = 2; paymentSheet = true })
+                                    DropdownMenuItem(text = { Text("Freeze selected") }, onClick = { more = false; vm.bulkEdit(null, true) })
+                                    DropdownMenuItem(text = { Text("Clear selection") }, onClick = { more = false; vm.clearSelection() })
+                                }
+                            }
                         }
                     }
                     val filtered = s.coins.filter { coin ->
@@ -171,8 +189,8 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
                         items(filtered, key = { it.outpoint }) { coin ->
                             ListItem(modifier = Modifier.clickable(enabled = !s.busy) { editing = coin; labelText = coin.label; vm.loadOutputSource(coin.outpoint) },
                                 headlineContent = { Text(coin.label.ifBlank { "Add a label" }) },
-                                leadingContent = { Checkbox(checked = coin.outpoint in s.selected, onCheckedChange = { vm.toggleCoin(coin) }, enabled = !s.busy && coin.state == CoinState.AVAILABLE,
-                                    modifier = Modifier.semantics { contentDescription = "Select coin, ${formatBalance(coin.sats)} BTC" }) },
+                                leadingContent = if (!selecting) null else { { Checkbox(checked = coin.outpoint in s.selected, onCheckedChange = { vm.toggleCoin(coin) }, enabled = !s.busy && coin.state == CoinState.AVAILABLE,
+                                    modifier = Modifier.semantics { contentDescription = "Select coin, ${formatBalance(coin.sats)} BTC" }) } },
                                 supportingContent = { Text(coin.state.name.lowercase().replace('_', ' ').replaceFirstChar { it.uppercase() }) },
                                 trailingContent = { Text("${formatBalance(coin.sats)} BTC") })
                         }

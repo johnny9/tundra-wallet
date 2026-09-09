@@ -166,13 +166,24 @@ class WalletRuntimeTest {
             assertSavedPayment(1, consolidation = false, oneOutput = false)
             discardAndClose()
             compose.onNodeWithText("Coins").performClick()
+            val tabsTop = compose.onNodeWithText("Coins").getUnclippedBoundsInRoot().top
+            compose.onNodeWithText("Filter and sort").performClick()
+            compose.onNodeWithText("Largest first").performClick()
+            compose.onNodeWithText("Activity").performClick()
+            compose.onNodeWithText("Coins").performClick()
+            compose.onNodeWithText("Filter and sort · 1 active").assertIsDisplayed()
+            compose.onAllNodes(hasContentDescription("Select coin", substring = true)).assertCountEquals(0)
+            compose.onNodeWithText("Select").performClick()
             for (consolidation in listOf(false, true)) {
                 val coins = compose.onAllNodes(hasContentDescription("Select coin", substring = true))
                 coins[0].performClick(); coins[1].performClick()
+                compose.onNodeWithText("2 selected · 100 BTC").assertIsDisplayed()
+                assertEquals(tabsTop, compose.onNodeWithText("Coins").getUnclippedBoundsInRoot().top)
                 var exact = emptySet<String>()
                 activity.onActivity { host -> exact = ViewModelProvider(host)[WalletViewModel::class.java].state.value.selected }
                 assertEquals(2, exact.size)
-                compose.onNodeWithText(if (consolidation) "Consolidate" else "Send").performClick()
+                if (consolidation) compose.onNodeWithText("More").performClick()
+                compose.onNodeWithText(if (consolidation) "Consolidate" else "Send selected").performClick()
                 if (consolidation) compose.onNodeWithTag("consolidationConsent").performScrollTo().performClick()
                 else {
                     compose.onNodeWithText("Max").performClick()
@@ -188,7 +199,7 @@ class WalletRuntimeTest {
             }
             val choices = compose.onAllNodes(hasContentDescription("Select coin", substring = true))
             choices[0].performClick(); choices[1].performClick()
-            compose.onNodeWithText("Send").performClick()
+            compose.onNodeWithText("Send selected").performClick()
             compose.onNodeWithText("Recipient address").performTextInput(recipient)
             compose.onNodeWithText("Amount in BTC").performTextInput("0.001")
             compose.onNodeWithText("Fee rate in sat/vB").performTextReplacement("2.5")
