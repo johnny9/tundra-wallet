@@ -1,0 +1,65 @@
+{
+  "recorded_at": "2026-09-09T07:18:59.095923+00:00",
+  "source": "457049257a7773d80f447f4ecc57e3e15311edeb",
+  "run_id": 34321570973,
+  "conclusion": "failure",
+  "rust": "189 Rust / 29 offline, fmt, Clippy and bindings passed",
+  "parser_audit_cargo_notices": "passed",
+  "android": {
+    "job_id": 102369165841,
+    "app_build": "passed",
+    "jvm_passed": 10,
+    "instrumentation_passed": 16,
+    "instrumentation_failed": 1,
+    "artifact_id": 10092314198,
+    "failure": "Recovery test expected finalized.txid after explicit recovery; view model uses retained submission.txid when a prior attempt exists",
+    "correction": "Check retained submission ID and the exact displayed ID; later submission/provenance and cold restart not reached"
+  },
+  "ios": {
+    "job_id": 102369165777,
+    "app_and_test_host_build": "passed",
+    "fixture_boundary": "passed",
+    "host_ffi_passed": 6,
+    "hosted_runtime_passed": 13,
+    "published_finalization_ui": "passed: two signature counters, exact txid/fee/vsize, restart persistence, no POST",
+    "normal_wallet_ui": "failed: inactive Receive still discoverable after tab switch; backup filename fix not reached",
+    "recovery_ui": "failed: expected one coin after observation; actual fixture has unrelated confirmed coin plus labeled pending output",
+    "recovery_steps_passed": [
+      "unsynced refusal",
+      "sync and explicit resume with zero POST",
+      "separate privacy and retry consent",
+      "one exact POST",
+      "restart retained receipt and no extra POST",
+      "sync observed spend"
+    ],
+    "corrections": "Remove inactive Activity actions while preserving scroll container identity/height; select observed output by its unique saved label",
+    "provenance_label_edit": "not qualified",
+    "artifact_id": 10092506503
+  },
+  "logs": [
+    {
+      "path": "build/public-screen-android-second.log",
+      "sha256": "a3d6390eddb7623ef0181374be9f28e39da07215b09995ffc512fcb84779d547"
+    },
+    {
+      "path": "build/public-screen-ios-second.log",
+      "sha256": "b479082a413a0083f8a7bae807848cd3d5ba94cce3ff758c2ad8ff1c2c34116c"
+    },
+    {
+      "path": "build/public-screen-android-second.zip",
+      "sha256": "d1f99c6ab5eed006bb0953267c73a2a84bfc15c7c7eda27f93da17f8d4c131a7"
+    },
+    {
+      "path": "build/public-screen-ios-second-results/ios-runtime-summary.json",
+      "sha256": "c3a7a95602953437fe87e827107f9681086d8552efaad55b7b1a508941c200b3"
+    },
+    {
+      "path": "build/ios-recovered-coins-last.png",
+      "sha256": "a553754734e640af962dd991ee3f4fa1296567e84deade5863df43a0c1163a6c"
+    },
+    {
+      "path": "build/ios-hidden-activity.png",
+      "sha256": "200903b215daa5e873b891553c2dec644f1d29b25cf195e167075439de403e2a"
+    }
+  ]
+}
