@@ -56,9 +56,16 @@ fn outpoint(s: &str) -> Result<OutPoint> {
 }
 
 impl Core {
-    /// Development storage is SQLite in the app sandbox, NOT encrypted. Use test data only.
+    /// Legacy development storage. Does not encrypt or decrypt an existing file.
     pub fn open(path: impl AsRef<Path>) -> Result<Self> {
-        let mut conn = Connection::open(path)?;
+        Self::from_connection(crate::storage::open_plain(path.as_ref())?)
+    }
+    /// Open with a 32-byte database encryption key, never a Bitcoin signing key.
+    /// A wrong key or plaintext database is refused without a reset or migration.
+    pub fn open_protected(path: impl AsRef<Path>, storage_key: Vec<u8>) -> Result<Self> {
+        Self::from_connection(crate::storage::open_protected(path.as_ref(), storage_key)?)
+    }
+    fn from_connection(mut conn: Connection) -> Result<Self> {
         conn.busy_timeout(Duration::from_secs(5))?;
         conn.execute_batch(
             "PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL;",

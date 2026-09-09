@@ -43,6 +43,8 @@ pub enum Error {
     Unavailable(&'static str),
     #[error("Wallet database operation failed")]
     Storage,
+    #[error("Protected wallet storage could not be opened; the existing files were retained")]
+    StorageLocked,
     #[error("Wallet state is corrupt or incompatible")]
     CorruptState,
     #[error("Application state is unavailable; restart the app")]

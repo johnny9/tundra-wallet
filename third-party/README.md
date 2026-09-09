@@ -18,3 +18,9 @@ The app uses Android's USB API directly through its native adapter.
 A complete dependency/design/fixture inventory, binary notice packaging and distribution
 review remain release gates. These notes do not grant rights to project branding or imply
 hardware-vendor endorsement.
+
+SQLCipher 4.19.0's reviewed source and BSD 3-Clause license are retained under
+[`crates/tundra-sqlcipher`](../crates/tundra-sqlcipher/README.md), including source hashes and
+reproduction instructions. Linux/Android link OpenSSL 3.6.3 through openssl-sys 0.9.117 and
+openssl-src 300.6.1+3.6.3. The OpenSSL Apache-2.0 license and Rust wrapper licenses are
+retained in `licenses/openssl*.txt`. Apple builds use CommonCrypto/Security.framework.

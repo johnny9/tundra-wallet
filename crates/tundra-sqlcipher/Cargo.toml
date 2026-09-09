@@ -1,0 +1,16 @@
+[package]
+name = "tundra-sqlcipher"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+links = "tundra_sqlcipher"
+
+[target.'cfg(not(target_vendor = "apple"))'.dependencies]
+openssl-sys = { version = "=0.9.117", features = ["vendored"] }
+
+[build-dependencies]
+cc = "=1.4.5"
+bitcoin_hashes = "=0.14.101"
+
+[lints]
+workspace = true

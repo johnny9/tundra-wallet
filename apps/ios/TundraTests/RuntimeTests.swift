@@ -4,6 +4,31 @@ import UIKit
 @testable import Tundra
 
 final class RuntimeTests: XCTestCase {
+    func testProtectedStorageRejectsWrongKeyAndPreservesWallet() throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let file = directory.appendingPathComponent("protected.sqlite")
+        let fixture = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "single-sig", withExtension: "txt"))
+        let descriptor = try String(contentsOf: fixture, encoding: .utf8)
+        // Public database-encryption fixture only; this does not qualify Keychain storage.
+        let key = Data(repeating: 0x11, count: 32)
+        var core: Tundra? = try Tundra.openProtected(path: file.path, storageKey: key)
+        let wallet = try core!.importWallet(name: "Protected public fixture", payload: descriptor, network: .signet)
+        let address = try core!.receiveAddress(walletId: wallet.id)
+        try core!.setLabel(walletId: wallet.id, kind: "addr", reference: address.address, label: "Protected public label 🧊")
+        core = nil
+        let before = try Data(contentsOf: file)
+        XCTAssertNil(before.range(of: Data("Protected public fixture".utf8)))
+        XCTAssertThrowsError(try Tundra.openProtected(path: file.path, storageKey: Data(repeating: 0x22, count: 32)))
+        XCTAssertThrowsError(try Tundra.open(path: file.path))
+        XCTAssertEqual(try Data(contentsOf: file), before)
+        core = try Tundra.openProtected(path: file.path, storageKey: key)
+        XCTAssertEqual(try core!.wallets()[0].id, wallet.id)
+        XCTAssertNil(try core!.wallets()[0].totalSats)
+        XCTAssertEqual(try core!.receiveAddress(walletId: wallet.id).index, 1)
+        XCTAssertTrue(try core!.exportLabels(walletId: wallet.id).contains("Protected public label 🧊"))
+    }
     private var usedBarcodeRevisions = Set<Int>()
     private func decodeQr(_ frame: String) throws -> String {
         let scaled = try XCTUnwrap(qrBitmap(try renderQrFrame(frame: frame), scale: 8))

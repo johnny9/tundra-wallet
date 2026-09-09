@@ -509,7 +509,7 @@ impl From<core::Error> for AppError {
             core::Error::UnsupportedKeys | core::Error::UnsupportedPolicy => ErrorCode::Unsupported,
             core::Error::NotFound => ErrorCode::NotFound,
             core::Error::AlreadyExists | core::Error::UnavailableCoin => ErrorCode::Conflict,
-            core::Error::Storage => ErrorCode::Storage,
+            core::Error::Storage | core::Error::StorageLocked => ErrorCode::Storage,
             core::Error::Unavailable(_) => ErrorCode::Unavailable,
             core::Error::CorruptState | core::Error::Poisoned => ErrorCode::Internal,
             _ => ErrorCode::InvalidInput,
@@ -568,6 +568,12 @@ impl Tundra {
     pub fn open(path: String) -> Result<Arc<Self>> {
         Ok(Arc::new(Self {
             core: core::Core::open(path)?,
+        }))
+    }
+    #[uniffi::constructor]
+    pub fn open_protected(path: String, storage_key: Vec<u8>) -> Result<Arc<Self>> {
+        Ok(Arc::new(Self {
+            core: core::Core::open_protected(path, storage_key)?,
         }))
     }
     pub fn wallets(&self) -> Result<Vec<WalletInfo>> {

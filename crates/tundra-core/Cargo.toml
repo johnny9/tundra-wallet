@@ -10,6 +10,8 @@ rusqlite.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
+tundra-sqlcipher = { path = "../tundra-sqlcipher" }
+zeroize = "=1.9.0"
 base64 = "=0.22.1"
 bhwi = { git = "https://github.com/wizardsardine/bhwi", rev = "edfac42caf0d67693660cf1f04c2d24ca6b8f7a1", default-features = false, features = ["ledger"] }
 # Hardware dependencies must never emit public wallet metadata through a native logger.

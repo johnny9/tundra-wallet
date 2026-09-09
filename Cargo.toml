@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/tundra-core", "crates/tundra-ffi"]
+members = ["crates/tundra-core", "crates/tundra-ffi", "crates/tundra-sqlcipher"]
 resolver = "2"
 
 [workspace.package]
@@ -9,7 +9,8 @@ publish = false
 
 [workspace.dependencies]
 bdk_wallet = { version = "=3.1.0", default-features = false, features = ["std"] }
-rusqlite = { version = "=0.37.0", features = ["bundled"] }
+# Compile no second SQLite library: tundra-sqlcipher supplies the pinned implementation.
+rusqlite = { version = "=0.37.0", features = ["in_gecko"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 thiserror = "2.0"

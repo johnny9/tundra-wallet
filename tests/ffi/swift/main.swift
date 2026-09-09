@@ -42,6 +42,36 @@ func testErrors() throws {
     }
 }
 
+func testProtectedStorage(_ payload: String) throws {
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let file = directory.appendingPathComponent("protected.sqlite")
+    // Public database-encryption fixture only, never a Bitcoin signing key.
+    let key = Data(repeating: 0x11, count: 32)
+    var core: Tundra? = try Tundra.openProtected(path: file.path, storageKey: key)
+    let wallet = try core!.importWallet(name: "Protected public fixture", payload: payload, network: .signet)
+    let address = try core!.receiveAddress(walletId: wallet.id)
+    try core!.setLabel(walletId: wallet.id, kind: "addr", reference: address.address, label: "Protected public label 🧊")
+    core = nil
+    let bytes = try Data(contentsOf: file)
+    precondition(bytes.range(of: Data("Protected public fixture".utf8)) == nil)
+    do {
+        _ = try Tundra.openProtected(path: file.path, storageKey: Data(repeating: 0x22, count: 32))
+        preconditionFailure("Wrong storage key succeeded")
+    } catch AppError.Operation(let code, let detail) {
+        precondition(code == .storage && !detail.contains(file.path))
+    }
+    let after = try Data(contentsOf: file)
+    precondition(after == bytes)
+    core = try Tundra.openProtected(path: file.path, storageKey: key)
+    let reopened = try core!.wallets()
+    let next = try core!.receiveAddress(walletId: wallet.id)
+    let labels = try core!.exportLabels(walletId: wallet.id)
+    precondition(reopened.count == 1 && reopened[0].totalSats == nil && next.index == 1)
+    precondition(labels.contains("Protected public label 🧊"))
+}
+
 func testAmounts() throws {
     let sats = try parseBtcAmount(value: "42.94967297")
     precondition(sats == 4_294_967_297)
@@ -59,4 +89,5 @@ let fixture = try String(contentsOfFile: CommandLine.arguments[1], encoding: .ut
 try testReopen(fixture)
 try testErrors()
 try testAmounts()
-print("3 Swift FFI smoke tests passed")
+try testProtectedStorage(fixture)
+print("4 Swift FFI smoke tests passed")

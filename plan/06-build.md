@@ -3,7 +3,8 @@
 ## Baseline
 
 - Rust workspace; BDK `=3.1.0` for wallet/descriptor/PSBT operations.
-- rusqlite `=0.37.0` (bundled SQLite) for the application-owned persistence transaction.
+- rusqlite `=0.37.0` with pinned SQLCipher `4.19.0` for the application-owned persistence
+  transaction; [source/build provenance](../crates/tundra-sqlcipher/README.md).
 - UniFFI `=0.32.0`; generate Kotlin and Swift from the compiled library metadata.
 - Sync: reqwest `=0.12.28` with rustls (no native OpenSSL), Tokio `=1.49.0`.
   The small Esplora adapter bounds streamed bodies before parsing; BDK owns wallet state.
@@ -27,8 +28,8 @@ Complete native coverage and physical hardware acceptance remain open.
 
 ## Dependency resolution
 
-Cargo.lock was updated by Cargo on September 8, 2026 and reviewed: checksummed crates.io
-packages, two workspace packages and the two immutable Git revisions recorded above. Direct BDK/rusqlite/UniFFI
+Cargo.lock was updated by Cargo on September 9, 2026 and reviewed: checksummed crates.io
+packages, three workspace packages and the two immutable Git revisions recorded above. Direct BDK/rusqlite/UniFFI
 pins are unchanged. Build/check scripts require the committed lock and use `--locked`.
 
 CI caches Cargo registries/Git checkouts and build artifacts by OS, architecture, job,
@@ -47,6 +48,8 @@ need reproducibility review.
 - `scripts/generate-bindings.sh`: host library build and generated Kotlin/Swift API.
 - `scripts/check-swift-ffi.sh`: macOS host smoke tests through the generated Swift binding.
 - `scripts/check-regtest.sh`: actual keyless Bitcoin Core chain, maturity and reorg tests.
+- `scripts/check-sqlcipher-source.sh`: reproduce and compare the vendored SQLCipher files
+  from a clean checkout at the reviewed upstream revision.
 - `scripts/install-bitcoin-ci.sh`: checksummed Bitcoin Core 31.1 user-local CI installation.
 - `scripts/check-fuzz.sh`: bounded AddressSanitizer parser, USB protocol and signature/finalization fuzzing.
 - CI audits the lock with cargo-audit 0.22.2 and the current RustSec database; a clean audit

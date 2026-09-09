@@ -10,7 +10,8 @@ use tundra_core::{Core, Network};
 #[ignore = "child process fixture, invoked by kill_during_write_preserves_last_commit"]
 fn crash_writer() {
     let path = std::env::var("TUNDRA_CRASH_DB").unwrap();
-    let core = Core::open(&path).unwrap();
+    let protected = std::env::var_os("TUNDRA_CRASH_PROTECTED").is_some();
+    let core = open(&path, protected);
     let wallet = core
         .import_wallet(
             "Crash test",
@@ -22,6 +23,11 @@ fn crash_writer() {
     core.set_label(&wallet.id, "addr", &address.address, "Committed 🧊")
         .unwrap();
     let db = rusqlite::Connection::open(path).unwrap();
+    if protected {
+        // Public storage-encryption test key, not a Bitcoin signing key.
+        db.pragma_update(None, "key", format!("x'{}'", "11".repeat(32)))
+            .unwrap();
+    }
     db.execute_batch("PRAGMA synchronous=FULL; BEGIN IMMEDIATE;")
         .unwrap();
     db.execute(
@@ -43,9 +49,32 @@ fn crash_writer() {
 
 #[test]
 fn kill_during_write_preserves_last_commit() {
+    kill_at_write_boundary(false);
+}
+
+#[test]
+fn kill_during_encrypted_write_preserves_last_commit() {
+    kill_at_write_boundary(true);
+}
+
+fn open(path: impl AsRef<std::path::Path>, protected: bool) -> Core {
+    if protected {
+        Core::open_protected(path, vec![0x11; 32]).unwrap()
+    } else {
+        Core::open(path).unwrap()
+    }
+}
+
+fn kill_at_write_boundary(protected: bool) {
     let dir = tempfile::tempdir().unwrap();
     let path = dir.path().join("wallet.sqlite");
-    let mut child = Command::new(std::env::current_exe().unwrap())
+    let mut command = Command::new(std::env::current_exe().unwrap());
+    if protected {
+        command.env("TUNDRA_CRASH_PROTECTED", "1");
+    } else {
+        command.env_remove("TUNDRA_CRASH_PROTECTED");
+    }
+    let mut child = command
         .args(["--ignored", "--exact", "crash_writer", "--nocapture"])
         .env("TUNDRA_CRASH_DB", &path)
         .stdout(Stdio::piped())
@@ -67,7 +96,7 @@ fn kill_during_write_preserves_last_commit() {
     child.wait().unwrap();
     reader.join().unwrap();
     assert!(ready, "child failed to reach write boundary");
-    let core = Core::open(&path).unwrap();
+    let core = open(&path, protected);
     let wallet = core.wallets().unwrap().remove(0);
     assert!(wallet.total_sats.is_none());
     assert_eq!(core.receive_address(&wallet.id).unwrap().index, 1);
@@ -75,6 +104,10 @@ fn kill_during_write_preserves_last_commit() {
     assert!(labels.contains("Committed 🧊"));
     assert!(!labels.contains("uncommitted metadata"));
     let db = rusqlite::Connection::open(path).unwrap();
+    if protected {
+        db.pragma_update(None, "key", format!("x'{}'", "11".repeat(32)))
+            .unwrap();
+    }
     assert_eq!(
         db.query_row("PRAGMA integrity_check", [], |r| r.get::<_, String>(0))
             .unwrap(),

@@ -11,6 +11,7 @@ pub mod labels;
 mod model;
 pub mod qr;
 pub mod signing;
+mod storage;
 mod sync;
 pub mod usb;
 pub use engine::Core;

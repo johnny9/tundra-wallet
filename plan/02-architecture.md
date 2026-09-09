@@ -16,7 +16,8 @@ Android Compose / Kotlin       iOS SwiftUI / Swift
                            native scanner     native USB transport
 ```
 
-Two crates initially: `tundra-core` and `tundra-ffi`. Modules are enough; do not create a
+Two application crates: `tundra-core` and `tundra-ffi`; `tundra-sqlcipher` is the isolated
+native dependency build boundary. Modules are enough; do not create a
 service or a crate for every feature. There is no backend that coordinates owners.
 
 The core owns amounts (integer satoshis), wallet eligibility, exact-input policy, fee/change,
@@ -44,7 +45,9 @@ format: `user_version` and dependency upgrades require restore/migration tests.
 Foreign keys include `(wallet_id, draft_id)`, preventing cross-wallet reservations. A
 coin has at most one reservation in a wallet. Freeze rows are independent of reservation
 rows. Unused indexes and newly revealed receive addresses are persisted before being
-returned. Development SQLite is **not encrypted**; production protection is a release gate.
+returned. The current apps still use legacy plaintext storage. A tested protected Rust
+constructor now uses pinned SQLCipher; native key retention/migration and recovery remain
+release gates. See [protected storage](13-storage.md).
 
 Schema v3 adds `draft_signatures`, with a composite wallet/draft foreign key and cascading
 deletion. The original PSBT in `drafts` never changes. External responses are validated against
