@@ -21,6 +21,7 @@ gradle.projectsEvaluated {
             }
             doLast {
                 def resolveModules = { configuration ->
+                    logger.lifecycle("Reviewing dependency configuration ${project.path}:${configuration.name}")
                     configuration.incoming.resolutionResult.allDependencies.each { dependency ->
                         if (dependency instanceof UnresolvedDependencyResult) {
                             throw new GradleException('Dependency graph could not be resolved', dependency.failure)

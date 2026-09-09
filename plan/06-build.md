@@ -102,3 +102,8 @@ These are authoritative design/API references, not evidence that this source com
 
 No Google/Apple account, package-name ownership, App Store name, trademark clearance or
 open-source license choice is implied by the development identifiers.
+
+The second Android collection at `cc89bfc` passed the self-project artifact boundary, then
+failed on a versionless Compose tooling dependency in a plugin configuration. Configuration
+names are now reported before resolution; the complete Android lock/checksum review remains
+open. Do not treat the local collector fixture as an Android dependency qualification.
