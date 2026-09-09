@@ -197,6 +197,10 @@ jobs:
       - run: ./scripts/build-ios.sh
       - run: ./scripts/check-swift-ffi.sh
       - run: cd apps/ios && xcodegen generate
+      - name: Check generated iOS fixture target boundaries
+        run: |
+          plutil -convert json -o build/ios-project.json apps/ios/Tundra.xcodeproj/project.pbxproj
+          python3 scripts/check-ios-fixture-boundary.py build/ios-project.json
       - run: xcodebuild -project apps/ios/Tundra.xcodeproj -scheme Tundra -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- build
       - run: ./scripts/install-bitcoin-ci.sh
       - name: Start keyless native test chain
@@ -208,7 +212,9 @@ jobs:
           done
           cat build/native-chain.log
           exit 1
-      - run: bash scripts/start-published-native-fixture.sh
+      - run: |
+          bash scripts/start-published-native-fixture.sh
+          bash scripts/start-published-native-fixture.sh --screen
       - run: ./scripts/check-ios-runtime.sh
         timeout-minutes: 20
       - name: Export simulator test diagnostics
@@ -228,6 +234,7 @@ jobs:
             build/ios-runtime-attachments/
             build/native-chain.log
             build/published-native-server.log
+            build/published-screen-server.log
       - uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         if: ${{ !cancelled() && steps.rust-cache.outputs.cache-hit != 'true' && steps.rust-cache.outputs.cache-primary-key != '' }}
         with:

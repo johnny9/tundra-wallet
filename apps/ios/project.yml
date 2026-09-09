@@ -71,12 +71,52 @@ targets:
         buildPhase: resources
     dependencies:
       - target: Tundra
+  TundraTestHost:
+    type: application
+    platform: iOS
+    sources:
+      - path: Tundra
+        excludes:
+          - TundraApp.swift
+      - path: TundraTestHost
+      - path: Generated
+        includes:
+          - "*.swift"
+      - path: ../../tests/fixtures/native-unsigned.sqlite
+        buildPhase: resources
+      - path: ../../tests/fixtures/native-signed-response.psbt
+        buildPhase: resources
+      - path: ../../tests/fixtures/native-signed-backup.tundra
+        buildPhase: resources
+    dependencies:
+      - framework: Frameworks/TundraCoreFFI.xcframework
+        embed: false
+      - sdk: Security.framework
+      - sdk: CoreFoundation.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.johnny9.tundra.public-ui
+        CODE_SIGN_ENTITLEMENTS: Tundra/Tundra.entitlements
+        TARGETED_DEVICE_FAMILY: "1,2"
+        INFOPLIST_KEY_CFBundleDisplayName: Tundra Public Tests
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+  TundraSigningUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: TundraSigningUITests
+      - path: ../../tests/fixtures/native-signing.json
+        buildPhase: resources
+    dependencies:
+      - target: TundraTestHost
 schemes:
   Tundra:
     build:
       targets:
         Tundra: all
+        TundraTestHost: [test]
     test:
       targets:
         - TundraTests
         - TundraUITests
+        - TundraSigningUITests

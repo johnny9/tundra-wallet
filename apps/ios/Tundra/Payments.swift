@@ -205,6 +205,7 @@ struct CoinsView: View {
     @State private var label = ""
     @State private var bulkLabel = false
     @FocusState private var searching: Bool
+    @FocusState private var editingLabel: Bool
     private var visible: [CoinInfo] {
         let filtered = model.coins.filter { coin in
             (!availableOnly || coin.state == .available) &&
@@ -257,7 +258,7 @@ struct CoinsView: View {
                             Text(String(describing: coin.state).capitalized).font(.caption).foregroundStyle(.secondary)
                             Text("\(formatBalance(sats: coin.sats)) BTC").monospacedDigit()
                         }.frame(maxWidth: .infinity, alignment: .leading)
-                    }.disabled(model.busy)
+                    }.disabled(model.busy).accessibilityIdentifier("coinDetails")
                 }
             }
         }
@@ -266,6 +267,7 @@ struct CoinsView: View {
             VStack(spacing: 20) {
                 Text("Coin label").font(.title2)
                 TextField("Label", text: $label).textFieldStyle(.roundedBorder)
+                    .focused($editingLabel).submitLabel(.done).onSubmit { editingLabel = false }
                 if let coin = editing {
                     Text(coin.outpoint).font(.caption)
                     if let source = model.outputSource, model.sourceOutpoint == coin.outpoint, source.walletId == model.selectedID {
