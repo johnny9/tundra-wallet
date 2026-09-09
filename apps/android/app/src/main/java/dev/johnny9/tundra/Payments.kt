@@ -15,6 +15,9 @@ import androidx.compose.ui.unit.dp
 import dev.johnny9.tundra.generated.*
 
 @Composable fun PaymentSheet(vm: WalletViewModel, s: WalletState, initialMode: Int, onClose: () -> Unit) {
+    val scroll = rememberScrollState()
+    LaunchedEffect(s.review?.id) { scroll.scrollTo(0) }
+    var broadcastTarget by remember { mutableStateOf<BroadcastRequest?>(null) }
     var mode by remember { mutableIntStateOf(initialMode) }
     var address by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
@@ -36,8 +39,14 @@ import dev.johnny9.tundra.generated.*
         if (uri != null && target != null) vm.importSignedDraft(uri, target.first, target.second)
         importTarget = null
     }
+    broadcastTarget?.let { target ->
+        BroadcastDialog(target, onClose = { broadcastTarget = null }) { request ->
+            broadcastTarget = null
+            vm.submitBroadcast(request)
+        }
+    }
     ModalBottomSheet(onDismissRequest = { if (!s.busy) onClose() }, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
-        Column(Modifier.padding(24.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        Column(Modifier.padding(24.dp).verticalScroll(scroll), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             val review = s.review
             if (review == null) {
                 Text("Create a payment", style = MaterialTheme.typography.headlineSmall)
@@ -88,7 +97,7 @@ import dev.johnny9.tundra.generated.*
                         Text("Input ${index + 1}: ${input.validSignatures} / ${input.requiredSignatures}")
                     }
                     if (signing.complete) {
-                        Text("All required signatures verified. This payment has not been broadcast.")
+                        Text("All required signatures verified. Finalize to review the exact transaction.")
                         if (review.state != "finalized") Button(onClick = vm::finalizeReview, enabled = !s.busy) { Text("Finalize for review") }
                     }
                 }
@@ -96,19 +105,34 @@ import dev.johnny9.tundra.generated.*
                     Text("Final transaction", style = MaterialTheme.typography.titleMedium)
                     Text(finalized.txid, style = MaterialTheme.typography.bodySmall)
                     Text("${finalized.vsize} vB · ${finalized.feeSats} sats fee")
-                    Text("Saved for final review. Inputs remain reserved. Broadcast is not available yet.")
+                    Text("Saved for final review. Inputs remain reserved until synchronization observes the spend.")
                 }
-                OutlinedButton(onClick = { exportTarget = review.walletId to review.id; export.launch("tundra-signing.psbt.txt") }, enabled = !s.busy && review.state != "invalidated") { Text(if (review.state == "unsigned") "Export unsigned PSBT" else "Export PSBT with signatures") }
-                OutlinedButton(onClick = { importTarget = review.walletId to review.id; importSigned.launch(arrayOf("*/*")) }, enabled = !s.busy && review.state !in listOf("invalidated", "finalized")) { Text("Import signed PSBT") }
+                s.submission?.takeIf { it.draftId == review.id }?.let { submission ->
+                    Text("Submission", style = MaterialTheme.typography.titleMedium)
+                    Text(submission.txid, style = MaterialTheme.typography.bodySmall)
+                    Text(submission.endpoint, style = MaterialTheme.typography.bodySmall)
+                    Text(submissionMessage(submission))
+                }
+                val transactionId = s.finalized?.txid ?: s.submission?.txid
+                if (review.state == "finalized" && transactionId != null) {
+                    Button(onClick = {
+                        broadcastTarget = BroadcastRequest(review.walletId, review.id, s.submission?.endpoint ?: s.endpoint,
+                            transactionId, s.submission?.attemptId, false, false)
+                    }, enabled = !s.busy, modifier = Modifier.testTag("reviewBroadcast")) {
+                        Text(if (s.submission == null) "Review test-network broadcast" else "Review resubmission")
+                    }
+                }
+                OutlinedButton(onClick = { exportTarget = review.walletId to review.id; export.launch("tundra-signing.psbt.txt") }, enabled = !s.busy && review.state !in listOf("invalidated", "observed")) { Text(if (review.state == "unsigned") "Export unsigned PSBT" else "Export PSBT with signatures") }
+                OutlinedButton(onClick = { importTarget = review.walletId to review.id; importSigned.launch(arrayOf("*/*")) }, enabled = !s.busy && review.state !in listOf("invalidated", "finalized", "observed")) { Text("Import signed PSBT") }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     listOf(QrEncoding.UR to "UR", QrEncoding.BBQR to "BBQr").forEach { (encoding, title) ->
                         FilterChip(selected = qrEncoding == encoding, onClick = { qrEncoding = encoding }, label = { Text(title) }, enabled = !s.busy)
                     }
                 }
-                OutlinedButton(onClick = { vm.exportQr(qrEncoding) }, enabled = !s.busy && review.state != "invalidated") { Text("Show PSBT QR") }
-                OutlinedButton(onClick = { scanTarget = review.walletId to review.id }, enabled = !s.busy && review.state !in listOf("invalidated", "finalized")) { Text("Scan signed PSBT") }
+                OutlinedButton(onClick = { vm.exportQr(qrEncoding) }, enabled = !s.busy && review.state !in listOf("invalidated", "observed")) { Text("Show PSBT QR") }
+                OutlinedButton(onClick = { scanTarget = review.walletId to review.id }, enabled = !s.busy && review.state !in listOf("invalidated", "finalized", "observed")) { Text("Scan signed PSBT") }
                 Text("PSBT exports are unencrypted wallet metadata.", style = MaterialTheme.typography.bodySmall)
-                TextButton(onClick = vm::discardReview, enabled = !s.busy) { Text("Discard draft and release inputs") }
+                TextButton(onClick = vm::discardReview, enabled = !s.busy && s.submission == null) { Text("Discard draft and release inputs") }
             }
             s.error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
             TextButton(onClick = onClose, enabled = !s.busy) { Text(if (s.review == null) "Close" else "Save for later") }

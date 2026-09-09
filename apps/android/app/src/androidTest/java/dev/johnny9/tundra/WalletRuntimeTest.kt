@@ -85,6 +85,16 @@ class WalletRuntimeTest {
             compose.onNode(isToggleable()).performClick()
             compose.onNodeWithText("Start scan").performScrollTo().performClick()
             compose.waitUntil(30_000) { compose.onAllNodesWithText("150 BTC").fetchSemanticsNodes().isNotEmpty() }
+            lateinit var model: WalletViewModel
+            activity.onActivity { model = ViewModelProvider(it)[WalletViewModel::class.java] }
+            fun waitForPayment(inputs: Int, mode: String) {
+                compose.waitUntil(10_000) { model.state.value.let { !it.busy && (it.review != null || it.error != null) } }
+                val result = model.state.value
+                assertNull("$mode public-fixture payment failed: ${result.error}", result.error)
+                assertEquals("$mode reviewed input count", inputs, result.review?.inputs?.size)
+                waitText("Inputs · $inputs")
+                compose.onNodeWithText("Inputs · $inputs").performScrollTo().assertIsDisplayed()
+            }
             fun assertSavedPayment(inputs: Int, consolidation: Boolean, oneOutput: Boolean, selected: Set<String>? = null) {
                 Tundra.open(context.noBackupFilesDir.resolve("tundra.sqlite").path).use { core ->
                     val wallet = core.wallets().single()
@@ -121,7 +131,7 @@ class WalletRuntimeTest {
             compose.onNodeWithText("Amount in BTC").performTextInput("0.001")
             compose.onNodeWithText("Fee rate in sat/vB").performTextReplacement("2.5")
             compose.onNodeWithTag("buildReview").performScrollTo().performClick()
-            waitText("Inputs · 1")
+            waitForPayment(1, "Automatic send")
             assertSavedPayment(1, consolidation = false, oneOutput = false)
             discardAndClose()
             compose.onNodeWithText("Coins").performClick()
@@ -139,7 +149,7 @@ class WalletRuntimeTest {
                 }
                 compose.onNodeWithText("Fee rate in sat/vB").performTextReplacement("2.5")
                 compose.onNodeWithTag("buildReview").performScrollTo().performClick()
-                waitText("Inputs · 2")
+                waitForPayment(2, if (consolidation) "Consolidation" else "Maximum send")
                 assertSavedPayment(2, consolidation, oneOutput = true, selected = exact)
                 if (consolidation) compose.onNodeWithText("Consolidation to this wallet").performScrollTo().assertIsDisplayed()
                 discardAndClose()
@@ -162,6 +172,12 @@ class WalletRuntimeTest {
                 assertNull(core.finalizedDraft(wallet.id, draft.id))
                 try { core.finalizeDraft(wallet.id, draft.id); fail("An unsigned draft cannot be finalized") }
                 catch (_: AppException.Operation) { }
+                assertNull(core.broadcastStatus(wallet.id, draft.id))
+                try {
+                    core.broadcastDraft(BroadcastRequest(wallet.id, draft.id, "http://127.0.0.1:1", "00".repeat(32), null, true, false))
+                    fail("An unsigned draft cannot be broadcast")
+                } catch (_: AppException.Operation) { }
+                assertNull(core.broadcastStatus(wallet.id, draft.id))
                 assertEquals("unsigned", core.drafts(wallet.id).single().state)
                 val expected = android.util.Base64.decode(core.exportSigningPsbt(wallet.id, draft.id), android.util.Base64.DEFAULT)
                 for (encoding in listOf(QrEncoding.UR, QrEncoding.BBQR)) {

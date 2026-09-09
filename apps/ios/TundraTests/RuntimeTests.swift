@@ -102,6 +102,11 @@ final class RuntimeTests: XCTestCase {
         var core: Tundra? = try Tundra.open(path: path)
         let wallet = try core!.importWallet(name: "Épargne 🧊", payload: descriptor, network: .signet)
         XCTAssertNil(wallet.totalSats)
+        XCTAssertNil(try core!.broadcastStatus(walletId: wallet.id, draftId: "missing"))
+        XCTAssertThrowsError(try core!.broadcastDraft(request: BroadcastRequest(walletId: wallet.id, draftId: "missing",
+            endpoint: "http://127.0.0.1:1", expectedTxid: String(repeating: "00", count: 32),
+            previousAttempt: nil, privacyConsent: true, retryAcknowledged: false)))
+        XCTAssertNil(try core!.broadcastStatus(walletId: wallet.id, draftId: "missing"))
         let first = try core!.receiveAddress(walletId: wallet.id)
         core = nil
         core = try Tundra.open(path: path)

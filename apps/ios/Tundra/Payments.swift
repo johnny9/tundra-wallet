@@ -17,6 +17,7 @@ private enum PaymentField: Hashable { case recipient, amount, fee, label }
 
 struct PaymentView: View {
     @ObservedObject var model: WalletModel
+    @State private var broadcastTarget: BroadcastTarget?
     @Environment(\.dismiss) private var dismiss
     @State var mode: Int
     @FocusState private var editing: PaymentField?
@@ -67,7 +68,7 @@ struct PaymentView: View {
                                 Text("Input \(index + 1): \(input.validSignatures) / \(input.requiredSignatures)")
                             }
                             if signing.complete {
-                                Text("All required signatures verified. This payment has not been broadcast.")
+                                Text("All required signatures verified. Finalize to review the exact transaction.")
                                 if review.state != "finalized" { Button("Finalize for review") { model.finalizeReview() }.disabled(model.busy) }
                             }
                         }
@@ -75,19 +76,32 @@ struct PaymentView: View {
                             Text("Final transaction").font(.headline)
                             Text(finalized.txid).font(.caption)
                             Text("\(finalized.vsize) vB · \(finalized.feeSats) sats fee")
-                            Text("Saved for final review. Inputs remain reserved. Broadcast is not available yet.")
+                            Text("Saved for final review. Inputs remain reserved until synchronization observes the spend.")
                         }
-                        Button(review.state == "unsigned" ? "Export unsigned PSBT" : "Export PSBT with signatures") { model.exportDraft() }.disabled(review.state == "invalidated" || model.busy)
+                        if let submission = model.submission, submission.draftId == review.id {
+                            Text("Submission").font(.headline)
+                            Text(submission.txid).font(.caption)
+                            Text(submission.endpoint).font(.caption)
+                            Text(submissionMessage(submission))
+                        }
+                        if review.state == "finalized", let transactionID = model.finalized?.txid ?? model.submission?.txid {
+                            Button(model.submission == nil ? "Review test-network broadcast" : "Review resubmission") {
+                                broadcastTarget = BroadcastTarget(request: BroadcastRequest(walletId: review.walletId, draftId: review.id,
+                                    endpoint: model.submission?.endpoint ?? model.endpoint, expectedTxid: transactionID,
+                                    previousAttempt: model.submission?.attemptId, privacyConsent: false, retryAcknowledged: false))
+                            }.disabled(model.busy).accessibilityIdentifier("reviewBroadcast")
+                        }
+                        Button(review.state == "unsigned" ? "Export unsigned PSBT" : "Export PSBT with signatures") { model.exportDraft() }.disabled(["invalidated", "observed"].contains(review.state) || model.busy)
                         Button("Import signed PSBT") {
                             importTarget = (review.walletId, review.id); importingPSBT = true
-                        }.disabled(["invalidated", "finalized"].contains(review.state) || model.busy)
+                        }.disabled(["invalidated", "finalized", "observed"].contains(review.state) || model.busy)
                         Picker("QR format", selection: $qrEncoding) { Text("UR").tag(QrEncoding.ur); Text("BBQr").tag(QrEncoding.bbqr) }
-                        Button("Show PSBT QR") { model.exportQr(qrEncoding) }.disabled(review.state == "invalidated" || model.busy)
+                        Button("Show PSBT QR") { model.exportQr(qrEncoding) }.disabled(["invalidated", "observed"].contains(review.state) || model.busy)
                         Button("Scan signed PSBT") {
                             importTarget = (review.walletId, review.id); scanningPSBT = true
-                        }.disabled(["invalidated", "finalized"].contains(review.state) || model.busy)
+                        }.disabled(["invalidated", "finalized", "observed"].contains(review.state) || model.busy)
                         Text("PSBT exports are unencrypted wallet metadata.").font(.caption)
-                        Button("Discard draft and release inputs", role: .destructive) { model.discardReview() }.disabled(model.busy)
+                        Button("Discard draft and release inputs", role: .destructive) { model.discardReview() }.disabled(model.busy || model.submission != nil)
                     }
                 } else {
                     Section("Payment") {
@@ -137,6 +151,12 @@ struct PaymentView: View {
                     Button(model.review == nil ? "Close" : "Save for later") { model.closeReview(); dismiss() }.disabled(model.busy)
                 }
                 ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Done") { editing = nil } }
+            }
+        }
+        .sheet(item: $broadcastTarget) { target in
+            BroadcastView(initial: target.request) { request in
+                broadcastTarget = nil
+                model.submitBroadcast(request)
             }
         }
         .sheet(isPresented: $scanningPSBT, onDismiss: { importTarget = nil }) {

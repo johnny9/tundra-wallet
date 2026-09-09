@@ -18,6 +18,7 @@ final class WalletModel: ObservableObject {
     @Published var review: PaymentReview?
     @Published var signing: SigningInfo?
     @Published var finalized: FinalTransactionInfo?
+    @Published var submission: BroadcastInfo?
     @Published var qrFrames: [String]?
     @Published var exportedPSBT: String?
     @Published var labelPreview: LabelImportPreview?
@@ -46,7 +47,7 @@ final class WalletModel: ObservableObject {
     }
     func load() { run { try await self.refresh() } }
     private func refresh() async throws {
-        signing = nil; finalized = nil
+        signing = nil; finalized = nil; submission = nil
         wallets = try await service.wallets()
         if !wallets.contains(where: { $0.id == selectedID }) { selectedID = wallets.first?.id }
         if let id = selectedID {
@@ -56,7 +57,8 @@ final class WalletModel: ObservableObject {
             drafts = try await service.drafts(id)
             selectedCoins.formIntersection(coins.filter { $0.state == .available }.map(\.outpoint))
             if let old = review { review = drafts.first { $0.id == old.id } }
-            if let review, review.state != "invalidated" {
+            if let review { submission = try await service.broadcastStatus(review.walletId, draftID: review.id) }
+            if let review, !["invalidated", "observed"].contains(review.state), submission == nil {
                 let progress = try await service.signingProgress(review.walletId, draftID: review.id)
                 let finalized = try await service.finalized(review.walletId, draftID: review.id)
                 if self.review?.id == review.id { signing = progress; self.finalized = finalized }
@@ -163,7 +165,7 @@ final class WalletModel: ObservableObject {
         }
     }
     func openReview(_ review: PaymentReview) {
-        self.review = review; signing = nil
+        self.review = review; signing = nil; finalized = nil; submission = nil
         run { try await self.refresh() }
     }
     func importSignedDraft(_ url: URL, walletID: String, draftID: String) {
@@ -193,7 +195,15 @@ final class WalletModel: ObservableObject {
             try await self.refresh()
         }
     }
-    func closeReview() { review = nil; signing = nil; finalized = nil; qrFrames = nil }
+    func submitBroadcast(_ request: BroadcastRequest) {
+        run {
+            guard self.selectedID == request.walletId, self.review?.id == request.draftId else { return }
+            do { try await self.service.broadcast(request) }
+            catch { try await self.refresh(); throw error }
+            try await self.refresh()
+        }
+    }
+    func closeReview() { review = nil; signing = nil; finalized = nil; submission = nil; qrFrames = nil }
     func inspectLabels(_ url: URL) {
         run {
             guard let id = self.selectedID else { return }

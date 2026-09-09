@@ -24,7 +24,7 @@ data class WalletState(
     val endpoint: String = "", val sync: SyncInfo? = null,
     val selected: Set<String> = emptySet(), val drafts: List<PaymentReview> = emptyList(),
     val review: PaymentReview? = null, val signing: SigningInfo? = null,
-    val finalized: FinalTransactionInfo? = null, val qrFrames: List<String>? = null
+    val finalized: FinalTransactionInfo? = null, val submission: BroadcastInfo? = null, val qrFrames: List<String>? = null
 ) { val wallet: WalletInfo? get() = wallets.firstOrNull { it.id == selectedId } }
 
 class WalletViewModel(application: Application) : AndroidViewModel(application) {
@@ -64,8 +64,10 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         val drafts = if (id == null) emptyList() else withContext(Dispatchers.IO) { engine().drafts(id) }
         val selected = mutable.value.selected.intersect(coins.filter { it.state == CoinState.AVAILABLE }.map { it.outpoint }.toSet())
         val review = mutable.value.review?.let { old -> drafts.firstOrNull { it.id == old.id } }
-        mutable.value = mutable.value.copy(wallets = wallets, selectedId = id, coins = coins, activity = activity, endpoint = endpoint, drafts = drafts, selected = selected, review = review, signing = null, finalized = null)
-        if (review != null && review.state != "invalidated") {
+        mutable.value = mutable.value.copy(wallets = wallets, selectedId = id, coins = coins, activity = activity, endpoint = endpoint, drafts = drafts, selected = selected, review = review, signing = null, finalized = null, submission = null)
+        val submission = review?.let { withContext(Dispatchers.IO) { engine().broadcastStatus(it.walletId, it.id) } }
+        mutable.value = mutable.value.copy(submission = submission)
+        if (review != null && review.state !in listOf("invalidated", "observed") && submission == null) {
             val signing = withContext(Dispatchers.IO) { engine().signingProgress(review.walletId, review.id) }
             val finalized = withContext(Dispatchers.IO) { engine().finalizedDraft(review.walletId, review.id) }
             if (mutable.value.review?.id == review.id) mutable.value = mutable.value.copy(signing = signing, finalized = finalized)
@@ -113,8 +115,8 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         withContext(Dispatchers.IO) { engine().editCoins(checkNotNull(s.selectedId), s.selected.toList(), label, frozen) }
         refresh()
     }
-    fun openReview(review: PaymentReview) { mutable.value = mutable.value.copy(review = review, signing = null, finalized = null); run { refresh() } }
-    fun closeReview() { mutable.value = mutable.value.copy(review = null, signing = null, finalized = null, qrFrames = null) }
+    fun openReview(review: PaymentReview) { mutable.value = mutable.value.copy(review = review, signing = null, finalized = null, submission = null); run { refresh() } }
+    fun closeReview() { mutable.value = mutable.value.copy(review = null, signing = null, finalized = null, submission = null, qrFrames = null) }
     fun createPayment(mode: Int, address: String, amount: String, fee: String, label: String, automatic: Boolean, acknowledge: Boolean) = run {
         val s = mutable.value
         val review = withContext(Dispatchers.IO) {
@@ -162,6 +164,11 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         val review = mutable.value.review ?: return@run
         withContext(Dispatchers.IO) { engine().finalizeDraft(review.walletId, review.id) }
         refresh()
+    }
+    fun submitBroadcast(request: BroadcastRequest) = run {
+        check(mutable.value.review?.id == request.draftId && mutable.value.selectedId == request.walletId)
+        try { withContext(Dispatchers.IO) { engine().broadcastDraft(request) } }
+        finally { refresh() } // Re-read durable uncertainty even if acknowledgement persistence failed.
     }
     fun closeQr() { mutable.value = mutable.value.copy(qrFrames = null) }
     fun sync(endpoint: String, consent: Boolean) = run {
