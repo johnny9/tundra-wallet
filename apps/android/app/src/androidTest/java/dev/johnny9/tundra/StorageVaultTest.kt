@@ -20,7 +20,12 @@ class StorageVaultTest {
         val alias = "tundra.test.storage.$id"
         val store = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
         try { test(context, directory, alias, store) }
-        finally { store.deleteEntry(alias); directory.deleteRecursively() }
+        finally {
+            File(directory, "restored-stores").listFiles()?.filter { it.isDirectory }?.forEach {
+                store.deleteEntry("$alias.${it.name}") // Only this isolated test's generation keys.
+            }
+            store.deleteEntry(alias); directory.deleteRecursively()
+        }
     }
 
     @Test fun keystoreReopenAndLostOrTamperedKeyMaterialNeverResetWallet() = isolated { context, directory, alias, store ->
@@ -81,5 +86,67 @@ class StorageVaultTest {
         assertThrows(StorageAccessException::class.java) { StorageVault.open(context, directory, alias).close() }
         assertFalse(database.exists())
         assertArrayEquals(retained, wrapped.readBytes())
+    }
+
+    @Test fun retainedMasterWithoutDatabaseOrWrapperCannotLookLikeNewInstallation() = isolated { context, directory, alias, store ->
+        StorageVault.open(context, directory, alias).close()
+        check(File(directory, "tundra.sqlite").delete())
+        check(File(directory, "storage-key.v1").delete())
+        assertTrue(store.containsAlias(alias))
+        assertThrows(StorageAccessException::class.java) { StorageVault.open(context, directory, alias).close() }
+        assertFalse(File(directory, "tundra.sqlite").exists())
+        assertFalse(File(directory, "storage-key.v1").exists())
+        assertTrue(store.containsAlias(alias))
+    }
+
+    @Test fun restoreSwitchesRetainedKeystoreGenerationsAndRecoversFromLostKeysAndSelectors() = isolated { context, directory, alias, store ->
+        val source = File(directory, "public-backup.tundra")
+        InstrumentationRegistry.getInstrumentation().context.assets.open("backup-v1.tundra").use { input ->
+            source.outputStream().use { input.copyTo(it) }
+        }
+        val password = "Public backup test password 🧊 ' spaces "
+        val backupBytes = source.readBytes()
+        val oldId = StorageVault.openActive(context, directory, alias).use {
+            it.importWallet("Original generation", fixture(), Chain.SIGNET).id
+        }
+        val oldDatabase = File(directory, "tundra.sqlite")
+        val oldBytes = oldDatabase.readBytes()
+        assertThrows(StorageAccessException::class.java) {
+            StorageVault.restoreActive(context, source, "Incorrect public password", directory, alias).close()
+        }
+        StorageVault.openActive(context, directory, alias).use { assertEquals(oldId, it.wallets().single().id) }
+        StorageVault.restoreActive(context, source, password, directory, alias).use {
+            val wallet = it.wallets().single()
+            assertEquals("Backup public fixture", wallet.name)
+            assertNull(wallet.totalSats); assertNull(wallet.syncedAt)
+            assertEquals(1u, it.receiveAddress(wallet.id).index)
+        }
+        var location = selectedStorage(directory.path)
+        assertNotEquals("default", location.generation)
+        assertTrue(location.requireExisting)
+        StorageVault.openActive(context, directory, alias).use {
+            assertEquals(2u, it.receiveAddress(it.wallets().single().id).index)
+        }
+        assertArrayEquals(oldBytes, oldDatabase.readBytes())
+        val broken = File(location.directory, "tundra.sqlite")
+        val brokenBytes = broken.readBytes()
+        store.deleteEntry("$alias.${location.generation}")
+        assertThrows(StorageAccessException::class.java) { StorageVault.openActive(context, directory, alias).close() }
+        StorageVault.restoreActive(context, source, password, directory, alias).close()
+        assertNotEquals(location.generation, selectedStorage(directory.path).generation)
+        assertArrayEquals(brokenBytes, broken.readBytes())
+        File(directory, "active-store.v1").writeText("corrupt selector")
+        assertThrows(StorageAccessException::class.java) { StorageVault.openActive(context, directory, alias).close() }
+        StorageVault.restoreActive(context, source, password, directory, alias).close()
+        check(File(directory, "active-store.v1").delete())
+        assertThrows(StorageAccessException::class.java) { StorageVault.openActive(context, directory, alias).close() }
+        StorageVault.restoreActive(context, source, password, directory, alias).close()
+        location = selectedStorage(directory.path)
+        val selectedDatabase = File(location.directory, "tundra.sqlite")
+        check(selectedDatabase.delete()) // Disposable generation; test must prove no re-creation.
+        assertThrows(StorageAccessException::class.java) { StorageVault.openActive(context, directory, alias).close() }
+        assertFalse(selectedDatabase.exists())
+        assertArrayEquals(backupBytes, source.readBytes())
+        assertArrayEquals(oldBytes, oldDatabase.readBytes())
     }
 }

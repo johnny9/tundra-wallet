@@ -28,14 +28,64 @@ internal object StorageVault {
     private val header = byteArrayOf(0x54, 0x44, 0x53, 1)
     private class Record(val key: ByteArray, val initialized: Boolean)
 
+    @Synchronized
+    fun openActive(context: Context, directory: File = context.noBackupFilesDir, alias: String = APP_ALIAS): Tundra {
+        try {
+            check(directory.isDirectory || directory.mkdirs())
+            val location = selectedStorage(directory.path)
+            return open(context, File(location.directory), generationAlias(alias, location.generation),
+                requireExisting = location.requireExisting)
+        } catch (_: Exception) { throw StorageAccessException() }
+    }
+
+    /** The caller must finish active network/USB work and close its old core first.
+     * If activation reports an error, remain unavailable and reopen selection; never
+     * keep using an old handle because the atomic selector replacement may have won. */
+    @Synchronized
+    fun restoreActive(context: Context, source: File, password: String,
+                      directory: File = context.noBackupFilesDir, alias: String = APP_ALIAS): Tundra {
+        try {
+            requireUnlocked(context)
+            check(directory.isDirectory || directory.mkdirs())
+            StoreRestoreSession.begin(directory.path, "tundra.sqlite").use { session ->
+                val location = session.location()
+                val candidate = File(location.directory)
+                val candidateAlias = generationAlias(alias, location.generation)
+                val store = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
+                check(!store.containsAlias(candidateAlias))
+                val wrapped = File(candidate, "storage-key.v1")
+                check(!wrapped.exists())
+                check(inspectStorage(File(candidate, "tundra.sqlite").path) == StorageFile.MISSING)
+                val master = generateMaster(candidateAlias)
+                val key = ByteArray(32).also { SecureRandom().nextBytes(it) }
+                try {
+                    write(wrapped, Record(key, false), master, candidateAlias, replacing = false)
+                    session.restore(source.path, password, key)
+                    // open verifies the same retained key and durably marks it initialized.
+                    val restored = open(context, candidate, candidateAlias)
+                    try { session.activate(); return restored }
+                    catch (error: Exception) { restored.close(); throw error }
+                } finally { key.fill(0) }
+            }
+        } catch (_: Exception) { throw StorageAccessException() }
+    }
+
+    private fun generationAlias(base: String, generation: String) =
+        if (generation == "default") base else "$base.$generation"
+
+    private fun requireUnlocked(context: Context) {
+        val keyguard = context.getSystemService(KeyguardManager::class.java) ?: throw StorageAccessException()
+        if (keyguard.isDeviceLocked) throw StorageAccessException()
+    }
+
     // Serializes initialization within the app process; the file lock covers a second
     // process. Rust separately excludes live DB handles from plaintext migration.
     @Synchronized
     fun open(context: Context, directory: File = context.noBackupFilesDir,
-             alias: String = APP_ALIAS, databaseName: String = "tundra.sqlite"): Tundra {
+             alias: String = APP_ALIAS, databaseName: String = "tundra.sqlite",
+             requireExisting: Boolean = false): Tundra {
         try {
-            val keyguard = context.getSystemService(KeyguardManager::class.java) ?: throw StorageAccessException()
-            if (keyguard.isDeviceLocked) throw StorageAccessException()
+            requireUnlocked(context)
             check(directory.isDirectory || directory.mkdirs())
             val root = directory.canonicalFile
             val lockFile = File(root, "storage-init.lock")
@@ -45,6 +95,7 @@ internal object StorageVault {
                 lock.use {
                     val database = File(root, databaseName)
                     val format = inspectStorage(database.path)
+                    if (requireExisting && format != StorageFile.PROTECTED_OR_UNKNOWN) throw StorageAccessException()
                     val wrapped = File(root, "storage-key.v1")
                     check(!Files.isSymbolicLink(wrapped.toPath()))
                     val store = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
@@ -55,15 +106,16 @@ internal object StorageVault {
                         record = read(wrapped, master, alias)
                     } else {
                         // A lost key must never authorize a fresh empty wallet database.
-                        if (format == StorageFile.PROTECTED_OR_UNKNOWN) throw StorageAccessException()
-                        master = if (store.containsAlias(alias)) {
-                            store.getKey(alias, null) as? SecretKey ?: throw StorageAccessException()
-                        } else generateMaster(alias)
+                        if (requireExisting || format == StorageFile.PROTECTED_OR_UNKNOWN || store.containsAlias(alias)) {
+                            throw StorageAccessException()
+                        }
+                        master = generateMaster(alias)
                         record = Record(ByteArray(32).also { SecureRandom().nextBytes(it) }, false)
                         try { write(wrapped, record, master, alias, replacing = false) }
                         catch (error: Exception) { record.key.fill(0); throw error }
                     }
                     try {
+                        if (requireExisting && !record.initialized) throw StorageAccessException()
                         if (record.initialized && format != StorageFile.PROTECTED_OR_UNKNOWN) {
                             throw StorageAccessException()
                         }

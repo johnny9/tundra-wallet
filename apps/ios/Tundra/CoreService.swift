@@ -10,7 +10,7 @@ actor CoreService {
         let directory = try fm.url(for: .applicationSupportDirectory,
                                    in: .userDomainMask, appropriateFor: nil, create: true)
             .appendingPathComponent("Tundra", isDirectory: true)
-        let result = try StorageVault.open(directory: directory)
+        let result = try StorageVault.openActive(directory: directory)
         core = result
         return result
     }

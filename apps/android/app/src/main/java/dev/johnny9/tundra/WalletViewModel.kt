@@ -42,7 +42,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     fun openStorage() = run {
         if (mutable.value.storageReady) return@run
         val previous = core; core = null
-        core = withContext(Dispatchers.IO) { previous?.close(); StorageVault.open(getApplication<Application>()) }
+        core = withContext(Dispatchers.IO) { previous?.close(); StorageVault.openActive(getApplication<Application>()) }
         refresh()
         mutable.value = mutable.value.copy(storageReady = true)
     }

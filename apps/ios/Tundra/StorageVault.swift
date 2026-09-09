@@ -8,27 +8,84 @@ enum StorageAccessError: Error {
 
 /// Database encryption only. No Bitcoin signing keys are generated or retained here.
 enum StorageVault {
-    private static let initialization = NSLock()
+    private static let initialization = NSRecursiveLock()
     private struct Record { var key: Data; let initialized: Bool }
     private static var appService: String { (Bundle.main.bundleIdentifier ?? "dev.johnny9.tundra.dev") + ".storage.v1" }
 
-    static func open(directory: URL, service: String? = nil, databaseName: String = "wallet.sqlite") throws -> Tundra {
+    static func openActive(directory: URL, service: String? = nil) throws -> Tundra {
+        initialization.lock(); defer { initialization.unlock() }
+        do {
+            try protectDirectory(directory)
+            let location = try selectedStorage(root: directory.path)
+            return try open(directory: URL(fileURLWithPath: location.directory, isDirectory: true),
+                service: generationService(service ?? appService, location.generation),
+                requireExisting: location.requireExisting)
+        } catch { throw StorageAccessError.unavailable }
+    }
+
+    /// Finish active operations and release the old service core before calling. If
+    /// activation fails, reopen selection before further use; the selector may have won.
+    static func restoreActive(source: URL, password: String, directory: URL, service: String? = nil) throws -> Tundra {
+        initialization.lock(); defer { initialization.unlock() }
+        do {
+            try protectDirectory(directory)
+            let session = try StoreRestoreSession.begin(root: directory.path, databaseName: "wallet.sqlite")
+            let location = try session.location()
+            let candidate = URL(fileURLWithPath: location.directory, isDirectory: true)
+            try protectDirectory(candidate)
+            let candidateService = generationService(service ?? appService, location.generation)
+            guard try read(service: candidateService) == nil,
+                  try inspectStorage(path: candidate.appendingPathComponent("wallet.sqlite").path) == .missing else {
+                throw StorageAccessError.unavailable
+            }
+            var key = Data(count: 32)
+            defer { key.resetBytes(in: 0..<key.count) }
+            let status = key.withUnsafeMutableBytes { bytes in
+                SecRandomCopyBytes(kSecRandomDefault, bytes.count, bytes.baseAddress!)
+            }
+            guard status == errSecSuccess else { throw StorageAccessError.unavailable }
+            guard try insert(Record(key: key, initialized: false), service: candidateService),
+                  var retained = try read(service: candidateService) else {
+                throw StorageAccessError.unavailable
+            }
+            defer { retained.key.resetBytes(in: 0..<retained.key.count) }
+            guard retained.key == key else { throw StorageAccessError.unavailable }
+            _ = try session.restore(source: source.path, password: password, storageKey: key)
+            // Verify the retained key and mark it initialized before selection changes.
+            let restored = try open(directory: candidate, service: candidateService)
+            try session.activate()
+            return restored
+        } catch { throw StorageAccessError.unavailable }
+    }
+
+    private static func generationService(_ base: String, _ generation: String) -> String {
+        generation == "default" ? base : base + "." + generation
+    }
+
+    private static func protectDirectory(_ directory: URL) throws {
+        var root = directory.resolvingSymlinksInPath()
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true,
+                                               attributes: [.protectionKey: FileProtectionType.complete])
+        try FileManager.default.setAttributes([.protectionKey: FileProtectionType.complete], ofItemAtPath: root.path)
+        var values = URLResourceValues(); values.isExcludedFromBackup = true
+        try root.setResourceValues(values)
+    }
+
+    static func open(directory: URL, service: String? = nil, databaseName: String = "wallet.sqlite",
+                     requireExisting: Bool = false) throws -> Tundra {
         initialization.lock()
         defer { initialization.unlock() }
         do {
-            let fm = FileManager.default
-            var root = directory.resolvingSymlinksInPath()
-            try fm.createDirectory(at: root, withIntermediateDirectories: true,
-                                   attributes: [.protectionKey: FileProtectionType.complete])
-            var values = URLResourceValues(); values.isExcludedFromBackup = true
-            try root.setResourceValues(values)
+            try protectDirectory(directory)
+            let root = directory.resolvingSymlinksInPath()
             let database = root.appendingPathComponent(databaseName)
             let format = try inspectStorage(path: database.path)
+            if requireExisting && format != .protectedOrUnknown { throw StorageAccessError.unavailable }
             let service = service ?? appService
             var record: Record
             if let existing = try read(service: service) { record = existing }
             else {
-                guard format != .protectedOrUnknown else { throw StorageAccessError.unavailable }
+                guard !requireExisting && format != .protectedOrUnknown else { throw StorageAccessError.unavailable }
                 var key = Data(count: 32)
                 let status = key.withUnsafeMutableBytes { bytes in
                     SecRandomCopyBytes(kSecRandomDefault, bytes.count, bytes.baseAddress!)
@@ -43,6 +100,7 @@ enum StorageVault {
                 record = retained
             }
             defer { record.key.resetBytes(in: 0..<record.key.count) }
+            if requireExisting && !record.initialized { throw StorageAccessError.unavailable }
             if record.initialized && format != .protectedOrUnknown { throw StorageAccessError.unavailable }
             if format == .legacyPlaintext { try upgradeStorage(path: database.path, storageKey: record.key) }
             let core = try Tundra.openProtected(path: database.path, storageKey: record.key)

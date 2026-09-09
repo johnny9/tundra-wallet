@@ -10,6 +10,11 @@ final class StorageVaultTests: XCTestCase {
         let service = "dev.johnny9.tundra.test.storage." + id
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer {
+            let generations = (try? FileManager.default.contentsOfDirectory(at: directory.appendingPathComponent("restored-stores"),
+                includingPropertiesForKeys: nil)) ?? []
+            for generation in generations {
+                SecItemDelete(query(service + "." + generation.lastPathComponent) as CFDictionary)
+            }
             SecItemDelete(query(service) as CFDictionary) // Only this test's unique item.
             try? FileManager.default.removeItem(at: directory)
         }
@@ -102,6 +107,59 @@ final class StorageVaultTests: XCTestCase {
             XCTAssertThrowsError(try StorageVault.open(directory: directory, service: service))
             XCTAssertFalse(FileManager.default.fileExists(atPath: database.path))
             XCTAssertTrue(try record(service) == retained)
+        }
+    }
+
+    func testRestoreSwitchesKeychainGenerationsAndRecoversLostKeysAndSelectors() throws {
+        try isolated { directory, service in
+            let source = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "backup-v1", withExtension: "tundra"))
+            let password = "Public backup test password 🧊 ' spaces "
+            let backupBytes = try Data(contentsOf: source)
+            var core: Tundra? = try StorageVault.openActive(directory: directory, service: service)
+            let oldId = try core!.importWallet(name: "Original generation", payload: fixture(), network: .signet).id
+            core = nil
+            let oldDatabase = directory.appendingPathComponent("wallet.sqlite")
+            let oldBytes = try Data(contentsOf: oldDatabase)
+            XCTAssertThrowsError(try StorageVault.restoreActive(source: source, password: "Incorrect public password", directory: directory, service: service))
+            core = try StorageVault.openActive(directory: directory, service: service)
+            XCTAssertEqual(try core!.wallets()[0].id, oldId)
+            core = nil
+            core = try StorageVault.restoreActive(source: source, password: password, directory: directory, service: service)
+            let wallet = try core!.wallets()[0]
+            XCTAssertEqual(wallet.name, "Backup public fixture")
+            XCTAssertNil(wallet.totalSats); XCTAssertNil(wallet.syncedAt)
+            XCTAssertEqual(try core!.receiveAddress(walletId: wallet.id).index, 1)
+            core = nil
+            var location = try selectedStorage(root: directory.path)
+            XCTAssertNotEqual(location.generation, "default"); XCTAssertTrue(location.requireExisting)
+            core = try StorageVault.openActive(directory: directory, service: service)
+            XCTAssertEqual(try core!.receiveAddress(walletId: wallet.id).index, 2)
+            core = nil
+            XCTAssertTrue(try Data(contentsOf: oldDatabase) == oldBytes)
+            let broken = URL(fileURLWithPath: location.directory).appendingPathComponent("wallet.sqlite")
+            let brokenBytes = try Data(contentsOf: broken)
+            XCTAssertEqual(SecItemDelete(query(service + "." + location.generation) as CFDictionary), errSecSuccess)
+            XCTAssertThrowsError(try StorageVault.openActive(directory: directory, service: service))
+            core = try StorageVault.restoreActive(source: source, password: password, directory: directory, service: service)
+            core = nil
+            XCTAssertNotEqual(try selectedStorage(root: directory.path).generation, location.generation)
+            XCTAssertTrue(try Data(contentsOf: broken) == brokenBytes)
+            let selector = directory.appendingPathComponent("active-store.v1")
+            try Data("corrupt selector".utf8).write(to: selector)
+            XCTAssertThrowsError(try StorageVault.openActive(directory: directory, service: service))
+            core = try StorageVault.restoreActive(source: source, password: password, directory: directory, service: service)
+            core = nil
+            try FileManager.default.removeItem(at: selector)
+            XCTAssertThrowsError(try StorageVault.openActive(directory: directory, service: service))
+            core = try StorageVault.restoreActive(source: source, password: password, directory: directory, service: service)
+            core = nil
+            location = try selectedStorage(root: directory.path)
+            let selected = URL(fileURLWithPath: location.directory).appendingPathComponent("wallet.sqlite")
+            try FileManager.default.removeItem(at: selected)
+            XCTAssertThrowsError(try StorageVault.openActive(directory: directory, service: service))
+            XCTAssertFalse(FileManager.default.fileExists(atPath: selected.path))
+            XCTAssertTrue(try Data(contentsOf: source) == backupBytes)
+            XCTAssertTrue(try Data(contentsOf: oldDatabase) == oldBytes)
         }
     }
 }
