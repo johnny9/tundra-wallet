@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
@@ -51,6 +52,8 @@ class MainActivity : ComponentActivity() {
 fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "Single signature" else "2 of 3 signatures"
 @Composable private fun WalletApp(vm: WalletViewModel, s: WalletState) {
     var tab by rememberSaveable { mutableIntStateOf(0) }
+    val activityScroll = rememberSaveable(s.selectedId, saver = LazyListState.Saver) { LazyListState() }
+    val coinScroll = rememberSaveable(s.selectedId, saver = LazyListState.Saver) { LazyListState() }
     var settings by remember { mutableStateOf(false) }
     var backup by remember { mutableStateOf(false) }
     var add by remember { mutableStateOf(false) }
@@ -130,7 +133,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
                         Button(onClick = { vm.closeReview(); paymentMode = 0; paymentSheet = true }, enabled = !s.busy && s.wallet!!.synced, modifier = Modifier.weight(1f)) { Text("Send") }
                     }
                     Text("Hardware signing is not qualified. Use disposable test wallets only.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    LazyColumn(Modifier.weight(1f).padding(top = 16.dp)) {
+                    LazyColumn(Modifier.weight(1f).padding(top = 16.dp), state = activityScroll) {
                         items(s.drafts, key = { "draft-${it.id}" }) { draft ->
                             ListItem(modifier = Modifier.clickable(enabled = !s.busy) { vm.openReview(draft); paymentSheet = true },
                                 headlineContent = { Text(draft.label.ifBlank { "Saved payment" }) },
@@ -163,7 +166,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
                         (!availableOnly || coin.state == CoinState.AVAILABLE) &&
                             listOf(coin.label, coin.address, coin.outpoint).any { it.contains(query, ignoreCase = true) }
                     }.let { coins -> if (largestFirst) coins.sortedByDescending { it.sats } else coins.sortedBy { it.label.lowercase() } }
-                    LazyColumn(Modifier.weight(1f).padding(top = 16.dp)) {
+                    LazyColumn(Modifier.weight(1f).padding(top = 16.dp), state = coinScroll) {
                         if (s.coins.isEmpty()) item { EmptyState("No synced coins", "No sample UTXOs are injected. Labels and coin control operate on wallet-owned outputs.") }
                         items(filtered, key = { it.outpoint }) { coin ->
                             ListItem(modifier = Modifier.clickable(enabled = !s.busy) { editing = coin; labelText = coin.label; vm.loadOutputSource(coin.outpoint) },
