@@ -11,7 +11,7 @@ These are ordered work packages, not time estimates.
 | M4: QR external signing | PSBT verification and QR codecs pass software tests; native camera builds/device qualification open | Bounded UR/BBQr sessions interoperate on devices; wrong payloads/transactions rejected; per-input signatures verified; receive/policy comparison works |
 | M5: Android USB / bhwi | Bounded pinned protocol and Android adapter compile; software and mobile FFI tests pass, physical qualification open | Pinned bhwi revision; documented model/firmware/transport matrix; permission, cancellation, reconnect and app lifecycle tests pass |
 | M6: signet end-to-end | Finalization and explicit broadcast pass software tests; native/hardware end-to-end open | 2-of-3 QR + USB with restart signs, validates, finalizes and explicitly broadcasts to a configured test backend |
-| M7: hardened release candidate | Not implemented | Protected storage, backup/recovery/migration tests, dependency/license review, independent security review and a clean supported-device matrix |
+| M7: hardened release candidate | Protected Rust storage boundary tested; native keys and recovery open | Protected storage, backup/recovery/migration tests, dependency/license review, independent security review and a clean supported-device matrix |
 
 ## M1 backlog before declaring it done
 

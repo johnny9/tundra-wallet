@@ -6,6 +6,31 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
+The SQLCipher storage boundary now passes **146 Rust tests including real regtest**,
+23 offline checks, formatting, strict Clippy and generation of both bindings. Added checks
+cover encrypted DB/WAL, wrong/missing keys, tampering, symlink refusal, rollback, keyed
+schema migration and an abrupt-process encrypted-write recovery test. The current apps
+still use legacy plaintext storage; native platform keys and recovery are not implemented.
+The new encrypted native/host FFI tests await their first CI run. See [13-storage.md](13-storage.md).
+At storage source `a13a0ff`, all three sanitizer targets passed: 1,626,888 parser, 1,256
+USB protocol and 642,399 signature/finalization cases in 61 seconds per target. Cargo audit
+reported no advisories or warnings; SQLCipher C review is a separate gate. Source reproduction
+passed byte for byte. [`storage-core-checks.json`](../validation/storage-core-checks.json)
+records commands, source/lock identities and log hashes.
+
+The preceding native run at source `959224a159bef4ab18465f2565d139db6229c1ad` is fully green:
+[CI run 34296820197](https://github.com/johnny9/tundra-wallet/actions/runs/34296820197).
+Android built both ABIs, passed 5 JVM and **6 instrumentation tests**, then passed the cold
+restart check without launcher ANR recovery. All four payment modes, QR, USB boundaries and
+the explicit broadcast-consent dialog passed. iOS built and passed **4 tests**, including
+all payment modes and process restart. Its independent QR decoder still used Vision
+revision 2. Rust (138 tests at that source), all three fuzz targets and audit also passed.
+Exact reports are retained in
+[`broadcast-native-passing-checks.json`](../validation/broadcast-native-passing-checks.json).
+This run predates SQLCipher and does not qualify positive signed submission or hardware.
+
+## Preceding broadcast checkpoints
+
 Explicit test-network broadcast now passes **14 additional Rust tests**, bringing the total
 to **138 including real regtest**. Schema v6 records an uncertain attempt before POST and
 keeps endpoint receipt separate from synchronized chain observation. Formatting, strict
@@ -22,8 +47,8 @@ the old log does not distinguish Max from consolidation. iOS entered `2.52` inst
 tests and four Android QR/USB instrumentation tests passed; Android cold restart did not
 run. Fixes/diagnostics are authored and retain the original assertions.
 `validation/payment-modes-checks.json` preserves exact failures and artifact identities.
-The newer broadcast API/screens/tests await native CI. The last completely passing native
-baseline remains `dc54fe9`, documented below; no milestone is complete from source alone.
+These failures preceded the passing `959224a` run above. No milestone is complete from
+source alone.
 
 The [broadcast-era native run at ec3a699](https://github.com/johnny9/tundra-wallet/actions/runs/34295706542)
 passes Rust, all three sanitizer targets and iOS. **All four iOS tests pass**, including the
@@ -32,7 +57,7 @@ wallet/QR/USB instrumentation tests; every payment mode and unsigned-broadcast r
 pass. Its sixth, standalone broadcast-dialog test failed to launch because the Compose test
 activity manifest was missing. The debug test-host dependency is now added. Cold restart
 was not run after that failure. `validation/broadcast-native-checks.json` records this partial
-checkpoint; the new dialog test and final Android restart await the corrected run.
+checkpoint; the corrected run above passes the dialog test and final Android restart.
 
 ## Earlier executed checkpoints
 

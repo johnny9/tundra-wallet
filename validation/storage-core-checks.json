@@ -1,0 +1,103 @@
+{
+  "recorded_at": "2026-09-09T01:22:11.093101+00:00",
+  "source": "a13a0ff53ffc2179e255c42a157950d22ae9ac1b",
+  "rust": {
+    "core_unit_passed": 138,
+    "abrupt_process_passed": 2,
+    "http_passed": 5,
+    "real_keyless_regtest_passed": 1,
+    "total_passed": 146,
+    "ignored_children_and_separate_regtest": "Two child fixtures are invoked by parent tests; regtest is run separately with Bitcoin Core 31.1"
+  },
+  "offline": {
+    "passed": 23,
+    "scope": "SQLite schema/public fixtures/source checks, not Rust transaction code"
+  },
+  "format_clippy_bindings": "passed",
+  "sqlcipher": {
+    "version": "4.19.0 community",
+    "sqlite": "3.53.4",
+    "provider": "openssl",
+    "source_revision": "c4b275a47932888216bade83aff2bbc73df0ff85",
+    "source_reproduction": "Both vendored amalgamation files reproduced byte for byte in separate clean output directories; checked again with scripts/check-sqlcipher-source.sh"
+  },
+  "storage_checks": [
+    "encrypted database and WAL public sentinel checks",
+    "Unicode labels, unknown balance, receive index reopen",
+    "missing/wrong/invalid key refusal without reset",
+    "plaintext refusal without implicit migration",
+    "authenticated header corruption refusal",
+    "final-path symlink refusal",
+    "independent keyed connections and metadata/state rollback",
+    "keyed schema v5 to v6 migration and future-version refusal",
+    "actual child kill during encrypted uncommitted write"
+  ],
+  "fuzz": [
+    {
+      "target": "public_parsers",
+      "runs": 1626888,
+      "seconds": 61,
+      "result": "passed without crashes"
+    },
+    {
+      "target": "usb_protocol",
+      "runs": 1256,
+      "seconds": 61,
+      "result": "passed without crashes"
+    },
+    {
+      "target": "validated_signatures",
+      "runs": 642399,
+      "seconds": 61,
+      "result": "passed without crashes"
+    }
+  ],
+  "audit": {
+    "database": {
+      "advisory-count": 1242,
+      "last-commit": "bf25f6575a93a35f30796c65c0ed91bee7fa19fd",
+      "last-updated": "2026-09-08T11:58:15+02:00"
+    },
+    "lockfile": {
+      "dependency-count": 243
+    },
+    "settings": {
+      "target_arch": [],
+      "target_os": [],
+      "severity": null,
+      "ignore": [],
+      "informational_warnings": [
+        "unmaintained",
+        "unsound",
+        "notice"
+      ]
+    },
+    "vulnerabilities": {
+      "found": false,
+      "count": 0,
+      "list": []
+    },
+    "warnings": {}
+  },
+  "native": "Kotlin/Swift bindings generated; new host/mobile encrypted-storage tests authored, first native CI pending. Apps still use legacy plaintext storage.",
+  "limits": [
+    "Native Keystore/Keychain key retention not implemented",
+    "Plaintext migration and backup/recovery not implemented",
+    "Physical storage faults/power loss not qualified",
+    "Rust audit does not independently audit SQLCipher C or Apple crypto",
+    "No private Bitcoin signing keys used"
+  ],
+  "invocation_note": "A plain cargo check was used to resolve the separate fuzz lock and refused the intentionally cfg(fuzzing)-only signature hook. The supported check-fuzz.sh invocation compiled and passed all three actual sanitizer targets.",
+  "logs": {
+    "build/storage-complete-check.log": "d3c306fc78e2063ece3e5fbbb0a317b11aa942028632a44c5023f940e88879a3",
+    "build/storage-regtest.log": "503838647715510bf87ac95660df0e49365d78e7f285b44d7495d53ebf7a1880",
+    "build/storage-bindings.log": "e513b35ddcee99aee92f33f698e4d7043c6e736e7903b20a7ab08d5475ec5d07",
+    "build/storage-fuzz.log": "f2fcba370498763a8fc34eefa296ae4b368f06a486e815a0edaa1fef4f9f24e6",
+    "build/storage-audit.json": "c8fdbb4f7351dea3ce9e577ee2401727b937107428e5c1adb148f03e7a5c4b62",
+    "build/storage-source-reproduction.log": "50c5b108ed181c5cbc52f433ee09bd02f8ea17e0b3b1b912557072715d8b671f"
+  },
+  "lock_sha256": {
+    "Cargo.lock": "31f23e153306d1432d44264e3defbcd1d4b630a3e428689d94037e72edab5fd9",
+    "fuzz/Cargo.lock": "e37eed0b061224d0e2948ed00cd5d567454fb692215f6096591bd7c755799fca"
+  }
+}

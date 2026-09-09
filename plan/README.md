@@ -16,7 +16,7 @@ approval system, or cloud account.
 
 - Source: descriptor-first watch-only engine, metadata, unsigned-draft core, UniFFI API,
   Android native import shell, iOS native starter, tests and CI.
-- Verified: 138 Rust tests including real regtest, 23 offline checks, parser fuzzing/audit,
+- Verified: 146 Rust tests including real regtest, 23 offline checks, parser fuzzing/audit,
   Android debug APK and iOS simulator builds, host FFI smoke tests, all four payment modes on both virtual platforms and initial process-restart checks.
   See [VALIDATION.md](VALIDATION.md) for the exact results and remaining gates.
 - Added: bounded opt-in Esplora scans, cancellation, cached timestamps, coinbase maturity,
@@ -29,7 +29,8 @@ approval system, or cloud account.
 - Added: immutable finalized transaction bytes and native final-review source; software tests pass.
 - Added: pinned bhwi Ledger protocol, registration persistence and Android USB adapter source; Android build/FFI/runtime checks pass; physical device qualification remains open.
 - Added: explicit test-network broadcast, durable uncertainty and observed-spend handling; Rust tests and native builds pass; positive submission UI qualification remains open.
-- Not implemented: production storage protection.
+- Added: pinned SQLCipher and a tested protected Rust constructor; native key retention,
+  migration and backup/recovery are still required before claiming app storage protection.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Not performed locally: Android build or Xcode build.
 - **No real-funds use. No supported hardware devices yet.**
@@ -44,6 +45,7 @@ approval system, or cloud account.
 | [04-security.md](04-security.md) | Threats, invariants, privacy and release blockers |
 | [05-testing.md](05-testing.md) | Test layers and real-device qualification |
 | [06-build.md](06-build.md) | Dependency choices, native builds and reproducibility |
+| [13-storage.md](13-storage.md) | Protected database boundary, native keys and recovery gates |
 | [12-broadcast.md](12-broadcast.md) | Explicit submission, durable uncertainty and chain observation |
 | [11-usb.md](11-usb.md) | Bounded Ledger protocol and Android USB qualification |
 | [10-finalization.md](10-finalization.md) | Exact final bytes, persistence and review |
