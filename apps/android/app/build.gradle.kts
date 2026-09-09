@@ -33,6 +33,9 @@ tasks.withType<Test>().configureEach {
 }
 dependencies {
     implementation(platform("androidx.compose:compose-bom:2025.12.00"))
+    // Kotlin's debugImplementationDependenciesMetadata resolves this scope on its
+    // own. Give its versionless tooling the same BOM used by the app classpaths.
+    debugImplementation(platform("androidx.compose:compose-bom:2025.12.00"))
     implementation("androidx.activity:activity-compose:1.10.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.0")

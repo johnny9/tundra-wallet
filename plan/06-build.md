@@ -107,3 +107,8 @@ The second Android collection at `cc89bfc` passed the self-project artifact boun
 failed on a versionless Compose tooling dependency in a plugin configuration. Configuration
 names are now reported before resolution; the complete Android lock/checksum review remains
 open. Do not treat the local collector fixture as an Android dependency qualification.
+
+The third collection identifies `debugImplementationDependenciesMetadata`: Kotlin resolves
+that scope independently, without the app's implementation BOM. Debug dependencies now
+declare the same pinned Compose BOM explicitly. All configurations remain part of the
+collection. Validation is pending.
