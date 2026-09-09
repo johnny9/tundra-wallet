@@ -1,0 +1,64 @@
+{
+  "recorded_at": "2026-09-09T00:03:58.862145+00:00",
+  "rust_toolchain": "1.93.1",
+  "rust_tests_including_regtest": 124,
+  "offline_checks": 23,
+  "fmt": "passed",
+  "clippy": "passed with warnings denied",
+  "bindings": "Kotlin and Swift generated from compiled production library",
+  "fuzz": {
+    "toolchain": "nightly-2026-09-07",
+    "cargo_fuzz": "0.13.2",
+    "libfuzzer_sys": "0.4.12",
+    "sanitizer": "AddressSanitizer",
+    "targets": [
+      {
+        "name": "public_parsers",
+        "executions": 1623390,
+        "seconds": 61,
+        "crashes": 0
+      },
+      {
+        "name": "usb_protocol",
+        "executions": 1246,
+        "seconds": 61,
+        "crashes": 0
+      },
+      {
+        "name": "validated_signatures",
+        "executions": 658421,
+        "seconds": 61,
+        "crashes": 0
+      }
+    ],
+    "signature_fixtures": [
+      "published HWI P2WPKH",
+      "published Ledger two-input P2WPKH",
+      "public confirmed native 2-of-3"
+    ],
+    "signature_checks": [
+      "bounded response parsing",
+      "signature and final-witness validation against immutable approvals and trusted public prevouts",
+      "partial aggregate merging",
+      "duplicate response idempotence",
+      "per-input threshold",
+      "incomplete finalization refusal",
+      "final transaction preserves approved inputs/outputs/txid",
+      "assembled witnesses independently revalidated"
+    ],
+    "production_exposure": "Fixture constructors and fuzz entry point require cfg(test) or cfg(fuzzing); no mobile fixture API",
+    "lockfile": "unchanged",
+    "limitations": [
+      "bounded smoke fuzzing, not exhaustive coverage",
+      "database eligibility and persistence are covered by separate tests, not this fuzz target",
+      "no hardware signing, camera optics, USB device IO or real-funds qualification"
+    ],
+    "compiler_note": "Pinned nightly reports an AtomicU64::fetch_update deprecation warning; stable Rust 1.93.1 Clippy passes with warnings denied."
+  },
+  "logs": {
+    "build/signature-fuzz-check.log": "c6b96b5efd5495b98e11b7054fa14da0d1deb3faec9e48d0b77238f46ccbbb29",
+    "build/signature-fuzz-regtest.log": "2ac64635e8359c7d8f8daeef9eff51fa5e57668811a51512afce1fee0a796867",
+    "build/signature-fuzz-bindings.log": "c1c271a9eb7b4cf333ab889ab4bb2b8ed6ba544ce9bc7c3c293362a1504e95a8",
+    "build/signature-fuzz-all.log": "7f8b72ca7a856fe6d903b242caf68fcdb3d6f7bdee2638864ea66d2cdcb49b4a"
+  }
+}

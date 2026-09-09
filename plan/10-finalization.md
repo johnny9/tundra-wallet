@@ -30,6 +30,12 @@ The existing sync invalidation test now covers both signed and finalized states.
 The full suite, real keyless regtest, formatting, Clippy and binding generation pass locally;
 `validation/finalization-checks.json` records counts and log hashes.
 
-Native final-review UI source and an unsigned-draft FFI rejection check are authored;
-compilation/execution is pending. This is not a real-device signing/broadcast test. The
-parser fuzz harness does not yet fuzz final transaction assembly or signature verification.
+Native final-review UI compiles on both platforms. Android's unsigned-draft finalization
+rejection check passes through the mobile FFI at `dc54fe9`; positive signed final-review UI
+coverage remains open. This is not a real-device signing/broadcast test.
+
+A dedicated signature/finalization AddressSanitizer target completed 658,421 cases in
+61 seconds with no crashes on September 9, 2026. It mutates published responses and final
+witnesses, checks incomplete-finalization refusal, immutable transaction fields and final
+witness revalidation. `validation/signature-fuzz-checks.json` records all three fuzz targets
+and the full Rust/regtest/binding rerun. This target does not fuzz database persistence.

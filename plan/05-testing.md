@@ -13,11 +13,16 @@
 | Hardware | Physical devices and qualified firmware, not just emulators or a README support list |
 | Security | Fuzz descriptor/BIP329/PSBT/QR parsers, transaction mutation corpus, storage crash tests, privacy/network/log inspection |
 
-`scripts/check-fuzz.sh` runs the checked-in libFuzzer harness with AddressSanitizer, public
-descriptor/BIP329 seeds, checksum repair for deeper descriptor mutations, and a bounded
-runtime (60 seconds by default). Toolchain: nightly-2026-09-07; cargo-fuzz 0.13.2;
-libfuzzer-sys 0.4.12. Its separate lock is committed and checked for changes. It covers
-descriptor, label, amount and bounded binary/base64 PSBT parsing; QR fuzzing awaits its codecs.
+`scripts/check-fuzz.sh` runs three libFuzzer targets with AddressSanitizer and public
+fixtures, each bounded to 60 seconds by default. Toolchain: nightly-2026-09-07; cargo-fuzz
+0.13.2; libfuzzer-sys 0.4.12. Its separate lock is committed and checked for changes.
+The parser target covers descriptors (including repaired checksums), BIP329, amounts,
+binary/base64 PSBTs, UR/BBQr and HID framing. The USB target mutates bounded APDU replies
+after public-account handshake phases. The signature target mutates published responses
+and final witnesses against immutable public approvals/prevouts, checks merge idempotence
+and per-input thresholds, and revalidates assembled final transactions. Its fixture entry
+point exists only under `cfg(fuzzing)`, never in the production library or UniFFI API.
+Database eligibility/persistence and device interoperability remain separate test layers.
 
 The `crash` integration test kills a child process after a durable receive/label commit and
 during an uncommitted snapshot/metadata write, then checks reopening, index non-reuse and

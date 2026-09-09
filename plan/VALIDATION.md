@@ -83,6 +83,12 @@ test names, simulator details and artifact IDs are in `validation/usb-native-che
 Newer source adds every payment mode to both native UI scenarios, an iOS keyboard Done
 control and an Android fallback for runtimes without USB. Their native rerun is pending.
 
+The September 9 public-signature fuzz pass completed **658,421 cases in 61 seconds**
+without crashes, alongside 1,623,390 parser and 1,246 USB protocol cases. The full 124-test
+Rust/regtest suite, strict Clippy, formatting, 23 offline checks and binding generation pass
+after the fixture refactor. See `validation/signature-fuzz-checks.json`; these are local
+software results and do not change native/device qualification.
+
 ## Local executed checks
 
 | Check | Actual result |
