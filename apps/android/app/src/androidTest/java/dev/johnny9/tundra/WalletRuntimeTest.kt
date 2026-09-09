@@ -75,7 +75,7 @@ class WalletRuntimeTest {
             compose.onNodeWithText("Dark appearance").assertIsDisplayed()
         }
         // Reopen the real Android ABI through FFI, with no process-local BDK wallet retained.
-        Tundra.open(context.noBackupFilesDir.resolve("tundra.sqlite").path).use { core ->
+        StorageVault.open(context).use { core ->
             val wallet = core.wallets().single()
             assertNull(wallet.totalSats)
             assertEquals(2u, core.receiveAddress(wallet.id).index)
@@ -108,7 +108,7 @@ class WalletRuntimeTest {
                 compose.onNodeWithText("Inputs · $inputs").performScrollTo().assertIsDisplayed()
             }
             fun assertSavedPayment(inputs: Int, consolidation: Boolean, oneOutput: Boolean, selected: Set<String>? = null) {
-                Tundra.open(context.noBackupFilesDir.resolve("tundra.sqlite").path).use { core ->
+                StorageVault.open(context).use { core ->
                     val wallet = core.wallets().single()
                     val draft = core.drafts(wallet.id).single()
                     assertEquals(inputs, draft.inputs.size)
@@ -131,7 +131,7 @@ class WalletRuntimeTest {
                 waitText("Create a payment")
                 compose.waitUntil(10_000) { compose.onAllNodes(hasText("Close") and isEnabled()).fetchSemanticsNodes().isNotEmpty() }
                 compose.onNodeWithText("Close").performScrollTo().performClick()
-                Tundra.open(context.noBackupFilesDir.resolve("tundra.sqlite").path).use { core ->
+                StorageVault.open(context).use { core ->
                     val wallet = core.wallets().single()
                     assertTrue(core.drafts(wallet.id).isEmpty())
                     assertEquals(15_000_000_000uL, wallet.availableSats)
@@ -178,7 +178,7 @@ class WalletRuntimeTest {
             compose.onNodeWithText("Import signed PSBT").performScrollTo().assertIsDisplayed()
             // Export a real reviewed draft in both formats, decode native barcode pixels,
             // then reassemble through Rust. Transport cannot add signatures.
-            Tundra.open(context.noBackupFilesDir.resolve("tundra.sqlite").path).use { core ->
+            StorageVault.open(context).use { core ->
                 val wallet = core.wallets().single()
                 val draft = core.drafts(wallet.id).single()
                 assertNull(core.finalizedDraft(wallet.id, draft.id))
@@ -222,7 +222,7 @@ class WalletRuntimeTest {
             compose.onNodeWithText("Activity").performClick()
             waitText("Draft · unsigned · 2 inputs")
         }
-        Tundra.open(context.noBackupFilesDir.resolve("tundra.sqlite").path).use { core ->
+        StorageVault.open(context).use { core ->
             val wallet = core.wallets().single()
             val draft = core.drafts(wallet.id).single()
             assertEquals(2, draft.inputs.size)
