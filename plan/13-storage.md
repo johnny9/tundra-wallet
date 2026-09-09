@@ -66,10 +66,36 @@ The migration suite exposed a transient lock-retention failure during concurrent
 spawning. Lock guards now explicitly unlock on drop instead of depending only on descriptor
 closure; the full suite passes with the child-process checks enabled.
 
+The next native run showed that Rust 1.93's standard file-lock API is unsupported on Android,
+preventing every file-backed core open. The implementation now uses pinned rustix 1.1.4's
+safe flock wrapper on Unix and distinguishes contention from other storage errors. This
+retains shared/exclusive locking rather than bypassing it. The behavior is explicit in the
+[pinned standard-library source](https://github.com/rust-lang/rust/blob/1.93.1/library/std/src/sys/fs/unix.rs).
+Apple's host link succeeds after adding CoreFoundation, but iOS linking then exposed unequal
+C/Rust deployment targets; build scripts now set iOS 17.0 and macOS 11.0 for both compilers.
+The full Linux suite passes with these fixes; the corrected native run is pending.
+
 ## Next gates
 
-- Android Keystore wrapping and iOS Keychain retention; missing/corrupt key material must
-  preserve existing files and expose recovery rather than generate a replacement key.
+Android and iOS key-store adapters and isolated runtime tests are now authored but have not
+run yet. Android wraps a random 32-byte storage key and initialization marker with a
+non-exportable Keystore AES-GCM key; only the authenticated packet is written to private
+storage with file/directory synchronization and atomic replacement. iOS stores the same
+key/marker in a non-synchronizing Keychain item with `WhenUnlockedThisDeviceOnly` access.
+Both retain a pending key before creating/upgrading the DB, mark initialization only after
+the protected core opens, and refuse lost/corrupt key material or a missing DB after that
+marker is set. Existing empty database files are still refused, including during interrupted
+setup. Neither adapter is connected to normal app startup yet.
+
+Android uses `setUnlockedDeviceRequired(true)` on API 35+, following Google's documented
+API 31–34 bugs; older targets use credential-encrypted app storage and an explicit keyguard
+check. This does not claim hardware-backed key storage on an emulator, or removal of an
+already-open SQLCipher key from memory when the screen locks. See
+[Android's API guidance](https://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec.Builder#setUnlockedDeviceRequired(boolean))
+and [Apple's Keychain accessibility](https://developer.apple.com/documentation/security/ksecattraccessiblewhenunlockedthisdeviceonly).
+
+- Run the new Keystore/Keychain tests and adopt them in native startup, including a storage
+  unavailable/recovery state that cannot masquerade as a newly empty wallet.
 - Native adoption of the tested plaintext migration and device interruption qualification.
 - Encrypted export and restore, including wrong credentials, bounds, partial writes,
   migrations, labels/freezes/drafts and uncertain broadcasts. Restored chain state must not
