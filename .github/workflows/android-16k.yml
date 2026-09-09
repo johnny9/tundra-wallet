@@ -1,0 +1,107 @@
+name: Validate Android APKs on 16 KiB emulator
+on:
+  workflow_dispatch:
+    inputs:
+      source_run:
+        description: Successful main CI run containing matching app and test APKs
+        required: true
+        default: '34332720770'
+      source_commit:
+        description: Exact application source SHA from that run
+        required: true
+        default: '1a9499c8694dd6d26a86040c61d890d3d5653050'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  android-16k:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      ANDROID_AVD_HOME: ${{ runner.temp }}/tundra-16k-avd
+      SOURCE_RUN: ${{ inputs.source_run }}
+      SOURCE_COMMIT: ${{ inputs.source_commit }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - name: Verify source and download matching successful APK artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p build
+          python3 - <<'PY'
+          import hashlib, json, os, re, subprocess
+          from pathlib import Path
+          run, revision = os.environ['SOURCE_RUN'], os.environ['SOURCE_COMMIT']
+          assert re.fullmatch(r'[1-9][0-9]{0,19}', run)
+          assert re.fullmatch(r'[0-9a-f]{40}', revision)
+          repository = os.environ['GITHUB_REPOSITORY']
+          result = json.loads(subprocess.check_output(['gh', 'api', f'repos/{repository}/actions/runs/{run}']))
+          assert result['conclusion'] == 'success' and result['head_sha'] == revision
+          assert result['path'] == '.github/workflows/ci.yml'
+          assert result['event'] in ('push', 'workflow_dispatch')
+          # The APKs carry their own matching tests. Require this checkout's fixture
+          # servers and test/build helpers to have the same source as those APKs.
+          subprocess.run(['git', 'diff', '--exit-code', revision, 'HEAD', '--', 'apps', 'crates', 'tests', 'scripts'], check=True)
+          files = []
+          for artifact, folder in [('tundra-development-apk', 'app'), ('tundra-instrumentation-apk', 'tests')]:
+              target = Path('build/16k-apks') / folder
+              subprocess.run(['gh', 'run', 'download', run, '--repo', repository, '--name', artifact, '--dir', str(target)], check=True)
+              apks = list(target.glob('*.apk'))
+              assert len(apks) == 1
+              files.append({'artifact': artifact, 'path': str(apks[0]), 'sha256': hashlib.sha256(apks[0].read_bytes()).hexdigest()})
+          Path('build/android-16k-source.json').write_text(json.dumps({'source_run': run, 'source_commit': revision, 'files': files}, indent=2) + '\n')
+          PY
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
+      - name: Create the experimental 16 KiB AVD without an inferred ABI tag
+        run: |
+          set -euo pipefail
+          sdkmanager 'system-images;android-35;google_apis_ps16k;x86_64'
+          mkdir -p "$ANDROID_AVD_HOME"
+          echo no | avdmanager create avd --name tundra-16k --package 'system-images;android-35;google_apis_ps16k;x86_64' --device pixel_6
+          sudo chmod 666 /dev/kvm
+      - run: ./scripts/install-bitcoin-ci.sh
+      - name: Start the fresh keyless and published-signature fixtures
+        run: |
+          set -euo pipefail
+          python3 tests/native_chain.py > build/native-chain.log 2>&1 &
+          for attempt in $(seq 1 60); do
+            test ! -f build/native-chain-port || break
+            sleep 1
+          done
+          test -f build/native-chain-port
+          bash scripts/start-published-native-fixture.sh
+          bash scripts/start-published-native-fixture.sh --screen
+      - uses: reactivecircus/android-emulator-runner@b530d96654c385303d652368551fb075bc2f0b6b # v2.35.0
+        with:
+          api-level: 35
+          target: google_apis_ps16k
+          arch: x86_64
+          avd-name: tundra-16k
+          force-avd-creation: false
+          disable-animations: true
+          script: |
+            adb root
+            adb wait-for-device
+            test "$(adb shell getconf PAGE_SIZE | tr -d '\r')" = 16384
+            adb shell setprop bionic.linker.16kb.app_compat.enabled false
+            adb shell setprop pm.16kb.app_compat.disabled true
+            test "$(adb shell getprop bionic.linker.16kb.app_compat.enabled | tr -d '\r')" = false
+            test "$(adb shell getprop pm.16kb.app_compat.disabled | tr -d '\r')" = true
+            adb shell getconf PAGE_SIZE > build/android-16k-page-size.log
+            adb shell getprop ro.build.fingerprint > build/android-16k-system.log
+            ANDROID_SERIAL=emulator-5554 TUNDRA_DISPOSABLE_ANDROID=1 ./scripts/check-android-apks.sh build/16k-apks/app/app-debug.apk build/16k-apks/tests/app-debug-androidTest.apk
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: tundra-android-16k-results
+          path: |
+            build/android-16k-*.json
+            build/android-16k-*.log
+            build/android-apk-instrumentation.log
+            build/android-restart*.log
+            build/native-chain.log
+            build/published-native-server.log
+            build/published-screen-server.log
