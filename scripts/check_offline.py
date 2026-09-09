@@ -143,6 +143,10 @@ class SchemaChecks(unittest.TestCase):
 
 
 class FixtureAndSourceChecks(unittest.TestCase):
+    def test_android_maven_inventory_matches_metadata_and_retained_poms(self):
+        subprocess.run(["python3", str(ROOT / "scripts/android-notices.py")],
+                       check=True, capture_output=True, timeout=30)
+
     def test_android_locks_and_checksum_policy_reject_missing_coverage_and_bypasses(self):
         spec = importlib.util.spec_from_file_location("android_dependencies", ROOT / "scripts/check-android-dependencies.py")
         checker = importlib.util.module_from_spec(spec)

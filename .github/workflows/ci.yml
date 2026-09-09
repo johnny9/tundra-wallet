@@ -31,6 +31,7 @@ jobs:
       - run: rustup toolchain install nightly-2026-09-07 --profile minimal
       - run: ./scripts/check-fuzz.sh > build/fuzz.log 2>&1
       - run: python3 scripts/cargo-notices.py --fetch > build/cargo-notices-check.log
+      - run: python3 scripts/android-notices.py > build/android-notices-check.log
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -39,6 +40,7 @@ jobs:
             build/audit.json
             build/fuzz.log
             build/cargo-notices-check.log
+            build/android-notices-check.log
             build/fuzz-artifacts/
       - uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         if: ${{ !cancelled() && steps.rust-cache.outputs.cache-hit != 'true' && steps.rust-cache.outputs.cache-primary-key != '' }}

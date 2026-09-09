@@ -10,3 +10,4 @@ tests/fixtures/native-signed-backup.tundra binary
 tests/fixtures/native-signed-response.psbt binary
 tests/fixtures/native-unsigned.sqlite binary
 third-party/cargo-notices/*.txt -text -whitespace
+third-party/android-poms/*.xml -text -whitespace

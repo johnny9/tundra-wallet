@@ -34,7 +34,22 @@ The upstream bhwi async HID implementation was reviewed but not copied or linked
 framing requires full reports and never treats old receive-buffer bytes as fresh input.
 The app uses Android's USB API directly through its native adapter.
 
-A complete native/SDK/design/fixture inventory, other nested vendored notices, binary notice
+[`android-inventory.json`](android-inventory.json) covers all **584 Gradle verification
+components** and retains **585 exact Maven POMs**, including their parent metadata. License
+declarations are followed through explicit Maven parent inheritance; **328 POMs** also match
+the Gradle verification baseline. The other **257 POMs** are supplemental documents fetched
+from the official configured repositories and retained with exact hashes. This distinction
+matters because Gradle often resolves a `.module` file without downloading the corresponding
+POM. Four parent-only metadata components (`jvnet-parent` 1/3 and `oss-parent` 7/9) have no
+effective license declaration; the inventory records that absence explicitly.
+
+`python3 scripts/android-notices.py` compares the inventory and retained bytes offline.
+`--fetch --write` prepares an intentional update for review. This declared-license inventory
+does not contain every notice embedded in JAR/AAR binaries, choose an alternative license,
+or grant distribution permission for Tundra. Full artifact notice extraction, SDK/build-tool
+review and binary notice packaging remain release gates.
+
+A complete SDK/design/fixture inventory, other nested vendored notices, binary notice
 packaging and distribution review remain release gates. These notes do not grant rights to
 project branding or imply hardware-vendor endorsement.
 

@@ -1,0 +1,34 @@
+{
+  "recorded_at": "2026-09-09T07:18:01.541371+00:00",
+  "verification_components": 584,
+  "retained_poms": 585,
+  "poms_matched_to_gradle_checksum": 328,
+  "supplemental_poms": 257,
+  "components_without_license_declaration": [
+    "net.java:jvnet-parent:1",
+    "net.java:jvnet-parent:3",
+    "org.sonatype.oss:oss-parent:7",
+    "org.sonatype.oss:oss-parent:9"
+  ],
+  "offline_regeneration": "passed",
+  "offline_checks_passed": 31,
+  "limits": "POM declarations and explicit parent inheritance only; full binary notices, SDK review and distribution-license decision remain open",
+  "files": [
+    {
+      "path": "build/android-notices-first.log",
+      "sha256": "a2e7a726abae8e321b550d00dbe5f34aa5559b8da269265cb35b255280b38f1b"
+    },
+    {
+      "path": "build/android-notices-offline.log",
+      "sha256": "a2e7a726abae8e321b550d00dbe5f34aa5559b8da269265cb35b255280b38f1b"
+    },
+    {
+      "path": "build/android-notices-final-offline.log",
+      "sha256": "109e60a984638dbd6f15d6a7090e622dbe413d14949a083057eb11cc5c15fb7f"
+    },
+    {
+      "path": "third-party/android-inventory.json",
+      "sha256": "a7890bb1f14619861809640fe16dba5c5804eecd4d7d9ed28457db05ab5306be"
+    }
+  ]
+}
