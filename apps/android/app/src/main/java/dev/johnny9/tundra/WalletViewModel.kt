@@ -24,6 +24,7 @@ data class WalletState(
     val endpoint: String = "", val sync: SyncInfo? = null,
     val selected: Set<String> = emptySet(), val drafts: List<PaymentReview> = emptyList(),
     val review: PaymentReview? = null, val signing: SigningInfo? = null,
+    val outputSource: PaymentReview? = null, val sourceOutpoint: String? = null,
     val finalized: FinalTransactionInfo? = null, val submission: BroadcastInfo? = null, val qrFrames: List<String>? = null
 ) { val wallet: WalletInfo? get() = wallets.firstOrNull { it.id == selectedId } }
 
@@ -110,6 +111,14 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         mutable.value = mutable.value.copy(selected = selected)
     }
     fun clearSelection() { mutable.value = mutable.value.copy(selected = emptySet()) }
+    fun loadOutputSource(outpoint: String) = run {
+        val walletId = checkNotNull(mutable.value.selectedId)
+        mutable.value = mutable.value.copy(outputSource = null, sourceOutpoint = outpoint)
+        val source = withContext(Dispatchers.IO) { engine().outputSource(walletId, outpoint) }
+        if (mutable.value.selectedId == walletId && mutable.value.sourceOutpoint == outpoint) {
+            mutable.value = mutable.value.copy(outputSource = source)
+        }
+    }
     fun bulkEdit(label: String?, frozen: Boolean?) = run {
         val s = mutable.value
         withContext(Dispatchers.IO) { engine().editCoins(checkNotNull(s.selectedId), s.selected.toList(), label, frozen) }

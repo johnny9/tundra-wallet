@@ -671,6 +671,16 @@ impl Tundra {
             .map(Into::into)
             .collect())
     }
+    pub fn output_source(
+        &self,
+        wallet_id: String,
+        outpoint: String,
+    ) -> Result<Option<PaymentReview>> {
+        Ok(self
+            .core
+            .output_source(&wallet_id, &outpoint)?
+            .map(Into::into))
+    }
     pub fn activity(&self, wallet_id: String) -> Result<Vec<ActivityInfo>> {
         Ok(self
             .core

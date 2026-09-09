@@ -517,6 +517,236 @@ fn independent_connections_racing_the_same_approval_submit_once() {
     );
 }
 
+fn observe_public(
+    core: &Core,
+    request: &BroadcastRequest,
+    transaction: &Transaction,
+    seen: u64,
+    evict: bool,
+) -> Result<()> {
+    let mut db = core.lock()?;
+    let tx = db.transaction()?;
+    let mut loaded = load(&tx, &request.wallet_id)?;
+    let mut update = bdk_wallet::Update::default();
+    update.tx_update.txs.push(Arc::new(transaction.clone()));
+    if evict {
+        update
+            .tx_update
+            .evicted_ats
+            .insert((transaction.compute_txid(), seen));
+    } else {
+        update
+            .tx_update
+            .seen_ats
+            .insert((transaction.compute_txid(), seen));
+    }
+    loaded.wallet.apply_update(update).unwrap();
+    crate::sync::invalidate_drafts(&tx, &request.wallet_id, &loaded.wallet)?;
+    crate::engine::save(&tx, &request.wallet_id, &mut loaded)?;
+    tx.commit()?;
+    Ok(())
+}
+
+#[test]
+fn observed_labels_and_input_provenance_survive_edits_reopen_and_reorg() {
+    let dir = tempfile::tempdir().unwrap();
+    let path = dir.path().join("public.sqlite");
+    let (core, mut request, finalized) = prepared(&path);
+    let original = core.drafts(&request.wallet_id).unwrap().remove(0);
+    let server = Server::new(Reply::Exact, None);
+    request.endpoint = server.endpoint.clone();
+    core.broadcast_draft(request.clone()).unwrap();
+    assert!(core.export_labels(&request.wallet_id).unwrap().is_empty());
+    let transaction: Transaction = deserialize(&finalized.transaction_bytes).unwrap();
+    observe_public(&core, &request, &transaction, 10, false).unwrap();
+    let owned: Vec<_> = core
+        .coins(&request.wallet_id)
+        .unwrap()
+        .into_iter()
+        .filter(|c| c.outpoint.starts_with(&finalized.txid))
+        .collect();
+    assert!(!owned.is_empty());
+    assert!(owned.iter().all(|c| c.label == original.label));
+    assert_eq!(
+        core.activity(&request.wallet_id)
+            .unwrap()
+            .iter()
+            .find(|a| a.txid == finalized.txid)
+            .unwrap()
+            .label,
+        original.label
+    );
+    for (index, output) in transaction.output.iter().enumerate() {
+        let outpoint = format!("{}:{index}", finalized.txid);
+        let source = core.output_source(&request.wallet_id, &outpoint).unwrap();
+        let mine = load(&core.lock().unwrap(), &request.wallet_id)
+            .unwrap()
+            .wallet
+            .is_mine(output.script_pubkey.clone());
+        assert_eq!(source.is_some(), mine);
+        if let Some(source) = source {
+            assert_eq!(source.id, request.draft_id);
+            assert_eq!(
+                crate::engine::json(&source.inputs).unwrap(),
+                crate::engine::json(&original.inputs).unwrap()
+            );
+        }
+    }
+    core.set_label(&request.wallet_id, "tx", &finalized.txid, "Changed history")
+        .unwrap();
+    core.set_label(&request.wallet_id, "output", &owned[0].outpoint, "")
+        .unwrap();
+    // Even removal by a future metadata editor must not make an old label reappear.
+    core.lock()
+        .unwrap()
+        .execute(
+            "DELETE FROM labels WHERE wallet_id=?1 AND kind='output'",
+            [&request.wallet_id],
+        )
+        .unwrap();
+    let labels = core.export_labels(&request.wallet_id).unwrap();
+    drop(core);
+    let core = Core::open(&path).unwrap();
+    observe_public(&core, &request, &transaction, 11, true).unwrap();
+    observe_public(&core, &request, &transaction, 12, false).unwrap();
+    assert_eq!(core.export_labels(&request.wallet_id).unwrap(), labels);
+    assert_eq!(
+        core.output_source(&request.wallet_id, &owned[0].outpoint)
+            .unwrap()
+            .unwrap()
+            .inputs[0]
+            .label,
+        "Public vector"
+    );
+    assert!(
+        core.output_source("missing-wallet", &owned[0].outpoint)
+            .is_err()
+    );
+}
+
+#[test]
+fn observed_labels_preserve_existing_labels_and_empty_payment_labels() {
+    for empty in [false, true] {
+        let (core, mut request, finalized) = prepared(std::path::Path::new(":memory:"));
+        let transaction: Transaction = deserialize(&finalized.transaction_bytes).unwrap();
+        if empty {
+            let mut review = core.drafts(&request.wallet_id).unwrap().remove(0);
+            review.label.clear();
+            core.lock()
+                .unwrap()
+                .execute(
+                    "UPDATE drafts SET review_json=?1,label='' WHERE id=?2",
+                    params![crate::engine::json(&review).unwrap(), review.id],
+                )
+                .unwrap();
+        }
+        let server = Server::new(Reply::Exact, None);
+        request.endpoint = server.endpoint.clone();
+        core.broadcast_draft(request.clone()).unwrap();
+        let owned_index = {
+            let db = core.lock().unwrap();
+            let loaded = load(&db, &request.wallet_id).unwrap();
+            transaction
+                .output
+                .iter()
+                .position(|o| loaded.wallet.is_mine(o.script_pubkey.clone()))
+                .unwrap()
+        };
+        let owned = format!("{}:{owned_index}", finalized.txid);
+        if !empty {
+            // Test-only preexisting metadata, before the synthetic chain observation.
+            let db = core.lock().unwrap();
+            db.execute(
+                "INSERT INTO labels VALUES(?1,'tx',?2,'Imported history')",
+                params![request.wallet_id, finalized.txid],
+            )
+            .unwrap();
+            db.execute(
+                "INSERT INTO labels VALUES(?1,'output',?2,'')",
+                params![request.wallet_id, owned],
+            )
+            .unwrap();
+        }
+        observe_public(&core, &request, &transaction, 10, false).unwrap();
+        assert!(
+            core.coins(&request.wallet_id)
+                .unwrap()
+                .iter()
+                .find(|c| c.outpoint == owned)
+                .unwrap()
+                .label
+                .is_empty()
+        );
+        let source = core
+            .output_source(&request.wallet_id, &owned)
+            .unwrap()
+            .unwrap();
+        assert_eq!(source.label.is_empty(), empty);
+        if empty {
+            assert!(core.export_labels(&request.wallet_id).unwrap().is_empty());
+        } else {
+            assert_eq!(
+                core.activity(&request.wallet_id)
+                    .unwrap()
+                    .iter()
+                    .find(|a| a.txid == finalized.txid)
+                    .unwrap()
+                    .label,
+                "Imported history"
+            );
+        }
+    }
+}
+
+#[test]
+fn observed_label_failure_rolls_back_chain_reservations_and_provenance_together() {
+    let (core, mut request, finalized) = prepared(std::path::Path::new(":memory:"));
+    let server = Server::new(Reply::Exact, None);
+    request.endpoint = server.endpoint.clone();
+    core.broadcast_draft(request.clone()).unwrap();
+    let transaction: Transaction = deserialize(&finalized.transaction_bytes).unwrap();
+    let before = crate::engine::json(&core.drafts(&request.wallet_id).unwrap()).unwrap();
+    let coins_before = crate::engine::json(&core.coins(&request.wallet_id).unwrap()).unwrap();
+    core.lock().unwrap().execute_batch("CREATE TRIGGER refuse_provenance BEFORE INSERT ON output_provenance BEGIN SELECT RAISE(ABORT,'test fault'); END;").unwrap();
+    assert!(observe_public(&core, &request, &transaction, 10, false).is_err());
+    assert_eq!(
+        crate::engine::json(&core.drafts(&request.wallet_id).unwrap()).unwrap(),
+        before
+    );
+    assert!(core.export_labels(&request.wallet_id).unwrap().is_empty());
+    assert_eq!(
+        core.broadcast_status(&request.wallet_id, &request.draft_id)
+            .unwrap()
+            .unwrap()
+            .observation,
+        BroadcastObservation::NotSeen
+    );
+    assert_eq!(
+        crate::engine::json(&core.coins(&request.wallet_id).unwrap()).unwrap(),
+        coins_before
+    );
+    {
+        let db = core.lock().unwrap();
+        assert_eq!(
+            db.query_row("SELECT count(*) FROM draft_label_applications", [], |r| r
+                .get::<_, u32>(
+                0
+            ))
+            .unwrap(),
+            0
+        );
+        assert_eq!(
+            db.query_row("SELECT count(*) FROM output_provenance", [], |r| r
+                .get::<_, u32>(0))
+                .unwrap(),
+            0
+        );
+        db.execute_batch("DROP TRIGGER refuse_provenance;").unwrap();
+    }
+    observe_public(&core, &request, &transaction, 10, false).unwrap();
+    assert!(!core.export_labels(&request.wallet_id).unwrap().is_empty());
+}
+
 #[test]
 fn schema_five_migration_preserves_final_bytes_and_wallet_isolation() {
     let dir = tempfile::tempdir().unwrap();

@@ -79,4 +79,18 @@ CREATE TABLE IF NOT EXISTS broadcast_attempts (
     FOREIGN KEY (wallet_id,draft_id) REFERENCES finalized_drafts(wallet_id,draft_id) ON DELETE CASCADE
 );
 CREATE INDEX IF NOT EXISTS broadcast_draft_attempts ON broadcast_attempts(wallet_id,draft_id,id);
-PRAGMA user_version = 6;
+-- Apply observed-payment labels once. Keep the marker across reorgs and user edits.
+CREATE TABLE IF NOT EXISTS draft_label_applications (
+    wallet_id TEXT NOT NULL,
+    draft_id TEXT NOT NULL,
+    PRIMARY KEY (wallet_id, draft_id),
+    FOREIGN KEY (wallet_id,draft_id) REFERENCES drafts(wallet_id,id) ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS output_provenance (
+    wallet_id TEXT NOT NULL,
+    outpoint TEXT NOT NULL,
+    draft_id TEXT NOT NULL,
+    PRIMARY KEY (wallet_id,outpoint),
+    FOREIGN KEY (wallet_id,draft_id) REFERENCES drafts(wallet_id,id) ON DELETE CASCADE
+);
+PRAGMA user_version = 7;

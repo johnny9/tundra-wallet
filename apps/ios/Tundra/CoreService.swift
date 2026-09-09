@@ -21,6 +21,9 @@ actor CoreService {
     }
     func wallets() throws -> [WalletInfo] { try engine().wallets() }
     func coins(_ id: String) throws -> [CoinInfo] { try engine().coins(walletId: id) }
+    func outputSource(_ id: String, outpoint: String) throws -> PaymentReview? {
+        try engine().outputSource(walletId: id, outpoint: outpoint)
+    }
     func activity(_ id: String) throws -> [ActivityInfo] { try engine().activity(walletId: id) }
     func inspect(_ payload: String, chain: Chain) throws -> WalletPreview {
         try engine().previewImport(payload: payload, network: chain)

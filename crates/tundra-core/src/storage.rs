@@ -269,7 +269,7 @@ fn migrate(
     }
     source.execute_batch("PRAGMA locking_mode=EXCLUSIVE; PRAGMA synchronous=FULL;")?;
     let version: i64 = source.query_row("PRAGMA user_version", [], |r| r.get(0))?;
-    if !(1..=6).contains(&version) {
+    if !(1..=7).contains(&version) {
         return Err(Error::CorruptState);
     }
     let raw_key = raw_key(storage_key)?;

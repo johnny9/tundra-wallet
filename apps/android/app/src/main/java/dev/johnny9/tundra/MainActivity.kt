@@ -154,7 +154,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
                     LazyColumn(Modifier.weight(1f).padding(top = 16.dp)) {
                         if (s.coins.isEmpty()) item { EmptyState("No synced coins", "No sample UTXOs are injected. Labels and coin control operate on wallet-owned outputs.") }
                         items(filtered, key = { it.outpoint }) { coin ->
-                            ListItem(modifier = Modifier.clickable(enabled = !s.busy) { editing = coin; labelText = coin.label },
+                            ListItem(modifier = Modifier.clickable(enabled = !s.busy) { editing = coin; labelText = coin.label; vm.loadOutputSource(coin.outpoint) },
                                 headlineContent = { Text(coin.label.ifBlank { "Add a label" }) },
                                 leadingContent = { Checkbox(checked = coin.outpoint in s.selected, onCheckedChange = { vm.toggleCoin(coin) }, enabled = !s.busy && coin.state == CoinState.AVAILABLE,
                                     modifier = Modifier.semantics { contentDescription = "Select coin, ${formatBalance(coin.sats)} BTC" }) },
@@ -204,6 +204,15 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedTextField(value = labelText, onValueChange = { labelText = it }, label = { Text("Label") }, singleLine = true)
                 Text(coin.outpoint, style = MaterialTheme.typography.bodySmall)
+                s.outputSource?.takeIf { s.sourceOutpoint == coin.outpoint && it.walletId == s.selectedId }?.let { source ->
+                    Text("Created by ${source.label.ifEmpty { "saved payment" }}", style = MaterialTheme.typography.titleSmall)
+                    Text("Original input labels · historical record", style = MaterialTheme.typography.labelSmall)
+                    Column(Modifier.heightIn(max = 180.dp).verticalScroll(rememberScrollState())) {
+                        source.inputs.forEach { input ->
+                            Text("${input.label.ifEmpty { "Unlabeled input" }} · ${formatBalance(input.sats)} BTC", style = MaterialTheme.typography.bodySmall)
+                        }
+                    }
+                }
                 TextButton(onClick = { vm.freeze(coin, coin.state != CoinState.FROZEN); editing = null }) { Text(if (coin.state == CoinState.FROZEN) "Unfreeze coin" else "Freeze coin") }
             }
         }, confirmButton = { TextButton(onClick = { vm.label("output", coin.outpoint, labelText); editing = null }) { Text("Save") } }, dismissButton = { TextButton(onClick = { editing = null }) { Text("Cancel") } })

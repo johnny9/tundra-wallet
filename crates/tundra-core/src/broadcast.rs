@@ -129,6 +129,7 @@ pub(crate) fn observe_draft(
     if observation(db, &info, wallet)? == BroadcastObservation::NotSeen {
         return Ok(false);
     }
+    apply_observed_labels(db, wallet_id, review, wallet, &info)?;
     review.state = "observed".into();
     db.execute(
         "UPDATE drafts SET review_json=?1 WHERE wallet_id=?2 AND id=?3",
@@ -139,6 +140,51 @@ pub(crate) fn observe_draft(
         params![wallet_id, review.id],
     )?;
     Ok(true)
+}
+
+/// Sync owns the transaction containing this operation. The marker, provenance,
+/// chain snapshot and labels commit together, or none of them do.
+fn apply_observed_labels(
+    db: &rusqlite::Connection,
+    wallet_id: &str,
+    review: &DraftReview,
+    wallet: &bdk_wallet::Wallet,
+    info: &BroadcastInfo,
+) -> Result<()> {
+    let inserted = db.execute(
+        "INSERT OR IGNORE INTO draft_label_applications(wallet_id,draft_id) VALUES(?1,?2)",
+        params![wallet_id, review.id],
+    )?;
+    if inserted == 0 {
+        return Ok(());
+    }
+    crate::labels::validate_label(&review.label)?;
+    let txid = info.txid.parse().map_err(|_| Error::CorruptState)?;
+    let transaction = wallet.get_tx(txid).ok_or(Error::CorruptState)?;
+    // Existing user/imported labels, including an explicit empty label, win.
+    if !review.label.is_empty() {
+        db.execute(
+            "INSERT OR IGNORE INTO labels(wallet_id,kind,reference,label) VALUES(?1,'tx',?2,?3)",
+            params![wallet_id, info.txid, review.label],
+        )?;
+    }
+    for (vout, output) in transaction.tx_node.tx.output.iter().enumerate() {
+        if !wallet.is_mine(output.script_pubkey.clone()) {
+            continue;
+        }
+        let outpoint = format!("{}:{vout}", info.txid);
+        db.execute(
+            "INSERT OR IGNORE INTO output_provenance(wallet_id,outpoint,draft_id) VALUES(?1,?2,?3)",
+            params![wallet_id, outpoint, review.id],
+        )?;
+        if !review.label.is_empty() {
+            db.execute(
+                "INSERT OR IGNORE INTO labels(wallet_id,kind,reference,label) VALUES(?1,'output',?2,?3)",
+                params![wallet_id, outpoint, review.label],
+            )?;
+        }
+    }
+    Ok(())
 }
 
 impl Core {

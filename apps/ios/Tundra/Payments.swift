@@ -229,7 +229,7 @@ struct CoinsView: View {
                         Image(systemName: model.selectedCoins.contains(coin.outpoint) ? "checkmark.square.fill" : "square")
                             .frame(width: 44, height: 44)
                     }.disabled(coin.state != .available || model.busy).accessibilityLabel("Select \(coin.label.isEmpty ? "coin" : coin.label)")
-                    Button { label = coin.label; editing = coin } label: {
+                    Button { label = coin.label; editing = coin; model.loadOutputSource(coin.outpoint) } label: {
                         VStack(alignment: .leading, spacing: 5) {
                             Text(coin.label.isEmpty ? "Add a label" : coin.label).foregroundStyle(.primary)
                             Text(String(describing: coin.state).capitalized).font(.caption).foregroundStyle(.secondary)
@@ -245,13 +245,24 @@ struct CoinsView: View {
                 TextField("Label", text: $label).textFieldStyle(.roundedBorder)
                 if let coin = editing {
                     Text(coin.outpoint).font(.caption)
+                    if let source = model.outputSource, model.sourceOutpoint == coin.outpoint, source.walletId == model.selectedID {
+                        Text("Created by \(source.label.isEmpty ? "saved payment" : source.label)").font(.headline)
+                        Text("Original input labels · historical record").font(.caption)
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 8) {
+                                ForEach(source.inputs, id: \.outpoint) { input in
+                                    Text("\(input.label.isEmpty ? "Unlabeled input" : input.label) · \(formatBalance(sats: input.sats)) BTC").font(.caption)
+                                }
+                            }.frame(maxWidth: .infinity, alignment: .leading)
+                        }.frame(maxHeight: 180)
+                    }
                     Button("Save") { model.editCoins([coin.outpoint], label: label, frozen: nil); editing = nil }
                     Button(coin.state == .frozen ? "Unfreeze coin" : "Freeze coin") {
                         model.editCoins([coin.outpoint], label: nil, frozen: coin.state != .frozen); editing = nil
                     }
                 }
                 Button("Cancel") { editing = nil }
-            }.padding(24).presentationDetents([.medium])
+            }.padding(24).presentationDetents([.medium, .large])
         }
         .alert("Label selected coins", isPresented: $bulkLabel) {
             TextField("Label", text: $label)

@@ -16,6 +16,8 @@ final class WalletModel: ObservableObject {
     @Published var selectedCoins: Set<String> = []
     @Published var drafts: [PaymentReview] = []
     @Published var review: PaymentReview?
+    @Published var outputSource: PaymentReview?
+    @Published var sourceOutpoint: String?
     @Published var signing: SigningInfo?
     @Published var finalized: FinalTransactionInfo?
     @Published var submission: BroadcastInfo?
@@ -127,6 +129,14 @@ final class WalletModel: ObservableObject {
         guard !busy, coin.state == .available else { return }
         if selectedCoins.contains(coin.outpoint) { selectedCoins.remove(coin.outpoint) }
         else { selectedCoins.insert(coin.outpoint) }
+    }
+    func loadOutputSource(_ outpoint: String) {
+        run {
+            guard let id = self.selectedID else { return }
+            self.outputSource = nil; self.sourceOutpoint = outpoint
+            let source = try await self.service.outputSource(id, outpoint: outpoint)
+            if self.selectedID == id && self.sourceOutpoint == outpoint { self.outputSource = source }
+        }
     }
     func editCoins(_ outpoints: [String], label: String?, frozen: Bool?) {
         run {

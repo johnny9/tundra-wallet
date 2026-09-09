@@ -84,7 +84,7 @@ impl Core {
         )?;
         let migration = conn.transaction_with_behavior(TransactionBehavior::Immediate)?;
         let version: i64 = migration.query_row("PRAGMA user_version", [], |r| r.get(0))?;
-        if version > 6 {
+        if version > 7 {
             return Err(Error::CorruptState);
         }
         migration.execute_batch(include_str!("schema.sql"))?;
@@ -187,6 +187,17 @@ impl Core {
         let db = self.lock()?;
         let l = load(&db, id)?;
         coins(&db, id, &l.wallet)
+    }
+    /// Historical approval and input labels for an observed wallet-owned output.
+    /// This is provenance, not proof of current confirmation or spend eligibility.
+    pub fn output_source(&self, id: &str, reference: &str) -> Result<Option<DraftReview>> {
+        let db = self.lock()?;
+        load(&db, id)?;
+        let reference = outpoint(reference)?.to_string();
+        db.query_row(
+            "SELECT d.review_json FROM output_provenance p JOIN drafts d ON d.wallet_id=p.wallet_id AND d.id=p.draft_id WHERE p.wallet_id=?1 AND p.outpoint=?2",
+            params![id, reference], |row| row.get::<_, String>(0),
+        ).optional()?.map(|value| from_json(&value)).transpose()
     }
     pub fn activity(&self, id: &str) -> Result<Vec<Activity>> {
         let db = self.lock()?;
@@ -1034,8 +1045,43 @@ mod tests {
                 .unwrap()
                 .query_row("PRAGMA user_version", [], |r| r.get::<_, u32>(0))
                 .unwrap(),
-            6
+            7
         );
+    }
+    #[test]
+    fn version_six_migration_adds_provenance_without_changing_wallet_metadata() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("wallet.sqlite");
+        let core = Core::open(&path).unwrap();
+        let wallet = core
+            .import_wallet("Migration", SINGLE, Network::Signet)
+            .unwrap();
+        let address = core.receive_address(&wallet.id).unwrap();
+        core.set_label(&wallet.id, "addr", &address.address, "Retained 🧊")
+            .unwrap();
+        core.lock().unwrap().execute_batch("DROP TABLE output_provenance; DROP TABLE draft_label_applications; PRAGMA user_version=6;").unwrap();
+        drop(core);
+        let core = Core::open(&path).unwrap();
+        assert_eq!(core.receive_address(&wallet.id).unwrap().index, 1);
+        assert!(
+            core.export_labels(&wallet.id)
+                .unwrap()
+                .contains("Retained 🧊")
+        );
+        let db = core.lock().unwrap();
+        assert_eq!(
+            db.query_row("PRAGMA user_version", [], |r| r.get::<_, u32>(0))
+                .unwrap(),
+            7
+        );
+        for table in ["output_provenance", "draft_label_applications"] {
+            assert_eq!(
+                db.query_row(&format!("SELECT count(*) FROM {table}"), [], |r| r
+                    .get::<_, u32>(0))
+                    .unwrap(),
+                0
+            );
+        }
     }
     #[test]
     fn duplicate_wallet_rejected() {
