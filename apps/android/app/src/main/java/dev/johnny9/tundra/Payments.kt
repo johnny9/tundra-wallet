@@ -11,11 +11,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import dev.johnny9.tundra.generated.*
 
 @Composable fun PaymentSheet(vm: WalletViewModel, s: WalletState, initialMode: Int, onClose: () -> Unit) {
     val scroll = rememberScrollState()
+    val focus = LocalFocusManager.current
     LaunchedEffect(s.review?.id) { scroll.scrollTo(0) }
     var broadcastTarget by remember { mutableStateOf<BroadcastRequest?>(null) }
     var mode by remember { mutableIntStateOf(initialMode) }
@@ -46,7 +48,7 @@ import dev.johnny9.tundra.generated.*
         }
     }
     ModalBottomSheet(onDismissRequest = { if (!s.busy) onClose() }, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
-        Column(Modifier.padding(24.dp).verticalScroll(scroll), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        Column(Modifier.padding(24.dp).imePadding().verticalScroll(scroll), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             val review = s.review
             if (review == null) {
                 Text("Create a payment", style = MaterialTheme.typography.headlineSmall)
@@ -72,7 +74,7 @@ import dev.johnny9.tundra.generated.*
                 OutlinedTextField(fee, { fee = it }, label = { Text("Fee rate in sat/vB") }, modifier = Modifier.fillMaxWidth())
                 OutlinedTextField(label, { label = it }, label = { Text("Payment label") }, modifier = Modifier.fillMaxWidth())
                 Text("Review reserves the selected inputs and saves an unsigned draft. It does not sign or broadcast.", style = MaterialTheme.typography.bodySmall)
-                Button(onClick = { vm.createPayment(mode, address, amount, fee, label, automatic, acknowledged) }, enabled = !s.busy, modifier = Modifier.testTag("buildReview")) { Text("Review payment") }
+                Button(onClick = { focus.clearFocus(); vm.createPayment(mode, address, amount, fee, label, automatic, acknowledged) }, enabled = !s.busy, modifier = Modifier.testTag("buildReview")) { Text("Review payment") }
             } else {
                 Text("Review payment", style = MaterialTheme.typography.headlineSmall)
                 Text(review.label.ifBlank { "Unlabeled payment" }, style = MaterialTheme.typography.titleMedium)
