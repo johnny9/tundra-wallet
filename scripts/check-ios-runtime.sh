@@ -21,4 +21,4 @@ xcodebuild -project apps/ios/Tundra.xcodeproj -scheme Tundra \
   -parallel-testing-enabled NO -resultBundlePath build/ios-runtime.xcresult \
   -test-timeouts-enabled YES -default-test-execution-time-allowance 300 \
   -maximum-test-execution-time-allowance 420 \
-  CODE_SIGNING_ALLOWED=NO test
+  CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- test

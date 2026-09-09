@@ -13,6 +13,15 @@ final class StorageVaultTests: XCTestCase {
             SecItemDelete(query(service) as CFDictionary) // Only this test's unique item.
             try? FileManager.default.removeItem(at: directory)
         }
+        // Diagnose simulator signing/access with a non-secret probe. Production errors
+        // remain bounded; test failures report only the Keychain OSStatus, never keys.
+        var probe = query(service)
+        probe[kSecAttrAccessible as String] = kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+        probe[kSecValueData as String] = Data([0])
+        let status = SecItemAdd(probe as CFDictionary, nil)
+        XCTAssertEqual(status, errSecSuccess, "The test host must have a signed app Keychain access group")
+        guard status == errSecSuccess else { throw StorageAccessError.unavailable }
+        XCTAssertEqual(SecItemDelete(query(service) as CFDictionary), errSecSuccess)
         try operation(directory, service)
     }
     private func fixture() throws -> String {

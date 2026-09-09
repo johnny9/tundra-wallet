@@ -192,7 +192,7 @@ jobs:
       - run: ./scripts/build-ios.sh
       - run: ./scripts/check-swift-ffi.sh
       - run: cd apps/ios && xcodegen generate
-      - run: xcodebuild -project apps/ios/Tundra.xcodeproj -scheme Tundra -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
+      - run: xcodebuild -project apps/ios/Tundra.xcodeproj -scheme Tundra -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- build
       - run: ./scripts/install-bitcoin-ci.sh
       - name: Start keyless native test chain
         run: |
