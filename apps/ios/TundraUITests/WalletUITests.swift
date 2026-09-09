@@ -245,7 +245,10 @@ final class WalletUITests: XCTestCase {
         app.buttons["Coins"].tap()
         XCTAssertTrue(filters.waitForExistence(timeout: 10))
         XCTAssertEqual(filters.value as? String, "1 active")
-        XCTAssertFalse(app.buttons["Receive"].exists)
+        let hiddenReceive = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: app.buttons["Receive"])
+        guard await XCTWaiter.fulfillment(of: [hiddenReceive], timeout: 5) == .completed else {
+            XCTFail("Inactive Activity controls remained discoverable"); return
+        }
         let tabsTop = app.buttons["Coins"].frame.minY
         for max in [true, false] {
             let coins = app.buttons.matching(identifier: "Select coin")

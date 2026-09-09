@@ -5,9 +5,16 @@ actor CoreService {
     private var core: Tundra?
     private var pendingBackup: URL?
     private var exportedBackup: URL?
+    private let directory: URL?
+    private let keychainService: String?
+
+    init(directory: URL? = nil, keychainService: String? = nil) {
+        self.directory = directory; self.keychainService = keychainService
+    }
 
     private func storageDirectory() throws -> URL {
-        try FileManager.default.url(for: .applicationSupportDirectory,
+        if let directory { return directory }
+        return try FileManager.default.url(for: .applicationSupportDirectory,
             in: .userDomainMask, appropriateFor: nil, create: true)
             .appendingPathComponent("Tundra", isDirectory: true)
     }
@@ -15,7 +22,7 @@ actor CoreService {
     private func engine() throws -> Tundra {
         if let core { return core }
         let directory = try storageDirectory()
-        let result = try StorageVault.openActive(directory: directory)
+        let result = try StorageVault.openActive(directory: directory, service: keychainService)
         core = result
         return result
     }
@@ -101,7 +108,7 @@ actor CoreService {
         // WalletModel serializes operations and finishes network work before switching.
         // No old handle is retained if activation reports an ambiguous filesystem error.
         core = nil
-        core = try StorageVault.restoreActive(source: file, password: password, directory: storageDirectory())
+        core = try StorageVault.restoreActive(source: file, password: password, directory: storageDirectory(), service: keychainService)
     }
     func clearBackupFiles() {
         if let pendingBackup { try? FileManager.default.removeItem(at: pendingBackup) }

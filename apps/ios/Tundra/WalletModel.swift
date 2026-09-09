@@ -32,7 +32,8 @@ final class WalletModel: ObservableObject {
     @Published var exportedLabels: String?
     private var pendingLabels: String?
     private var labelsWalletID: String?
-    private let service = CoreService()
+    private let service: CoreService
+    init(service: CoreService = CoreService()) { self.service = service }
     // Sensitive in-memory edit state is not stored in scene restoration or preferences.
     private var pendingPayload: String?
     private var pendingChain: Chain = .signet
