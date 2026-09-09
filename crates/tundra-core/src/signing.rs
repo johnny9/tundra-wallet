@@ -834,3 +834,13 @@ impl crate::Core {
 #[cfg(test)]
 #[path = "signing_tests.rs"]
 mod tests;
+
+#[cfg(any(test, fuzzing))]
+#[path = "../../../tests/signing_fixtures.rs"]
+mod public_fixtures;
+
+// Fuzz only, never a production library or UniFFI fixture API.
+#[cfg(fuzzing)]
+#[path = "../../../fuzz/support/signatures.rs"]
+#[doc(hidden)]
+pub mod fuzz_support;

@@ -31,4 +31,19 @@ SEEDS
 CARGO_NET_OFFLINE=true cargo +nightly-2026-09-07 fuzz run usb_protocol build/usb-fuzz-corpus -- \
   -max_total_time="${TUNDRA_FUZZ_SECONDS:-60}" -max_len=4097 -rss_limit_mb=2048 \
   -artifact_prefix=build/fuzz-artifacts/
+mkdir -p build/signature-fuzz-corpus
+python3 - <<'SEEDS'
+import base64
+from pathlib import Path
+# Public signatures only: seed complete, incomplete and repeated partial aggregates.
+root = Path('build/signature-fuzz-corpus')
+root.joinpath('public-hwi-binary').write_bytes(b'\x00' + base64.b64decode(
+    Path('tests/fixtures/hwi-signed-wpkh.psbt').read_bytes()))
+for fixture in range(3):
+    for mode in [4, 8, 12, 0x84, 0x8c]:
+        root.joinpath(f'fixture-{fixture}-mode-{mode}').write_bytes(bytes([mode + fixture]))
+SEEDS
+CARGO_NET_OFFLINE=true cargo +nightly-2026-09-07 fuzz run validated_signatures build/signature-fuzz-corpus -- \
+  -max_total_time="${TUNDRA_FUZZ_SECONDS:-60}" -max_len=32769 -rss_limit_mb=2048 \
+  -artifact_prefix=build/fuzz-artifacts/
 cmp fuzz/Cargo.lock build/fuzz-lock-before
