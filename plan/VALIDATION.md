@@ -25,6 +25,15 @@ run. Fixes/diagnostics are authored and retain the original assertions.
 The newer broadcast API/screens/tests await native CI. The last completely passing native
 baseline remains `dc54fe9`, documented below; no milestone is complete from source alone.
 
+The [broadcast-era native run at ec3a699](https://github.com/johnny9/tundra-wallet/actions/runs/34295706542)
+passes Rust, all three sanitizer targets and iOS. **All four iOS tests pass**, including the
+expanded payment modes and restart. Android builds and passes five JVM tests plus all five
+wallet/QR/USB instrumentation tests; every payment mode and unsigned-broadcast refusal now
+pass. Its sixth, standalone broadcast-dialog test failed to launch because the Compose test
+activity manifest was missing. The debug test-host dependency is now added. Cold restart
+was not run after that failure. `validation/broadcast-native-checks.json` records this partial
+checkpoint; the new dialog test and final Android restart await the corrected run.
+
 ## Earlier executed checkpoints
 
 The later signing implementation passes **15 additional Rust tests** and the full local suite:

@@ -17,8 +17,7 @@ approval system, or cloud account.
 - Source: descriptor-first watch-only engine, metadata, unsigned-draft core, UniFFI API,
   Android native import shell, iOS native starter, tests and CI.
 - Verified: 138 Rust tests including real regtest, 23 offline checks, parser fuzzing/audit,
-  Android debug APK and iOS simulator builds, host FFI smoke tests, Android exact-input
-  payment/process-restart checks and iOS consolidation/process-restart checks.
+  Android debug APK and iOS simulator builds, host FFI smoke tests, all four payment modes on both virtual platforms and initial process-restart checks.
   See [VALIDATION.md](VALIDATION.md) for the exact results and remaining gates.
 - Added: bounded opt-in Esplora scans, cancellation, cached timestamps, coinbase maturity,
   reorg-safe draft invalidation, and a keyless Bitcoin Core regtest integration test.
@@ -29,7 +28,7 @@ approval system, or cloud account.
 - Added: bounded UR/BBQr codecs and native camera/display source; both native barcode tests pass; iOS uses Vision revision 2 as its independent image decoder.
 - Added: immutable finalized transaction bytes and native final-review source; software tests pass.
 - Added: pinned bhwi Ledger protocol, registration persistence and Android USB adapter source; Android build/FFI/runtime checks pass; physical device qualification remains open.
-- Added: explicit test-network broadcast, durable uncertainty and observed-spend handling; Rust tests pass, native gate pending.
+- Added: explicit test-network broadcast, durable uncertainty and observed-spend handling; Rust tests and native builds pass; positive submission UI qualification remains open.
 - Not implemented: production storage protection.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Not performed locally: Android build or Xcode build.
