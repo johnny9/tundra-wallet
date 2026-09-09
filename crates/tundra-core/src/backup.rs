@@ -11,7 +11,7 @@ use zeroize::Zeroizing;
 const MAX_BYTES: u64 = 256 * 1024 * 1024;
 const MAX_STATE_BYTES: u64 = 16 * 1024 * 1024;
 const APPLICATION_ID: u32 = 0x54444231; // TDB1, inside authenticated encrypted pages.
-const SCHEMA_VERSION: u32 = 7;
+const SCHEMA_VERSION: u32 = 8;
 const MANIFEST: &str = "CREATE TABLE backup_manifest (id INTEGER PRIMARY KEY CHECK(id=1), version INTEGER NOT NULL CHECK(version=1), created_at INTEGER NOT NULL CHECK(created_at>=0));";
 
 #[derive(Debug, Clone)]
@@ -105,7 +105,7 @@ fn schema(db: &Connection) -> Result<Vec<SchemaRow>> {
 fn validate(db: &Connection) -> Result<BackupSummary> {
     let application: u32 = db.query_row("PRAGMA application_id", [], |r| r.get(0))?;
     let version: u32 = db.query_row("PRAGMA user_version", [], |r| r.get(0))?;
-    if application != APPLICATION_ID || version != SCHEMA_VERSION {
+    if application != APPLICATION_ID || !(7..=SCHEMA_VERSION).contains(&version) {
         return Err(Error::CorruptState);
     }
     // Reject arbitrary triggers, views, virtual tables or changed constraints before
@@ -113,7 +113,11 @@ fn validate(db: &Connection) -> Result<BackupSummary> {
     let expected = storage::open_plain(Path::new(":memory:"))?;
     // Retain this versioned schema when the live app schema advances, so old backup
     // readers/restorers can be migrated deliberately instead of silently accepting drift.
-    expected.execute_batch(include_str!("backup_schema_v1.sql"))?;
+    expected.execute_batch(if version == 7 {
+        include_str!("backup_schema_v1.sql")
+    } else {
+        include_str!("schema.sql")
+    })?;
     expected.execute_batch(MANIFEST)?;
     if schema(db)? != schema(&expected)? {
         return Err(Error::CorruptState);
@@ -126,6 +130,11 @@ fn validate(db: &Connection) -> Result<BackupSummary> {
     )?;
     let count: u32 = db.query_row("SELECT count(*) FROM wallets", [], |r| r.get(0))?;
     if count > 1000 {
+        return Err(Error::CorruptState);
+    }
+    let drafts: u32 = db.query_row("SELECT count(*) FROM drafts", [], |r| r.get(0))?;
+    let excessive_attempts: bool = db.query_row("SELECT EXISTS(SELECT 1 FROM broadcast_attempts GROUP BY wallet_id,draft_id HAVING count(*)>64)", [], |r| r.get(0))?;
+    if drafts > 10_000 || excessive_attempts {
         return Err(Error::CorruptState);
     }
     let oversized: bool = db.query_row(
@@ -142,12 +151,36 @@ fn validate(db: &Connection) -> Result<BackupSummary> {
         .collect::<std::result::Result<Vec<_>, _>>()?;
     let mut wallets = Vec::with_capacity(ids.len());
     for id in ids {
+        // Check the bounded public descriptor language before asking BDK to load a
+        // possibly hostile snapshot with an arbitrary descriptor expression.
+        let (raw, network): (String, String) = db.query_row(
+            "SELECT state_json,network FROM wallets WHERE id=?1",
+            [&id],
+            |r| Ok((r.get(0)?, r.get(1)?)),
+        )?;
+        let state: serde_json::Value = engine::from_json(&raw)?;
+        let external = state
+            .get("descriptor")
+            .and_then(|v| v.as_str())
+            .ok_or(Error::CorruptState)?;
+        let internal = state
+            .get("change_descriptor")
+            .and_then(|v| v.as_str())
+            .ok_or(Error::CorruptState)?;
+        if external.len() > 16_384 || internal.len() > 16_384 {
+            return Err(Error::CorruptState);
+        }
+        let public_pair = serde_json::json!({"descriptors":[{"desc":external,"internal":false},{"desc":internal,"internal":true}]}).to_string();
+        let preview =
+            crate::descriptor::preview_import(&public_pair, crate::Network::parse(&network)?)?;
+        drop(state);
+        drop(raw);
         let loaded = engine::load(db, &id)?;
-        let payload = serde_json::json!({"descriptors": [
-            {"desc": loaded.wallet.public_descriptor(bdk_wallet::KeychainKind::External).to_string(), "internal": false},
-            {"desc": loaded.wallet.public_descriptor(bdk_wallet::KeychainKind::Internal).to_string(), "internal": true}
-        ]}).to_string();
-        let preview = crate::descriptor::preview_import(&payload, loaded.summary.network)?;
+        if loaded.summary.name.trim().is_empty()
+            || loaded.summary.name.chars().any(char::is_control)
+        {
+            return Err(Error::CorruptState);
+        }
         if preview.policy != loaded.summary.policy {
             return Err(Error::CorruptState);
         }
@@ -158,7 +191,7 @@ fn validate(db: &Connection) -> Result<BackupSummary> {
     Ok(BackupSummary {
         created_at,
         wallets,
-        drafts: db.query_row("SELECT count(*) FROM drafts", [], |r| r.get(0))?,
+        drafts,
         submissions: db.query_row("SELECT count(*) FROM broadcast_attempts", [], |r| r.get(0))?,
     })
 }
@@ -167,6 +200,158 @@ pub fn inspect_backup(path: impl AsRef<Path>, password: String) -> Result<Backup
     let key = password_key(password)?;
     let path = storage::canonical_path(path.as_ref())?;
     validate(&open_snapshot(&path, &key)?)
+}
+
+/// Restore to a NEW protected store. The native caller must already have durably
+/// retained its storage key. Existing destination files and the input are never replaced.
+pub fn restore_backup(
+    source: impl AsRef<Path>,
+    destination: impl AsRef<Path>,
+    password: String,
+    storage_key: Vec<u8>,
+) -> Result<BackupSummary> {
+    let storage_key = Zeroizing::new(storage_key);
+    restore_snapshot(
+        source.as_ref(),
+        destination.as_ref(),
+        password,
+        &storage_key,
+        |_| Ok(()),
+    )
+}
+
+fn restore_snapshot(
+    source: &Path,
+    destination: &Path,
+    password: String,
+    storage_key: &[u8],
+    mut boundary: impl FnMut(RestoreStep) -> Result<()>,
+) -> Result<BackupSummary> {
+    use std::io::Read;
+    storage::validate_key_path(destination, storage_key)?;
+    let key = password_key(password)?;
+    let source = storage::canonical_path(source)?;
+    let destination = storage::canonical_path(destination)?;
+    let _lock = storage::exclusive_lock(&destination)?;
+    match fs::symlink_metadata(&destination) {
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+        _ => return Err(Error::AlreadyExists),
+    }
+    standalone_file(&source)?;
+    let parent = destination
+        .parent()
+        .ok_or(Error::InvalidInput("restore path"))?;
+    let mut input = tempfile::Builder::new()
+        .prefix(".tundra-restore-input-")
+        .tempfile_in(parent)
+        .map_err(|_| Error::Storage)?;
+    // Copy only bounded ciphertext. Parsing/exporting uses this private copy, never
+    // a writable connection to the caller's original backup document.
+    #[cfg(unix)]
+    let file = File::from(
+        rustix::fs::open(
+            &source,
+            rustix::fs::OFlags::RDONLY | rustix::fs::OFlags::CLOEXEC | rustix::fs::OFlags::NOFOLLOW,
+            rustix::fs::Mode::empty(),
+        )
+        .map_err(|_| Error::Storage)?,
+    );
+    #[cfg(not(unix))]
+    let file = File::open(&source).map_err(|_| Error::Storage)?;
+    if !file.metadata().map_err(|_| Error::Storage)?.is_file() {
+        return Err(Error::StorageLocked);
+    }
+    let copied = std::io::copy(&mut file.take(MAX_BYTES + 1), input.as_file_mut())
+        .map_err(|_| Error::Storage)?;
+    if copied > MAX_BYTES {
+        return Err(Error::StorageLocked);
+    }
+    let checked = open_snapshot(input.path(), &key)?;
+    let summary = validate(&checked)?;
+    checked.close().map_err(|_| Error::Storage)?;
+
+    let output = tempfile::Builder::new()
+        .prefix(".tundra-restore-output-")
+        .tempfile_in(parent)
+        .map_err(|_| Error::Storage)?;
+    // This empty file is newly owned by this operation. It is never an existing app DB.
+    let mut db = Connection::open_with_flags(
+        output.path(),
+        OpenFlags::SQLITE_OPEN_READ_WRITE
+            | OpenFlags::SQLITE_OPEN_NO_MUTEX
+            | OpenFlags::SQLITE_OPEN_NOFOLLOW,
+    )?;
+    storage::backend(&db)?;
+    let raw_key = storage::raw_key(storage_key)?;
+    db.pragma_update(None, "key", raw_key.as_str())?;
+    db.pragma_update(None, "max_page_count", MAX_BYTES / 4096)?;
+    db.execute_batch("PRAGMA journal_mode=DELETE; PRAGMA synchronous=FULL; PRAGMA foreign_keys=ON; PRAGMA trusted_schema=OFF;")?;
+    db.execute(
+        "ATTACH DATABASE ?1 AS restore_source KEY ?2",
+        params![
+            input
+                .path()
+                .to_str()
+                .ok_or(Error::InvalidInput("restore path"))?,
+            key.as_str()
+        ],
+    )?;
+    let result = (|| -> Result<()> {
+        profile(&db, Some("restore_source"))?;
+        let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
+        tx.query_row(
+            "SELECT sqlcipher_export('main','restore_source')",
+            [],
+            |_| Ok(()),
+        )?;
+        tx.execute_batch("DROP TABLE backup_manifest;")?;
+        tx.execute_batch(include_str!("schema.sql"))?;
+        tx.pragma_update(None, "application_id", 0)?;
+        crate::recovery::suspend(&tx)?;
+        boundary(RestoreStep::Copied)?;
+        tx.commit()?;
+        Ok(())
+    })();
+    let detached = db.execute_batch("DETACH DATABASE restore_source");
+    result?;
+    detached?;
+    db.close().map_err(|_| Error::Storage)?;
+    let verified = storage::open_protected(output.path(), storage_key)?;
+    storage::integrity(&verified)?;
+    let stale: bool = verified.query_row(
+        "SELECT EXISTS(SELECT 1 FROM wallets WHERE synced_at IS NOT NULL)",
+        [],
+        |r| r.get(0),
+    )?;
+    if stale {
+        return Err(Error::CorruptState);
+    }
+    for wallet in &summary.wallets {
+        engine::load(&verified, &wallet.id)?;
+    }
+    verified.close().map_err(|_| Error::Storage)?;
+    output.as_file().sync_all().map_err(|_| Error::Storage)?;
+    boundary(RestoreStep::Verified)?;
+    let installed = output.persist_noclobber(&destination).map_err(|error| {
+        if error.error.kind() == std::io::ErrorKind::AlreadyExists {
+            Error::AlreadyExists
+        } else {
+            Error::Storage
+        }
+    })?;
+    installed.sync_all().map_err(|_| Error::Storage)?;
+    boundary(RestoreStep::Installed)?;
+    File::open(parent)
+        .and_then(|directory| directory.sync_all())
+        .map_err(|_| Error::Storage)?;
+    Ok(summary)
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum RestoreStep {
+    Copied,
+    Verified,
+    Installed,
 }
 
 impl Core {
@@ -263,3 +448,7 @@ enum ExportStep {
 #[cfg(test)]
 #[path = "backup_tests.rs"]
 mod tests;
+
+#[cfg(test)]
+#[path = "restore_tests.rs"]
+mod restore_tests;

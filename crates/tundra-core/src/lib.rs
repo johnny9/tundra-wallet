@@ -2,7 +2,7 @@
 //! Test-network development; hardware qualification and release gates remain open.
 pub mod amount;
 mod backup;
-pub use backup::{BackupSummary, inspect_backup};
+pub use backup::{BackupSummary, inspect_backup, restore_backup};
 mod broadcast;
 pub use broadcast::{BroadcastInfo, BroadcastObservation, BroadcastRequest};
 pub mod descriptor;
@@ -12,6 +12,7 @@ pub mod hardware;
 pub mod labels;
 mod model;
 pub mod qr;
+mod recovery;
 pub mod signing;
 mod storage;
 pub use storage::{StorageFormat, migrate_plaintext_storage, storage_format};

@@ -84,7 +84,7 @@ impl Core {
         )?;
         let migration = conn.transaction_with_behavior(TransactionBehavior::Immediate)?;
         let version: i64 = migration.query_row("PRAGMA user_version", [], |r| r.get(0))?;
-        if version > 7 {
+        if version > 8 {
             return Err(Error::CorruptState);
         }
         migration.execute_batch(include_str!("schema.sql"))?;
@@ -742,7 +742,7 @@ fn coins(db: &Connection, id: &str, w: &Wallet) -> Result<Vec<Coin>> {
             |r| r.get(0),
         )?;
         let reserved: bool = db.query_row(
-            "SELECT EXISTS(SELECT 1 FROM reservations WHERE wallet_id=?1 AND outpoint=?2)",
+            "SELECT EXISTS(SELECT 1 FROM reservations WHERE wallet_id=?1 AND outpoint=?2) OR EXISTS(SELECT 1 FROM recovery_holds WHERE wallet_id=?1 AND outpoint=?2)",
             params![id, op],
             |r| r.get(0),
         )?;
@@ -1045,7 +1045,7 @@ mod tests {
                 .unwrap()
                 .query_row("PRAGMA user_version", [], |r| r.get::<_, u32>(0))
                 .unwrap(),
-            7
+            8
         );
     }
     #[test]
@@ -1059,7 +1059,7 @@ mod tests {
         let address = core.receive_address(&wallet.id).unwrap();
         core.set_label(&wallet.id, "addr", &address.address, "Retained 🧊")
             .unwrap();
-        core.lock().unwrap().execute_batch("DROP TABLE output_provenance; DROP TABLE draft_label_applications; PRAGMA user_version=6;").unwrap();
+        core.lock().unwrap().execute_batch("DROP TABLE recovery_holds; DROP TABLE recovered_submissions; DROP TABLE output_provenance; DROP TABLE draft_label_applications; PRAGMA user_version=6;").unwrap();
         drop(core);
         let core = Core::open(&path).unwrap();
         assert_eq!(core.receive_address(&wallet.id).unwrap().index, 1);
@@ -1072,9 +1072,14 @@ mod tests {
         assert_eq!(
             db.query_row("PRAGMA user_version", [], |r| r.get::<_, u32>(0))
                 .unwrap(),
-            7
+            8
         );
-        for table in ["output_provenance", "draft_label_applications"] {
+        for table in [
+            "output_provenance",
+            "draft_label_applications",
+            "recovered_submissions",
+            "recovery_holds",
+        ] {
             assert_eq!(
                 db.query_row(&format!("SELECT count(*) FROM {table}"), [], |r| r
                     .get::<_, u32>(0))

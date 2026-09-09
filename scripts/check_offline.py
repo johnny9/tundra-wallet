@@ -63,7 +63,7 @@ class SchemaChecks(unittest.TestCase):
     def draft(self, wallet="a", ident="draft"):
         self.db.execute("INSERT INTO drafts VALUES(?,?, 'UNSIGNED_TEST_MARKER','{}','',1)", (ident, wallet))
     def test_version_and_foreign_keys(self):
-        self.assertEqual(self.db.execute("PRAGMA user_version").fetchone()[0], 7)
+        self.assertEqual(self.db.execute("PRAGMA user_version").fetchone()[0], 8)
         self.assertEqual(self.db.execute("PRAGMA foreign_keys").fetchone()[0], 1)
     def test_unknown_sync_is_null_not_zero(self):
         self.assertIsNone(self.db.execute("SELECT synced_at FROM wallets WHERE id='a'").fetchone()[0])
@@ -111,8 +111,11 @@ class SchemaChecks(unittest.TestCase):
             self.db.execute("INSERT INTO reservations VALUES(?, 'out:0', ?)", (wallet, wallet))
             self.db.execute("INSERT INTO draft_label_applications VALUES(?,?)", (wallet, wallet))
             self.db.execute("INSERT INTO output_provenance VALUES(?,'out:0',?)", (wallet, wallet))
+            self.db.execute("INSERT INTO finalized_drafts VALUES(?,?,X'00')", (wallet, wallet))
+            self.db.execute("INSERT INTO recovered_submissions VALUES(?,?)", (wallet, wallet))
+            self.db.execute("INSERT INTO recovery_holds VALUES(?,'out:0',?)", (wallet, wallet))
         self.db.execute("DELETE FROM wallets WHERE id='a'")
-        for table in ("labels", "freezes", "drafts", "reservations", "draft_label_applications", "output_provenance"):
+        for table in ("labels", "freezes", "drafts", "reservations", "draft_label_applications", "output_provenance", "finalized_drafts", "recovered_submissions", "recovery_holds"):
             self.assertEqual(self.db.execute(f"SELECT wallet_id FROM {table}").fetchall(), [("b",)])
     def test_provenance_cannot_reference_another_wallet_draft(self):
         self.draft(wallet="b")
@@ -120,6 +123,14 @@ class SchemaChecks(unittest.TestCase):
             self.db.execute("INSERT INTO draft_label_applications VALUES('a','draft')")
         with self.assertRaises(sqlite3.IntegrityError):
             self.db.execute("INSERT INTO output_provenance VALUES('a','out:0','draft')")
+    def test_recovery_holds_cannot_reference_another_wallet_submission(self):
+        self.draft(wallet="b")
+        self.db.execute("INSERT INTO finalized_drafts VALUES('b','draft',X'00')")
+        with self.assertRaises(sqlite3.IntegrityError):
+            self.db.execute("INSERT INTO recovered_submissions VALUES('a','draft')")
+        self.db.execute("INSERT INTO recovered_submissions VALUES('b','draft')")
+        with self.assertRaises(sqlite3.IntegrityError):
+            self.db.execute("INSERT INTO recovery_holds VALUES('a','out:0','draft')")
     def test_wallet_state_and_metadata_rollback_together(self):
         self.db.execute("BEGIN IMMEDIATE")
         self.db.execute("UPDATE wallets SET state_json='new' WHERE id='a'")

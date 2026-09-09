@@ -234,7 +234,7 @@ fn keyed_schema_migration_preserves_wallet_and_refuses_future_versions() {
             .unwrap()
             .query_row("PRAGMA user_version", [], |r| r.get::<_, i64>(0))
             .unwrap(),
-        7
+        8
     );
     migrated
         .lock()

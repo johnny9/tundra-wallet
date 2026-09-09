@@ -49,7 +49,7 @@ pub(crate) fn validate_key_path(path: &Path, storage_key: &[u8]) -> Result<()> {
     Ok(())
 }
 
-fn raw_key(storage_key: &[u8]) -> Result<Zeroizing<String>> {
+pub(crate) fn raw_key(storage_key: &[u8]) -> Result<Zeroizing<String>> {
     let mut raw_key = Zeroizing::new(String::with_capacity(67));
     raw_key.push_str("x'");
     for byte in storage_key.iter() {
@@ -176,6 +176,12 @@ pub(crate) fn shared_lock(path: &Path) -> Result<Option<Arc<StorageLock>>> {
     Ok(Some(Arc::new(StorageLock(file))))
 }
 
+pub(crate) fn exclusive_lock(path: &Path) -> Result<StorageLock> {
+    let file = lock_file(path)?;
+    acquire(&file, true)?;
+    Ok(StorageLock(file))
+}
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum StorageFormat {
     Missing,
@@ -269,7 +275,7 @@ fn migrate(
     }
     source.execute_batch("PRAGMA locking_mode=EXCLUSIVE; PRAGMA synchronous=FULL;")?;
     let version: i64 = source.query_row("PRAGMA user_version", [], |r| r.get(0))?;
-    if !(1..=7).contains(&version) {
+    if !(1..=8).contains(&version) {
         return Err(Error::CorruptState);
     }
     let raw_key = raw_key(storage_key)?;

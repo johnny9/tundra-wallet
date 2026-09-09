@@ -130,6 +130,10 @@ pub(crate) fn observe_draft(
         return Ok(false);
     }
     apply_observed_labels(db, wallet_id, review, wallet, &info)?;
+    db.execute(
+        "DELETE FROM recovered_submissions WHERE wallet_id=?1 AND draft_id=?2",
+        params![wallet_id, review.id],
+    )?;
     review.state = "observed".into();
     db.execute(
         "UPDATE drafts SET review_json=?1 WHERE wallet_id=?2 AND id=?3",

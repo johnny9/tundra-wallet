@@ -93,4 +93,18 @@ CREATE TABLE IF NOT EXISTS output_provenance (
     PRIMARY KEY (wallet_id,outpoint),
     FOREIGN KEY (wallet_id,draft_id) REFERENCES drafts(wallet_id,id) ON DELETE CASCADE
 );
-PRAGMA user_version = 7;
+-- Restored submissions remain suspended independently of ordinary draft reservations.
+CREATE TABLE IF NOT EXISTS recovered_submissions (
+    wallet_id TEXT NOT NULL,
+    draft_id TEXT NOT NULL,
+    PRIMARY KEY (wallet_id,draft_id),
+    FOREIGN KEY (wallet_id,draft_id) REFERENCES finalized_drafts(wallet_id,draft_id) ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS recovery_holds (
+    wallet_id TEXT NOT NULL,
+    outpoint TEXT NOT NULL,
+    draft_id TEXT NOT NULL,
+    PRIMARY KEY (wallet_id,outpoint,draft_id),
+    FOREIGN KEY (wallet_id,draft_id) REFERENCES recovered_submissions(wallet_id,draft_id) ON DELETE CASCADE
+);
+PRAGMA user_version = 8;

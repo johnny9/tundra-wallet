@@ -49,6 +49,26 @@ pub fn inspect_backup(path: String, password: String) -> Result<BackupInfo> {
     Ok(core::inspect_backup(path, password)?.into())
 }
 
+/// The destination must be new, with its storage key durably retained by the caller.
+#[uniffi::export]
+pub fn restore_backup(
+    source: String,
+    destination: String,
+    password: String,
+    storage_key: Vec<u8>,
+) -> Result<BackupInfo> {
+    Ok(core::restore_backup(source, destination, password, storage_key)?.into())
+}
+
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct RecoveryReviewRequest {
+    pub wallet_id: String,
+    pub draft_id: String,
+    pub expected_txid: String,
+    pub expected_attempt: u64,
+    pub review_acknowledged: bool,
+}
+
 #[derive(Debug, Clone, Copy, uniffi::Enum)]
 pub enum Chain {
     Mainnet,
@@ -706,6 +726,24 @@ impl Tundra {
     }
     pub fn export_backup(&self, path: String, password: String) -> Result<BackupInfo> {
         Ok(self.core.export_backup(path, password)?.into())
+    }
+    pub fn recovery_required(&self, wallet_id: String, draft_id: String) -> Result<bool> {
+        Ok(self.core.recovery_required(&wallet_id, &draft_id)?)
+    }
+    pub fn resume_recovered_submission(
+        &self,
+        request: RecoveryReviewRequest,
+    ) -> Result<FinalTransactionInfo> {
+        Ok(self
+            .core
+            .resume_recovered_submission(
+                &request.wallet_id,
+                &request.draft_id,
+                &request.expected_txid,
+                request.expected_attempt,
+                request.review_acknowledged,
+            )?
+            .into())
     }
     pub fn activity(&self, wallet_id: String) -> Result<Vec<ActivityInfo>> {
         Ok(self

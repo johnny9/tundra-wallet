@@ -123,6 +123,12 @@ func testBackup(_ payload: String, source: URL) throws {
         preconditionFailure("Wrong backup password succeeded")
     } catch AppError.Operation(_, _) { }
     let after = try Data(contentsOf: imported); precondition(before == after)
+    let restored = directory.appendingPathComponent("restored.sqlite")
+    _ = try restoreBackup(source: imported.path, destination: restored.path, password: password, storageKey: Data(repeating: 0x33, count: 32))
+    let recovered = try Tundra.openProtected(path: restored.path, storageKey: Data(repeating: 0x33, count: 32))
+    let restoredWallet = try recovered.wallets()[0]
+    let address = try recovered.receiveAddress(walletId: restoredWallet.id)
+    precondition(!restoredWallet.synced && restoredWallet.totalSats == nil && address.index == 1)
     let core = try Tundra.open(path: ":memory:")
     let wallet = try core.importWallet(name: "Host backup fixture", payload: payload, network: .signet)
     let output = directory.appendingPathComponent("exported.tundra")
