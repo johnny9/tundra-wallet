@@ -1,0 +1,183 @@
+{
+  "recorded_at": "2026-09-09T09:26:11.726115+00:00",
+  "source": "1a9499c8694dd6d26a86040c61d890d3d5653050",
+  "run": 34332720770,
+  "url": "https://github.com/johnny9/tundra-wallet/actions/runs/34332720770",
+  "conclusion": "All four jobs pass, including final iOS semantic colors, Android system-bar modes and trimmed JNI packaging",
+  "rust": {
+    "job": 102404850445,
+    "passed": 189,
+    "breakdown": {
+      "core": 179,
+      "crash": 2,
+      "published_native": 2,
+      "http": 5,
+      "real_keyless_regtest": 1
+    },
+    "offline_passed": 34,
+    "format_clippy_bindings": "PASS",
+    "ignored_helpers": "Eight helper/fixture entry points are ignored by the ordinary workspace run; the separately ignored regtest runs explicitly and passes"
+  },
+  "parser_and_dependency": {
+    "job": 102404850293,
+    "audit_vulnerabilities": 0,
+    "audit_warning_categories": [],
+    "asan_cases": {
+      "public_parsers": 1469122,
+      "usb_protocol": 1220,
+      "validated_signatures": 503608
+    },
+    "seconds_per_target": 61,
+    "crashes": 0,
+    "inventory_regeneration": "PASS",
+    "limits": "Bounded fuzz runs and the recorded RustSec snapshot; not exhaustive parser or independent security qualification"
+  },
+  "android": {
+    "job": 102404850430,
+    "runtime": "API 35 Android 15, x86_64 Pixel 6 hosted emulator",
+    "builds": "arm64/x86_64 Rust, app and instrumentation APKs pass",
+    "jvm_passed": 10,
+    "instrumentation_passed": 18,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "cold_restart": "PASS; retained synced fixture balance and exact-input draft",
+    "backup_document": "PASS with one bounded recovery of the hosted Quickstep launcher ANR; screenshot retained in CI artifact",
+    "system_bar_mode_assertions": "PASS in both app appearance modes",
+    "notice_resource": "177 texts / 2301108 bytes match actual APK",
+    "installed_sdk_payload_files_matched": 20220,
+    "complete_strict_dependency_gate": "PASS",
+    "refusal_checks": [
+      "missing lock",
+      "disabled verification",
+      "altered checksum"
+    ],
+    "apk_sha256": "367f559a07cc49ecee1865c5d07f0e715e2164c57de7a07365fdac36fe9bebe5",
+    "native_libraries": 10,
+    "native_inspection": "Correct ABI, 16 KiB ELF/ZIP alignment, nonexecutable stack, no writable/executable LOAD segments and GNU_RELRO pass",
+    "runtime_artifact": 10096804378,
+    "jvm_artifact": 10096803289,
+    "apk_artifact": 10096801170,
+    "test_apk_artifact": 10096802362
+  },
+  "ios": {
+    "job": 102404850083,
+    "runtime": "iPhone 17 Pro simulator, arm64, iOS 26.2 (23C54)",
+    "host": "macOS 15.7.9; Xcode 16.4 selected; XcodeGen 2.46.0 pinned release",
+    "host_ffi_passed": 6,
+    "simulator_passed": 17,
+    "failed": 0,
+    "skipped": 0,
+    "normal_wallet": "All four payment modes, filters, saved-draft restart and actual system Files export/readback/inspection/restore/restart pass",
+    "positive_scenarios": "Published signature/finalization and recovered review/separate submission/provenance/retained label edits pass",
+    "appearance": "Neutral coin text and semantic light/dark colors compile and render; independent offsets, fixed tabs and measured enlarged-text controls pass",
+    "notice_resource": "177 texts / 2301108 bytes match actual app",
+    "runtime_artifact": 10097071768
+  },
+  "visual_review": {
+    "screenshots": "Exact unedited public fixture screenshots retained under validation/native-2026-09-09",
+    "observations": "iOS coin text is neutral in light and dark; light actions/secondary text use semantic colors. Android light status icons are now readable. Both retain fixed tabs and visible enlarged-text selection controls.",
+    "limits": "Partial appearance/layout evidence only: iOS large-text timestamp is abbreviated, the list is partly scrolled, and the Android dark screenshot captures dim navigation buttons despite passing window mode assertions. This does not qualify all screen sizes, settled system animations or whole-app accessibility."
+  },
+  "waydroid": "2026-09-09 recheck: session/container running, IP UNKNOWN, no ADB devices; no local instrumentation run",
+  "not_claimed": [
+    "16 KiB runtime execution",
+    "physical phone storage/lock/power-loss qualification",
+    "physical QR/USB device interoperability or supported hardware",
+    "real-network hardware signing/broadcast",
+    "complete provider-interruption/accessibility/device-size matrix",
+    "hermetic or byte-reproducible builds",
+    "complete upstream/distribution or independent security review",
+    "an owner-selected original-source license",
+    "real-funds readiness"
+  ],
+  "files": [
+    {
+      "path": "build/android-final-native.log",
+      "sha256": "160bbcc97f39d019112f68246b94dca7a3795d8786850c67d894f4472d99f88b"
+    },
+    {
+      "path": "build/android-final-native.zip",
+      "sha256": "fa4f31673407978d3c253f916ceae7c6511ac0888956441348434551797c344c"
+    },
+    {
+      "path": "build/android-final-jvm.zip",
+      "sha256": "1c608dc04bdc9d124e2eec918c96e9b37748d0a0b622b43046a7c869c9f98771"
+    },
+    {
+      "path": "build/android-final-native-results/TEST-emulator-5554 - 15-_app-.xml",
+      "sha256": "b4a3a75e0a2559b1db89bb18239ecbc056e64b311085646d0aba777840ff3639"
+    },
+    {
+      "path": "build/android-final-native-results/android-native-artifacts.json",
+      "sha256": "be5c8ce5e438a09d85a10f204c56a58fb98e3c0cc0018360e755598580f043ad"
+    },
+    {
+      "path": "build/android-final-native-results/android-restart-launch.log",
+      "sha256": "925f670deb0a236d37a61390b28acd4459ce5ef23d61e0899e6191f7ea32762c"
+    },
+    {
+      "path": "build/android-final-native-results/backup-launcher-before-recovery.png",
+      "sha256": "1dba782a34cd39d5f53a0ca6ea0bd9e28e70c0fb02d0c44bc9b1dee0d736cfb4"
+    },
+    {
+      "path": "build/ios-final-native.log",
+      "sha256": "51b0035eb6a5d15f8347a937019ee1e34e6dd10af60b8fa89d76472005abe33b"
+    },
+    {
+      "path": "build/ios-final-native.zip",
+      "sha256": "f9bfdfff43853fb655299f4456709b0370bb7b4672191cfeaaefbeb813a308d3"
+    },
+    {
+      "path": "build/ios-final-native-results/ios-runtime-summary.json",
+      "sha256": "f8e850c710ff2e83c8bc669ac85b5a417d8f4ec39ca4d907257d76e71f99ac74"
+    },
+    {
+      "path": "build/ios-final-native-results/manifest.json",
+      "sha256": "a156416322d54e1800d9cd97d158ce48cd4dcbb3c0f8b806d3942f7a9b714f83"
+    },
+    {
+      "path": "build/rust-final-ci.log",
+      "sha256": "a11e3bb6deca3c6077062d12bf2f2ab550ed0fa9e5048ff4525e39196a4fa361"
+    },
+    {
+      "path": "build/parser-final-ci.zip",
+      "sha256": "c3da75b3f277ae487171641d4f8cf2773d7147db243f5c623f5e0170eca3a08c"
+    },
+    {
+      "path": "build/parser-final-ci-results/audit.json",
+      "sha256": "90b4ffde23fd6d9adb3ff48f9b2900a356de0aac8a9bc359716658370871bfcc"
+    },
+    {
+      "path": "build/parser-final-ci-results/fuzz.log",
+      "sha256": "cf2674d8670e595e9448c7c5b37072e8276e0343fe08c72720c6a6836ab5700a"
+    },
+    {
+      "path": "validation/native-2026-09-09/android-light.png",
+      "sha256": "f59ec6e185775c5169cd52a1aa0860c60cfeb12ec0024e4fcf14b80f8682ae0e"
+    },
+    {
+      "path": "validation/native-2026-09-09/android-large-text.png",
+      "sha256": "7c7f9e721fd98ff89a3be574c2b2d746edb4aa0e1b2fc6187aedf05157e66333"
+    },
+    {
+      "path": "validation/native-2026-09-09/ios-light.png",
+      "sha256": "e33f033a29ee94c6dfb8ecfeac99fc27fc6424c6126debade808ebd9d541f686"
+    },
+    {
+      "path": "validation/native-2026-09-09/ios-large-text.png",
+      "sha256": "015b8c0d551f01225212257eeed764b97036d4baeabb2e04b30379c319235639"
+    },
+    {
+      "path": "build/final-handoff-offline.log",
+      "sha256": "525c5d0444e784a58d225e4df5d07687bbf62cb51e3b0d59458862cc7d1f77d6"
+    }
+  ],
+  "documentation_followup": {
+    "scope": "Documentation and retained public evidence only; application/build/test source remains at the tested commit",
+    "offline_passed": 34,
+    "relative_document_links_checked": 112,
+    "evidence_hashes_verified": 19,
+    "native_rerun": "Not needed for this documentation-only follow-up; the application source is covered by the completed run above"
+  }
+}

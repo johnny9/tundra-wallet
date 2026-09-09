@@ -10,11 +10,16 @@ It never imports or generates Bitcoin private signing keys.
 > Rust tests and recorded native builds, payment modes and initial restart checks pass.
 > Android and iOS system backup document exchange, restore and restart tests pass.
 > Both native published-signature, recovery, submission and provenance UI scenarios pass.
-> Subsequent contrast and native-library packaging corrections await their next CI run.
+> The final contrast and native-library packaging changes also pass both native CI jobs.
 > Explicit test-network sync and external signature validation are implemented. Hardware
 > signing remains unavailable. Explicit test-network broadcast has software validation;
 > USB device and camera qualification remain open.
 > Do not fund addresses from the fixtures or use this version with real savings.
+
+Latest tested application source: [`1a9499c`, all four CI jobs pass](https://github.com/johnny9/tundra-wallet/actions/runs/34332720770).
+Results: **189 Rust + 34 offline**, **10 Android JVM + 18 instrumentation + cold restart**,
+and **6 Swift host FFI + 17 iOS simulator tests**. See the [validation report](plan/VALIDATION.md)
+for exact scope, screenshots and remaining acceptance gates.
 
 ## Start here
 
@@ -33,7 +38,7 @@ It never imports or generates Bitcoin private signing keys.
 |---|---|---|
 | `tundra-core` | BDK public descriptor validation, receive/change derivation, SQLite snapshots, bounded opt-in Esplora sync | Test networks only; chosen endpoint supplies the chain view |
 | Metadata | Wallet-scoped labels, BIP 329, bulk edits, user freezes and observed-output input provenance | Core and both native provenance/label-edit UI tests pass; physical qualification remains |
-| Transactions | Exact/manual and automatic eligible inputs, max/consolidation, saved reviews/reservations, verified external PSBT signatures and immutable final transaction bytes | All four native modes pass; positive signed submission and hardware qualification remain |
+| Transactions | Exact/manual and automatic eligible inputs, max/consolidation, saved reviews/reservations, verified external PSBT signatures and immutable final transaction bytes | All four modes and published-fixture signed submission pass on both virtual platforms; hardware qualification remains |
 | QR exchange | Bounded UR/BBQr codecs, native camera/display and independent barcode tests | Both native barcode tests pass; physical interoperability pending |
 | USB exchange | Pinned bhwi Ledger protocol, registration persistence and Android adapter source | Android native tests pass; physical USB qualification pending; signing remains blocked |
 | `tundra-ffi` | Typed UniFFI API; Kotlin and Swift bindings generated and exercised against the host library | Mobile lifecycle/cancellation qualification remains |
@@ -54,7 +59,7 @@ and all external signatures are independently validated against the approved dra
 crates/tundra-core/  Bitcoin decisions, persistence, metadata, unsigned drafts
 crates/tundra-ffi/   App-owned bridge types; no BDK/bhwi types in native UI
 apps/android/       Kotlin + Jetpack Compose
-apps/ios/           SwiftUI starter + XcodeGen specification
+apps/ios/           SwiftUI app + XcodeGen specification
 plan/               Requirements, roadmap, risks, validation, build decisions
 design/             Approved visual reference and third-party attribution
 tests/fixtures/     Public descriptors and published signature vectors; NEVER FUND

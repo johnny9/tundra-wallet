@@ -67,4 +67,8 @@ request woke the frozen container. The subsequent recheck still reports a runnin
 and no ADB devices. Waydroid has not executed the native validation suite. CI emulators
 and the Apple simulator remain the source of the recorded native test results.
 
+The September 9 09:17 UTC recheck still reports a running session/container, unknown IP and
+no ADB devices. Local Rust/Android builds and hosted native validation can continue without
+further sudo installation; Waydroid connectivity is a separate optional local-runtime gate.
+
 Keep the [validation report](VALIDATION.md) as the authority for tests actually executed.

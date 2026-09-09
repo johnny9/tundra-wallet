@@ -32,12 +32,11 @@ An actual child-process kill during an encrypted write preserves the last commit
 and label together. The complete Rust/regtest suite passes with this backend. The generated
 amalgamation reproduces byte for byte from its pinned source.
 
-Kotlin host encrypted-reopen checks pass in the first native CI run. Android's initial
-protected open failed; iOS host linking failed on missing CoreFoundation symbols. The
-Apple link fix is committed. A regression reproduced rejection of directory symlinks;
-storage now canonicalizes the parent while still refusing a final-file symlink. This also
-makes directory aliases share the same migration lock. The corrected native run and new
-migration tests are pending. These use public storage-encryption test keys, not platform
+Both native encrypted-reopen and migration checks pass. The first runs exposed Android
+locking and Apple linking/deployment-target issues; their failures and fixes are retained
+in [the validation history](VALIDATION.md). Storage canonicalizes the parent while refusing
+a final-file symlink, making directory aliases share the same migration lock. Isolated
+storage tests use public storage-encryption keys; separate native vault tests use platform
 key stores. No Bitcoin signing key is generated or imported.
 
 ## Explicit plaintext upgrade
@@ -67,14 +66,12 @@ The migration suite exposed a transient lock-retention failure during concurrent
 spawning. Lock guards now explicitly unlock on drop instead of depending only on descriptor
 closure; the full suite passes with the child-process checks enabled.
 
-The next native run showed that Rust 1.93's standard file-lock API is unsupported on Android,
-preventing every file-backed core open. The implementation now uses pinned rustix 1.1.4's
+Rust 1.93's standard file-lock API is unsupported on Android. The implementation uses pinned rustix 1.1.4's
 safe flock wrapper on Unix and distinguishes contention from other storage errors. This
 retains shared/exclusive locking rather than bypassing it. The behavior is explicit in the
 [pinned standard-library source](https://github.com/rust-lang/rust/blob/1.93.1/library/std/src/sys/fs/unix.rs).
-Apple's host link succeeds after adding CoreFoundation, but iOS linking then exposed unequal
-C/Rust deployment targets; build scripts now set iOS 17.0 and macOS 11.0 for both compilers.
-The full Linux suite passes with these fixes; the corrected native run is pending.
+Apple links CoreFoundation, and build scripts align C/Rust deployment targets at iOS 17.0
+and macOS 11.0. The Linux suite and both native builds/runtime suites pass with these fixes.
 
 ## Native key retention and remaining gates
 
@@ -97,16 +94,16 @@ already-open SQLCipher key from memory when the screen locks. See
 [Android's API guidance](https://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec.Builder#setUnlockedDeviceRequired(boolean))
 and [Apple's Keychain accessibility](https://developer.apple.com/documentation/security/ksecattraccessiblewhenunlockedthisdeviceonly).
 
-- Run protected normal startup, all payment modes and restart after adopting the tested
-  vaults. Physical device interruption and lock qualification remain separate.
-- Encrypted export/inspection/restore and native provider checks pass. Atomic generation
-  selection passes core tests; native generation keys and explicit recovery review await
-  CI. Complete document exchange and recovery UX; see [14-backup.md](14-backup.md).
-- Native startup/restart/lock behavior with protected storage, accessibility and recovery UX.
-- Dependency notice packaging, reproducible native builds and independent security review.
+- Protected normal startup, all payment modes and restart pass on both virtual platforms.
+- Encrypted export/inspection/restore, system document round-trips, retained generation keys,
+  lost-key/selector refusal and explicit recovered-payment review/submission pass on both
+  virtual platforms; see [14-backup.md](14-backup.md).
+- Physical device interruption, lock/power-loss and storage-fault qualification remain open.
+- Native notice packaging passes; complete distribution/reproducibility and independent
+  security review remain open.
 
-M7 remains incomplete. The app must not advertise recoverable backups or production storage
-protection until the corresponding native and recovery gates pass.
+M7 remains incomplete. Passing virtual backup/recovery checks does not qualify production
+storage protection or device-loss recovery on a supported physical phone.
 
 The historical native failures above are retained in the validation report. The subsequent
 run at `d441d6c` passes both platform vaults: Android uses supported `fstat`/`S_ISDIR` before

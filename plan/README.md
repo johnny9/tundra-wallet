@@ -12,7 +12,7 @@ approval system, or cloud account.
 
 ## Current status — September 9, 2026
 
-**Test-network sync and native coin control implemented; mobile qualification in progress.**
+**Test-network wallet flows implemented and tested on both virtual platforms; device and release qualification remain open.**
 
 - Source: descriptor-first watch-only engine, metadata, unsigned-draft core, UniFFI API,
   native Android and iOS wallet flows, tests and CI.
@@ -47,6 +47,9 @@ approval system, or cloud account.
   inventory now have local checks; the full locked Android build and APK notice packaging pass locally.
   Broader binary notice and distribution review remains.
 - Local Android Rust ABIs, app/test APK builds and 10 JVM tests now pass with strict locks.
+- The final source checkpoint `1a9499c` passes all four CI jobs, including the iOS semantic
+  colors, Android system-bar mode assertions and trimmed JNI packaging. Public appearance
+  screenshots and their limits are retained with the validation evidence.
 - Not performed locally: Android instrumentation or an Xcode build.
 - **No real-funds use. No supported hardware devices yet.**
 
@@ -72,15 +75,15 @@ approval system, or cloud account.
 
 ## Immediate next implementation pass
 
-1. Keep `scripts/check.sh` passing against the reviewed lock and pinned Rust 1.93.1.
-   Close the remaining descriptor, persistence and FFI regression gaps in M1.
-2. Extend the passing Android exact-input and iOS consolidation/restart scenarios to every
-   payment mode, metadata file exchange, accessibility and appearance. Qualify physical phones separately.
-3. Keep the implemented opt-in test-network sync, cancellation and reorg checks passing.
-   Never convert an unsynced balance into a displayed zero.
-4. Complete visual comparison of native selection/review/draft screens with the approved design.
-5. Add QR exchange, then one qualified bhwi/Android USB device. Validate signatures and
-   approved-transaction invariants before exposing finalization or broadcast.
+1. Keep the locked Rust, native build/runtime, parser/audit and dependency/notice gates
+   passing. The current software evidence is in `VALIDATION.md`.
+2. Extend device-size, accessibility and document-provider interruption coverage; separately
+   qualify physical phone lock/power-loss, camera and USB lifecycle behavior.
+3. Run the physical acceptance scenario in `05-testing.md` with a documented model/firmware
+   matrix: policy/address comparison, every signing pair, restart and explicit test-network
+   submission. USB signing stays gated until its device acceptance tests pass.
+4. Complete independent security, upstream/distribution and build reproducibility review;
+   choose the original-source license before public distribution.
 
 Do not mark a milestone complete because source files exist. Each milestone has a
 compile/test/device gate below.

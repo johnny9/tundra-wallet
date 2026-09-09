@@ -31,9 +31,10 @@ The existing sync invalidation test now covers both signed and finalized states.
 The full suite, real keyless regtest, formatting, Clippy and binding generation pass locally;
 `validation/finalization-checks.json` records counts and log hashes.
 
-Native final-review UI compiles on both platforms. Android's unsigned-draft finalization
-rejection check passes through the mobile FFI at `dc54fe9`; positive signed final-review UI
-coverage remains open. This is not a real-device signing/broadcast test.
+Both native positive signed-file and final-review UI tests pass, including per-input
+signature progress and equality with the pinned published transaction. Unsigned-draft
+finalization remains rejected. See [current native results](VALIDATION.md); this is not
+a real-device signing/broadcast test.
 
 A dedicated signature/finalization AddressSanitizer target completed 658,421 cases in
 61 seconds with no crashes on September 9, 2026. It mutates published responses and final

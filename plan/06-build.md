@@ -67,15 +67,12 @@ reviewed downloads, not publisher signature authentication or a completed licens
 Local Gradle 8.13 configures the real Android project successfully. Isolated copies of the
 same build configuration pass a baseline and refuse missing locks, disabled verification and
 an altered plugin checksum. The offline checker also rejects mutable versions, unreviewed
-components and broad verification exceptions. The local all-configuration check reaches the
-missing Android SDK and cannot complete; normal native CI now runs that read-only gate before
-building, then runs the same refusal checks. Its first full locked native run refuses a Guava parent POM missing from the initial
-checksum set. That POM and all 256 other retained supplemental POMs now have explicit exact
-checksums. The second run reaches Kotlin build-tools resolution and refuses a missing imported
-coroutines BOM. Recursive imported-BOM inventory adds two independently retained POMs with exact
-checksums. The following complete configuration gate passes; actual app compilation exposes
-AGP's detached AAPT2 Linux JAR/POM, now separately checksum-reviewed. The full locked app build
-remains pending. See [AAPT2 evidence](../validation/android-aapt2-checks.json),
+components and broad verification exceptions. The complete all-configuration and refusal
+gates now pass locally and in CI with the user-owned Android SDK. Earlier full builds exposed
+missing Guava parent metadata, imported coroutines BOMs and AGP's detached AAPT2 Linux JAR/POM.
+Each was independently retained and added with exact reviewed checksums. The full strict
+locked app/test APK build and 10 JVM tests now pass locally, including offline builds; CI
+also passes all 18 instrumentation tests and cold restart. See [AAPT2 evidence](../validation/android-aapt2-checks.json),
 [imported BOM correction](../validation/android-imported-bom-checks.json) and
 [parent-metadata correction](../validation/android-parent-metadata-checks.json).
 See [exact lock/enforcement evidence](../validation/android-lock-enforcement-checks.json).
@@ -95,7 +92,8 @@ The Android builder now stages dependency outputs separately and copies only `li
 into the app's JNI sources. BBQr is statically linked Rust code; its unused standalone cdylibs
 are removed from generated output. The local APK passes actual ABI, ELF/ZIP 16 KiB alignment,
 nonexecutable stack and relocation protection checks for all ten remaining shared libraries.
-Runtime execution of this packaging correction is pending; see
+The trimmed APK also passes all 18 instrumentation tests and cold restart in
+[run 34332720770](https://github.com/johnny9/tundra-wallet/actions/runs/34332720770); see
 [binary inspection evidence](../validation/android-native-packaging-checks.json). A 16 KiB
 runtime remains a separate gate, following the [Android guidance](https://developer.android.com/guide/practices/page-sizes).
 

@@ -6,8 +6,8 @@ The Rust core exports a consistent snapshot of every wallet and its metadata int
 SQLCipher file. It uses a password separate from the platform-retained storage key. A
 versioned prefix preserves exact UTF-8 password bytes and prevents raw-key literal handling.
 Passwords must have at least 16 characters, at most 1024 UTF-8 bytes and no controls;
-this length check is not a password-strength guarantee. Native UX still needs password
-confirmation and clear advice to retain a strong, unique password separately.
+this length check is not a password-strength guarantee. Both native forms require password
+confirmation for export and advise retaining a strong, unique password separately.
 
 Profile 1 explicitly sets 4096-byte pages, PBKDF2-HMAC-SHA512 at 256,000 iterations,
 HMAC-SHA512 authenticated pages and no plaintext header, using the pinned SQLCipher provider.
@@ -49,7 +49,7 @@ resumption requires a fresh chain view, current attempt/transaction identity, ac
 and full signature, approval and eligibility validation. It changes no final bytes and
 performs no network request. Competing resumption requests cannot both succeed.
 
-## Executed checks and pending native gate
+## Executed checks
 
 Nine export tests and eleven restore tests cover passwords, encryption, published public
 signatures, uncertainty, bounded hostile input, no-clobber races and actual process kills
@@ -84,13 +84,14 @@ app data remains outside the storage freshness guarantee.
 
 Seven selection tests pass, including injected faults and four actual process-kill
 boundaries. The complete gate now passes 186 Rust tests, 26 offline checks and both bindings.
-Native lost-key/selector/generation tests and explicit submission recovery controls are
-authored and await CI. See [selection evidence](../validation/store-selection-checks.json).
+Native lost-key/selector/generation tests and explicit submission recovery controls now pass
+on both virtual platforms. See [selection evidence](../validation/store-selection-checks.json)
+and [current native results](VALIDATION.md).
 
 ## Native document exchange gate
 
 Native password/confirmation fields, bounded streaming import, backup summary/consent and
-new-generation restore are authored. Only a completed encrypted export reaches a document
+new-generation restore are implemented and exercised on both virtual platforms. Only a completed encrypted export reaches a document
 provider. A saved file is successful only after readback matches its byte count and SHA-256;
 partial writes or unavailable readback produce a bounded failure and never a success message.
 Owned staging files are removed on completion/cancellation; process-kill cleanup and provider
@@ -100,13 +101,13 @@ preferences; not all platform string copies can be wiped.
 The apps serialize wallet operations before replacing the core and clear old views on switch.
 Process-wide sync IDs reject delayed callbacks targeting a new core after restoration. This
 regression and the complete local gate pass 187 Rust tests and 26 offline checks. Native file
-helper tests and the system document-picker/recovery flow await execution. Apple uses the
+helper tests and the complete system document-picker/recovery flows now pass. Apple uses the
 [iOS 17 FileDocument export/cancellation API](https://developer.apple.com/documentation/swiftui/view/fileexporter(ispresented:document:contenttypes:defaultfilename:oncompletion:oncancellation:)).
 
-The corrected generation tests pass on both platforms at `56ffb89`. Two file helper tests
-pass on each platform; Apple passes all 13 runtime tests. Android's payment scenario timed
-out and its keyboard/diagnostic correction awaits CI. Actual system picker round-trips are
-now authored. See [native document results](../validation/backup-document-native-checks.json).
+The corrected generation tests first pass at `56ffb89`; two file helper tests pass on each
+platform. Subsequent runs pass system export/readback, inspection, reviewed restore and
+restart on both platforms. Earlier keyboard/picker failures are retained in
+[native document results](../validation/backup-document-native-checks.json) and the validation history.
 
 Apple provider reads use NSFileCoordinator while holding security-scoped access. The Files
 integration exposes only the Documents directory; an empty Backups folder supplies a local
@@ -119,5 +120,6 @@ and [in-place document coordination requirements](https://developer.apple.com/li
 
 The recovery screens explain that an old backup cannot know receive addresses issued after
 it was made, and a scan cannot discover unused addresses. Positive native recovered-payment
-review/submission, provider interruption, physical hardware and independent security review
-remain open. M7 remains incomplete.
+review/submission now passes, including separate consent, exact published bytes and observed
+provenance. Provider interruption, physical hardware and independent security review remain
+open. M7 remains incomplete.

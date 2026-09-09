@@ -11,18 +11,20 @@ These are ordered work packages, not time estimates.
 | M4: QR external signing | PSBT verification and QR codecs pass software tests; native camera builds/device qualification open | Bounded UR/BBQr sessions interoperate on devices; wrong payloads/transactions rejected; per-input signatures verified; receive/policy comparison works |
 | M5: Android USB / bhwi | Bounded pinned protocol and Android adapter compile; software and mobile FFI tests pass, physical qualification open | Pinned bhwi revision; documented model/firmware/transport matrix; permission, cancellation, reconnect and app lifecycle tests pass |
 | M6: signet end-to-end | Finalization and explicit broadcast pass software tests; native/hardware end-to-end open | 2-of-3 QR + USB with restart signs, validates, finalizes and explicitly broadcasts to a configured test backend |
-| M7: hardened release candidate | Core protection/migration, native vaults and backup/restore tested; native recovery UX and switching open | Protected storage, backup/recovery/migration tests, dependency/license review, independent security review and a clean supported-device matrix |
+| M7: hardened release candidate | Core protection/migration, native vaults, system backup/restore, generation switching and recovery UX pass; physical storage and release review open | Protected storage, backup/recovery/migration tests, dependency/license review, independent security review and a clean supported-device matrix |
 
 ## M1 backlog before declaring it done
 
 - Rust compilation, rustfmt and reviewed Cargo.lock completed on Rust 1.93.1; keep required checks passing.
 - Both adapters compile and execute the actual mobile Rust library; Android packages both
   arm64/x86_64 ABIs. Keep the recorded host/mobile FFI and process-restart checks passing.
-- Extend initial emulator/simulator coverage to accessibility, dark/light appearance and
-  cancellation during active network IO on physical phones.
+- Long-list, dark/light and enlarged-text scenarios pass on both virtual platforms; broader
+  accessibility, device sizes and cancellation during active network IO on physical phones
+  remain to qualify.
 - Public key ordering, duplicate accounts/origins, branch/policy mismatches and hardened/public
-  derivation constraints now have regression coverage. Expand private-key/WIF rejection and
-  parser fuzz coverage before declaring descriptor validation complete.
+  derivation constraints have regression coverage. Descriptor/private-key rejection and
+  bounded parser fuzzing pass; keep these gates and extend the corpus when supported
+  policies or observed failures change.
 - File reopen, snapshot-write rollback, competing reservations and abrupt-process WAL
   recovery tests pass. Physical power-loss/storage-fault testing remains open.
 
@@ -43,21 +45,26 @@ These are ordered work packages, not time estimates.
 - Native 100-output tab-scroll and large-text scenarios are authored for both platforms;
   Apple passes independent scroll restoration, light appearance and measured large-text controls.
   Android also passes independent offsets, light appearance and enlarged-text controls in CI.
-  Subsequent contrast/system-icon corrections await a native rerun. The data comes from the existing keyless
+  The contrast/system-icon corrections also pass the final native rerun. The data comes from the existing keyless
   regtest node, with isolated native vaults and no production balance-injection API.
-- Native coin selection, review, PSBT file export and saved drafts are implemented; validate
-  every mode on both platforms and compare layouts/accessibility against the reference.
+- Native coin selection, review, PSBT file export and saved drafts are implemented; all four
+  modes and interrupted-draft restart pass on both platforms. Broader layouts/accessibility
+  and physical file-provider qualification remain.
 - Apple layout screenshots exposed inherited orange coin text and weak light-theme contrast.
   Explicit neutral coin text and the approved accent/secondary/error/primary-button colors
-  are now authored. Source color-pair calculations and offline checks pass; native compilation
-  and rendered comparison remain pending. See [color evidence](../validation/ios-semantic-color-checks.json).
+  now compile and render in the passing native suite. Source color-pair calculations and
+  partial rendered comparison pass; broader accessibility remains open. See the
+  [public screenshots and limits](../validation/native-2026-09-09/README.md).
 - Observed submissions now apply payment labels to history and wallet-owned outputs once,
   retaining their saved input provenance through edits/reorgs. Rust, migration and rollback
-  tests pass; native provenance presentation and a real device submission remain to qualify.
+  tests pass; both native provenance/label-edit screens now pass. A real-device submission
+  remains to qualify.
 
 ## Release blockers
 
-Public distribution should wait for a chosen license and reproducible dependency lock.
-Real-funds support additionally requires protected metadata storage, verified hardware
-receive addresses and multisig policies, actual signature validation, reorg-safe drafts,
-backup/export recovery, and the end-to-end adversarial tests in `05-testing.md`.
+Public distribution still requires an owner-selected license, complete upstream/distribution
+review and reproducibility review beyond the checked dependency locks. Real-funds support
+additionally requires physical qualification of protected storage and backup recovery,
+verified hardware receive addresses and multisig policies, the supported-device matrix and
+the end-to-end adversarial trials in `05-testing.md`. Passing signature/reorg/restore software
+tests does not close those release gates.

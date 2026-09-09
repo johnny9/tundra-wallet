@@ -45,9 +45,9 @@ format: `user_version` and dependency upgrades require restore/migration tests.
 Foreign keys include `(wallet_id, draft_id)`, preventing cross-wallet reservations. A
 coin has at most one reservation in a wallet. Freeze rows are independent of reservation
 rows. Unused indexes and newly revealed receive addresses are persisted before being
-returned. The current apps still use legacy plaintext storage. A tested protected Rust
-constructor now uses pinned SQLCipher; native key retention/migration and recovery remain
-release gates. See [protected storage](13-storage.md).
+returned. Both native apps now use pinned SQLCipher through their platform key vaults.
+Protected startup, plaintext migration, retained-generation restore and restart pass on
+both virtual platforms; physical storage qualification remains. See [protected storage](13-storage.md).
 
 File-backed cores hold a shared migration lock until their DB connection is released.
 The explicit plaintext upgrade requires the exclusive lock, verifies an encrypted export,
@@ -66,10 +66,11 @@ The source milestone uses synchronous UniFFI methods and a mutex. Calls go off t
 Android `Dispatchers.IO`, iOS a dedicated actor. Do not hold this mutex while waiting for a
 user, a device or the network.
 
-Before long-running work is added, introduce cancellable operation IDs and typed progress
-notifications. Build external scan/transport work outside a DB transaction, then validate
-and apply its result in a short transaction. Test cancellation and lifecycle explicitly;
-a cancelled coroutine is not automatically a cancelled native operation.
+Long-running scans and USB sessions use cancellable operation IDs and typed progress.
+External scan/transport work runs outside a DB transaction; validated results apply in a
+short transaction. Sync IDs are unique across cores within a process, so callbacks for a
+replaced store cannot target its successor. Physical cancellation/lifecycle qualification
+remains separate; a cancelled coroutine is not automatically a cancelled native operation.
 
 ## Hardware boundary
 

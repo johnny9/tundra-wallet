@@ -6,9 +6,10 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
-**All four CI jobs pass at [cd44448](https://github.com/johnny9/tundra-wallet/actions/runs/34330225952).**
+**All four CI jobs pass at [1a9499c](https://github.com/johnny9/tundra-wallet/actions/runs/34332720770).**
 This includes **189 Rust tests / 34 offline checks**, parser fuzzing/audit and dependency/notice
-checks. Exact results and hashes are in the [passing native record](../validation/locked-native-passing-checks.json).
+checks. Exact results and hashes are in the [final native record](../validation/final-native-checks.json).
+The preceding [cd44448 baseline](../validation/locked-native-passing-checks.json) also passes.
 
 Android passes both Rust mobile ABIs, the app/test APK builds, **10 JVM / all 18 instrumentation
 tests** and cold restart. The new recovered-payment screen now passes explicit reapproval,
@@ -16,7 +17,8 @@ separate submission consents, one exact published-fixture POST, observed input p
 retained output-label edits. Its 100-output scenario passes independent Activity/Coins offsets,
 fixed tabs, light appearance and enlarged-text controls. Strict complete dependency checks,
 actual refusal cases, all **20,220 installed SDK payload files/links** and the exact **177-text
-APK notice resource** pass too.
+APK notice resource** pass too. The document test needed one bounded recovery of the hosted
+Quickstep launcher ANR; its public diagnostic screenshot is retained in the CI artifact.
 
 Apple passes its app build, **6 host FFI / all 17 simulator tests** with no skips. The normal
 wallet scenario passes all four payment modes, filters, saved-draft restart and real system
@@ -24,17 +26,27 @@ Files export/readback/inspection/restore/restart. Both public signing/recovery U
 and the complete long-list/light/large-text scenario pass. Pinned XcodeGen 2.46.0 executes,
 and the exact **177-text notice resource** is present in the built app. The persistent,
 read-only loopback RPC correction fixes the preceding fixture scan timeout without changing
-production networking or the UI's wait limits.
+production networking or the UI's wait limits. This run uses the arm64 iPhone 17 Pro simulator
+on iOS 26.2; the app is built with the pinned Xcode 16.4.
 
-**Subsequent presentation/packaging changes still require a native rerun.** The screenshots
-exposed weak iOS light-theme/inherited button colors and unreadable Android system icons in
-light appearance. Semantic color and system-bar fixes are authored; source color-pair checks
-and local Android compilation pass. The Android builder also removes two unused BBQr cdylibs;
-all ten remaining APK libraries pass correct-ABI, 16 KiB ELF/ZIP alignment, nonexecutable-stack
-and relocation checks. This is binary inspection, not a 16 KiB runtime qualification. See
+**The presentation and packaging corrections now pass their native rerun.** iOS semantic
+colors compile and render with neutral coin text; Android's window icon-mode assertions pass
+in both appearance modes, and its light screenshot shows readable status icons. Exact public
+screenshots and comparison limits are [retained in the repository](../validation/native-2026-09-09/README.md).
+The Android builder removes two unused BBQr cdylibs; all ten remaining APK libraries pass
+correct-ABI, 16 KiB ELF/ZIP alignment, nonexecutable-stack and relocation checks. The trimmed
+APK passes the complete runtime suite. This is not 16 KiB runtime qualification. Earlier
+source/local-check records are retained at
 [iOS colors](../validation/ios-semantic-color-checks.json),
 [Android system icons](../validation/android-system-bar-checks.json) and
-[native packaging](../validation/android-native-packaging-checks.json).
+[native packaging](../validation/android-native-packaging-checks.json); their pending statements
+are superseded by this run.
+
+The three 61-second AddressSanitizer runs complete **1,469,122 parser / 1,220 USB protocol /
+503,608 signature cases** without crashes. The recorded RustSec audit reports zero
+vulnerabilities and no warning categories. These are bounded checks, not exhaustive parser
+testing or independent security review. Eight Rust fixture/helper entry points are intentionally
+ignored by the ordinary workspace run; the real regtest is separately executed and passes.
 
 Local user-owned Android tools now build both APKs and pass strict **offline** Gradle builds,
 10 real host FFI JVM tests and exact native notice checks. No sudo installation was needed.
@@ -162,7 +174,7 @@ before reopening, then captures the baseline used for subsequent restore asserti
 that explicit reopen. The remaining assertions stay in place and await the next run.
 See [`store-selection-native-checks.json`](../validation/store-selection-native-checks.json).
 
-## Last fully passing native checkpoint
+## Earlier fully passing native checkpoint
 
 The [restore run at 03d3732](https://github.com/johnny9/tundra-wallet/actions/runs/34307207286)
 is **fully green**. Android passes **8 JVM tests, all 11 instrumentation tests and cold

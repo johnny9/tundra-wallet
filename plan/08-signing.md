@@ -3,7 +3,8 @@
 The Rust core accepts a signed PSBT for an existing test-network draft. The original PSBT
 and review stay immutable; schema v3 stores the validated signature aggregate separately.
 Import, review-state update and signature persistence share one SQLite transaction.
-Reopen/export revalidate signatures. [Finalization](10-finalization.md) now saves exact transaction bytes; broadcast remains unavailable.
+Reopen/export revalidate signatures. [Finalization](10-finalization.md) saves exact transaction
+bytes; [test-network broadcast](12-broadcast.md) is a separate explicit action.
 
 ## Accepted format and policy
 
@@ -34,8 +35,9 @@ signed drafts on the same terms as unsigned drafts; returning coins cannot reviv
 Freezing a reserved input blocks signing use until the user unfreezes it.
 
 The supplied endpoint is still the trusted chain view. These checks do not defend against
-an attacker who can coherently replace the plaintext database, descriptors and approval.
-Protected storage and hardware policy/address comparison remain release gates.
+an attacker who controls the unlocked app or can replay a coherent old store, descriptors
+and approval. Native protected storage is implemented; physical storage qualification and
+hardware policy/address comparison remain release gates.
 
 ## Executed software evidence and remaining gates
 
@@ -45,9 +47,10 @@ progress, reopen, failed-write rollback, schema-v2 migration and permanent inval
 The parser participates in the AddressSanitizer fuzz harness. See [VALIDATION.md](VALIDATION.md)
 and `validation/signing-checks.json` for exact execution evidence.
 
-These tests do not qualify QR codecs, scanner sessions, a hardware device, every 2-of-3
-signing pair or a signet end-to-end flow. Native signed-file interaction tests, QR exchange,
-policy/address verification and bhwi/USB remain separate work.
+Both native published-file response and positive final-review UI tests now pass, as do
+independent QR image decoding checks. These do not qualify camera sessions, a hardware
+device, every 2-of-3 signing pair or a signet end-to-end flow. Physical QR exchange,
+policy/address verification and bhwi/USB qualification remain separate work.
 
 The format and signature hashing follow [BIP 174](https://bips.dev/174/) and
 [BIP 143](https://bips.dev/143/). Public fixture attribution is in

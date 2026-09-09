@@ -35,7 +35,8 @@ upgrades legacy plaintext only after durably retaining its key. The isolated vau
 the normal protected startup/restart path passes on both virtual platforms. Android uses `noBackupFilesDir`,
 disables Android backup and sets FLAG_SECURE. iOS excludes the support directory from backup
 and requests complete file protection. This is not an independently audited metadata design;
-physical lock/power-loss qualification and restore remain open. iOS screenshot prevention
+native backup/restore passes on both virtual platforms, while physical lock/power-loss
+qualification remains open. iOS screenshot prevention
 and removal of already-open SQLCipher keys from process memory on lock are not asserted.
 
 The database contains public descriptors and sensitive labels/history. An attacker who
@@ -54,7 +55,8 @@ be assumed unavailable.
 
 The software validator and atomic persistence are implemented and exercised with public signed
 fixtures and adversarial tests. [08-signing.md](08-signing.md) defines the accepted format and
-remaining native, hardware, finalization and broadcast gates.
+accepted software scope and remaining hardware gates. Both native published-signature,
+finalization, recovery and explicit fixture-submission scenarios pass.
 
 Bound input size, parse PSBT versions/types explicitly, match the draft's unsigned transaction,
 check outpoints/prevout scripts and values against independently known wallet state, match
@@ -73,5 +75,6 @@ The iOS Files integration shares only Documents/Backups and other user-managed D
 contents. Wallet databases, native keys and import/export staging remain in private support
 storage, excluded from automatic backup. Exported backup files use their separate password;
 users must retain a verified copy outside the app/device. Provider reads are coordinated,
-and successful export requires destination readback. Native system-picker tests are an open
-gate; see [backup recovery](14-backup.md).
+and successful export requires destination readback. System export/readback, reviewed restore
+and restart pass on both virtual platforms; provider interruption and physical qualification
+remain open. See [backup recovery](14-backup.md).

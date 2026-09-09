@@ -92,8 +92,9 @@ file/link against the pinned Linux archives. Installed-file comparison and pinne
 execution both pass in CI. Command-line tools, emulator/host images and other build utilities
 still have separate provenance/reproducibility limits.
 
-A complete SDK/design/fixture inventory, other nested vendored notices, validated binary notice
-packaging and distribution review remain release gates. These notes do not grant rights to
+A complete SDK/design/fixture inventory, other nested vendored notices, correspondence between
+the broad notice bundle and actual distributed binaries, and distribution review remain
+release gates. Exact notice-resource packaging passes on both platforms. These notes do not grant rights to
 project branding or imply hardware-vendor endorsement.
 
 SQLCipher 4.19.0's reviewed source and BSD 3-Clause license are retained under

@@ -20,7 +20,8 @@ Scan a public descriptor QR or import a supported file -> review detected policy
 information belong to a wallet. Hardware-specific registration metadata can also belong
 there quietly, without creating a signer-management UI.
 
-M1 implements file/paste parsing in native UI, not QR scanning. Require checksummed public
+The foundation implements file/paste parsing; native QR scanning is now added with physical
+qualification still open. Require checksummed public
 extended keys with origin information and receive/change branches. Accept one `/<0;1>/*`
 multipath expression or a matching receive/change pair. Explicitly choose network: testnet,
 signet and regtest keys cannot disambiguate the intended chain on their own. Never guess a
@@ -49,7 +50,7 @@ consolidation and freeze. Ineligible outputs remain visible with reasons.
 
 Persist transaction/address/output labels and user freezes. Support previewed BIP 329
 imports/exports. Do not send labels to hardware or a chain server by default. Preserve
-original input labels in draft review and, in a later milestone, output provenance.
+original input labels in draft review and observed output provenance.
 Consolidated/change outputs may receive new labels without erasing input history.
 
 ## Spending

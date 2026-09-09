@@ -2,8 +2,8 @@
 
 Rust submits only the exact persisted finalized transaction, after another check of the
 approval, signatures, current wallet inputs, reservations, freezes and fee accounting.
-Mainnet remains blocked. Native confirmation forms and typed UniFFI calls are authored;
-their new build/runtime gate is pending. Hardware signet end-to-end qualification remains open.
+Mainnet remains blocked. Both native confirmation forms and typed UniFFI calls pass positive
+published-fixture runtime checks. Hardware signet end-to-end qualification remains open.
 
 The adapter uses Esplora's hex-body `POST /tx` and expects the exact transaction ID in its
 successful response. See the [upstream Esplora API](https://github.com/Blockstream/esplora/blob/master/API.md#post-tx).
@@ -50,9 +50,11 @@ The HTTP servers are local protocol fixtures; they do not prove Bitcoin network 
 
 Both native forms show the transaction ID and endpoint and require fresh consent. Changing
 the endpoint clears consent; a retry has an additional acknowledgement. No automatic
-broadcast follows signing, finalization, startup or sync. Android dialog and mobile FFI
-refusal tests are authored. Positive native signed-review/submission coverage and a
-hardware-funded signet round trip remain to qualify/complete.
+broadcast follows signing, finalization, startup or sync. Android dialog/mobile FFI refusal
+tests and both native positive recovered-review/submission scenarios pass. Each public
+scenario requires separate reapproval and submission consent, then sends the exact published
+transaction to a fresh loopback fixture. This is not real-network acceptance; a hardware-funded
+signet round trip remains open. See [current native results](VALIDATION.md).
 
 ## Observed labels and provenance
 
@@ -67,5 +69,6 @@ labels independently of current metadata. The typed `output_source` API returns 
 historical review; native coin details now show its input labels. This is not a current
 confirmation or eligibility claim. New-output provenance and labels roll back together
 with the chain snapshot, review state and reservation changes on an injected write failure.
-Four additional Rust tests and expanded offline foreign-key/deletion checks pass. Native
-presentation is authored; positive signed native observation remains to qualify.
+Four additional Rust tests and expanded offline foreign-key/deletion checks pass. Both native
+positive scenarios observe the exact fixture transaction, display its retained input labels
+and preserve user output-label edits after reopen and resync.
