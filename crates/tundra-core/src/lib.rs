@@ -16,6 +16,8 @@ mod recovery;
 pub mod signing;
 mod storage;
 pub use storage::{StorageFormat, migrate_plaintext_storage, storage_format};
+mod store_selection;
+pub use store_selection::{StorageLocation, StorageRestore, selected_storage};
 mod sync;
 pub mod usb;
 pub use engine::Core;

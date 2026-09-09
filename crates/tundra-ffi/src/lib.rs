@@ -61,6 +61,70 @@ pub fn restore_backup(
 }
 
 #[derive(Debug, Clone, uniffi::Record)]
+pub struct StorageLocation {
+    pub generation: String,
+    pub directory: String,
+    pub require_existing: bool,
+}
+impl From<&core::StorageLocation> for StorageLocation {
+    fn from(value: &core::StorageLocation) -> Self {
+        Self {
+            generation: value.generation.clone(),
+            directory: value.directory.to_string_lossy().into_owned(),
+            require_existing: value.require_existing,
+        }
+    }
+}
+#[uniffi::export]
+pub fn selected_storage(root: String) -> Result<StorageLocation> {
+    Ok((&core::selected_storage(root)?).into())
+}
+
+/// Exclusive, explicit restore attempt. Native code retains its new storage key
+/// before restore and marks it initialized before activating the verified store.
+#[derive(uniffi::Object)]
+pub struct StoreRestoreSession {
+    session: Mutex<core::StorageRestore>,
+}
+#[uniffi::export]
+impl StoreRestoreSession {
+    #[uniffi::constructor]
+    pub fn begin(root: String, database_name: String) -> Result<Arc<Self>> {
+        Ok(Arc::new(Self {
+            session: Mutex::new(core::StorageRestore::begin(root, &database_name)?),
+        }))
+    }
+    pub fn location(&self) -> Result<StorageLocation> {
+        Ok(self
+            .session
+            .lock()
+            .map_err(|_| core::Error::Storage)?
+            .location()
+            .into())
+    }
+    pub fn restore(
+        &self,
+        source: String,
+        password: String,
+        storage_key: Vec<u8>,
+    ) -> Result<BackupInfo> {
+        Ok(self
+            .session
+            .lock()
+            .map_err(|_| core::Error::Storage)?
+            .restore(source, password, storage_key)?
+            .into())
+    }
+    pub fn activate(&self) -> Result<()> {
+        Ok(self
+            .session
+            .lock()
+            .map_err(|_| core::Error::Storage)?
+            .activate()?)
+    }
+}
+
+#[derive(Debug, Clone, uniffi::Record)]
 pub struct RecoveryReviewRequest {
     pub wallet_id: String,
     pub draft_id: String,
