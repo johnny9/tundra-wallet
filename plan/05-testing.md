@@ -33,6 +33,14 @@ regtest outputs directly to public fixtures; no private signing keys or native f
 API are used. Android forwards loopback port 3002 using ADB; the iOS simulator uses host
 loopback. These tests qualify software behavior on the recorded virtual runtimes only.
 
+A separate server on loopback port 3003 supplies the pinned published Ledger signatures
+and synthetic confirmation/observation data for the native vault tests. It is not Bitcoin
+Core or a valid Signet chain, and accepts only the exact published final transaction. Start
+it with `bash scripts/start-published-native-fixture.sh` on a fresh test host; both native
+CI jobs do this explicitly. Android forwards both ports. Rust exercises the same fixture
+through real HTTP with isolated ephemeral ports. Android's first vault scenario passes;
+Apple runtime and positive UI controls remain pending as recorded in `VALIDATION.md`.
+
 ## Existing Rust source tests
 
 Amount parsing/formatting; policy import and checksums; test-network matching; missing-change

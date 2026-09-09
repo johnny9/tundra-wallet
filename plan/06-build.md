@@ -37,10 +37,17 @@ Rust toolchain and lockfile hash, with a fallback for the same OS/architecture/j
 when the lock changes. Cargo revalidates changed dependency/build inputs. Every build/test
 command still runs with the reviewed lock; cache hits are not validation results.
 
-Formatting and Clippy warnings are required checks. Third-party CI actions still use version
-tags; pin their commit SHAs after review before a release. The Gradle wrapper is pinned,
-but Gradle dependencies, SDK downloads, cargo-ndk installation and the Xcode host still
-need reproducibility review.
+Formatting and Clippy warnings are required checks. Workflow actions are now pinned to the
+exact commit SHAs already executed in run 34311969023; `.github/action-pins.json` records
+upstream versions and revisions, and an offline guard rejects unreviewed/floating references.
+The Rust action revision explicitly selects 1.93.1. This prevents tag movement, not malicious
+behavior inside an action. The Gradle wrapper is pinned, but Gradle dependencies, SDK
+downloads, cargo-ndk installation and the Xcode host still need reproducibility review.
+
+Both complete Cargo locks now have a deterministic declared-license/notice inventory,
+including all features and the fuzz graph. CI regenerates it from locked package metadata;
+offline checks verify graph coverage and retained bytes. See the [notice scope and remaining
+distribution gates](../third-party/README.md). Original Tundra's license remains an owner decision.
 
 ## Build commands
 

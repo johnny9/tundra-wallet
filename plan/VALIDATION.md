@@ -6,6 +6,13 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
+Workflow action pins and both complete Cargo license/notice inventories pass their local
+checks: **29 offline tests**, deterministic inventory regeneration for **243 packages** and
+**165 retained texts**. The CI action SHAs exactly match those already executed in run
+34311969023; the new CI inventory comparison still awaits execution. This does not complete
+native dependency, binary distribution or independent security review. See
+[`reproducibility-checks.json`](../validation/reproducibility-checks.json).
+
 The [published-fixture native run at f86c34e](https://github.com/johnny9/tundra-wallet/actions/runs/34312982396)
 passes both app builds, **10 Android JVM / 13 Android instrumentation** checks and **6 Apple
 host FFI** checks. Android’s new published-signature/vault scenario passes: both signatures,

@@ -198,6 +198,29 @@ class FixtureAndSourceChecks(unittest.TestCase):
             manifest = tomllib.loads((ROOT/name/"Cargo.toml").read_text())
             self.assertTrue(manifest["package"]["publish"]["workspace"])
         tomllib.loads((ROOT/"crates/tundra-ffi/uniffi.toml").read_text())
+    def test_ci_actions_match_reviewed_immutable_revisions(self):
+        records = json.loads((ROOT/".github/action-pins.json").read_text())
+        known = {row["repository"]: row["commit"] for row in records["actions"]}
+        for path in (ROOT/".github/workflows").glob("*.yml"):
+            for action, revision in re.findall(r"uses:\s*([A-Za-z0-9_./-]+)@([^\s]+)", path.read_text()):
+                self.assertRegex(revision, r"^[a-f0-9]{40}$")
+                self.assertEqual(revision, known["/".join(action.split("/")[:2])])
+    def test_cargo_notice_inventory_covers_both_locks_and_preserves_bytes(self):
+        inventory = json.loads((ROOT/"third-party/cargo-inventory.json").read_text())
+        for lock, fingerprint in inventory["lock_sha256"].items():
+            self.assertEqual(hashlib.sha256((ROOT/lock).read_bytes()).hexdigest(), fingerprint)
+            packages = tomllib.loads((ROOT/lock).read_text())["package"]
+            expected = {(p["name"], p["version"], p["source"], p.get("checksum")) for p in packages if p.get("source")}
+            actual = {(p["name"], p["version"], p["source"], p["checksum"]) for p in inventory["packages"] if lock in p["graphs"]}
+            self.assertEqual(actual, expected)
+        for package in inventory["packages"]:
+            self.assertTrue(package["notices"])
+            for notice in package["notices"]:
+                self.assertRegex(notice["sha256"], r"^[a-f0-9]{64}$")
+                self.assertEqual(notice["retained"], "cargo-notices/" + notice["sha256"] + ".txt")
+                data = (ROOT/"third-party"/notice["retained"]).read_bytes()
+                self.assertEqual(len(data), notice["bytes"])
+                self.assertEqual(hashlib.sha256(data).hexdigest(), notice["sha256"])
     def test_included_fixture_and_schema_paths_exist(self):
         for path in (ROOT/"crates").rglob("*.rs"):
             for target in re.findall(r'include_str!\("([^"]+)"\)', path.read_text()):

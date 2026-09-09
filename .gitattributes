@@ -9,3 +9,4 @@ tests/fixtures/backup-v1.tundra binary
 tests/fixtures/native-signed-backup.tundra binary
 tests/fixtures/native-signed-response.psbt binary
 tests/fixtures/native-unsigned.sqlite binary
+third-party/cargo-notices/*.txt -text -whitespace

@@ -1,0 +1,24 @@
+{
+  "recorded_at": "2026-09-09T05:13:51.565708+00:00",
+  "workflow_actions": "8 upstream repositories pinned to the exact revisions executed in run 34311969023",
+  "rust_action": "Reviewed action.yml hardcodes 1.93.1",
+  "inventory": "243 third-party packages across both entire Cargo locks with all features; 165 distinct retained notice files",
+  "validation": "deterministic inventory regeneration matches; exact lock coverage and notice bytes pass offline checks",
+  "offline_passed": 29,
+  "limits": [
+    "Declared licenses and explicit notice supplements are not a binary distribution review",
+    "Native/SDK/design dependencies and nested vendored code remain separate",
+    "No license chosen for original Tundra source",
+    "CI regeneration gate authored, not yet run"
+  ],
+  "logs": [
+    {
+      "path": "build/cargo-notices-check.log",
+      "sha256": "390318427e91f1efbf6a73ccdcdd455ef30e5c34db5a72a79400b160e2f34076"
+    },
+    {
+      "path": "build/reproducibility-offline.log",
+      "sha256": "1bf1f5fd57478c5030d3ef845be5ef38aac950795ebbb4991a57de03b6e9bf69"
+    }
+  ]
+}

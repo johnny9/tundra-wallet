@@ -7,8 +7,9 @@ The product manages public descriptors, labeled coins and hardware-signed paymen
 It never imports or generates Bitcoin private signing keys.
 
 > **Development source, not a released wallet. Use disposable test descriptors only.**
-> Rust tests pass; both recorded native builds, all payment modes and initial restart tests
-> pass in CI. The broadcast consent dialog passes; positive signed submission remains open.
+> Rust tests and recorded native builds, payment modes and initial restart checks pass.
+> Current backup document UI checks still fail; see the exact validation report below.
+> Android's published-signature/vault submission test passes; positive submission UI remains open.
 > Explicit test-network sync and external signature validation are implemented. Hardware
 > signing remains unavailable. Explicit test-network broadcast has software validation;
 > USB device and camera qualification remain open.
@@ -37,7 +38,7 @@ It never imports or generates Bitcoin private signing keys.
 | `tundra-ffi` | Typed UniFFI API; Kotlin and Swift bindings generated and exercised against the host library | Mobile lifecycle/cancellation qualification remains |
 | Android | Compose import, wallets, sync, coin selection/search, bulk metadata and payment review | Every payment mode and restart pass on the emulator; full device qualification remains |
 | iOS | SwiftUI import, wallets, sync, coin selection/search, metadata and payment review | Every payment mode and restart pass on the simulator; full device qualification remains |
-| Protected storage | Pinned SQLCipher, encrypted DB/WAL, atomic plaintext upgrade, platform key vaults and encrypted backup/restore | Protected startup and native restore pass; generation switching/recovery UX remain under validation |
+| Protected storage | Pinned SQLCipher, encrypted DB/WAL, atomic plaintext upgrade, platform key vaults and encrypted backup/restore | Protected startup and native generation restore pass; system document/recovery UX remain under validation |
 | Design | Exact approved Tundra HTML reference and source | Simulation stays in `design/`, not in the Rust/native wallet |
 | Quality | Rust tests, offline schema/fixture checks, CI and build scripts | See [validation report](plan/VALIDATION.md) for executed versus unexecuted checks |
 

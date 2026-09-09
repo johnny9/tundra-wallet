@@ -1,0 +1,196 @@
+{
+  "reviewed_at": "2026-09-09",
+  "groups": [
+    {
+      "basis": "Packaged VCS revision points to this upstream repository root",
+      "packages": [
+        {
+          "name": "bdk_chain",
+          "version": "0.23.3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "c290eff038799a8ac0c5a82b6160a9ca456baa299a6f22b262c771342d2846c0"
+        },
+        {
+          "name": "bdk_core",
+          "version": "0.6.3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "cb3028782f6bf14a6df987244333d34e6b272b5a40a53e4879ec2dfd82275a3a"
+        }
+      ],
+      "notices": [
+        {
+          "name": "LICENSE",
+          "sha256": "031dbd187e6e01b8b0ab57250038c3810633323e61a0a4d1d0c171760dba38c7",
+          "bytes": 693,
+          "retained": "cargo-notices/031dbd187e6e01b8b0ab57250038c3810633323e61a0a4d1d0c171760dba38c7.txt",
+          "upstream_blob": "https://github.com/bitcoindevkit/bdk/blob/d9aa92b3511d95f6075616d30c146aa5df814495/LICENSE",
+          "git_blob": "9c61848fc032423e59e578be63614894f6458172"
+        },
+        {
+          "name": "LICENSE-APACHE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "bytes": 11357,
+          "retained": "cargo-notices/c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4.txt",
+          "upstream_blob": "https://github.com/bitcoindevkit/bdk/blob/d9aa92b3511d95f6075616d30c146aa5df814495/LICENSE-APACHE",
+          "git_blob": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        },
+        {
+          "name": "LICENSE-MIT",
+          "sha256": "638da3722c9e102ccd8011d82f61ae3b611174e4a0f8da185c582df137b60a8c",
+          "bytes": 1023,
+          "retained": "cargo-notices/638da3722c9e102ccd8011d82f61ae3b611174e4a0f8da185c582df137b60a8c.txt",
+          "upstream_blob": "https://github.com/bitcoindevkit/bdk/blob/d9aa92b3511d95f6075616d30c146aa5df814495/LICENSE-MIT",
+          "git_blob": "9d982a4d63256f23b8cc0854024d134e1140f4f3"
+        }
+      ]
+    },
+    {
+      "basis": "Packaged VCS revision points to this upstream repository root",
+      "packages": [
+        {
+          "name": "uniffi",
+          "version": "0.32.0",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "a782a48d72cfd7a2d65cfc7c691dbf5375c43104b3c195f7eccc716dcc3540c8"
+        },
+        {
+          "name": "uniffi_bindgen",
+          "version": "0.32.0",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "533b0312c73e3b54eb78a4b257ceae390962dd4767995778309a74644643f9ac"
+        },
+        {
+          "name": "uniffi_core",
+          "version": "0.32.0",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "8e32e261c5b0dfaba6488f536e71957dddd6b1a498ac7eb791bee56b60a086be"
+        },
+        {
+          "name": "uniffi_internal_macros",
+          "version": "0.32.0",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "84ae78069a5e6772ef694fd5bdb628532c88d2c2f0e7142bf6a384636eadb1af"
+        },
+        {
+          "name": "uniffi_macros",
+          "version": "0.32.0",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "330be6770532e86320df31f54c70bb0be67588594e8e77fa56e9083a3fed5d0d"
+        },
+        {
+          "name": "uniffi_meta",
+          "version": "0.32.0",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "78de021f5547e56ab16c665a49d67d4fd3d31e77422f7739a2e9359d328cd9e7"
+        },
+        {
+          "name": "uniffi_pipeline",
+          "version": "0.32.0",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "3f8201bb1907ed8a42d80e11cbc25c8a033e7a31c3cff1d911f56eedb81d4948"
+        },
+        {
+          "name": "uniffi_udl",
+          "version": "0.32.0",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "a6e57996bc58009cc29bf04845d627ae313c2547b87171c1c349d6c51a1656c0"
+        }
+      ],
+      "notices": [
+        {
+          "name": "LICENSE",
+          "sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5",
+          "bytes": 16725,
+          "retained": "cargo-notices/1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5.txt",
+          "upstream_blob": "https://github.com/mozilla/uniffi-rs/blob/5c7b73906358e1a7acdc1bdc7bf5cd86fb27e44c/LICENSE",
+          "git_blob": "a612ad9813b006ce81d1ee438dd784da99a54007"
+        }
+      ]
+    },
+    {
+      "basis": "Shared upstream CC0 license at bitcoin-0.32.102 tag; these archives omit VCS metadata; no exact source revision equivalence is asserted",
+      "packages": [
+        {
+          "name": "base58ck",
+          "version": "0.1.101",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "365c0acd5b2e8dd0111a46c4faea83fb3cfb6e39a49a7c73a06e090db7b2eff0"
+        },
+        {
+          "name": "bitcoin",
+          "version": "0.32.102",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "bb0ce8bd5baaa0d303a19915a6d93afed161f528654e42da2a7a97d05c59499a"
+        },
+        {
+          "name": "bitcoin-consensus-encoding",
+          "version": "1.2.0",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "6712f9c6fd6785b3b270884e57c441c403dc5d7e19ca45368c97c7a1de3000ec"
+        },
+        {
+          "name": "bitcoin-internals",
+          "version": "0.6.0",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "d573f4cf32996a8dce612e4348cece65a241f1882ed594047c9ba348e8869fa5"
+        },
+        {
+          "name": "bitcoin-io",
+          "version": "0.1.101",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "bb5de036369d1ac59d3c1819ebc4d850f89466f5401c571a285b6ed564a4cb78"
+        },
+        {
+          "name": "bitcoin-units",
+          "version": "0.1.101",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "9cb95693f371d089a4b5b6fc41c6f3ea6e01ee8c15388335dfac8ea685173b51"
+        },
+        {
+          "name": "bitcoin_hashes",
+          "version": "0.14.101",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "bca4c7abb40c8817d77403c880988cfd484f23ab2365726afb2f798363e2c4a2"
+        },
+        {
+          "name": "bitcoin_hashes",
+          "version": "1.2.0",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "5304e53726dbe5f93141535e102ed97b5bf4714fbecefdda8f9fb98d7fdaff0e"
+        }
+      ],
+      "notices": [
+        {
+          "name": "LICENSE",
+          "sha256": "7179683e8000e6bdc9bbc60d85edf0a4ac8e76f951857f54fcb775d5886f1309",
+          "bytes": 7049,
+          "retained": "cargo-notices/7179683e8000e6bdc9bbc60d85edf0a4ac8e76f951857f54fcb775d5886f1309.txt",
+          "upstream_blob": "https://github.com/rust-bitcoin/rust-bitcoin/blob/bitcoin-0.32.102/LICENSE",
+          "git_blob": "6ca207ef004cb69d03041e7e5c288a2be4968045"
+        }
+      ]
+    },
+    {
+      "basis": "Standard SPDX text for the MITNFA identifier declared in the checksummed package; upstream package omits license text and its recorded VCS revision was unavailable. Package author is retained in the inventory; this is not a recreated copyright notice.",
+      "packages": [
+        {
+          "name": "hex_lit",
+          "version": "0.1.1",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "3011d1213f159867b13cfd6ac92d2cd5f1345762c63be3554e84092d85a50bbd"
+        }
+      ],
+      "notices": [
+        {
+          "name": "MITNFA.txt",
+          "sha256": "d436716f7a05466f52443893079761c8a88f4967d0ef490fabc0a1c9ef1c3a1d",
+          "bytes": 1531,
+          "retained": "cargo-notices/d436716f7a05466f52443893079761c8a88f4967d0ef490fabc0a1c9ef1c3a1d.txt",
+          "upstream_blob": "https://api.github.com/repos/spdx/license-list-data/git/blobs/6d44edb3db0e68a518a0286ce5f8d78e9b565d1e",
+          "git_blob": "6d44edb3db0e68a518a0286ce5f8d78e9b565d1e",
+          "standard_text": true
+        }
+      ]
+    }
+  ]
+}

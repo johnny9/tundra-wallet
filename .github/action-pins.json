@@ -1,0 +1,63 @@
+{
+  "reviewed_at": "2026-09-09",
+  "scope": "Exact upstream revisions already executed in run 34311969023; pinning prevents tag movement, not a security audit",
+  "rust_toolchain": "The 1.93.1 action revision hardcodes toolchain: 1.93.1 in its parse step",
+  "actions": [
+    {
+      "repository": "actions/checkout",
+      "ref": "v4",
+      "commit": "11d5960a326750d5838078e36cf38b85af677262",
+      "url": "https://github.com/actions/checkout/commit/11d5960a326750d5838078e36cf38b85af677262",
+      "subject": "backport fixes to releases-v4 (#2524)"
+    },
+    {
+      "repository": "actions/cache",
+      "ref": "v4",
+      "commit": "0057852bfaa89a56745cba8c7296529d2fc39830",
+      "url": "https://github.com/actions/cache/commit/0057852bfaa89a56745cba8c7296529d2fc39830",
+      "subject": "Merge pull request #1655 from actions/Link-/prepare-4.3.0"
+    },
+    {
+      "repository": "dtolnay/rust-toolchain",
+      "ref": "1.93.1",
+      "commit": "c655e6902480079b4f4726174674b33218ce239c",
+      "url": "https://github.com/dtolnay/rust-toolchain/commit/c655e6902480079b4f4726174674b33218ce239c",
+      "subject": "toolchain: 1.93.1"
+    },
+    {
+      "repository": "actions/upload-artifact",
+      "ref": "v4",
+      "commit": "ea165f8d65b6e75b540449e92b4886f43607fa02",
+      "url": "https://github.com/actions/upload-artifact/commit/ea165f8d65b6e75b540449e92b4886f43607fa02",
+      "subject": "Merge pull request #685 from salmanmkc/salmanmkc/3-new-upload-artifacts-release"
+    },
+    {
+      "repository": "actions/setup-java",
+      "ref": "v4",
+      "commit": "cf277c60eb25467037889841efdb72551f06f6c3",
+      "url": "https://github.com/actions/setup-java/commit/cf277c60eb25467037889841efdb72551f06f6c3",
+      "subject": "Deprecate setup-java v4 (#1194)"
+    },
+    {
+      "repository": "android-actions/setup-android",
+      "ref": "v3",
+      "commit": "9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407",
+      "url": "https://github.com/android-actions/setup-android/commit/9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407",
+      "subject": "Update dependencies"
+    },
+    {
+      "repository": "gradle/actions",
+      "ref": "v4",
+      "commit": "ed408507eac070d1f99cc633dbcf757c94c7933a",
+      "url": "https://github.com/gradle/actions/commit/ed408507eac070d1f99cc633dbcf757c94c7933a",
+      "subject": "Bump the npm-dependencies group in /sources with 5 updates (#725)"
+    },
+    {
+      "repository": "reactivecircus/android-emulator-runner",
+      "ref": "v2.35.0",
+      "commit": "b530d96654c385303d652368551fb075bc2f0b6b",
+      "url": "https://github.com/ReactiveCircus/android-emulator-runner/commit/b530d96654c385303d652368551fb075bc2f0b6b",
+      "subject": "Merge branch 'main' into release/v2"
+    }
+  ]
+}
