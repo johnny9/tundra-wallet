@@ -1,0 +1,122 @@
+{
+  "recorded_at": "2026-09-09T08:36:12.976422+00:00",
+  "platform": "Ubuntu 26.04 x86_64, local user-owned tools; no sudo installation",
+  "archives_reviewed": 6,
+  "toolchain_notice_texts": 17,
+  "installed_sdk_files_compared": 20220,
+  "selected_sdk": "API 36 r2 / Build Tools 35.0.0 / NDK 27.2.12479018",
+  "cargo_ndk": "4.1.2",
+  "android_abis": [
+    "arm64-v8a",
+    "x86_64"
+  ],
+  "rust_native_build": "Both ABIs pass; first wrapper interrupted by concurrent script edit, complete finalized wrapper rerun passes",
+  "bindings": "Kotlin and Swift generated from the same compiled host API",
+  "complete_locked_configurations": "PASS locally and in CI 34327546681",
+  "task_lock_change": "Only add empty androidApis configuration, discovered by actual app resource compilation; no module changes",
+  "app_and_instrumentation_apks": "Both compile; normal strict --offline build without lock-writing flags passes",
+  "jvm_tests_passed": 10,
+  "instrumentation_runtime": "NOT RUN locally; Waydroid remains IP UNKNOWN with no ADB device",
+  "notice_resource": "177 texts / 2301108 bytes; actual APK bytes match",
+  "gradle_refusals": "Baseline, missing-lock, disabled-verification and changed-plugin-checksum checks pass",
+  "offline_passed": 34,
+  "apple_pinned_tool_and_expanded_resource": "Authored; execution pending",
+  "files": [
+    {
+      "path": "apps/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk",
+      "sha256": "b375d64a4605b9462610943fbbb8465c95b28ba1bd66748cfd31c9cfda06d0cc"
+    },
+    {
+      "path": "apps/android/app/build/outputs/apk/debug/app-debug.apk",
+      "sha256": "262a3e9ced96ce9ec9652715ba81f3773cd9a10ac6adcd89872fe08335b04f28"
+    },
+    {
+      "path": "apps/android/app/build/test-results/testDebugUnitTest/TEST-dev.johnny9.tundra.BackupFilesTest.xml",
+      "sha256": "a90d21e6433a4cf53ae550065d3a0cf39538d3ae3f610d71584207970d714a35"
+    },
+    {
+      "path": "apps/android/app/build/test-results/testDebugUnitTest/TEST-dev.johnny9.tundra.NativeCoreTest.xml",
+      "sha256": "a5e65834f384a27c08bd3b25b3925059459f7e02a441cff915ac46ed72800a0a"
+    },
+    {
+      "path": "apps/android/app/build/test-results/testDebugUnitTest/TEST-dev.johnny9.tundra.UsbDescriptorTest.xml",
+      "sha256": "6ad2d4bb74758ac4354e95b00510391991d8a7f59b31ec6689fcbaa636bd0ee7"
+    },
+    {
+      "path": "apps/android/app/gradle.lockfile",
+      "sha256": "d2042fbaba47e814e605962540a8a8928812766f636b0cbdbbbd426e55c7a542"
+    },
+    {
+      "path": "build/android-rust-targets-local.log",
+      "sha256": "dabf5b8b05cf5dcd6e9dd396583713f0d13c7c453778017e832f7777ea9ba71f"
+    },
+    {
+      "path": "build/cargo-ndk-local-install.log",
+      "sha256": "2d72d7e27f509bd48b8b574fcffb454edfc904c8cb319d6524f49bb5fec5a1ea"
+    },
+    {
+      "path": "build/gradle-enforcement-local-sdk/baseline.log",
+      "sha256": "6066783fcbc13113566a51e70f90a26fc342fba6df7250709a8ad89553cb3f01"
+    },
+    {
+      "path": "build/gradle-enforcement-local-sdk/checksum-mismatch.log",
+      "sha256": "36a96ce3a8350188010962cd31a5291957c9774f2325783e7d9208fe3dda075c"
+    },
+    {
+      "path": "build/gradle-enforcement-local-sdk/missing-lock.log",
+      "sha256": "5f9c6a3a726d564c36ebc950f79a1ffc05847bc6d9cecabded15d331ab06099d"
+    },
+    {
+      "path": "build/gradle-enforcement-local-sdk/verification-disabled.log",
+      "sha256": "a5c4da50e147313e9acfecf8def18cf987dcdc8a2d8b60f888d5824070391596"
+    },
+    {
+      "path": "build/local-android-locked-offline-build.log",
+      "sha256": "889bf7ddf72d4258bafab2831856346055cadddf129939b5a28bbf13763eb357"
+    },
+    {
+      "path": "build/local-android-native-first.log",
+      "sha256": "da561ec39beff73e7dec180b67bb2326c390f539a643be5e2cb59f14cfc6c725"
+    },
+    {
+      "path": "build/local-android-native-second.log",
+      "sha256": "0f9f9017a87db3e886cef86216fe58254e255396e15dfe5c5896be270331665d"
+    },
+    {
+      "path": "build/local-android-notice-packaging.log",
+      "sha256": "95f41fe9990b3d07b0d6b1b9c40d41490c00347958bc94672f358c4f7f41d31d"
+    },
+    {
+      "path": "build/local-android-sdk-configurations.log",
+      "sha256": "d66950a650bc3b6b6970cba2268f59c8967af1a6884adc8a77750aa0ed8e45bd"
+    },
+    {
+      "path": "build/local-android-task-locks-first.log",
+      "sha256": "018bbca19796fc6a9e033547f632b83d7b361b2cb43a6a6dd26bfc10a44c74f0"
+    },
+    {
+      "path": "build/local-sdk-byte-comparison.log",
+      "sha256": "4d75082ad19c88dc8ce68cc46a66c959ab82a2597f49bcf7e2bebc4c74582300"
+    },
+    {
+      "path": "build/local-sdk-final-offline.log",
+      "sha256": "c79b6e042ab427f329ba595dc981a439ad6e2482191b4c3649c7148f3cb1f6d4"
+    },
+    {
+      "path": "build/local-sdk-gradle-enforcement.log",
+      "sha256": "c75746d049b00704606966eba56d27de3ddef8213cc11c1916218c02a2ae96f1"
+    },
+    {
+      "path": "build/native-toolchain-final-archives.log",
+      "sha256": "10f56b4f24aa5ac51a3a18961609f626cd81caa8064562f8eb7f14fd14ab0198"
+    },
+    {
+      "path": "third-party/bundle-manifest.json",
+      "sha256": "3d189a85983464567997742c5f6d052b422012c8ffe1a06a83a20e0a5bc94af9"
+    },
+    {
+      "path": "third-party/toolchain-inventory.json",
+      "sha256": "9a71357c36b90da2fb376d85f1cc7784e27f2e9efe6af265d7e78b1ab937a106"
+    }
+  ]
+}

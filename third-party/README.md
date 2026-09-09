@@ -71,12 +71,26 @@ These records do not choose which alternative license applies.
 
 [`bundle/THIRD-PARTY-NOTICES.txt`](bundle/THIRD-PARTY-NOTICES.txt) combines the reviewed Cargo,
 Android release-graph, supplemental, SQLCipher and design notices into one deterministic
-resource with an index and **175 distinct exact notice texts**. The broad source inventory
+resource with an index and **177 distinct exact notice texts**, including the NDK aggregate
+runtime/compiler notices. The broad source inventory
 includes build/test tools and known platform variants, not an exact binary contents manifest.
 `python3 scripts/package-notices.py` checks its generation and source hashes offline;
 `--write` prepares an explicit update. Both native apps now include this resource in source.
-CI checks its exact bytes inside the APK and built iOS app; those new packaging gates are
-pending their first native run. SDK/build-tool and remaining upstream review stay open.
+CI checks its exact bytes inside the APK and built iOS app; the initial Apple gate passes,
+while Android stops earlier at AAPT2 verification. The expanded resource awaits both builds.
+
+[`toolchain-inventory.json`](toolchain-inventory.json) records six reviewed archive downloads:
+API 36 revision 2, Linux NDK 27.2.12479018, Build Tools 35/36, XcodeGen 2.46.0 and AGP's Linux
+AAPT2. **17 distinct toolchain notice texts** are retained exactly. The unused Build Tools 36
+installation is identified separately. SDK archive SHA-1 values match Google's repository
+metadata, and newly recorded SHA-256 values match the actual downloads; XcodeGen also matches
+the release asset's published SHA-256. These are integrity/provenance records, not publisher
+signature authentication or a conclusion that every bundled tool is distributed in an app.
+`python3 scripts/native-toolchains.py --archives` compares the actual archive notices.
+`--fetch --sdk "$ANDROID_HOME"` additionally compares every selected installed SDK payload
+file/link against the pinned Linux archives. The new installed-file and pinned XcodeGen
+execution gates await CI. Command-line tools, emulator/host images and other build utilities
+still have separate provenance/reproducibility limits.
 
 A complete SDK/design/fixture inventory, other nested vendored notices, validated binary notice
 packaging and distribution review remain release gates. These notes do not grant rights to

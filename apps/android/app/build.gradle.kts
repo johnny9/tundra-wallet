@@ -6,6 +6,8 @@ plugins {
 android {
     namespace = "dev.johnny9.tundra"
     compileSdk = 36
+    buildToolsVersion = "35.0.0"
+    ndkVersion = "27.2.12479018"
     defaultConfig {
         applicationId = "dev.johnny9.tundra.dev"
         minSdk = 28

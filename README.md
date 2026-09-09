@@ -88,7 +88,7 @@ For the subset that can run without Rust, use `python3 scripts/check_offline.py`
 
 ### Android
 
-Use JDK 17+, Android SDK 36, build-tools 36.0.0 and NDK 27.2.12479018.
+Use JDK 17+, Android SDK 36, Build Tools 35.0.0 and NDK 27.2.12479018.
 The committed wrapper supplies Gradle 8.13 and verifies its distribution checksum.
 Reviewed Gradle locks and SHA-256 metadata are required; missing files or disabled verification
 fail the build. See the build plan for intentional dependency updates.
@@ -97,7 +97,7 @@ The scripts do not silently accept SDK licenses or download executables with `cu
 
 ```sh
 rustup target add aarch64-linux-android x86_64-linux-android
-cargo install cargo-ndk --locked
+cargo install cargo-ndk --version 4.1.2 --locked
 ./scripts/build-android.sh
 # Open apps/android in Android Studio, or:
 cd apps/android && ./gradlew --no-daemon :app:assembleDebug :app:testDebugUnitTest

@@ -96,7 +96,7 @@ jobs:
           key: ${{ steps.rust-cache.outputs.cache-primary-key }}
 
   android:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
@@ -114,7 +114,8 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
-      - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0' 'ndk;27.2.12479018'
+      - run: sdkmanager 'platforms;android-36' 'build-tools;35.0.0' 'ndk;27.2.12479018'
+      - run: python3 scripts/native-toolchains.py --fetch --sdk "$ANDROID_HOME"
       - run: echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/27.2.12479018" >> "$GITHUB_ENV"
       - uses: dtolnay/rust-toolchain@c655e6902480079b4f4726174674b33218ce239c # 1.93.1
         with:
@@ -191,6 +192,8 @@ jobs:
 
   ios:
     runs-on: macos-15
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
@@ -207,7 +210,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@c655e6902480079b4f4726174674b33218ce239c # 1.93.1
         with:
           targets: aarch64-apple-ios, aarch64-apple-ios-sim, x86_64-apple-ios
-      - run: brew install xcodegen
+      - run: python3 scripts/native-toolchains.py --fetch --install-xcodegen
       - run: ./scripts/build-ios.sh
       - run: ./scripts/check-swift-ffi.sh
       - run: cd apps/ios && xcodegen generate

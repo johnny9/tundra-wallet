@@ -1,16 +1,17 @@
 {
   "format": 1,
   "resource": "third-party/bundle/THIRD-PARTY-NOTICES.txt",
-  "sha256": "0185fc8724ee8e09a164a9eae6d033a0c08b082f8c2c0fa56c137eecdcb1a69a",
-  "bytes": 970513,
+  "sha256": "4fccbb7e30c34e52ada39de31637d81d3e79e34029ade5e69220e64212764163",
+  "bytes": 2301108,
   "cargo_packages": 243,
   "android_release_components": 150,
-  "distinct_notice_texts": 175,
+  "distinct_notice_texts": 177,
   "inputs": {
     "third-party/cargo-inventory.json": "fc6bccd78a7b77f4b92f9bd8008777afec272ac182ae904cf35e1affbfda2660",
     "third-party/android-inventory.json": "dbc978780fefd4ba4c5b49ce1bb908744ac59ecdb71d77558f11f350fde4eb9f",
     "third-party/android-artifact-inventory.json": "2b6367726d86fcdbc0a7956f25d398d0bbf7762807bb8b03c323f355e95e8d18",
-    "third-party/android-notice-supplements.json": "976f28684f187d8b2096afdfd0667e20718a3a7ac7ff569c3d70afcece1f4d59"
+    "third-party/android-notice-supplements.json": "976f28684f187d8b2096afdfd0667e20718a3a7ac7ff569c3d70afcece1f4d59",
+    "third-party/toolchain-inventory.json": "9a71357c36b90da2fb376d85f1cc7784e27f2e9efe6af265d7e78b1ab937a106"
   },
   "notice_sources": {
     "crates/tundra-sqlcipher/vendor/LICENSE.md": "2a2826f6acf46fa650730cf42cbb22a642be33a7ef119c9c4f4bf6daf3bef48e",
@@ -190,6 +191,8 @@
     "third-party/cargo-notices/f428305bbf2e70fbd807af0f3c7ac1b7acfb95311640f451e9d2e48db6d7e96b.txt": "f428305bbf2e70fbd807af0f3c7ac1b7acfb95311640f451e9d2e48db6d7e96b",
     "third-party/cargo-notices/f7db81051789b729fea528a63ec4c938fdcb93d9d61d97dc8cc2e9df6d47f2a1.txt": "f7db81051789b729fea528a63ec4c938fdcb93d9d61d97dc8cc2e9df6d47f2a1",
     "third-party/cargo-notices/fd80a26fbb3f644af1fa994134446702932968519797227e07a1368dea80f0bc.txt": "fd80a26fbb3f644af1fa994134446702932968519797227e07a1368dea80f0bc",
-    "third-party/cargo-notices/ff8f68cb076caf8cefe7a6430d4ac086ce6af2ca8ce2c4e5a2004d4552ef52a2.txt": "ff8f68cb076caf8cefe7a6430d4ac086ce6af2ca8ce2c4e5a2004d4552ef52a2"
+    "third-party/cargo-notices/ff8f68cb076caf8cefe7a6430d4ac086ce6af2ca8ce2c4e5a2004d4552ef52a2.txt": "ff8f68cb076caf8cefe7a6430d4ac086ce6af2ca8ce2c4e5a2004d4552ef52a2",
+    "third-party/toolchain-notices/4d5224d1c0b54ffa88b0dc0088191638fdbb7227835095dfb98f7f66b416a323.txt": "4d5224d1c0b54ffa88b0dc0088191638fdbb7227835095dfb98f7f66b416a323",
+    "third-party/toolchain-notices/cbe3237be53c0a819f8df6aac5358fdee848eee3b6571b4e2ca20767ebd7465e.txt": "cbe3237be53c0a819f8df6aac5358fdee848eee3b6571b4e2ca20767ebd7465e"
   }
 }

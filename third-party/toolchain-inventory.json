@@ -1,0 +1,229 @@
+{
+  "format": 1,
+  "reviewed_at": "2026-09-09",
+  "scope": "Official archive bytes and retained notices for reviewed SDK/NDK and XcodeGen tools",
+  "limits": "Does not authenticate publishers, select licenses, reproduce hosted OS images, or cover every external tool. Installed SDK comparison remains a separate check.",
+  "sdk_metadata": {
+    "url": "https://dl.google.com/android/repository/repository2-1.xml",
+    "sha256": "26484e1c83de994cb281fd75f20e4eceb55412c9f285c65839997d8a636e01cf"
+  },
+  "archives": [
+    {
+      "package": "platforms;android-36",
+      "url": "https://dl.google.com/android/repository/platform-36_r02.zip",
+      "bytes": 65878410,
+      "upstream_sha1": "2c1a80dd4d9f7d0e6dd336ec603d9b5c55a6f576",
+      "sha256": "37607369a28c5b640b3a7998868d45898ebcb777565a0e85f9acf36f29631d2e",
+      "roots": [
+        "android-36"
+      ],
+      "notices": [
+        {
+          "member": "android-36/data/NOTICE.txt",
+          "sha256": "6f3c947e9827793a4984bd5d0e4a306b76c95a65186fe779feec748fc739c56f",
+          "bytes": 766391,
+          "path": "third-party/toolchain-notices/6f3c947e9827793a4984bd5d0e4a306b76c95a65186fe779feec748fc739c56f.txt"
+        },
+        {
+          "member": "android-36/skins/NOTICE.txt",
+          "sha256": "6f3c947e9827793a4984bd5d0e4a306b76c95a65186fe779feec748fc739c56f",
+          "bytes": 766391,
+          "path": "third-party/toolchain-notices/6f3c947e9827793a4984bd5d0e4a306b76c95a65186fe779feec748fc739c56f.txt"
+        },
+        {
+          "member": "android-36/templates/NOTICE.txt",
+          "sha256": "6f3c947e9827793a4984bd5d0e4a306b76c95a65186fe779feec748fc739c56f",
+          "bytes": 766391,
+          "path": "third-party/toolchain-notices/6f3c947e9827793a4984bd5d0e4a306b76c95a65186fe779feec748fc739c56f.txt"
+        }
+      ],
+      "role": "native build tool or SDK; not an application package graph"
+    },
+    {
+      "package": "ndk;27.2.12479018",
+      "url": "https://dl.google.com/android/repository/android-ndk-r27c-linux.zip",
+      "bytes": 663987688,
+      "upstream_sha1": "090e8083a715fdb1a3e402d0763c388abb03fb4e",
+      "sha256": "59c2f6dc96743b5daf5d1626684640b20a6bd2b1d85b13156b90333741bad5cc",
+      "roots": [
+        "android-ndk-r27c"
+      ],
+      "notices": [
+        {
+          "member": "android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/NOTICE",
+          "sha256": "f96f763beb66a7ba7a667647fc64c0226ace875e590c831fdd9579ec1c1d91e1",
+          "bytes": 130424,
+          "path": "third-party/toolchain-notices/f96f763beb66a7ba7a667647fc64c0226ace875e590c831fdd9579ec1c1d91e1.txt"
+        },
+        {
+          "member": "android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/python3/lib/python3.11/site-packages/setuptools-65.5.0.dist-info/LICENSE",
+          "sha256": "db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8",
+          "bytes": 1050,
+          "path": "third-party/toolchain-notices/db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8.txt"
+        },
+        {
+          "member": "android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/python3/lib/python3.11/site-packages/pip-23.1.2.dist-info/LICENSE.txt",
+          "sha256": "634300a669d49aeae65b12c6c48c924c51a4cdf3d1ff086dc3456dc8bcaa2104",
+          "bytes": 1093,
+          "path": "third-party/toolchain-notices/634300a669d49aeae65b12c6c48c924c51a4cdf3d1ff086dc3456dc8bcaa2104.txt"
+        },
+        {
+          "member": "android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/python3/lib/python3.11/LICENSE.txt",
+          "sha256": "2d3de21bb0173e7ee49fc80f8fab52a0c55c690ff740bed77b6b8b4dd7641b81",
+          "bytes": 15138,
+          "path": "third-party/toolchain-notices/2d3de21bb0173e7ee49fc80f8fab52a0c55c690ff740bed77b6b8b4dd7641b81.txt"
+        },
+        {
+          "member": "android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/sysroot/NOTICE",
+          "sha256": "d5f5557f82bc42ce657d0513ba9a7d0c55e64eb99d4998994d92f2b5c2b1fb3c",
+          "bytes": 501406,
+          "path": "third-party/toolchain-notices/d5f5557f82bc42ce657d0513ba9a7d0c55e64eb99d4998994d92f2b5c2b1fb3c.txt"
+        },
+        {
+          "member": "android-ndk-r27c/sources/third_party/googletest/NOTICE",
+          "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138",
+          "bytes": 1475,
+          "path": "third-party/toolchain-notices/9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138.txt"
+        },
+        {
+          "member": "android-ndk-r27c/sources/third_party/googletest/LICENSE",
+          "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138",
+          "bytes": 1475,
+          "path": "third-party/toolchain-notices/9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138.txt"
+        },
+        {
+          "member": "android-ndk-r27c/sources/cxx-stl/system/NOTICE",
+          "sha256": "e33f24b134f489859a8d71d0cf28f6561c5c03d4ccb6f92ae0c6fa4c31323712",
+          "bytes": 3677,
+          "path": "third-party/toolchain-notices/e33f24b134f489859a8d71d0cf28f6561c5c03d4ccb6f92ae0c6fa4c31323712.txt"
+        },
+        {
+          "member": "android-ndk-r27c/sources/android/ndk_helper/NOTICE",
+          "sha256": "c870d52f42a8f93023b99a85fe68d02637d6b04e5f35bbcd7f98759adb4e4d49",
+          "bytes": 577,
+          "path": "third-party/toolchain-notices/c870d52f42a8f93023b99a85fe68d02637d6b04e5f35bbcd7f98759adb4e4d49.txt"
+        },
+        {
+          "member": "android-ndk-r27c/sources/android/cpufeatures/NOTICE",
+          "sha256": "c870d52f42a8f93023b99a85fe68d02637d6b04e5f35bbcd7f98759adb4e4d49",
+          "bytes": 577,
+          "path": "third-party/toolchain-notices/c870d52f42a8f93023b99a85fe68d02637d6b04e5f35bbcd7f98759adb4e4d49.txt"
+        },
+        {
+          "member": "android-ndk-r27c/sources/android/native_app_glue/NOTICE",
+          "sha256": "396e2d75715e8b4d1029ded55ae92832c8ab9c58148969653d34931248739b95",
+          "bytes": 577,
+          "path": "third-party/toolchain-notices/396e2d75715e8b4d1029ded55ae92832c8ab9c58148969653d34931248739b95.txt"
+        },
+        {
+          "member": "android-ndk-r27c/NOTICE.toolchain",
+          "sha256": "cbe3237be53c0a819f8df6aac5358fdee848eee3b6571b4e2ca20767ebd7465e",
+          "bytes": 806124,
+          "path": "third-party/toolchain-notices/cbe3237be53c0a819f8df6aac5358fdee848eee3b6571b4e2ca20767ebd7465e.txt"
+        },
+        {
+          "member": "android-ndk-r27c/NOTICE",
+          "sha256": "4d5224d1c0b54ffa88b0dc0088191638fdbb7227835095dfb98f7f66b416a323",
+          "bytes": 522923,
+          "path": "third-party/toolchain-notices/4d5224d1c0b54ffa88b0dc0088191638fdbb7227835095dfb98f7f66b416a323.txt"
+        },
+        {
+          "member": "android-ndk-r27c/python-packages/NOTICE",
+          "sha256": "c870d52f42a8f93023b99a85fe68d02637d6b04e5f35bbcd7f98759adb4e4d49",
+          "bytes": 577,
+          "path": "third-party/toolchain-notices/c870d52f42a8f93023b99a85fe68d02637d6b04e5f35bbcd7f98759adb4e4d49.txt"
+        }
+      ],
+      "role": "native build tool or SDK; not an application package graph"
+    },
+    {
+      "package": "build-tools;36.0.0",
+      "url": "https://dl.google.com/android/repository/build-tools_r36_linux.zip",
+      "bytes": 63737259,
+      "upstream_sha1": "b0b6376977657e8ad9b969bacf4093601da2c6fb",
+      "sha256": "5d9ac77fb6ff43d9da518a337b4fcf8f9097113df531d99ccefe80ef7ce8250b",
+      "roots": [
+        "android-16"
+      ],
+      "notices": [
+        {
+          "member": "android-16/NOTICE.txt",
+          "sha256": "67622ffd7ac76bc5fe0f22c7773da1fc9a9502b848361d6e0b3f245afa4679c8",
+          "bytes": 1075001,
+          "path": "third-party/toolchain-notices/67622ffd7ac76bc5fe0f22c7773da1fc9a9502b848361d6e0b3f245afa4679c8.txt"
+        },
+        {
+          "member": "android-16/renderscript/clang-include/LICENSE.TXT",
+          "sha256": "de4c79665f0f5688b0ace17cba6f8e0343925bb95e0949d66d47bbd4527310d6",
+          "bytes": 2749,
+          "path": "third-party/toolchain-notices/de4c79665f0f5688b0ace17cba6f8e0343925bb95e0949d66d47bbd4527310d6.txt"
+        }
+      ],
+      "role": "reviewed unused CI installation; app uses 35.0.0"
+    },
+    {
+      "package": "build-tools;35.0.0",
+      "url": "https://dl.google.com/android/repository/build-tools_r35_linux.zip",
+      "bytes": 61958799,
+      "upstream_sha1": "2cfaa0bbb2336e9ec18ed3ecea84fa2e2af607bc",
+      "sha256": "bd3a4966912eb8b30ed0d00b0cda6b6543b949d5ffe00bea54c04c81e1561d88",
+      "roots": [
+        "android-15"
+      ],
+      "notices": [
+        {
+          "member": "android-15/NOTICE.txt",
+          "sha256": "14ad8a3f18a62e674e865b5e06b5847a6c97848d33f8cdc8e842eaf9bed994c3",
+          "bytes": 1068025,
+          "path": "third-party/toolchain-notices/14ad8a3f18a62e674e865b5e06b5847a6c97848d33f8cdc8e842eaf9bed994c3.txt"
+        },
+        {
+          "member": "android-15/renderscript/clang-include/LICENSE.TXT",
+          "sha256": "de4c79665f0f5688b0ace17cba6f8e0343925bb95e0949d66d47bbd4527310d6",
+          "bytes": 2749,
+          "path": "third-party/toolchain-notices/de4c79665f0f5688b0ace17cba6f8e0343925bb95e0949d66d47bbd4527310d6.txt"
+        }
+      ],
+      "role": "native build tool or SDK; not an application package graph"
+    },
+    {
+      "package": "XcodeGen:2.46.0",
+      "url": "https://github.com/yonaskolb/XcodeGen/releases/download/2.46.0/xcodegen.zip",
+      "bytes": 4278764,
+      "upstream_sha256": "4d9e34b62172d645eed6457cac13fc222569974098ef4ee9c3368bedf0196806",
+      "sha256": "4d9e34b62172d645eed6457cac13fc222569974098ef4ee9c3368bedf0196806",
+      "roots": [
+        "xcodegen"
+      ],
+      "notices": [
+        {
+          "member": "xcodegen/LICENSE",
+          "sha256": "1e210fcab168d549f41a7495d11a7092836bc38c742baa5e21c0883cd0f1d1a1",
+          "bytes": 1067,
+          "path": "third-party/toolchain-notices/1e210fcab168d549f41a7495d11a7092836bc38c742baa5e21c0883cd0f1d1a1.txt"
+        }
+      ],
+      "role": "native build tool or SDK; not an application package graph"
+    },
+    {
+      "package": "com.android.tools.build:aapt2:8.13.2-14304508:linux",
+      "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/aapt2/8.13.2-14304508/aapt2-8.13.2-14304508-linux.jar",
+      "bytes": 2815427,
+      "sha256": "839609d6d776d6dd60a02aa577d97193ce3e650cf1deaabf062321e23bbd6bf6",
+      "roots": [
+        "META-INF",
+        "NOTICE",
+        "aapt2"
+      ],
+      "role": "AGP-selected resource compiler; exact artifact hash also enforced by Gradle",
+      "notices": [
+        {
+          "member": "NOTICE",
+          "sha256": "2764003f159cd28439a28e252ca385d868723305fa271122b60083a6210467b9",
+          "bytes": 118657,
+          "path": "third-party/toolchain-notices/2764003f159cd28439a28e252ca385d868723305fa271122b60083a6210467b9.txt"
+        }
+      ]
+    }
+  ]
+}

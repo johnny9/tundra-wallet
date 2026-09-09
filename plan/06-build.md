@@ -9,6 +9,7 @@
 - Sync: reqwest `=0.12.28` with rustls (no native OpenSSL), Tokio `=1.49.0`.
   The small Esplora adapter bounds streamed bodies before parsing; BDK owns wallet state.
 - Android: Kotlin/Compose, AGP `8.13.2`, Gradle `8.13`, JDK 17+, compile/target SDK 36,
+  explicit Build Tools `35.0.0` and NDK `27.2.12479018`,
   min SDK 28, Kotlin `2.2.21`, Compose BOM `2025.12.00`.
 - The Gradle 8.13 wrapper was generated with the official distribution, then both the
   distribution and wrapper JAR were checked against Gradle's published SHA-256 values.
@@ -41,8 +42,13 @@ Formatting and Clippy warnings are required checks. Workflow actions are now pin
 exact commit SHAs already executed in run 34311969023; `.github/action-pins.json` records
 upstream versions and revisions, and an offline guard rejects unreviewed/floating references.
 The Rust action revision explicitly selects 1.93.1. This prevents tag movement, not malicious
-behavior inside an action. The Gradle wrapper and dependency baseline are pinned. SDK
-downloads, cargo-ndk installation and the Xcode host still need reproducibility review.
+behavior inside an action. The Gradle wrapper and dependency baseline are pinned. CI now
+explicitly selects the recorded Xcode 16.4, checksummed XcodeGen 2.46.0 release and Linux
+SDK/NDK payloads. Its new installed-file and XcodeGen execution gates are pending. Build Tools
+35.0.0 preserves AGP 8.13.2's previous default; CI's unused 36.0.0 installation is removed.
+See the [official AGP compatibility table](https://developer.android.com/build/releases/agp-8-13-0-release-notes).
+Host/emulator images, SDK command-line tools and additional cargo-tool installation graphs
+still need reproducibility review. This is not a hermetic or byte-reproducible build claim.
 
 The manually dispatched `Collect Android dependency review` workflow prepares candidate
 Gradle locks (including plugin classpaths) and SHA-256 verification metadata on an Android

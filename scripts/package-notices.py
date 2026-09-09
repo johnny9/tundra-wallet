@@ -27,8 +27,9 @@ def read_json(path):
 
 def build():
     inputs = ["third-party/cargo-inventory.json", "third-party/android-inventory.json",
-              "third-party/android-artifact-inventory.json", "third-party/android-notice-supplements.json"]
-    cargo, maven, android, supplements = map(read_json, inputs)
+              "third-party/android-artifact-inventory.json", "third-party/android-notice-supplements.json",
+              "third-party/toolchain-inventory.json"]
+    cargo, maven, android, supplements, toolchains = map(read_json, inputs)
     texts, sources = {}, {}
 
     def retain(path, checksum=None):
@@ -88,6 +89,12 @@ def build():
                 raise ValueError("Supplemental license no longer matches the verified archive")
     extra = [{"source": path, "sha256": retain(path)} for path in
              ["crates/tundra-sqlcipher/vendor/LICENSE.md", "design/THIRD-PARTY-NOTICES.md"]]
+    ndk = next(row for row in toolchains["archives"] if row["package"] == "ndk;27.2.12479018")
+    for notice in ndk["notices"]:
+        if notice["member"] in {"android-ndk-r27c/NOTICE", "android-ndk-r27c/NOTICE.toolchain"}:
+            extra.append({"source": notice["path"], "sha256": retain(notice["path"], notice["sha256"]),
+                          "archive": ndk["url"], "archive_sha256": ndk["sha256"], "member": notice["member"],
+                          "scope": "NDK runtime/compiler attribution; aggregate upstream notices also cover non-shipped tools and samples"})
     index = {"scope": "Cargo application/fuzz locks, including build/test and all platforms; Android release graph known archive variants; SQLCipher and design notices",
              "limits": "Not an exact binary contents manifest or a completed distribution review. Missing embedded notices remain explicit in archive entries. SDK/build-tool review is separate. No license for original Tundra source or alternative third-party license is selected here.",
              "packages": packages, "supplements": supplements, "additional_notices": extra}

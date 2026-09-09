@@ -5,6 +5,7 @@ Run after a successful locked Android Gradle `help` to populate the user-owned c
 Requires Gradle 8.13 and JDK 17, but no Android SDK, wallet files or network downloads.
 """
 from pathlib import Path
+import argparse
 import shutil
 import subprocess
 import tempfile
@@ -18,8 +19,12 @@ FILES = ("settings.gradle.kts", "build.gradle.kts", "gradle.properties", "app/bu
 
 
 def main():
-    logs = ROOT / "build/gradle-enforcement"
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--logs", type=Path, default=ROOT / "build/gradle-enforcement")
+    logs = parser.parse_args().logs
     logs.mkdir(parents=True, exist_ok=True)
+    if any(logs.iterdir()):
+        raise ValueError("Refuse to overwrite existing evidence; choose a new --logs directory")
     for case in ("baseline", "missing-lock", "verification-disabled", "checksum-mismatch"):
         with tempfile.TemporaryDirectory(prefix="gradle-enforcement-", dir=ROOT / "build") as temporary:
             target = Path(temporary)
