@@ -149,6 +149,11 @@ final class WalletUITests: XCTestCase {
         XCTAssertTrue(address.waitForExistence(timeout: 10)); address.tap(); address.typeText(recipient)
         if let amount { let field = app.textFields["Amount in BTC"]; field.tap(); field.typeText(amount) }
         let fee = app.textFields["Fee rate in sat/vB"]
+        // The amount keyboard can cover the fee row in selected-input Send.
+        // Dismiss it and reveal the row before tapping its trailing value.
+        app.buttons["Done"].tap()
+        for _ in 0..<3 { if fee.isHittable { break }; app.swipeUp() }
+        guard fee.isHittable else { XCTFail("The fee row remained covered"); return false }
         // The value is trailing-aligned, so tapping the field's center can land in
         // empty space. Place the caret at its trailing edge and use keyboard edits.
         guard let current = fee.value as? String, current.count <= 32 else {
