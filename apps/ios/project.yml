@@ -79,6 +79,8 @@ targets:
         excludes:
           - TundraApp.swift
       - path: TundraTestHost
+      - path: ../../tests/fixtures/two-of-three.txt
+        buildPhase: resources
       - path: Generated
         includes:
           - "*.swift"

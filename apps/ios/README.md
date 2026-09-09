@@ -39,3 +39,9 @@ started with `scripts/start-published-native-fixture.sh` and its `--screen` opti
 is isolated from the vault tests' earlier submission. Neither server is a valid Signet
 chain or a real broadcast. System PSBT picker and physical transport qualification remain
 separate from the public-response handoff in this test host.
+
+The separate public test host also has an authored `layout` scenario. It imports the public
+2-of-3 fixture and scans the real keyless regtest server's 100 outputs. New Android/iOS
+scenarios check independent tab scroll offsets and large-text controls; the Apple host
+injects SwiftUI `accessibility3` into the shared wallet view. These tests await native
+compilation/execution and do not qualify physical accessibility settings or screen readers.

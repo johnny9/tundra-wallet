@@ -92,7 +92,7 @@ struct WalletView: View {
                                     }
                                     ForEach(model.activity, id: \.txid) { row in
                                         VStack(alignment: .leading) {
-                                            Text(row.label.isEmpty ? "Unlabeled transaction" : row.label)
+                                            Text(row.label.isEmpty ? "Unlabeled transaction" : row.label).accessibilityIdentifier("activityLabel")
                                             Text(row.confirmed ? "Confirmed" : "Pending").font(.caption).foregroundStyle(.secondary)
                                         }
                                     }

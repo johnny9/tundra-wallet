@@ -17,14 +17,16 @@ struct FixtureApp: App {
     }
     var body: some Scene {
         WindowGroup {
-            if prepared { FixtureView(model: model).preferredColorScheme(.dark).tint(.orange) }
+            if prepared {
+                FixtureView(model: model, layout: ProcessInfo.processInfo.environment["TUNDRA_PUBLIC_UI_SCENARIO"] == "layout").tint(.orange)
+            }
             else { Text("Public fixture preparation failed") }
         }
     }
     private static func prepare() throws -> CoreService {
         let environment = ProcessInfo.processInfo.environment
         guard let id = environment["TUNDRA_PUBLIC_UI_ID"].flatMap(UUID.init(uuidString:)),
-              let scenario = environment["TUNDRA_PUBLIC_UI_SCENARIO"], ["signing", "recovery"].contains(scenario) else {
+              let scenario = environment["TUNDRA_PUBLIC_UI_SCENARIO"], ["signing", "recovery", "layout"].contains(scenario) else {
             throw FixtureFailure.preparation
         }
         let manager = FileManager.default
@@ -44,6 +46,10 @@ struct FixtureApp: App {
             if scenario == "signing" {
                 guard let source = Bundle.main.url(forResource: "native-unsigned", withExtension: "sqlite") else { throw FixtureFailure.preparation }
                 try manager.copyItem(at: source, to: root.appendingPathComponent("wallet.sqlite"))
+            } else if scenario == "layout" {
+                guard let source = Bundle.main.url(forResource: "two-of-three", withExtension: "txt") else { throw FixtureFailure.preparation }
+                let core = try StorageVault.openActive(directory: root, service: service)
+                _ = try core.importWallet(name: "Public long-list wallet", payload: String(contentsOf: source, encoding: .utf8), network: .regtest)
             } else {
                 guard let source = Bundle.main.url(forResource: "native-signed-backup", withExtension: "tundra") else { throw FixtureFailure.preparation }
                 // This is setup. The normal app's separate UI test covers the real
@@ -64,13 +70,28 @@ private struct FixtureView: View {
     @State private var loaded = false
     @State private var wallet = false
     @State private var dark = true
+    @State private var largeText = false
+    private let layout: Bool
+    init(model: WalletModel, layout: Bool) {
+        self.model = model; self.layout = layout
+        _wallet = State(initialValue: layout)
+    }
     var body: some View {
         VStack(spacing: 4) {
-            if wallet { WalletView(model: model, dark: $dark) }
+            if wallet {
+                WalletView(model: model, dark: $dark)
+                    .dynamicTypeSize(largeText ? .accessibility3 : .large)
+            }
             else { PaymentView(model: model, mode: 0) }
             // Only these public-fixture handoff controls are test-specific. Payment,
             // recovery, broadcast and coin details above are the production views.
-            HStack {
+            if layout {
+                HStack {
+                    Button("Sync public fixture") { model.synchronize("http://127.0.0.1:3002", consent: true) }
+                    Button("Toggle fixture appearance") { dark.toggle() }
+                    Button("Use large text") { largeText = true }
+                }.font(.system(size: 12)).disabled(!loaded || model.busy)
+            } else { HStack {
                 Button("Supply published response") {
                     if let review = model.review,
                        let source = Bundle.main.url(forResource: "native-signed-response", withExtension: "psbt") {
@@ -84,10 +105,11 @@ private struct FixtureView: View {
                     else { model.closeReview() }
                     wallet.toggle()
                 }.disabled(!loaded || model.busy)
-            }.font(.caption).padding(.horizontal)
+            }.font(.caption).padding(.horizontal) }
             if !loaded || model.busy { Text("Public fixture working") }
             else { Text(model.error == nil ? "Public fixture ready" : "Public fixture operation failed") }
         }
+        .preferredColorScheme(dark ? .dark : .light)
         .task {
             model.load()
             while model.busy { try? await Task.sleep(for: .milliseconds(25)) }

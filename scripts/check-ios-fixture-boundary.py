@@ -27,7 +27,7 @@ def check(project):
     host_sources = members("TundraTestHost", "PBXSourcesBuildPhase")
     production_resources = members("Tundra", "PBXResourcesBuildPhase")
     host_resources = members("TundraTestHost", "PBXResourcesBuildPhase")
-    fixtures = {"native-unsigned.sqlite", "native-signed-response.psbt", "native-signed-backup.tundra"}
+    fixtures = {"native-unsigned.sqlite", "native-signed-response.psbt", "native-signed-backup.tundra", "two-of-three.txt"}
     if "TundraApp.swift" not in production_sources or "FixtureApp.swift" in production_sources:
         raise ValueError("Production app entry point boundary changed")
     if "FixtureApp.swift" not in host_sources or "TundraApp.swift" in host_sources:

@@ -136,7 +136,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
                         Button(onClick = { vm.closeReview(); paymentMode = 0; paymentSheet = true }, enabled = !s.busy && s.wallet!!.synced, modifier = Modifier.weight(1f)) { Text("Send") }
                     }
                     Text("Hardware signing is not qualified. Use disposable test wallets only.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    LazyColumn(Modifier.weight(1f).padding(top = 16.dp), state = activityScroll) {
+                    LazyColumn(Modifier.weight(1f).padding(top = 16.dp).testTag("activityList"), state = activityScroll) {
                         items(s.drafts, key = { "draft-${it.id}" }) { draft ->
                             ListItem(modifier = Modifier.clickable(enabled = !s.busy) { vm.openReview(draft); paymentSheet = true },
                                 headlineContent = { Text(draft.label.ifBlank { "Saved payment" }) },
@@ -184,7 +184,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
                         (!availableOnly || coin.state == CoinState.AVAILABLE) &&
                             listOf(coin.label, coin.address, coin.outpoint).any { it.contains(query, ignoreCase = true) }
                     }.let { coins -> if (largestFirst) coins.sortedByDescending { it.sats } else coins.sortedBy { it.label.lowercase() } }
-                    LazyColumn(Modifier.weight(1f).padding(top = 16.dp), state = coinScroll) {
+                    LazyColumn(Modifier.weight(1f).padding(top = 16.dp).testTag("coinList"), state = coinScroll) {
                         if (filtered.isEmpty()) item {
                             if (s.coins.isNotEmpty()) EmptyState("No matching coins", "Try another search or change the filters.")
                             else EmptyState("No coins", if (s.wallet?.synced == true) "No coins were found at the last successful sync."
