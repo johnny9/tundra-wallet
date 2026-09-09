@@ -22,8 +22,7 @@ approval system, or cloud account.
 - Added: bounded opt-in Esplora scans, cancellation, cached timestamps, coinbase maturity,
   reorg-safe draft invalidation, and a keyless Bitcoin Core regtest integration test.
 - Added: native search/filter/selection, payment/max/consolidation review and saved drafts;
-  explicit Select mode and grouped filter/bulk controls pass Android runtime checks;
-  Apple controls remain under validation;
+  explicit Select mode and grouped filter/bulk controls pass both native runtime checks;
   decimal fee rates and atomic bulk coin metadata. Broader native qualification remains.
 - Added: bounded external PSBT validation, per-input cryptographic signature progress,
   immutable approvals and atomic signature persistence. Native file integration and both initial payment/restart UI scenarios pass; broader coverage remains.
@@ -41,7 +40,7 @@ approval system, or cloud account.
   passes Rust tests and native generation recovery now passes on both platforms. File
   helpers, Android system backup round-trip and Apple system export/readback pass. Both native vaults pass published-signature
   finalization/recovery/submission/provenance. Both Apple positive payment screen tests now pass;
-  complete Apple system restore and Android recovery controls remain under validation.
+  complete Apple system restore/restart now passes; Android recovery controls remain under validation.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Build review: workflow actions pinned to executed revisions; both full Cargo locks have
   a checked license/notice inventory. Android locks/checksums and a retained Maven declaration

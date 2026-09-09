@@ -1,0 +1,33 @@
+{
+  "recorded_at": "2026-09-09T08:07:39.498762+00:00",
+  "run": 34325362419,
+  "source": "05dabe26025c6b3bcf5d7873f90c08984baa3914",
+  "ios_job": 102381262367,
+  "result": "failure overall: 16 of 17 simulator tests pass",
+  "host_ffi_passed": 6,
+  "hosted_runtime_passed": 13,
+  "normal_wallet_ui": "PASS: import/restart/receive, explicit regtest sync, automatic/exact/max/consolidation, filters and fixed tabs, draft restart, actual Files export/readback/inspect/restore/restart",
+  "public_payment_ui": "Both PASS: published signature finalization and restored approval/sync/separate submission/provenance/label editing",
+  "long_list": "Compiled; 100 coins and activity entries, independent tab offsets, fixed tabs and light appearance pass. Large-text phase fails because filter controls remain scrolled offscreen",
+  "correction": "Return to list header after exact offset checks; assert test-host large-text action and measured Select control height increase before layout assertions",
+  "corrected_native_rerun": "pending",
+  "scope": "Public fixtures, keyless regtest and published signatures only; no hardware or real-network broadcast",
+  "files": [
+    {
+      "path": "build/public-screen-ios-fourth.log",
+      "sha256": "70b6504ee05937524f43ec8cd511de00ad636a843908e0d00d3c29ce26145c12"
+    },
+    {
+      "path": "build/public-screen-ios-fourth.zip",
+      "sha256": "2410a428c9ef09fee7f646fa077fb034cff8c0fefe9f331b49fa2314d7876ad0"
+    },
+    {
+      "path": "build/public-screen-ios-fourth-results/ios-runtime-summary.json",
+      "sha256": "82f1e4549d38ae9b6dff7bcfa073d955af3bd58e4c0316acfedd6161cb7c5683"
+    },
+    {
+      "path": "build/ios-long-list-last.png",
+      "sha256": "742cde0a0a1dd2223056aa40a9e7e453eaf858a2e2583449a1fb9f8fd954d060"
+    }
+  ]
+}

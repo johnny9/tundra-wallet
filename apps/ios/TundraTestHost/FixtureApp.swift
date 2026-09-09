@@ -89,7 +89,8 @@ private struct FixtureView: View {
                 HStack {
                     Button("Sync public fixture") { model.synchronize("http://127.0.0.1:3002", consent: true) }
                     Button("Toggle fixture appearance") { dark.toggle() }
-                    Button("Use large text") { largeText = true }
+                    Button(largeText ? "Large text enabled" : "Use large text") { largeText = true }
+                        .disabled(largeText)
                 }.font(.system(size: 12)).disabled(!loaded || model.busy)
             } else { HStack {
                 Button("Supply published response") {

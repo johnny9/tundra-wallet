@@ -6,21 +6,25 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
-The [run at 77ce36c](https://github.com/johnny9/tundra-wallet/actions/runs/34323294461)
-passes Rust (**189 tests / 31 offline**), parser/audit and both notice-regeneration gates.
-iOS builds, passes **6 host FFI / all 13 hosted runtime tests**, and now passes **both public
+The [run at 05dabe2](https://github.com/johnny9/tundra-wallet/actions/runs/34325362419)
+passes Rust (**189 tests / 32 offline**), parser/audit and the notice-regeneration gates.
+iOS builds, passes **6 host FFI / all 13 hosted runtime tests**, and passes **both public
 payment UI tests completely**. These exercise signature counters, exact finalization,
 restart persistence, recovery sync/reapproval without POST, separate privacy/retry consent,
 one exact fixture submission, restart without an extra POST, observed input provenance and
 retained output-label edits. These use published signatures and a synthetic loopback endpoint;
 no physical transport or real-network broadcast is claimed.
 
-The normal Apple wallet UI test now passes removal of inactive Activity actions, retained
-filters, fixed tabs, automatic Send and selected Max. Its later exact-input Send fails editing
-a fee row covered by the amount keyboard. The public recording confirms the obstruction;
-the test now dismisses the keyboard and requires a visible fee row before editing. Updated
-consolidation and the backup filename/system-restore correction remain unreached. See
-[exact native evidence](../validation/published-screen-passing-checks.json).
+The normal Apple wallet UI test now passes completely: inactive Activity actions, retained
+filters, fixed tabs, all four payment modes, saved-draft restart, system Files backup export,
+readback, inspection, restore into a new protected generation and restart with retained
+receive derivation. Its keyboard and backup filename corrections are now validated.
+Overall simulator result: **16 of 17 tests pass**. The new long-list test passes its
+100-output/activity counts, independent scroll restoration, fixed tabs and light appearance;
+it fails looking for filter controls still scrolled offscreen during its large-text phase.
+The recording confirms the offscreen controls. The test now returns to the list header and
+also requires a measured text-size increase; that correction awaits runtime execution. See
+[exact current native evidence](../validation/apple-backup-layout-checks.json).
 
 Android's first complete locked configuration gate fails **before app compilation**, because
 an additional Guava parent POM was missing from verification metadata. That POM and all 256
@@ -45,11 +49,12 @@ fetched and verified; five embedded notice texts and 116 module metadata files a
 54 archives lack embedded notices, including 48 with compiled code. Upstream review and
 binary notice packaging remain open. See [notice scope](../third-party/README.md).
 
-Both native **100-output long-list/large-text scenarios are authored but have not compiled
-or run**. They use the existing keyless regtest fixture and isolated native vaults. The Apple
-test-host boundary is extended for that public descriptor; the normal app excludes fixtures.
-Complete Apple system restore/restart, exact scroll restoration and broader layout/accessibility
-qualification remain open. Physical phones, hardware and independent release review are
+Both native **100-output long-list/large-text scenarios are authored**. Apple compiles and
+passes scroll restoration, with the large-text phase still pending its correction; Android
+has not compiled the new scenario because its dependency gate stops first. The tests use the
+existing keyless regtest fixture and isolated native vaults. The Apple test-host boundary
+passes and excludes public fixtures from the normal app. Broader layout/accessibility
+qualification remains open. Physical phones, hardware and independent release review are
 separate gates. Earlier results/failures remain in revision-specific evidence files.
 
 ## Earlier document and fixture checkpoints

@@ -41,7 +41,9 @@ These are ordered work packages, not time estimates.
 - Explicit bounded Esplora test-network sync and signed-response validation are implemented.
   Native QR and broadcast qualification remain separate acceptance gates.
 - Native 100-output tab-scroll and large-text scenarios are authored for both platforms;
-  compilation/runtime qualification is pending. The data comes from the existing keyless
+  Apple compiles and passes independent scroll restoration and light appearance. Its large-text
+  phase needs a test-sequence correction; Android compilation remains blocked by dependency
+  verification. The data comes from the existing keyless
   regtest node, with isolated native vaults and no production balance-injection API.
 - Native coin selection, review, PSBT file export and saved drafts are implemented; validate
   every mode on both platforms and compare layouts/accessibility against the reference.

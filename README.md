@@ -8,7 +8,7 @@ It never imports or generates Bitcoin private signing keys.
 
 > **Development source, not a released wallet. Use disposable test descriptors only.**
 > Rust tests and recorded native builds, payment modes and initial restart checks pass.
-> Android backup document exchange and restore pass. iOS import/restore UI remains under validation.
+> Android and iOS system backup document exchange, restore and restart tests pass.
 > Both native published-signature/vault tests and Apple positive payment/recovery UI tests pass.
 > Android recovery UI remains under validation.
 > Explicit test-network sync and external signature validation are implemented. Hardware
@@ -39,7 +39,7 @@ It never imports or generates Bitcoin private signing keys.
 | `tundra-ffi` | Typed UniFFI API; Kotlin and Swift bindings generated and exercised against the host library | Mobile lifecycle/cancellation qualification remains |
 | Android | Compose import, wallets, sync, coin selection/search, bulk metadata and payment review | Every payment mode and restart pass on the emulator; full device qualification remains |
 | iOS | SwiftUI import, wallets, sync, coin selection/search, metadata and payment review | Every payment mode and restart pass on the simulator; full device qualification remains |
-| Protected storage | Pinned SQLCipher, encrypted DB/WAL, atomic plaintext upgrade, platform key vaults and encrypted backup/restore | Protected startup and native generation restore pass; system document/recovery UX remain under validation |
+| Protected storage | Pinned SQLCipher, encrypted DB/WAL, atomic plaintext upgrade, platform key vaults and encrypted backup/restore | Protected startup, generation restore and system document round-trips pass on both virtual platforms; physical storage qualification remains |
 | Design | Exact approved Tundra HTML reference and source | Simulation stays in `design/`, not in the Rust/native wallet |
 | Quality | Rust tests, offline schema/fixture checks, CI and build scripts | See [validation report](plan/VALIDATION.md) for executed versus unexecuted checks |
 

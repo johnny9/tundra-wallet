@@ -98,14 +98,24 @@ final class SigningUITests: XCTestCase {
         let light = XCTAttachment(screenshot: app.screenshot())
         light.name = "Public long list in light appearance"; light.lifetime = .keepAlways; add(light)
         app.buttons["Toggle fixture appearance"].tap()
+        // Filter controls scroll with the coin list. Restore the top before
+        // checking their large-text layout; the offset checks above stay exact.
+        let filters = app.buttons["coinFilters"], select = app.buttons["Select"]
+        for _ in 0..<10 {
+            if filters.isHittable && select.isHittable { break }
+            coinScroll.swipeDown()
+        }
+        XCTAssertTrue(filters.isHittable); XCTAssertTrue(select.isHittable)
+        let normalSelectHeight = select.frame.height
         app.buttons["Use large text"].tap()
+        XCTAssertTrue(app.buttons["Large text enabled"].waitForExistence(timeout: 5))
         // The test host injects SwiftUI accessibility3 into the production view.
         // This qualifies that layout, not a physical device's accessibility settings.
         XCTAssertTrue(app.buttons["Activity"].isHittable)
         XCTAssertTrue(app.buttons["Coins"].isHittable)
         XCTAssertGreaterThan(coinScroll.frame.height, 50)
-        let filters = app.buttons["coinFilters"], select = app.buttons["Select"]
         XCTAssertTrue(filters.isHittable); XCTAssertTrue(select.isHittable)
+        XCTAssertGreaterThan(select.frame.height, normalSelectHeight * 1.3)
         XCTAssertFalse(filters.frame.intersects(select.frame))
         let large = XCTAttachment(screenshot: app.screenshot())
         large.name = "Public long list with accessibility text"; large.lifetime = .keepAlways; add(large)
