@@ -1,0 +1,34 @@
+{
+  "recorded_at": "2026-09-09T04:47:27.693485+00:00",
+  "scope": "Published signature fixtures and loopback recovery integration, not native UI or real Signet broadcast",
+  "rust_passed": 189,
+  "offline_passed": 27,
+  "rust_counts": {
+    "unit": 179,
+    "crash": 2,
+    "published_native": 2,
+    "http": 5,
+    "separate_real_keyless_regtest": 1
+  },
+  "format_clippy": "passed",
+  "both_bindings": "generated",
+  "native_fixture_use": "not yet run",
+  "logs": [
+    {
+      "path": "build/published-native-check.log",
+      "sha256": "cc15e9e1394f2359f0dfa90e16af52a604b937b35d6823ba3221b4fafcbbf8ad"
+    },
+    {
+      "path": "build/published-native-regtest.log",
+      "sha256": "ef0a873ef5ce575ce79395cf8aea6a3e33c33a667d3130ff36ebbfeb2fa768ad"
+    },
+    {
+      "path": "build/published-native-bindings.log",
+      "sha256": "6c6464095332a9db2ebffc488cd466f2cb87460886ac874f79cae2068a8daf3f"
+    },
+    {
+      "path": "build/native-signing-fixture-generation-v2.log",
+      "sha256": "1c065feedf29c7db72c459318e5494a0d1fdc2a4d56b2093d272e743e3fd2861"
+    }
+  ]
+}

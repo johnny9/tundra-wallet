@@ -4,6 +4,7 @@
 /fuzz/artifacts/
 /build/
 *.sqlite
+!tests/fixtures/native-unsigned.sqlite
 *.sqlite-*
 *.tundra-lock
 .tundra-protect-*
@@ -12,6 +13,7 @@
 *.psbt
 !tests/fixtures/hwi-signed-wpkh.psbt
 !tests/fixtures/ledger-wpkh-two-inputs.psbt
+!tests/fixtures/native-signed-response.psbt
 .env
 .env.*
 !*.example

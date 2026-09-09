@@ -16,7 +16,7 @@ approval system, or cloud account.
 
 - Source: descriptor-first watch-only engine, metadata, unsigned-draft core, UniFFI API,
   Android native import shell, iOS native starter, tests and CI.
-- Verified: 187 Rust tests including real regtest, 26 offline checks, parser fuzzing/audit,
+- Verified: 189 Rust tests including real regtest, 27 offline checks, parser fuzzing/audit,
   Android debug APK and iOS simulator builds, host FFI smoke tests, all four payment modes on both virtual platforms and initial process-restart checks.
   See [VALIDATION.md](VALIDATION.md) for the exact results and remaining gates.
 - Added: bounded opt-in Esplora scans, cancellation, cached timestamps, coinbase maturity,

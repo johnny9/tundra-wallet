@@ -24,3 +24,6 @@ pub use engine::Core;
 pub use error::{Error, Result};
 pub use model::*;
 pub use sync::{SyncPhase, SyncProgress};
+
+#[cfg(test)]
+mod native_fixtures;

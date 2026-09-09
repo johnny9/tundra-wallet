@@ -1,0 +1,95 @@
+{
+  "block": {
+    "hash": "f6f6c4854437a6fe335267257d498257d322c830e92184d52e177ee991b42f6e",
+    "header": "01000000f61eee3b63a380a477a063af32b2bbc97c9ff9f01f2c4225e973988108000000e2a53c15601def934fbe894ec85c26d186c4ec8fcf1976197db4882cd2fde72e01000000ffff7f2000000000",
+    "height": 1,
+    "time": 1,
+    "transactions": [
+      {
+        "inputs": [
+          "45482c74b5d01df2b2c83665dbe703fe611bde5477c9e4cf93f77210e0b26a93:1"
+        ],
+        "outputs": [
+          {
+            "sats": 13099486,
+            "script": "0014eb78d7c40bf1063b0e3fce29c3565b689c8559ab",
+            "scripthash": "64f18e5493915603dfc37165b87948094cffd392f823e80f8ec2a2e6f72c361b"
+          },
+          {
+            "sats": 10000,
+            "script": "00142318d66f84fef5c4875f933b038dc63831f8da13",
+            "scripthash": "b82bdbb50872ae7111124fab5bbf6f3f510f3a19b6041a5a72ad5c911200908b"
+          }
+        ],
+        "raw": "0200000001936ab2e01072f793cfe4c97754de1b61fe03e7db6536c8b2f21dd0b5742c48450100000000feffffff02dee1c70000000000160014eb78d7c40bf1063b0e3fce29c3565b689c8559ab10270000000000001600142318d66f84fef5c4875f933b038dc63831f8da13f9971e00",
+        "txid": "b44d2b2642fe0d7b465a581d36ca6606a3d405745d7d238ab787adf027fe2c9e"
+      },
+      {
+        "inputs": [
+          "64f4fc1ec581bcf92ff7bfb2c9a96e93693f8d0f66c8ef51cb1a2ce9f41e470e:1"
+        ],
+        "outputs": [
+          {
+            "sats": 700000,
+            "script": "001435c6e0dd6d3c84b16ba885dca73ac863d0b593ec",
+            "scripthash": "96c18a243bc9433da1c4a0e9b463aa44d34fd26c2d1f761007e1e65466247ff0"
+          },
+          {
+            "sats": 3278511,
+            "script": "0014dc286e0cd2e6bd37cebe9ec349fb5f08905672fc",
+            "scripthash": "cc8384cd02f736d7a3c223e5764ff0d4806bfa14292c5bd7c4d93c4822098d2c"
+          }
+        ],
+        "raw": "01000000010e471ef4e92c1acb51efc8660f8d3f69936ea9c9b2bff72ff9bc81c51efcf4640100000000000000000260ae0a000000000016001435c6e0dd6d3c84b16ba885dca73ac863d0b593ecaf06320000000000160014dc286e0cd2e6bd37cebe9ec349fb5f08905672fc00000000",
+        "txid": "f333ac37b7fafef63d55db824a4c6a33261146acb659aff11f740f5906aebfaf"
+      }
+    ]
+  },
+  "draft_id": "c8c68a35a8a9ca2e77cd5649c30623ea852b2f9b2873ae1f31d1313c579c64bb",
+  "final": {
+    "fee_sats": 1768,
+    "inputs": [
+      "b44d2b2642fe0d7b465a581d36ca6606a3d405745d7d238ab787adf027fe2c9e:1",
+      "f333ac37b7fafef63d55db824a4c6a33261146acb659aff11f740f5906aebfaf:0"
+    ],
+    "outputs": [
+      {
+        "is_mine": true,
+        "sats": 408232,
+        "script": "0014eb38fa9b8128f81f26e95edb0c5ffaea83690fe4",
+        "scripthash": "7744ac5c903fefb81d825f08dd28be0fd2002a57e0d3b38fc68431265680d86f"
+      },
+      {
+        "is_mine": false,
+        "sats": 300000,
+        "script": "00203fa966c9ddcdc2fd96e4a5e1bc765b9faf6ce8b3eb4f1104aad6bdf77324e5be",
+        "scripthash": "8eb7cc3949de68785c8ee2e496a2f35ecb53e8ead97ac45ba52b53eca875a286"
+      }
+    ],
+    "raw": "020000000001029e2cfe27f0ad87b78a237d5d7405d4a30666ca361d585a467b0dfe42262b4db40100000000fdffffffafbfae06590f741ff1af59b6ac461126336a4c4a82db553df6fefab737ac33f30000000000fdffffff02a83a060000000000160014eb38fa9b8128f81f26e95edb0c5ffaea83690fe4e0930400000000002200203fa966c9ddcdc2fd96e4a5e1bc765b9faf6ce8b3eb4f1104aad6bdf77324e5be0247304402206b3e877655f08c6e7b1b74d6d893a82cdf799f68a5ae7cecae63a71b0339e5ce022019b94aa3fb6635956e109f3d89c996b1bfbbaf3c619134b5a302badfaf52180e012103455ee7cedc97b0ba435b80066fc92c963a34c600317981d135330c4ee43ac7a302483045022100e2e98e4f8c70274f10145c89a5d86e216d0376bdf9f42f829e4315ea67d79d210220743589fd4f55e540540a976a5af58acd610fa5e188a5096dfe7d36baf3afb94001210271b5b779ad870838587797bcf6f0c7aec5abe76a709d724f48d2e26cf874f0a000000000",
+    "txid": "54e3752e16af13b324eb0bb009fa768f7dddda799bc869ed6702d02846db8207",
+    "vsize": 221,
+    "wtxid": "beaa04a0cbf779c860bf47b763be6617393321c19cbdf8ed10d14f3887ae21e5"
+  },
+  "funded_btc": "0.03988511",
+  "generator": "native_fixtures::export_published_signing_fixtures",
+  "genesis": {
+    "hash": "00000008819873e925422c1ff0f99f7cc9bbb232af63a077a480a3633bee1ef6",
+    "header": "0100000000000000000000000000000000000000000000000000000000000000000000003ba3edfd7a7b12b27ac72c3e67768f617fc81bc3888a51323a9fb8aa4b1e5e4a008f4d5fae77031e8ad22203"
+  },
+  "limits": [
+    "Synthetic Signet block is not a valid Signet chain",
+    "Timestamp 1 is fixture metadata, not real synchronization",
+    "Historical attempt is synthetic; no real broadcast occurred",
+    "Signatures were copied from published Ledger vectors, never generated"
+  ],
+  "password": "Public native signing backup 2026",
+  "purpose": "Public published-signature native fixtures; NEVER FUND; no Bitcoin signing keys",
+  "schema": 8,
+  "sources": [
+    "ledger-wpkh-two-inputs.psbt",
+    "ledger-wpkh-two-inputs.json",
+    "signing-provenance.json"
+  ],
+  "wallet_id": "92ec5adf64a0f05dac69c554ac7aece2f7c7c85f344ad4c26c6af5859c39c7af"
+}

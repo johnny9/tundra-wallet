@@ -182,6 +182,15 @@ class FixtureAndSourceChecks(unittest.TestCase):
         self.assertEqual(len(data), record["size"])
         self.assertEqual(hashlib.sha256(data).hexdigest(), record["sha256"])
         self.assertEqual(hashlib.sha256((ROOT/"crates/tundra-core/src/backup_schema_v1.sql").read_bytes()).hexdigest(), record["schema_sha256"])
+    def test_public_native_signing_fixture_hashes(self):
+        fixtures = ROOT/"tests/fixtures"
+        records = json.loads((fixtures/"native-signing-hashes.json").read_text())
+        self.assertEqual(set(records), {"native-unsigned.sqlite", "native-signed-response.psbt", "native-signed-backup.tundra", "native-signing.json"})
+        for name, record in records.items():
+            data = (fixtures/name).read_bytes()
+            self.assertEqual(len(data), record["size"])
+            self.assertEqual(hashlib.sha256(data).hexdigest(), record["sha256"])
+        # A hash check is not signature validation, decryption or a real chain scan.
     def test_cargo_manifest_syntax_and_private_packages(self):
         root = tomllib.loads((ROOT/"Cargo.toml").read_text())
         self.assertFalse(root["workspace"]["package"]["publish"])

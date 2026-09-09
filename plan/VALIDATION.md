@@ -6,6 +6,15 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
+Published native fixtures now pass the local **189 Rust / 27 offline** gate, strict Clippy,
+formatting and both binding generators. Two new integration tests verify the published
+Ledger response and exact final bytes, then protected restore, actual loopback HTTP sync,
+explicit recovery review, separate exact submission consent, reopen and observed output
+provenance with retained user label edits. The server is a synthetic Merkle-consistent test
+chain, **not valid Signet or a real network broadcast**. The separate actual keyless Bitcoin
+Core regtest also passes. Native use of these pinned fixtures remains untested. See
+[`published-native-fixture-checks.json`](../validation/published-native-fixture-checks.json).
+
 The [first system-picker run at b9434ec](https://github.com/johnny9/tundra-wallet/actions/runs/34310420076)
 passes Rust/parser/audit, both native builds, **10 Android JVM tests**, **12 Android
 instrumentation tests**, **6 Apple host FFI checks** and **12 iOS runtime tests**. Two Android

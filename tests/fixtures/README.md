@@ -35,3 +35,21 @@ existing output. SQLCipher uses a random salt, so regeneration changes the ciphe
 The offline check verifies the committed hash; actual decryption and supported descriptor
 checks belong to Rust/native tests. This is not a recoverable personal wallet or a safe
 password for personal data. Native tests use it to check provider interoperability.
+
+`native-unsigned.sqlite`, `native-signed-response.psbt`, `native-signed-backup.tundra`
+and `native-signing.json` share the already published Ledger two-input signatures above.
+`native-signing-hashes.json` pins their exact bytes. The explicit ignored generator
+`native_fixtures::export_published_signing_fixtures` requires a new directory in
+`TUNDRA_NATIVE_SIGNED_FIXTURES`; it never generates Bitcoin signing keys. The plaintext
+database is a **test-only public snapshot**, with an unsigned review and synthetic funding.
+The PSBT supplies only the published response. The encrypted backup contains its validated
+final transaction plus a **synthetic historical uncertain attempt**, with no network call.
+Its public test password is `Public native signing backup 2026`.
+
+`../esplora_published.py` serves these prevouts in a Merkle-consistent synthetic block over
+loopback and accepts only the exact final bytes. This block is **not a valid Signet chain**;
+fixture acknowledgement and mempool observation do not establish real network broadcast.
+The Rust `published_native` tests exercise production restore, HTTP sync, signature checking,
+explicit resumption, separate submission consent, restart and output provenance against this
+fixture. Real keyless Bitcoin Core regtest remains a separate test. Native runtime/UI use of
+these fixtures must be reported independently from the Rust tests.
