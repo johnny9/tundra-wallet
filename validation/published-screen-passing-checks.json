@@ -1,0 +1,53 @@
+{
+  "recorded_at": "2026-09-09T07:42:38.266310+00:00",
+  "source": "77ce36c8c42ab4469232b65f4d58c88969465813",
+  "run_id": 34323294461,
+  "conclusion": "failure",
+  "rust": "189 tests, 31 offline, fmt/Clippy and bindings passed",
+  "parser_audit_cargo_maven_inventory": "passed",
+  "android": {
+    "job": 102374643282,
+    "result": "Missing Guava parent POM checksum during complete locked configurations; app/JVM/instrumentation/restart not run"
+  },
+  "ios": {
+    "job": 102374643410,
+    "artifact": 10093263867,
+    "build": "passed",
+    "fixture_boundary": "passed",
+    "host_ffi_passed": 6,
+    "hosted_runtime_passed": 13,
+    "public_payment_ui_passed": 2,
+    "public_payment_scenarios": [
+      "per-input signature progress, exact finalization and restart; no POST",
+      "recovery sync, explicit reapproval without POST, separate privacy/retry consent, one exact submission, no extra POST on restart, observed provenance and retained label edits"
+    ],
+    "normal_wallet_ui_failed": 1,
+    "normal_wallet_steps_passed": [
+      "inactive Activity actions removed",
+      "retained filters and fixed tabs",
+      "automatic Send",
+      "selected Max"
+    ],
+    "normal_wallet_failure": "Later exact-input Send: amount keyboard covers the fee row, so coordinate tap fails to focus it",
+    "correction": "Dismiss the amount/recipient keyboard, reveal the fee row and require hittability before editing",
+    "backup_restore": "not reached"
+  },
+  "files": [
+    {
+      "path": "build/public-screen-ios-third.log",
+      "sha256": "3f14ad4670334ed0477119a969d65d4228b64ee7e45a0e916018d0d805016eac"
+    },
+    {
+      "path": "build/public-screen-ios-third-results/ios-runtime-summary.json",
+      "sha256": "9814cdba036e415e1782b54a8a05299e59f5af01295a927e76d60a26db1bed06"
+    },
+    {
+      "path": "build/ios-fee-covered-by-keyboard.png",
+      "sha256": "fe6c3705c10c6594c962e1572afde83182c87b5fb8aaf3cb5ab60bc23eecfc78"
+    },
+    {
+      "path": "build/android-locked-ci-first.log",
+      "sha256": "618303665ec46d4ed950856e2615d9ba3ce649472fbfee19b432a02ecfbe349a"
+    }
+  ]
+}

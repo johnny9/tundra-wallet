@@ -6,44 +6,47 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
-The [run at 4570492](https://github.com/johnny9/tundra-wallet/actions/runs/34321570973)
-passes Rust (**189 tests / 29 offline**), parser/audit, Cargo notice regeneration and both
-native app builds. Android passes **10 JVM / 16 of 17 instrumentation tests**, including
-all updated payment modes, published-file signature counters/finalization and system backup
-round-trip. The new recovery test now reaches explicit resumption with no submission, then
-incorrectly expects the transaction in the new-finalization field. Recovered payments retain
-it in their submission record; the assertion now checks that record and its displayed ID.
-Later Android submission/provenance controls and cold restart were not reached by this run.
+The [run at 77ce36c](https://github.com/johnny9/tundra-wallet/actions/runs/34323294461)
+passes Rust (**189 tests / 31 offline**), parser/audit and both notice-regeneration gates.
+iOS builds, passes **6 host FFI / all 13 hosted runtime tests**, and now passes **both public
+payment UI tests completely**. These exercise signature counters, exact finalization,
+restart persistence, recovery sync/reapproval without POST, separate privacy/retry consent,
+one exact fixture submission, restart without an extra POST, observed input provenance and
+retained output-label edits. These use published signatures and a synthetic loopback endpoint;
+no physical transport or real-network broadcast is claimed.
 
-iOS passes **6 host FFI / all 13 hosted runtime tests**, including the previously failing
-published scan. Its **published-response UI test now passes completely**: both per-input
-signature counters, actual finalization, exact transaction/fee review and persistence after
-restart, with no POST. The new recovery screen passes sync, explicit resumption with no POST,
-separate privacy/retry consent, exact submission and restart without another POST. The test
-then expects one coin, but the actual full descriptor scan finds an unrelated confirmed coin
-alongside the payment output. It now selects the unique retained payment label; provenance
-and label-edit controls remain unqualified. The normal wallet UI test still finds inactive
-Receive in accessibility queries, before the remaining payment modes and Apple backup restore.
-Inactive Activity actions are now conditionally removed while the independent ScrollView and
-its dimensions remain; this correction awaits native execution. See
-[exact evidence](../validation/public-screen-second-platform-checks.json).
+The normal Apple wallet UI test now passes removal of inactive Activity actions, retained
+filters, fixed tabs, automatic Send and selected Max. Its later exact-input Send fails editing
+a fee row covered by the amount keyboard. The public recording confirms the obstruction;
+the test now dismisses the keyboard and requires a visible fee row before editing. Updated
+consolidation and the backup filename/system-restore correction remain unreached. See
+[exact native evidence](../validation/published-screen-passing-checks.json).
 
-The fourth Gradle collector run passes. Reviewed locks now cover **440 distinct components**;
-strict verification covers **584 metadata components / 1,006 artifacts**. The real Android
-project configures locally, and isolated Gradle checks pass a baseline plus missing-lock,
-disabled-verification and altered-checksum refusals. Full locked configuration/build validation
-requires the Android SDK and is pending in native CI. See [enforcement evidence](../validation/android-lock-enforcement-checks.json).
+Android's first complete locked configuration gate fails **before app compilation**, because
+an additional Guava parent POM was missing from verification metadata. That POM and all 256
+other retained supplemental POMs now have explicit exact checksum entries. The baseline
+locks **440 distinct components** and verifies **585 metadata components / 1,263 artifacts**.
+No module version or broad trust exception changed. The next full locked native run is
+pending. Local real-project configuration and missing-lock, disabled-verification and
+altered-plugin-checksum refusal checks pass. See [parent metadata evidence](../validation/android-parent-metadata-checks.json).
+The preceding Android runtime run passes **10 JVM / 16 of 17 instrumentation tests**; its
+recovery assertion correction and later recovery/provenance steps await runtime execution.
 
-The declared-license inventory retains **585 exact Maven POMs** for all verification components
-and their parents. Offline regeneration and **31 offline checks** pass locally. Four parent-only
-metadata components lack declarations and are explicitly recorded. Full JAR/AAR notices,
-SDK/build tools and binary distribution review remain open. See
-[notice scope](../third-party/README.md) and [inventory evidence](../validation/android-notice-inventory-checks.json).
+Local full Rust/regtest, formatting, strict Clippy and both binding generators pass after
+strengthening the secret-marker regression to use valid descriptor checksums. It uses only
+invalid/truncated markers, never usable signing keys. **32 offline checks** now pass, including
+Maven and binary-notice inventory guards. All **585 retained Maven POMs** match verification
+hashes. **138 archive variants** for the **150 release-runtime components** were actually
+fetched and verified; five embedded notice texts and 116 module metadata files are retained.
+54 archives lack embedded notices, including 48 with compiled code. Upstream review and
+binary notice packaging remain open. See [notice scope](../third-party/README.md).
 
-The Apple test-host fixture boundary passes; fixtures/setup controls are excluded from the
-normal app. No physical PSBT picker, hardware, complete Apple system restore/restart, exact
-long-list scroll restoration or broad layout/accessibility qualification is claimed. Earlier
-results and failures remain in their revision-specific evidence files.
+Both native **100-output long-list/large-text scenarios are authored but have not compiled
+or run**. They use the existing keyless regtest fixture and isolated native vaults. The Apple
+test-host boundary is extended for that public descriptor; the normal app excludes fixtures.
+Complete Apple system restore/restart, exact scroll restoration and broader layout/accessibility
+qualification remain open. Physical phones, hardware and independent release review are
+separate gates. Earlier results/failures remain in revision-specific evidence files.
 
 ## Earlier document and fixture checkpoints
 

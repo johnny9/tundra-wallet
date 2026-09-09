@@ -16,7 +16,7 @@ approval system, or cloud account.
 
 - Source: descriptor-first watch-only engine, metadata, unsigned-draft core, UniFFI API,
   native Android and iOS wallet flows, tests and CI.
-- Verified: 189 Rust tests including real regtest, 31 local offline checks, parser fuzzing/audit,
+- Verified: 189 Rust tests including real regtest, 32 local offline checks, parser fuzzing/audit,
   Android debug APK and iOS simulator builds, host FFI smoke tests, all four payment modes on both virtual platforms and initial process-restart checks.
   See [VALIDATION.md](VALIDATION.md) for the exact results and remaining gates.
 - Added: bounded opt-in Esplora scans, cancellation, cached timestamps, coinbase maturity,
@@ -30,9 +30,9 @@ approval system, or cloud account.
 - Added: bounded UR/BBQr codecs and native camera/display source; both native barcode tests pass; iOS uses Vision revision 2 as its independent image decoder.
 - Added: immutable finalized transaction bytes and native final-review source; software tests pass.
 - Added: pinned bhwi Ledger protocol, registration persistence and Android USB adapter source; Android build/FFI/runtime checks pass; physical device qualification remains open.
-- Added: explicit test-network broadcast, durable uncertainty and observed-spend handling; Rust tests and native builds pass; positive submission UI qualification remains open.
+- Added: explicit test-network broadcast, durable uncertainty and observed-spend handling; Rust tests and native builds pass; Apple positive submission/recovery UI checks pass; Android coverage remains open.
 - Added: observed payment/output labels and durable input provenance; local rollback,
-  reorg and migration tests pass; native coin-detail presentation awaits validation.
+  reorg and migration tests pass; Apple coin-detail/provenance/label-edit checks pass; Android validation remains.
 - Added: pinned SQLCipher, protected Rust storage and atomic plaintext migration with
   process-kill tests; both native vaults pass platform key-retention tests. Protected
   normal startup and all payment/restart flows pass on both virtual platforms.
@@ -40,8 +40,8 @@ approval system, or cloud account.
   and durable recovery holds. Native restore/provider checks pass. Atomic store selection
   passes Rust tests and native generation recovery now passes on both platforms. File
   helpers, Android system backup round-trip and Apple system export/readback pass. Both native vaults pass published-signature
-  finalization/recovery/submission/provenance; complete Apple system restore and positive payment UI
-  controls remain under validation.
+  finalization/recovery/submission/provenance. Both Apple positive payment screen tests now pass;
+  complete Apple system restore and Android recovery controls remain under validation.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Build review: workflow actions pinned to executed revisions; both full Cargo locks have
   a checked license/notice inventory. Android locks/checksums and a retained Maven declaration
