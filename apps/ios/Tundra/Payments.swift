@@ -34,6 +34,10 @@ struct PaymentView: View {
     var body: some View {
         NavigationStack {
             Form {
+                let walletID = model.review?.walletId ?? model.selectedID
+                if let wallet = model.wallets.first(where: { $0.id == walletID }) {
+                    Text("Network: \(String(describing: wallet.network).capitalized)")
+                } else { Text("Network unavailable") }
                 if let review = model.review {
                     Section("Saved payment · \(review.state)") {
                         Text(review.label.isEmpty ? "Unlabeled payment" : review.label)
@@ -243,6 +247,12 @@ struct CoinsView: View {
                         Button("Clear selection") { model.selectedCoins = [] }
                     }.buttonStyle(.bordered)
                 }.disabled(model.busy)
+            }
+            if visible.isEmpty {
+                Text(!model.coins.isEmpty ? "No coins match this search and filters."
+                    : model.wallet?.synced == true ? "No coins were found at the last successful sync."
+                    : "Sync this wallet with your chosen test endpoint to load its coins.")
+                    .font(.subheadline).foregroundStyle(.secondary)
             }
             ForEach(visible, id: \.outpoint) { coin in
                 HStack(alignment: .top) {

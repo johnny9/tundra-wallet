@@ -54,6 +54,9 @@ import dev.johnny9.tundra.generated.*
         val focus = LocalFocusManager.current
         Column(Modifier.padding(24.dp).imePadding().verticalScroll(scroll), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             val review = s.review
+            val walletId = review?.walletId ?: s.selectedId
+            val network = s.wallets.firstOrNull { it.id == walletId }?.network
+            Text(network?.let { "Network: ${it.name.lowercase().replaceFirstChar(Char::uppercase)}" } ?: "Network unavailable")
             if (review == null) {
                 Text("Create a payment", style = MaterialTheme.typography.headlineSmall)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

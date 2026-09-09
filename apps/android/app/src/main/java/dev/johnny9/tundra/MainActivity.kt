@@ -185,7 +185,11 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
                             listOf(coin.label, coin.address, coin.outpoint).any { it.contains(query, ignoreCase = true) }
                     }.let { coins -> if (largestFirst) coins.sortedByDescending { it.sats } else coins.sortedBy { it.label.lowercase() } }
                     LazyColumn(Modifier.weight(1f).padding(top = 16.dp), state = coinScroll) {
-                        if (s.coins.isEmpty()) item { EmptyState("No synced coins", "No sample UTXOs are injected. Labels and coin control operate on wallet-owned outputs.") }
+                        if (filtered.isEmpty()) item {
+                            if (s.coins.isNotEmpty()) EmptyState("No matching coins", "Try another search or change the filters.")
+                            else EmptyState("No coins", if (s.wallet?.synced == true) "No coins were found at the last successful sync."
+                                else "Sync this wallet with your chosen test endpoint to load its coins.")
+                        }
                         items(filtered, key = { it.outpoint }) { coin ->
                             ListItem(modifier = Modifier.clickable(enabled = !s.busy) { editing = coin; labelText = coin.label; vm.loadOutputSource(coin.outpoint) },
                                 headlineContent = { Text(coin.label.ifBlank { "Add a label" }) },

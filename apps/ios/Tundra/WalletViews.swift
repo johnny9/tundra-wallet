@@ -195,7 +195,7 @@ struct ImportView: View {
                     }
                 }
                 if let error = model.error { Text(error).foregroundStyle(.red) }
-                Text("Use public test fixtures only. No private keys, real coins or recoverable backups.").font(.footnote)
+                Text("Use disposable test wallets. This development build is not qualified for real funds.").font(.footnote)
             }
             .navigationTitle("Add a wallet")
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Close") { dismiss() }.disabled(model.busy) } }
