@@ -54,4 +54,6 @@ dependencies {
     // The Android AAR has no host JNA dispatch library; JVM tests need the desktop artifact.
     testRuntimeOnly("net.java.dev.jna:jna:5.17.0@jar")
     debugImplementation("androidx.compose.ui:ui-tooling")
+    // Supplies ComponentActivity for standalone Compose instrumentation tests only.
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
