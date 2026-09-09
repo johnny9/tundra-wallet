@@ -14,6 +14,18 @@ during encrypted writes and plaintext upgrade. The current apps
 still use legacy plaintext storage; native platform keys and recovery are not implemented.
 Native key retention is the next implementation gate. See [13-storage.md](13-storage.md).
 
+The [migration-native run at 4fbbb67](https://github.com/johnny9/tundra-wallet/actions/runs/34300425464)
+passes Rust, all sanitizer targets, audit, Android ABI/app builds and **7 JVM tests**.
+Android instrumentation fails both storage tests because Rust 1.93's standard file locking
+is unsupported there; the wallet test subsequently times out on failed startup. Five other
+instrumentation tests pass, and cold restart does not run. Apple host linking/bindings now
+pass, but arm64 iOS linking fails on a stack-probe symbol because C and Rust chose different
+minimum OS versions. `efa7296` uses Android-supported rustix locks and explicitly aligns
+Apple deployment targets; all 155 local Rust tests and required checks pass with the fix.
+[`storage-migration-native-checks.json`](../validation/storage-migration-native-checks.json)
+preserves the failures and corrections. The new native Keystore/Keychain adapters and
+isolated tests at `555f1d5` also await CI; normal app startup still uses legacy storage.
+
 The [first native storage run at b8d4bf7](https://github.com/johnny9/tundra-wallet/actions/runs/34298929142)
 passes Rust, parser/audit, both Android ABI builds and 6 host JVM tests. Android passes six
 existing instrumentation tests but fails the new protected open; cold restart did not run.

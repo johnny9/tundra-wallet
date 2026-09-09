@@ -1,0 +1,214 @@
+{
+  "recorded_at": "2026-09-09T02:04:13.215028+00:00",
+  "source": "4fbbb67185215542972da43230effcf22923c351",
+  "run": "https://github.com/johnny9/tundra-wallet/actions/runs/34300425464",
+  "rust": "155 tests including real keyless regtest; required checks passed",
+  "parser_and_audit": "all three sanitizer targets and cargo-audit passed",
+  "android": {
+    "build": "arm64/x86_64 and app build passed",
+    "jvm": [
+      {
+        "name": "dev.johnny9.tundra.UsbDescriptorTest",
+        "tests": "2",
+        "skipped": "0",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-09-09T01:49:48.638Z",
+        "hostname": "runnervmejwal",
+        "time": "0.012"
+      },
+      {
+        "name": "dev.johnny9.tundra.NativeCoreTest",
+        "tests": "5",
+        "skipped": "0",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-09-09T01:49:46.439Z",
+        "hostname": "runnervmejwal",
+        "time": "2.197"
+      }
+    ],
+    "instrumentation": {
+      "name": "dev.johnny9.tundra.BroadcastRuntimeTest",
+      "tests": "8",
+      "failures": "3",
+      "errors": "0",
+      "skipped": "0",
+      "time": "26.573",
+      "timestamp": "2026-09-09T01:51:57",
+      "hostname": "localhost"
+    },
+    "failures": [
+      {
+        "test": {
+          "name": "encryptedDatabaseCrossesMobileFfiAndWrongKeyPreservesIt",
+          "classname": "dev.johnny9.tundra.StorageRuntimeTest",
+          "time": "0.02"
+        },
+        "detail": "dev.johnny9.tundra.generated.AppException$Operation: code=STORAGE, detail=Wallet storage is in use; close other wallet sessions before upgrading storage\nat dev.johnny9.tundra.generated.FfiConverterTypeAppError.read(tundra_ffi.kt:3884)\nat dev.johnny9.tundra.generated.FfiConverterTypeAppError.read(tundra_ffi.kt:3879)\nat dev.johnny9.tundra.generated.FfiConverter.liftFromRustBuffer(tundra_ffi.kt:200)\nat dev.johnny9.tundra.generated.FfiConverterTypeAppError.liftFromRustBuffer(tundra_ffi.kt:3879)\nat dev.johnny9.tundra.generated.FfiConverterTypeAppError.liftFromRustBuffer(tundra_ffi.kt:3879)\nat dev.johnny9.tundra.generated.FfiConverterRustBuffer.lift(tundra_ffi.kt:217)\nat dev.johnny9.tundra.generated.FfiConverterTypeAppError.lift(tundra_ffi.kt:3879)\nat dev.johnny9.tundra.generated.FfiConverterTypeAppError.lift(tundra_ffi.kt:3879)\nat dev.johnny9.tundra.generated.AppException$ErrorHandler.lift(tundra_ffi.kt:3870)\nat dev.johnny9.tundra.generated.AppException$ErrorHandler.lift(tundra_ffi.kt:3869)\nat dev.johnny9.tundra.generated.Tundra_ffiKt.uniffiCheckCallStatus(tundra_ffi.kt:284)\nat dev.johnny9.tundra.generated.Tundra_ffiKt.access$uniffiCheckCallStatus(tundra_ffi.kt:1)\nat dev.johnny9.tundra.generated.Tundra$Companion.openProtected(tundra_ffi.kt:5142)\nat dev.johnny9.tundra.StorageRuntimeTest.encryptedDatabaseCrossesMobileFfiAndWrongKeyPreservesIt(StorageRuntimeTest.kt:47)\n"
+      },
+      {
+        "test": {
+          "name": "plaintextUpgradeRefusesLiveHandlesAndPreservesMobileState",
+          "classname": "dev.johnny9.tundra.StorageRuntimeTest",
+          "time": "0.028"
+        },
+        "detail": "dev.johnny9.tundra.generated.AppException$Operation: code=STORAGE, detail=Wallet storage is in use; close other wallet sessions before upgrading storage\nat dev.johnny9.tundra.generated.FfiConverterTypeAppError.read(tundra_ffi.kt:3884)\nat dev.johnny9.tundra.generated.FfiConverterTypeAppError.read(tundra_ffi.kt:3879)\nat dev.johnny9.tundra.generated.FfiConverter.liftFromRustBuffer(tundra_ffi.kt:200)\nat dev.johnny9.tundra.generated.FfiConverterTypeAppError.liftFromRustBuffer(tundra_ffi.kt:3879)\nat dev.johnny9.tundra.generated.FfiConverterTypeAppError.liftFromRustBuffer(tundra_ffi.kt:3879)\nat dev.johnny9.tundra.generated.FfiConverterRustBuffer.lift(tundra_ffi.kt:217)\nat dev.johnny9.tundra.generated.FfiConverterTypeAppError.lift(tundra_ffi.kt:3879)\nat dev.johnny9.tundra.generated.FfiConverterTypeAppError.lift(tundra_ffi.kt:3879)\nat dev.johnny9.tundra.generated.AppException$ErrorHandler.lift(tundra_ffi.kt:3870)\nat dev.johnny9.tundra.generated.AppException$ErrorHandler.lift(tundra_ffi.kt:3869)\nat dev.johnny9.tundra.generated.Tundra_ffiKt.uniffiCheckCallStatus(tundra_ffi.kt:284)\nat dev.johnny9.tundra.generated.Tundra_ffiKt.access$uniffiCheckCallStatus(tundra_ffi.kt:1)\nat dev.johnny9.tundra.generated.Tundra$Companion.open(tundra_ffi.kt:5138)\nat dev.johnny9.tundra.StorageRuntimeTest.plaintextUpgradeRefusesLiveHandlesAndPreservesMobileState(StorageRuntimeTest.kt:20)\n"
+      },
+      {
+        "test": {
+          "name": "importRecreateReceiveAppearanceAndSyncConsent",
+          "classname": "dev.johnny9.tundra.WalletRuntimeTest",
+          "time": "17.238"
+        },
+        "detail": "androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 10000 ms\nat androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)\nat androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)\nat dev.johnny9.tundra.WalletRuntimeTest.waitText(WalletRuntimeTest.kt:22)\nat dev.johnny9.tundra.WalletRuntimeTest.importRecreateReceiveAppearanceAndSyncConsent(WalletRuntimeTest.kt:39)\n"
+      }
+    ],
+    "cold_restart": "NOT RUN after instrumentation failure"
+  },
+  "ios": {
+    "host_library_and_bindings": "passed after CoreFoundation linkage fix",
+    "failure": "arm64 iOS link: ___chkstk_darwin referenced by sqlcipher_log. C used iOS 18.5 while rustc linked at 10.0. Swift/iOS app builds and runtime tests did not run."
+  },
+  "followup": {
+    "source": "efa7296",
+    "android": "Use already-locked rustix 1.1.4 safe flock on Unix because Rust 1.93 std file locking explicitly excludes Android. No lock bypass. Other errors no longer masquerade as contention.",
+    "apple": "Set IPHONEOS_DEPLOYMENT_TARGET=17.0 and MACOSX_DEPLOYMENT_TARGET=11.0 in build scripts, aligning C and Rust with supported native targets.",
+    "local_checks": "155 Rust tests, 23 offline checks, fmt/Clippy, actual regtest and both generated bindings passed",
+    "native": "rerun pending"
+  },
+  "key_vaults": {
+    "source": "555f1d5",
+    "status": "isolated source and two runtime tests per platform authored; not yet compiled/run and not connected to normal app startup"
+  },
+  "artifacts": [
+    {
+      "id": 10084977641,
+      "node_id": "MDg6QXJ0aWZhY3QxMDA4NDk3NzY0MQ==",
+      "name": "tundra-parser-and-dependency-results",
+      "size_in_bytes": 207041,
+      "url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10084977641",
+      "archive_download_url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10084977641/zip",
+      "expired": false,
+      "digest": "sha256:9a2175c1d28bf352171a1c1d8e27ef50631f9e56931fd434b90c73cb4622da27",
+      "created_at": "2026-09-09T01:56:43Z",
+      "updated_at": "2026-09-09T01:56:43Z",
+      "expires_at": "2026-12-08T01:44:49Z",
+      "workflow_run": {
+        "id": 34300425464,
+        "repository_id": 1361561052,
+        "head_repository_id": 1361561052,
+        "head_branch": "master",
+        "head_sha": "4fbbb67185215542972da43230effcf22923c351"
+      }
+    },
+    {
+      "id": 10084874354,
+      "node_id": "MDg6QXJ0aWZhY3QxMDA4NDg3NDM1NA==",
+      "name": "tundra-android-runtime-results",
+      "size_in_bytes": 39086,
+      "url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10084874354",
+      "archive_download_url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10084874354/zip",
+      "expired": false,
+      "digest": "sha256:9b3fba06c4153dac27b38da1fc41e22a1b8f8c89f0a55b5468451100be20a34b",
+      "created_at": "2026-09-09T01:52:07Z",
+      "updated_at": "2026-09-09T01:52:07Z",
+      "expires_at": "2026-12-08T01:44:49Z",
+      "workflow_run": {
+        "id": 34300425464,
+        "repository_id": 1361561052,
+        "head_repository_id": 1361561052,
+        "head_branch": "master",
+        "head_sha": "4fbbb67185215542972da43230effcf22923c351"
+      }
+    },
+    {
+      "id": 10084873953,
+      "node_id": "MDg6QXJ0aWZhY3QxMDA4NDg3Mzk1Mw==",
+      "name": "tundra-jvm-test-results",
+      "size_in_bytes": 1122,
+      "url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10084873953",
+      "archive_download_url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10084873953/zip",
+      "expired": false,
+      "digest": "sha256:8a7086618e071046ec1d45b51045d82127e56dfd5e5de8cce70ce59db4048fbb",
+      "created_at": "2026-09-09T01:52:06Z",
+      "updated_at": "2026-09-09T01:52:06Z",
+      "expires_at": "2026-12-08T01:44:49Z",
+      "workflow_run": {
+        "id": 34300425464,
+        "repository_id": 1361561052,
+        "head_repository_id": 1361561052,
+        "head_branch": "master",
+        "head_sha": "4fbbb67185215542972da43230effcf22923c351"
+      }
+    },
+    {
+      "id": 10084873608,
+      "node_id": "MDg6QXJ0aWZhY3QxMDA4NDg3MzYwOA==",
+      "name": "tundra-instrumentation-apk",
+      "size_in_bytes": 951486,
+      "url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10084873608",
+      "archive_download_url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10084873608/zip",
+      "expired": false,
+      "digest": "sha256:0fbb997656044a67059700fe78d86daa2eb5fbc06f6d816d92b0ee2cb05e1e27",
+      "created_at": "2026-09-09T01:52:05Z",
+      "updated_at": "2026-09-09T01:52:05Z",
+      "expires_at": "2026-12-08T01:44:49Z",
+      "workflow_run": {
+        "id": 34300425464,
+        "repository_id": 1361561052,
+        "head_repository_id": 1361561052,
+        "head_branch": "master",
+        "head_sha": "4fbbb67185215542972da43230effcf22923c351"
+      }
+    },
+    {
+      "id": 10084873086,
+      "node_id": "MDg6QXJ0aWZhY3QxMDA4NDg3MzA4Ng==",
+      "name": "tundra-development-apk",
+      "size_in_bytes": 37299770,
+      "url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10084873086",
+      "archive_download_url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10084873086/zip",
+      "expired": false,
+      "digest": "sha256:dc3e7bcde85b4ac4f262b42ce6ec4bc23cb684ab9c2a65934e0de99e8d2e6720",
+      "created_at": "2026-09-09T01:52:04Z",
+      "updated_at": "2026-09-09T01:52:04Z",
+      "expires_at": "2026-12-08T01:44:49Z",
+      "workflow_run": {
+        "id": 34300425464,
+        "repository_id": 1361561052,
+        "head_repository_id": 1361561052,
+        "head_branch": "master",
+        "head_sha": "4fbbb67185215542972da43230effcf22923c351"
+      }
+    },
+    {
+      "id": 10084807426,
+      "node_id": "MDg6QXJ0aWZhY3QxMDA4NDgwNzQyNg==",
+      "name": "lock-and-offline-report",
+      "size_in_bytes": 14652,
+      "url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10084807426",
+      "archive_download_url": "https://api.github.com/repos/johnny9/tundra-wallet/actions/artifacts/10084807426/zip",
+      "expired": false,
+      "digest": "sha256:ea412e031a5ca7a10d44535af356c64d84f670e90fff3a22d898236d6180dddf",
+      "created_at": "2026-09-09T01:49:12Z",
+      "updated_at": "2026-09-09T01:49:12Z",
+      "expires_at": "2026-12-08T01:44:49Z",
+      "workflow_run": {
+        "id": 34300425464,
+        "repository_id": 1361561052,
+        "head_repository_id": 1361561052,
+        "head_branch": "master",
+        "head_sha": "4fbbb67185215542972da43230effcf22923c351"
+      }
+    }
+  ],
+  "logs": {
+    "build/android-migration-first-results/apps/android/app/build/outputs/androidTest-results/connected/debug/TEST-emulator-5554 - 15-_app-.xml": "91fa33d9a20405d61d0967b50e5df547806348cce868e96478f0dbfc2f048342",
+    "build/ios-migration-first.log": "0f0e06b105abee70d1c3d9ab7ce399909f81b1081270fff380ef9b705f43ea88",
+    "build/android-migration-first.log": "ac33e2dfa3f024a354c3f25bcbb34436898d6fe1f488dd475688f6766431f65a",
+    "build/storage-lock-api-check.log": "f1bf6a6c056187f4ef4578944babff1a4f5537d0dff0dd3db8fde967927a6119",
+    "build/storage-lock-api-regtest.log": "812edfba2dba94dd51e9ee1c10a2c6831656175d4fbf11f8708c8dea7aabbfc9",
+    "build/storage-lock-api-bindings.log": "38a03f3619b9c38e8a92e61907178c946875bd46f131e7a3899924d8c3226a00"
+  }
+}
