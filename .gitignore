@@ -5,6 +5,8 @@
 /build/
 *.sqlite
 *.sqlite-*
+*.tundra-lock
+.tundra-protect-*
 *.db
 *.db-*
 *.psbt

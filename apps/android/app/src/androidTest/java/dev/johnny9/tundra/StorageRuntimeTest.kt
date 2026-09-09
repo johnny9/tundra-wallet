@@ -8,6 +8,33 @@ import java.io.File
 import java.util.UUID
 
 class StorageRuntimeTest {
+    @Test fun plaintextUpgradeRefusesLiveHandlesAndPreservesMobileState() {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        val directory = File(instrumentation.targetContext.cacheDir, "migration-test-${UUID.randomUUID()}")
+        check(directory.mkdir())
+        try {
+            val file = File(directory, "upgrade.sqlite")
+            val fixture = instrumentation.context.assets.open("single-sig.txt").bufferedReader().use { it.readText() }
+            val key = ByteArray(32) { 0x11 } // Public storage fixture only.
+            assertEquals(StorageFile.MISSING, inspectStorage(file.path))
+            val id = Tundra.open(file.path).use { core ->
+                val wallet = core.importWallet("Upgrade fixture", fixture, Chain.SIGNET)
+                val address = core.receiveAddress(wallet.id)
+                core.setLabel(wallet.id, "addr", address.address, "Migrated public label 🧊")
+                assertEquals(StorageFile.LEGACY_PLAINTEXT, inspectStorage(file.path))
+                assertThrows(AppException.Operation::class.java) { upgradeStorage(file.path, key) }
+                wallet.id
+            }
+            upgradeStorage(file.path, key)
+            assertEquals(StorageFile.PROTECTED_OR_UNKNOWN, inspectStorage(file.path))
+            Tundra.openProtected(file.path, key).use { core ->
+                assertEquals(id, core.wallets().single().id)
+                assertEquals(1u, core.receiveAddress(id).index)
+                assertTrue(core.exportLabels(id).contains("Migrated public label 🧊"))
+            }
+            upgradeStorage(file.path, key)
+        } finally { directory.deleteRecursively() }
+    }
     @Test fun encryptedDatabaseCrossesMobileFfiAndWrongKeyPreservesIt() {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         val directory = File(instrumentation.targetContext.cacheDir, "storage-test-${UUID.randomUUID()}")

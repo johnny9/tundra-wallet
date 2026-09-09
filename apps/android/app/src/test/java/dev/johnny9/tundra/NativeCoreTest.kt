@@ -53,7 +53,7 @@ class NativeCoreTest {
     }
 
     @Test fun protectedStorageReopensAndWrongKeyCannotResetIt() {
-        val file = temporary.newFile("protected.sqlite")
+        val file = java.io.File(temporary.root, "protected.sqlite")
         // Public database-encryption fixture only; never a Bitcoin signing key.
         val key = ByteArray(32) { 0x11 }
         val id = Tundra.openProtected(file.path, key).use { core ->
@@ -77,6 +77,27 @@ class NativeCoreTest {
             assertEquals(1u, core.receiveAddress(id).index)
             assertTrue(core.exportLabels(id).contains("Protected public label 🧊"))
         }
+    }
+
+    @Test fun plaintextUpgradeRequiresClosedHandlesAndPreservesState() {
+        val file = java.io.File(temporary.root, "upgrade.sqlite")
+        val key = ByteArray(32) { 0x11 }
+        assertEquals(StorageFile.MISSING, inspectStorage(file.path))
+        val id = Tundra.open(file.path).use { core ->
+            val wallet = core.importWallet("Upgrade fixture", fixture, Chain.SIGNET)
+            core.receiveAddress(wallet.id)
+            assertEquals(StorageFile.LEGACY_PLAINTEXT, inspectStorage(file.path))
+            val error = assertThrows(AppException.Operation::class.java) { upgradeStorage(file.path, key) }
+            assertEquals(ErrorCode.STORAGE, error.code)
+            wallet.id
+        }
+        upgradeStorage(file.path, key)
+        assertEquals(StorageFile.PROTECTED_OR_UNKNOWN, inspectStorage(file.path))
+        Tundra.openProtected(file.path, key).use { core ->
+            assertEquals(id, core.wallets().single().id)
+            assertEquals(1u, core.receiveAddress(id).index)
+        }
+        upgradeStorage(file.path, key)
     }
 
     @Test fun unsignedAmountsCrossTheBridgeWithoutTruncation() {

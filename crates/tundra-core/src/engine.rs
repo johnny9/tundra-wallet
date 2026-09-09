@@ -26,6 +26,8 @@ use std::{
 pub struct Core {
     pub(crate) db: Arc<Mutex<Connection>>,
     pub(crate) syncs: Arc<crate::sync::Operations>,
+    // Declared last: release the migration lock only after this handle releases the DB.
+    _storage_lock: Option<Arc<crate::storage::StorageLock>>,
 }
 pub(crate) struct Loaded {
     pub(crate) wallet: Wallet,
@@ -58,14 +60,24 @@ fn outpoint(s: &str) -> Result<OutPoint> {
 impl Core {
     /// Legacy development storage. Does not encrypt or decrypt an existing file.
     pub fn open(path: impl AsRef<Path>) -> Result<Self> {
-        Self::from_connection(crate::storage::open_plain(path.as_ref())?)
+        let storage_lock = crate::storage::shared_lock(path.as_ref())?;
+        Self::from_connection(crate::storage::open_plain(path.as_ref())?, storage_lock)
     }
     /// Open with a 32-byte database encryption key, never a Bitcoin signing key.
     /// A wrong key or plaintext database is refused without a reset or migration.
     pub fn open_protected(path: impl AsRef<Path>, storage_key: Vec<u8>) -> Result<Self> {
-        Self::from_connection(crate::storage::open_protected(path.as_ref(), storage_key)?)
+        let storage_key = zeroize::Zeroizing::new(storage_key);
+        crate::storage::validate_key_path(path.as_ref(), &storage_key)?;
+        let storage_lock = crate::storage::shared_lock(path.as_ref())?;
+        Self::from_connection(
+            crate::storage::open_protected(path.as_ref(), &storage_key)?,
+            storage_lock,
+        )
     }
-    fn from_connection(mut conn: Connection) -> Result<Self> {
+    fn from_connection(
+        mut conn: Connection,
+        storage_lock: Option<Arc<crate::storage::StorageLock>>,
+    ) -> Result<Self> {
         conn.busy_timeout(Duration::from_secs(5))?;
         conn.execute_batch(
             "PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL;",
@@ -80,6 +92,7 @@ impl Core {
         Ok(Self {
             db: Arc::new(Mutex::new(conn)),
             syncs: Arc::new(crate::sync::Operations::default()),
+            _storage_lock: storage_lock,
         })
     }
     pub(crate) fn lock(&self) -> Result<MutexGuard<'_, Connection>> {

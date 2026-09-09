@@ -45,6 +45,8 @@ pub enum Error {
     Storage,
     #[error("Protected wallet storage could not be opened; the existing files were retained")]
     StorageLocked,
+    #[error("Wallet storage is in use; close other wallet sessions before upgrading storage")]
+    StorageBusy,
     #[error("Wallet state is corrupt or incompatible")]
     CorruptState,
     #[error("Application state is unavailable; restart the app")]

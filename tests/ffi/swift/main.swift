@@ -84,10 +84,33 @@ func testAmounts() throws {
     }
 }
 
+func testStorageUpgrade(_ payload: String) throws {
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let file = directory.appendingPathComponent("upgrade.sqlite")
+    let key = Data(repeating: 0x11, count: 32) // Public storage fixture only.
+    var core: Tundra? = try Tundra.open(path: file.path)
+    let wallet = try core!.importWallet(name: "Upgrade fixture", payload: payload, network: .signet)
+    _ = try core!.receiveAddress(walletId: wallet.id)
+    do {
+        try upgradeStorage(path: file.path, storageKey: key)
+        preconditionFailure("Live handle did not prevent migration")
+    } catch AppError.Operation(let code, _) { precondition(code == .storage) }
+    core = nil
+    try upgradeStorage(path: file.path, storageKey: key)
+    let format = try inspectStorage(path: file.path)
+    precondition(format == .protectedOrUnknown)
+    core = try Tundra.openProtected(path: file.path, storageKey: key)
+    let next = try core!.receiveAddress(walletId: wallet.id)
+    precondition(next.index == 1)
+}
+
 precondition(CommandLine.arguments.count == 2, "Pass the public single-sig fixture path")
 let fixture = try String(contentsOfFile: CommandLine.arguments[1], encoding: .utf8)
 try testReopen(fixture)
 try testErrors()
 try testAmounts()
 try testProtectedStorage(fixture)
-print("4 Swift FFI smoke tests passed")
+try testStorageUpgrade(fixture)
+print("5 Swift FFI smoke tests passed")

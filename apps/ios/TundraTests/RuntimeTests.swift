@@ -4,6 +4,31 @@ import UIKit
 @testable import Tundra
 
 final class RuntimeTests: XCTestCase {
+    func testPlaintextUpgradeRefusesLiveHandlesAndPreservesMobileState() throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let file = directory.appendingPathComponent("upgrade.sqlite")
+        let fixture = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "single-sig", withExtension: "txt"))
+        let descriptor = try String(contentsOf: fixture, encoding: .utf8)
+        let key = Data(repeating: 0x11, count: 32) // Public storage fixture only.
+        XCTAssertEqual(try inspectStorage(path: file.path), .missing)
+        var core: Tundra? = try Tundra.open(path: file.path)
+        let wallet = try core!.importWallet(name: "Upgrade fixture", payload: descriptor, network: .signet)
+        let address = try core!.receiveAddress(walletId: wallet.id)
+        try core!.setLabel(walletId: wallet.id, kind: "addr", reference: address.address, label: "Migrated public label 🧊")
+        XCTAssertEqual(try inspectStorage(path: file.path), .legacyPlaintext)
+        XCTAssertThrowsError(try upgradeStorage(path: file.path, storageKey: key))
+        core = nil
+        try upgradeStorage(path: file.path, storageKey: key)
+        XCTAssertEqual(try inspectStorage(path: file.path), .protectedOrUnknown)
+        core = try Tundra.openProtected(path: file.path, storageKey: key)
+        XCTAssertEqual(try core!.wallets()[0].id, wallet.id)
+        XCTAssertEqual(try core!.receiveAddress(walletId: wallet.id).index, 1)
+        XCTAssertTrue(try core!.exportLabels(walletId: wallet.id).contains("Migrated public label 🧊"))
+        core = nil
+        try upgradeStorage(path: file.path, storageKey: key)
+    }
     func testProtectedStorageRejectsWrongKeyAndPreservesWallet() throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)

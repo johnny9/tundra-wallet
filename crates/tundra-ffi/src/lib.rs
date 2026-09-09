@@ -4,6 +4,29 @@ use tundra_core as core;
 uniffi::setup_scaffolding!();
 
 #[derive(Debug, Clone, Copy, uniffi::Enum)]
+pub enum StorageFile {
+    Missing,
+    LegacyPlaintext,
+    ProtectedOrUnknown,
+}
+
+/// Read-only hint for retaining native storage keys; not a database integrity verdict.
+#[uniffi::export]
+pub fn inspect_storage(path: String) -> Result<StorageFile> {
+    Ok(match core::storage_format(path)? {
+        core::StorageFormat::Missing => StorageFile::Missing,
+        core::StorageFormat::Plaintext => StorageFile::LegacyPlaintext,
+        core::StorageFormat::ProtectedOrUnknown => StorageFile::ProtectedOrUnknown,
+    })
+}
+
+/// The caller must durably retain this storage key before requesting the upgrade.
+#[uniffi::export]
+pub fn upgrade_storage(path: String, storage_key: Vec<u8>) -> Result<()> {
+    Ok(core::migrate_plaintext_storage(path, storage_key)?)
+}
+
+#[derive(Debug, Clone, Copy, uniffi::Enum)]
 pub enum Chain {
     Mainnet,
     Signet,
@@ -509,7 +532,9 @@ impl From<core::Error> for AppError {
             core::Error::UnsupportedKeys | core::Error::UnsupportedPolicy => ErrorCode::Unsupported,
             core::Error::NotFound => ErrorCode::NotFound,
             core::Error::AlreadyExists | core::Error::UnavailableCoin => ErrorCode::Conflict,
-            core::Error::Storage | core::Error::StorageLocked => ErrorCode::Storage,
+            core::Error::Storage | core::Error::StorageLocked | core::Error::StorageBusy => {
+                ErrorCode::Storage
+            }
             core::Error::Unavailable(_) => ErrorCode::Unavailable,
             core::Error::CorruptState | core::Error::Poisoned => ErrorCode::Internal,
             _ => ErrorCode::InvalidInput,

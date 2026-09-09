@@ -12,6 +12,7 @@ mod model;
 pub mod qr;
 pub mod signing;
 mod storage;
+pub use storage::{StorageFormat, migrate_plaintext_storage, storage_format};
 mod sync;
 pub mod usb;
 pub use engine::Core;

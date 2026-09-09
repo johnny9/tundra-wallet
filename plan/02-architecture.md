@@ -49,6 +49,11 @@ returned. The current apps still use legacy plaintext storage. A tested protecte
 constructor now uses pinned SQLCipher; native key retention/migration and recovery remain
 release gates. See [protected storage](13-storage.md).
 
+File-backed cores hold a shared migration lock until their DB connection is released.
+The explicit plaintext upgrade requires the exclusive lock, verifies an encrypted export,
+then syncs and atomically replaces the original. Directory aliases share one lock identity;
+final-file symlinks are refused. Native callers must retain the storage key before upgrading.
+
 Schema v3 adds `draft_signatures`, with a composite wallet/draft foreign key and cascading
 deletion. The original PSBT in `drafts` never changes. External responses are validated against
 that approval and current wallet-derived policies; only verified signatures enter the aggregate.
