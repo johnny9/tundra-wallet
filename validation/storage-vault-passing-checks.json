@@ -1,0 +1,35 @@
+{
+  "recorded_at": "2026-09-09T02:51:32.632394+00:00",
+  "source": "d441d6cb09ed9fa03d2c0bba39670537f1e72975",
+  "run": "https://github.com/johnny9/tundra-wallet/actions/runs/34303410689",
+  "conclusion": "success",
+  "rust": "159 tests including keyless regtest, 24 offline checks, fmt, Clippy and binding generation passed",
+  "parser_and_audit": "all three sanitizer targets and cargo-audit passed",
+  "android": {
+    "abis": "arm64/x86_64 build passed",
+    "jvm_passed": 7,
+    "instrumentation_passed": 10,
+    "failed": 0,
+    "vaults": "Real Android Keystore wrapping/reopen/upgrade, missing master/wrapper, corrupt wrapper and initialized-with-missing-DB refusals passed",
+    "restart": "force-stop/relaunch retained synced public fixture balance and saved draft",
+    "launcher_anr_recovery": false
+  },
+  "ios": {
+    "build": "host, iOS arm64 and simulator builds passed",
+    "host_ffi_passed": 5,
+    "runtime_passed": 8,
+    "failed": 0,
+    "vaults": "Keychain create/reopen/pending marker, corrupted/wrong/lost key record, upgrade and missing initialized DB refusals passed with app-scoped entitlements and ad hoc simulator signing"
+  },
+  "scope": "Vaults were isolated in this source; normal startup still used plaintext. Native startup adoption is a separate new gate. No hardware-backed Keystore or physical lock/power-loss claim.",
+  "logs": [
+    {
+      "path": "build/android-vault-fixed.log",
+      "sha256": "f90c826db9dc2427357cd8fc6d70d56e838ae167be03c1913a6cbd988164ef19"
+    },
+    {
+      "path": "build/ios-vault-fixed.log",
+      "sha256": "7df66205bce8678992994e544f36adc2f0343d9bb3ce4ff719222afdb59cef2a"
+    }
+  ]
+}

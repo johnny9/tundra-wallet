@@ -1,0 +1,55 @@
+{
+  "recorded_at": "2026-09-09T02:51:32.632394+00:00",
+  "source": "0e59bae6c2a559dbd97c43fb2bbdffb5533f7d10",
+  "rust": {
+    "core_unit_passed": 160,
+    "ignored_core_child_or_explicit_generator_helpers": 4,
+    "crash_integration_passed": 2,
+    "http_integration_passed": 5,
+    "separately_executed_keyless_regtest_passed": 1,
+    "total_passed": 168
+  },
+  "offline_passed": 25,
+  "fmt_and_strict_clippy": "passed",
+  "bindings": "Kotlin/Swift generated from compiled library",
+  "checks": [
+    "Encrypted standalone snapshot and read-only inspection preserve live labels/indices",
+    "Password bounds, whitespace/Unicode/quotes, raw-key-looking password still uses KDF",
+    "Wrong password, modified authenticated pages, truncation/oversize/sidecars and live DB refusal",
+    "Exact versioned schema rejects unexpected triggers and future schema",
+    "Saved public signatures, final bytes, reservations and uncertain attempts retained",
+    "Failure injection and actual process kills at three export boundaries",
+    "Racing destination creation is not overwritten",
+    "Pinned OpenSSL-generated interoperability fixture decrypts in Rust"
+  ],
+  "native": "Host/mobile backup and cross-provider fixture checks authored; not yet run",
+  "startup": "322bf83 adopts tested platform vaults; normal protected startup/restart gate pending",
+  "not_implemented": [
+    "Restore and generation switching",
+    "Restored approval suspension and uncertain-input quarantine",
+    "Native backup/recovery user flow"
+  ],
+  "initial_failures": [
+    "Test used BDK DescriptorId index as a KeychainKind map; corrected to public derivation_index API",
+    "KDF pragma assertion expected integer but SQLCipher returns text",
+    "Offline private-extended-key guard assumed every fixture was UTF-8; changed to byte regex and added exact encrypted fixture/schema hash check"
+  ],
+  "logs": [
+    {
+      "path": "build/backup-export-final-fixed.log",
+      "sha256": "08a73567fc946619666ce752efe5310d350e0bd4f6ca87a5339e32c131fb65ec"
+    },
+    {
+      "path": "build/backup-export-regtest.log",
+      "sha256": "7e0ba9585aedf177a168e30d5219b4174853b7aaa9df49ca7793ffe82ae08762"
+    },
+    {
+      "path": "build/backup-export-final-fixed-bindings.log",
+      "sha256": "fd0f99540237dbec6027c2d055ef6048e3214c564fa18146ba9f237cae28fadd"
+    },
+    {
+      "path": "build/backup-fixture-generation.log",
+      "sha256": "c33f884b1a85a7f9ad61fa391ccf163aef5e71f6ecc8d30d52e87e1e7f2d1928"
+    }
+  ]
+}

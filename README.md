@@ -30,14 +30,14 @@ It never imports or generates Bitcoin private signing keys.
 | Area | Authored | Important limitation |
 |---|---|---|
 | `tundra-core` | BDK public descriptor validation, receive/change derivation, SQLite snapshots, bounded opt-in Esplora sync | Test networks only; chosen endpoint supplies the chain view |
-| Metadata | Wallet-scoped labels, BIP 329, bulk edits, user freezes and observed-output input provenance | Core provenance tests pass; native presentation validation pending; current app DB remains plaintext |
+| Metadata | Wallet-scoped labels, BIP 329, bulk edits, user freezes and observed-output input provenance | Core provenance tests and native builds pass; positive provenance UI validation pending |
 | Transactions | Exact/manual and automatic eligible inputs, max/consolidation, saved reviews/reservations, verified external PSBT signatures and immutable final transaction bytes | All four native modes pass; positive signed submission and hardware qualification remain |
 | QR exchange | Bounded UR/BBQr codecs, native camera/display and independent barcode tests | Both native barcode tests pass; physical interoperability pending |
 | USB exchange | Pinned bhwi Ledger protocol, registration persistence and Android adapter source | Android native tests pass; physical USB qualification pending; signing remains blocked |
 | `tundra-ffi` | Typed UniFFI API; Kotlin and Swift bindings generated and exercised against the host library | Mobile lifecycle/cancellation qualification remains |
 | Android | Compose import, wallets, sync, coin selection/search, bulk metadata and payment review | Every payment mode and restart pass on the emulator; full device qualification remains |
 | iOS | SwiftUI import, wallets, sync, coin selection/search, metadata and payment review | Every payment mode and restart pass on the simulator; full device qualification remains |
-| Protected storage | Pinned SQLCipher, encrypted DB/WAL, protected Rust/FFI constructor and atomic plaintext upgrade | Apps still use legacy storage; native key retention and backup/recovery remain |
+| Protected storage | Pinned SQLCipher, encrypted DB/WAL, atomic plaintext upgrade, platform key vaults and encrypted export/inspection | Isolated native vaults pass; protected normal startup now authored; restore/recovery UX remains |
 | Design | Exact approved Tundra HTML reference and source | Simulation stays in `design/`, not in the Rust/native wallet |
 | Quality | Rust tests, offline schema/fixture checks, CI and build scripts | See [validation report](plan/VALIDATION.md) for executed versus unexecuted checks |
 

@@ -6,6 +6,25 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
+Encrypted backup export/inspection at `0e59bae` passes **168 Rust tests including real
+keyless regtest**, **25 offline checks**, formatting, strict Clippy and both binding
+generators. This includes encrypted standalone files, hostile schema/password/bounds checks,
+preserved signing/submission records and actual kills at three export boundaries. New native
+tests will read the pinned Linux/OpenSSL fixture and export their own snapshots. Restore
+and native backup/recovery UX are **not implemented**. See
+[`backup-export-checks.json`](../validation/backup-export-checks.json) and [backup rules](14-backup.md).
+
+The [native run at d441d6c](https://github.com/johnny9/tundra-wallet/actions/runs/34303410689)
+is fully green: **7 Android JVM tests, 10 instrumentation tests and cold restart**; Apple
+host/iOS builds, **5 host FFI checks and 8 runtime tests**; Rust, all sanitizer targets and
+audit. Both platform vaults pass real Keystore/Keychain create/reopen/migration and missing
+or corrupt key tests. Ad hoc simulator signing with app-scoped Keychain entitlements passes
+the previously failing Apple tests. These were isolated vault checks: `322bf83` now connects
+them to normal startup with an unavailable/retry state, and that protected startup/restart
+gate is pending. See [`storage-vault-passing-checks.json`](../validation/storage-vault-passing-checks.json).
+
+## Previous provenance and vault checkpoints
+
 Output provenance at `eea54c5` passes **159 Rust tests including real keyless regtest**,
 **24 offline checks**, formatting, strict Clippy and generation of both bindings. Schema 7
 applies the saved payment label to history and wallet-owned outputs only after sync observes

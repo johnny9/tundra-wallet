@@ -30,10 +30,13 @@
 
 ## M1 limitations, not promises
 
-SQLite state is plaintext in the app sandbox. Android uses `noBackupFilesDir`, disables
-Android backup and sets FLAG_SECURE. iOS excludes the support directory from backup and
-requests complete file protection. Neither measure equals an audited encrypted wallet
-metadata design. iOS screenshot prevention is not asserted.
+Native startup now requests SQLCipher storage through the tested platform key vaults and
+upgrades legacy plaintext only after durably retaining its key. The isolated vault tests pass;
+the newly adopted normal startup/restart path still awaits CI. Android uses `noBackupFilesDir`,
+disables Android backup and sets FLAG_SECURE. iOS excludes the support directory from backup
+and requests complete file protection. This is not an independently audited metadata design;
+physical lock/power-loss qualification and restore remain open. iOS screenshot prevention
+and removal of already-open SQLCipher keys from process memory on lock are not asserted.
 
 The database contains public descriptors and sensitive labels/history. An attacker who
 can tamper with it can mislead the UI. Hardware address/policy verification is therefore a

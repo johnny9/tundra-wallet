@@ -16,7 +16,7 @@ approval system, or cloud account.
 
 - Source: descriptor-first watch-only engine, metadata, unsigned-draft core, UniFFI API,
   Android native import shell, iOS native starter, tests and CI.
-- Verified: 159 Rust tests including real regtest, 24 offline checks, parser fuzzing/audit,
+- Verified: 168 Rust tests including real regtest, 25 offline checks, parser fuzzing/audit,
   Android debug APK and iOS simulator builds, host FFI smoke tests, all four payment modes on both virtual platforms and initial process-restart checks.
   See [VALIDATION.md](VALIDATION.md) for the exact results and remaining gates.
 - Added: bounded opt-in Esplora scans, cancellation, cached timestamps, coinbase maturity,
@@ -32,8 +32,10 @@ approval system, or cloud account.
 - Added: observed payment/output labels and durable input provenance; local rollback,
   reorg and migration tests pass; native coin-detail presentation awaits validation.
 - Added: pinned SQLCipher, protected Rust storage and atomic plaintext migration with
-  process-kill tests; Apple protected/migration runtime checks pass. Native vault fixes
-  and backup/recovery remain before normal app storage protection.
+  process-kill tests; both native vaults pass platform key-retention tests. Protected
+  normal startup is now authored and awaits its runtime gate.
+- Added: bounded encrypted backup export/inspection and a portable public fixture; Rust
+  checks pass. Native provider checks, restore and backup/recovery UX remain.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Not performed locally: Android build or Xcode build.
 - **No real-funds use. No supported hardware devices yet.**
@@ -49,6 +51,7 @@ approval system, or cloud account.
 | [05-testing.md](05-testing.md) | Test layers and real-device qualification |
 | [06-build.md](06-build.md) | Dependency choices, native builds and reproducibility |
 | [13-storage.md](13-storage.md) | Protected database boundary, native keys and recovery gates |
+| [14-backup.md](14-backup.md) | Encrypted snapshot format, inspection and restore gates |
 | [12-broadcast.md](12-broadcast.md) | Explicit submission, durable uncertainty and chain observation |
 | [11-usb.md](11-usb.md) | Bounded Ledger protocol and Android USB qualification |
 | [10-finalization.md](10-finalization.md) | Exact final bytes, persistence and review |
