@@ -8,6 +8,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
@@ -26,6 +28,8 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.Lifecycle
@@ -257,6 +261,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
     }
 }
 @Composable private fun ImportSheet(vm: WalletViewModel, s: WalletState, onClose: () -> Unit) {
+    val focus = LocalFocusManager.current
     var scanning by remember { mutableStateOf(false) }
     var payload by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("Savings") }
@@ -274,8 +279,10 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
             if (s.importPreview == null) {
                 OutlinedButton(onClick = { picker.launch(arrayOf("*/*")) }, enabled = !s.busy, modifier = Modifier.fillMaxWidth()) { Text("Import descriptor file") }
                 OutlinedButton(onClick = { scanning = true }, enabled = !s.busy, modifier = Modifier.fillMaxWidth()) { Text("Scan descriptor QR") }
-                OutlinedTextField(value = payload, onValueChange = { if (it.length <= 32768) payload = it }, label = { Text("Or paste a public descriptor") }, modifier = Modifier.fillMaxWidth().heightIn(min = 120.dp, max = 200.dp), enabled = !s.busy)
-                Button(onClick = { vm.inspect(payload, chain) }, enabled = payload.isNotBlank() && !s.busy, modifier = Modifier.fillMaxWidth()) { Text("Review wallet") }
+                OutlinedTextField(value = payload, onValueChange = { if (it.length <= 32768) payload = it }, label = { Text("Or paste a public descriptor") }, modifier = Modifier.fillMaxWidth().heightIn(min = 120.dp, max = 200.dp), enabled = !s.busy,
+                    keyboardOptions = KeyboardOptions(autoCorrectEnabled = false, imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focus.clearFocus() }))
+                Button(onClick = { focus.clearFocus(); vm.inspect(payload, chain) }, enabled = payload.isNotBlank() && !s.busy, modifier = Modifier.fillMaxWidth()) { Text("Review wallet") }
                 Text("Public descriptor text, UR bytes or BBQr text/JSON. Device-specific account QR formats are not yet supported.", style = MaterialTheme.typography.bodySmall)
             } else {
                 Text(policyText(s.importPreview.policy), style = MaterialTheme.typography.titleMedium)

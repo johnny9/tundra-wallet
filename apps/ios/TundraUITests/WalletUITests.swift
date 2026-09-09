@@ -28,6 +28,10 @@ final class WalletUITests: XCTestCase {
         for _ in 0..<8 {
             if let folder = visibleDocumentItem("Backups", in: app) { folder.tap(); return true }
             if let folder = visibleDocumentItem("Tundra", in: app) { folder.tap() }
+            // The simulator's Files provider offers a writable local root even
+            // when it has not indexed the app's Documents folder. Exercise that
+            // real destination and still require provider readback and reimport.
+            else if app.staticTexts["On My iPhone is Empty"].exists || app.navigationBars["On My iPhone"].exists { return true }
             else if let local = visibleDocumentItem("On My iPhone", in: app) { local.tap() }
             else if let browse = visibleDocumentItem("Browse", in: app) { browse.tap() }
             else if let locations = visibleDocumentItem("Locations", in: app) { locations.tap() }

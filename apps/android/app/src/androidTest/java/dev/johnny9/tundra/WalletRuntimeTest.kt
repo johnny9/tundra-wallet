@@ -39,9 +39,12 @@ class WalletRuntimeTest {
             compose.onNodeWithText("Close scan").performClick()
             compose.onNodeWithText("Regtest").performClick()
             compose.onNodeWithText("Or paste a public descriptor").performTextInput(fixture())
+            compose.onNodeWithText("Or paste a public descriptor").performImeAction()
+            compose.waitForIdle()
             compose.onNodeWithText("Review wallet").performScrollTo().assertIsDisplayed().assertIsEnabled().performClick()
             try { waitText("Single signature") }
             catch (failure: ComposeTimeoutException) {
+                capturePublicFixtureScreenshot("wallet-import-preview")
                 // Bounded state diagnostics for this disposable public fixture only.
                 // Do not dump the UI tree, descriptor, addresses, labels or native traces.
                 var diagnostic = "Public fixture preview did not appear"
@@ -112,6 +115,7 @@ class WalletRuntimeTest {
             fun waitForPayment(inputs: Int, mode: String) {
                 try { compose.waitUntil(10_000) { model.state.value.let { !it.busy && (it.review != null || it.error != null) } } }
                 catch (failure: ComposeTimeoutException) {
+                    capturePublicFixtureScreenshot("wallet-payment-review")
                     val result = model.state.value
                     throw AssertionError("$mode public-fixture review timed out; busy=${result.busy}, review=${result.review != null}, error=${result.error}", failure)
                 }

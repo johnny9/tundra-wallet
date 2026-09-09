@@ -127,16 +127,14 @@ jobs:
           done
           cat build/native-chain.log
           exit 1
+      - run: bash scripts/start-published-native-fixture.sh
       - uses: reactivecircus/android-emulator-runner@v2.35.0
         with:
           api-level: 35
           arch: x86_64
           profile: pixel_6
           disable-animations: true
-          script: |
-            adb reverse tcp:3002 tcp:3002
-            ./apps/android/gradlew --no-daemon -p apps/android -Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true :app:connectedDebugAndroidTest
-            ./scripts/check-android-restart.sh
+          script: bash scripts/check-android-tests.sh
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -161,6 +159,7 @@ jobs:
             build/android-restart*.log
             build/android-restart*.xml
             build/native-chain.log
+            build/android-public-test-diagnostics/
       - uses: actions/cache/save@v4
         if: ${{ !cancelled() && steps.rust-cache.outputs.cache-hit != 'true' && steps.rust-cache.outputs.cache-primary-key != '' }}
         with:
@@ -203,6 +202,7 @@ jobs:
           done
           cat build/native-chain.log
           exit 1
+      - run: bash scripts/start-published-native-fixture.sh
       - run: ./scripts/check-ios-runtime.sh
         timeout-minutes: 20
       - name: Export simulator test diagnostics

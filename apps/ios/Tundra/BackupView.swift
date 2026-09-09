@@ -9,7 +9,9 @@ struct EncryptedBackupDocument: FileDocument {
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
         // The model retains this completed ciphertext until the export callback and
         // readback finish. The provider never receives an in-progress database.
-        try FileWrapper(url: source, options: [])
+        let wrapper = try FileWrapper(url: source, options: [])
+        wrapper.preferredFilename = "tundra-backup.tundra"
+        return wrapper
     }
 }
 

@@ -1,0 +1,47 @@
+{
+  "recorded_at": "2026-09-09T04:57:36.803132+00:00",
+  "run_id": 34311969023,
+  "source": "d89cba6ae6cebf434932378c923d2f343a0983d2",
+  "conclusion": "failure",
+  "android": {
+    "build": "passed",
+    "jvm_passed": 10,
+    "instrumentation_passed": 12,
+    "instrumentation_failed": 2,
+    "failures": [
+      "Export ready, system filename control still missing",
+      "Wallet import preview absent, busy false and no error"
+    ],
+    "cold_restart": "not run"
+  },
+  "ios": {
+    "build": "passed",
+    "host_ffi_passed": 6,
+    "runtime_passed": 12,
+    "ui_failed": 1,
+    "payment_modes_and_restart": "passed before backup extension",
+    "backup_progress": "Settings and password entry/export open the real Files picker",
+    "failure": "Local Tundra/Backups folder not indexed; recording shows writable empty On My iPhone root"
+  },
+  "rust_parser_audit": "passed",
+  "corrections_pending": [
+    "Flush Compose launch effect before polling DocumentsUI; capture only public test screenshots on failure",
+    "Explicit descriptor IME Done before review",
+    "Use available local Files root; give exported wrapper a stable backup filename"
+  ],
+  "new_native_gate": "Published response/finalization, protected generation restore, sync, explicit recovery review, separate submission and provenance authored for both vaults; not yet run",
+  "logs": [
+    {
+      "path": "build/backup-picker-android-second.log",
+      "sha256": "acf8d4323ec60f824fc10de14f3d9e3163080227ff8acee48978ae6bf2fa7a4c"
+    },
+    {
+      "path": "build/backup-picker-ios-second.log",
+      "sha256": "e66e5e367ffc6e36a1d7f7984e3cd06d635002f7a13110185e7932e3793c0336"
+    },
+    {
+      "path": "build/published-native-platform-offline.log",
+      "sha256": "fd90e84592a67cc1cec3e6ca8b927f000ef811e4adb242f6a394dbe1b49be1c6"
+    }
+  ]
+}

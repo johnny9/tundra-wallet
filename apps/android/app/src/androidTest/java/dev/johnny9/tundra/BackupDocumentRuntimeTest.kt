@@ -50,6 +50,7 @@ class BackupDocumentRuntimeTest {
             }
             SystemClock.sleep(100)
         }
+        capturePublicFixtureScreenshot("backup-document-control")
         throw AssertionError("Expected system document control was not available")
     }
 
@@ -102,6 +103,9 @@ class BackupDocumentRuntimeTest {
             compose.onNodeWithTag("prepareBackup").performScrollTo().assertIsDisplayed().assertIsEnabled().performClick()
             compose.waitUntil(10_000) { vm.state.value.backupExportReady || vm.state.value.error != null }
             assertNull("Public fixture export preparation failed", vm.state.value.error)
+            // StateFlow readiness precedes the recomposition/LaunchedEffect that
+            // launches DocumentsUI. Flush the Compose test clock before native polling.
+            compose.waitForIdle()
             val filename = "tundra-public-$id.tundra"
             val name = systemNode { it.className?.toString()?.endsWith("EditText") == true && it.text?.contains("tundra-backup") == true }
             assertTrue(name.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, Bundle().apply {
@@ -131,6 +135,10 @@ class BackupDocumentRuntimeTest {
             }
             assertTrue(File(root, "tundra.sqlite").isFile)
         } finally {
+            val automation = InstrumentationRegistry.getInstrumentation().uiAutomation
+            if (automation.rootInActiveWindow?.packageName?.toString()?.contains("documentsui", ignoreCase = true) == true) {
+                automation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK)
+            }
             compose.runOnUiThread { views.clear() }
             File(root, "restored-stores").listFiles()?.forEach { keys.deleteEntry("$alias.${it.name}") }
             keys.deleteEntry(alias); root.deleteRecursively()

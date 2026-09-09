@@ -6,6 +6,23 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
+The [next picker run at d89cba6](https://github.com/johnny9/tundra-wallet/actions/runs/34311969023)
+passes both builds, **10 Android JVM / 12 Android instrumentation**, **6 Apple host FFI /
+12 iOS runtime** checks, Rust and parser/audit. Android still fails at the system filename
+control after export preparation; its wallet import preview also fails without a core error.
+iOS passes payment modes/restart and now opens Settings and the actual Files export picker,
+but cannot find the unindexed Tundra/Backups folder. Its recording shows a writable empty
+local root. Pending corrections flush Compose before native picker polling, dismiss the
+descriptor IME, accept the available local Files root and name the exported wrapper.
+Neither complete picker flow nor Android cold restart passes this run. See
+[`backup-picker-second-checks.json`](../validation/backup-picker-second-checks.json).
+
+New native vault scenarios are authored using the pinned published-signature fixtures and
+a separate local synthetic HTTP server: both inputs/signatures, exact final bytes, protected
+restore/generation switching, sync, explicit reapproval, separate submission consent, reopen
+and observed provenance with preserved user edits. Their first native run remains pending;
+these tests do not exercise the corresponding positive UI controls or real network broadcast.
+
 Published native fixtures now pass the local **189 Rust / 27 offline** gate, strict Clippy,
 formatting and both binding generators. Two new integration tests verify the published
 Ledger response and exact final bytes, then protected restore, actual loopback HTTP sync,
