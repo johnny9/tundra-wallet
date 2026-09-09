@@ -110,11 +110,15 @@ class StorageVaultTest {
             it.importWallet("Original generation", fixture(), Chain.SIGNET).id
         }
         val oldDatabase = File(directory, "tundra.sqlite")
-        val oldBytes = oldDatabase.readBytes()
+        var oldBytes = oldDatabase.readBytes()
         assertThrows(StorageAccessException::class.java) {
             StorageVault.restoreActive(context, source, "Incorrect public password", directory, alias).close()
         }
+        assertArrayEquals(oldBytes, oldDatabase.readBytes())
         StorageVault.openActive(context, directory, alias).use { assertEquals(oldId, it.wallets().single().id) }
+        // A legitimate core reopen may rewrite SQLCipher pages (fresh IVs). Snapshot
+        // after that reopen so this checks mutations by subsequent restore operations.
+        oldBytes = oldDatabase.readBytes()
         StorageVault.restoreActive(context, source, password, directory, alias).use {
             val wallet = it.wallets().single()
             assertEquals("Backup public fixture", wallet.name)

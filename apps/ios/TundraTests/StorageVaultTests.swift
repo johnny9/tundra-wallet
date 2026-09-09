@@ -119,11 +119,15 @@ final class StorageVaultTests: XCTestCase {
             let oldId = try core!.importWallet(name: "Original generation", payload: fixture(), network: .signet).id
             core = nil
             let oldDatabase = directory.appendingPathComponent("wallet.sqlite")
-            let oldBytes = try Data(contentsOf: oldDatabase)
+            var oldBytes = try Data(contentsOf: oldDatabase)
             XCTAssertThrowsError(try StorageVault.restoreActive(source: source, password: "Incorrect public password", directory: directory, service: service))
+            XCTAssertTrue(try Data(contentsOf: oldDatabase) == oldBytes)
             core = try StorageVault.openActive(directory: directory, service: service)
             XCTAssertEqual(try core!.wallets()[0].id, oldId)
             core = nil
+            // Reopening the old core may rewrite authenticated pages with fresh IVs.
+            // Subsequent restores must retain the bytes after this legitimate reopen.
+            oldBytes = try Data(contentsOf: oldDatabase)
             core = try StorageVault.restoreActive(source: source, password: password, directory: directory, service: service)
             let wallet = try core!.wallets()[0]
             XCTAssertEqual(wallet.name, "Backup public fixture")
