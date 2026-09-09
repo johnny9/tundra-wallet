@@ -37,8 +37,18 @@ class WalletRuntimeTest {
             compose.onNodeWithText("Close scan").performClick()
             compose.onNodeWithText("Regtest").performClick()
             compose.onNodeWithText("Or paste a public descriptor").performTextInput(fixture())
-            compose.onNodeWithText("Review wallet").performClick()
-            waitText("Single signature")
+            compose.onNodeWithText("Review wallet").performScrollTo().assertIsDisplayed().assertIsEnabled().performClick()
+            try { waitText("Single signature") }
+            catch (failure: ComposeTimeoutException) {
+                // Bounded state diagnostics for this disposable public fixture only.
+                // Do not dump the UI tree, descriptor, addresses, labels or native traces.
+                var diagnostic = "Public fixture preview did not appear"
+                activity.onActivity { host ->
+                    val state = ViewModelProvider(host)[WalletViewModel::class.java].state.value
+                    diagnostic += "; storageReady=${state.storageReady}, busy=${state.busy}, preview=${state.importPreview != null}, error=${state.error}"
+                }
+                throw AssertionError(diagnostic, failure)
+            }
             compose.onNodeWithTag("confirmImport").performScrollTo().performClick()
             // Import removes the preview asynchronously; wait for the new wallet first.
             compose.waitUntil(10_000) { compose.onAllNodesWithText("— BTC").fetchSemanticsNodes().isNotEmpty() }
