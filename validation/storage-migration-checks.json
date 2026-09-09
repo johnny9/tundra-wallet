@@ -1,0 +1,65 @@
+{
+  "recorded_at": "2026-09-09T01:44:38.561913+00:00",
+  "source": "ccfd24a7af59aee47dae005af31017c05a3398f2",
+  "rust": {
+    "core_unit_passed": 147,
+    "abrupt_process_integration_passed": 2,
+    "http_passed": 5,
+    "real_keyless_regtest_passed": 1,
+    "total_passed": 155
+  },
+  "offline_passed": 23,
+  "format_clippy_bindings": "passed",
+  "migration_checks": [
+    "format hints refuse an existing empty/unknown file as missing",
+    "verified encrypted export and atomic replacement",
+    "labels, signatures, final bytes, reservations, freezes, registration metadata and uncertain broadcast retention",
+    "same-directory quote and Unicode paths",
+    "live Core clones and independent connections refuse migration",
+    "raw SQLite WAL reader refuses migration",
+    "new cores refuse open during exclusive migration",
+    "wrong key and future schema refusal",
+    "injected errors before commit, after verification and after replacement",
+    "actual child kill at all three boundaries, recoverable retry, no plaintext sentinel in abandoned encrypted temporary files",
+    "canonical parent paths share migration locks; final-file symlinks refused"
+  ],
+  "concurrency_followup": "One injected-error test initially saw StorageBusy during concurrent child spawning. Explicit unlock guards replaced close-only lock release; the full suite and ten subsequent concurrent storage runs passed. The final directory-alias fix then passed the full suite again.",
+  "fuzz_lock_check": [
+    {
+      "target": "public_parsers",
+      "runs": 1420308,
+      "seconds": 61
+    },
+    {
+      "target": "usb_protocol",
+      "runs": 1168,
+      "seconds": 61
+    },
+    {
+      "target": "validated_signatures",
+      "runs": 697063,
+      "seconds": 61
+    }
+  ],
+  "fuzz_scope": "Run after tempfile moved into the normal dependency graph. Parser/USB/signature targets are unchanged by the later directory-path fix; this run is not evidence of fuzzed migration/filesystem operations.",
+  "lock_sha256": {
+    "Cargo.lock": "31f23e153306d1432d44264e3defbcd1d4b630a3e428689d94037e72edab5fd9",
+    "fuzz/Cargo.lock": "731a04bd657d38b88fcdcb4b890de7975cc1ccb95c142e2669c85d76bc5c5acf"
+  },
+  "logs": {
+    "build/storage-migration-complete.log": "67d79040e2ebab91a9b723408f457d24b8d56ef22a25e8b9719ccbd062f11de6",
+    "build/storage-migration-regtest.log": "3dbde9d6b81ce07cc4b75c77a3815ff016f8b7eca25460a4452ebfcf95ff3d15",
+    "build/storage-migration-bindings.log": "e7bd59cdb118943f9da4f46ec433805a2c1329ea12df2b7206b7ba9aa416fa1f",
+    "build/storage-migration-lock-repeat.log": "0f8493ad796291e48967df2e78e1e92ed77faf92d7dd9a8d8cb75e0251a66cab",
+    "build/storage-alias-before.log": "346d8cf07985502d607bd9352c00c83153d5559ac0eb650fe1621e647837a4ca",
+    "build/storage-migration-fuzz.log": "246051a67565a9fa98f9a29b7b17f59196b87a366e26c291d5a7f086fc9edd77"
+  },
+  "native": "Corrected storage and new migration host/mobile tests await CI",
+  "limits": [
+    "Apps still use legacy storage until native key retention lands",
+    "Native key store and backup/recovery not implemented",
+    "Advisory migration lock assumes app-owned directory; arbitrary writers ignoring it are unsupported",
+    "No flash secure-erasure or physical power-loss claim",
+    "No private Bitcoin signing keys used"
+  ]
+}

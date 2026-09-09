@@ -37,7 +37,7 @@ It never imports or generates Bitcoin private signing keys.
 | `tundra-ffi` | Typed UniFFI API; Kotlin and Swift bindings generated and exercised against the host library | Mobile lifecycle/cancellation qualification remains |
 | Android | Compose import, wallets, sync, coin selection/search, bulk metadata and payment review | Every payment mode and restart pass on the emulator; full device qualification remains |
 | iOS | SwiftUI import, wallets, sync, coin selection/search, metadata and payment review | Every payment mode and restart pass on the simulator; full device qualification remains |
-| Protected storage | Pinned SQLCipher with encrypted DB/WAL and protected Rust/FFI constructor | Apps still use legacy storage; native key retention, migration and recovery remain |
+| Protected storage | Pinned SQLCipher, encrypted DB/WAL, protected Rust/FFI constructor and atomic plaintext upgrade | Apps still use legacy storage; native key retention and backup/recovery remain |
 | Design | Exact approved Tundra HTML reference and source | Simulation stays in `design/`, not in the Rust/native wallet |
 | Quality | Rust tests, offline schema/fixture checks, CI and build scripts | See [validation report](plan/VALIDATION.md) for executed versus unexecuted checks |
 

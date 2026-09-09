@@ -6,12 +6,28 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
-The SQLCipher storage boundary now passes **146 Rust tests including real regtest**,
+The SQLCipher storage boundary and atomic plaintext migration pass **155 Rust tests including real regtest**,
 23 offline checks, formatting, strict Clippy and generation of both bindings. Added checks
 cover encrypted DB/WAL, wrong/missing keys, tampering, symlink refusal, rollback, keyed
-schema migration and an abrupt-process encrypted-write recovery test. The current apps
+schema migration, live-connection exclusion, directory aliases and actual process kills
+during encrypted writes and plaintext upgrade. The current apps
 still use legacy plaintext storage; native platform keys and recovery are not implemented.
-The new encrypted native/host FFI tests await their first CI run. See [13-storage.md](13-storage.md).
+Native key retention is the next implementation gate. See [13-storage.md](13-storage.md).
+
+The [first native storage run at b8d4bf7](https://github.com/johnny9/tundra-wallet/actions/runs/34298929142)
+passes Rust, parser/audit, both Android ABI builds and 6 host JVM tests. Android passes six
+existing instrumentation tests but fails the new protected open; cold restart did not run.
+iOS fails during macOS host-library linking because the Apple provider needs CoreFoundation;
+Swift/iOS builds and tests did not run. That link is added in `721bd76`. The migration change
+`ccfd24a` also fixes a reproduced directory-alias failure while retaining final-file symlink
+refusal. Both corrections and the expanded migration FFI tests await the next native run.
+Exact initial failures remain in
+[`storage-native-initial-checks.json`](../validation/storage-native-initial-checks.json).
+
+The migration checks at `ccfd24a` include three actual child-kill boundaries and ten repeated
+concurrent storage runs after an explicit-unlock fix. No data reset is used to recover.
+[`storage-migration-checks.json`](../validation/storage-migration-checks.json) records the
+software evidence and its limits.
 At storage source `a13a0ff`, all three sanitizer targets passed: 1,626,888 parser, 1,256
 USB protocol and 642,399 signature/finalization cases in 61 seconds per target. Cargo audit
 reported no advisories or warnings; SQLCipher C review is a separate gate. Source reproduction
