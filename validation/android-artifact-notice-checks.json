@@ -1,0 +1,44 @@
+{
+  "recorded_at": "2026-09-09T07:42:38.267963+00:00",
+  "release_graph_components": 150,
+  "verified_archive_variants": 138,
+  "retained_module_metadata": 116,
+  "distinct_notice_texts": 5,
+  "archives_without_embedded_notices": 54,
+  "those_with_compiled_code": 48,
+  "collection": "passed with exact Gradle checksums, bounded ZIP/embedded-JAR inspection",
+  "repeat_cached_collection": "passed",
+  "offline_validation": "passed",
+  "offline_checks_passed": 32,
+  "limits": "Includes all known JAR/AAR variants for release graph components; not an APK contents or complete license/distribution qualification",
+  "files": [
+    {
+      "path": "third-party/android-artifact-inventory.json",
+      "sha256": "2b6367726d86fcdbc0a7956f25d398d0bbf7762807bb8b03c323f355e95e8d18"
+    },
+    {
+      "path": "build/android-artifact-notices-first.log",
+      "sha256": "da18f0d07e56ca379640405899e5cb491a0eade997dad7e48a23ec43d3fbb063"
+    },
+    {
+      "path": "build/android-artifact-notices-second.log",
+      "sha256": "63f4d760f2bc0f60bbda3a3f912e26f3872009335bb4fbe7a1fdd69ae00d1b58"
+    },
+    {
+      "path": "build/android-artifact-notices-third.log",
+      "sha256": "0345268ceaba1144562ea21546e24843cc9d9319a877e21aa18c87baaa36880d"
+    },
+    {
+      "path": "build/android-artifact-notices-reviewed-collection.log",
+      "sha256": "0345268ceaba1144562ea21546e24843cc9d9319a877e21aa18c87baaa36880d"
+    },
+    {
+      "path": "build/android-artifact-notices-repeated-collection.log",
+      "sha256": "0345268ceaba1144562ea21546e24843cc9d9319a877e21aa18c87baaa36880d"
+    },
+    {
+      "path": "build/archive-long-list-offline.log",
+      "sha256": "7d7ee200df295566eab561535bcbb49c11a9a885cdd90427305c66274b242ff4"
+    }
+  ]
+}
