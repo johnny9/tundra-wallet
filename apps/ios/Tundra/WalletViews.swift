@@ -11,6 +11,7 @@ struct WalletView: View {
     @State private var paymentMode = 0
     @State private var labels = false
     @State private var backup = false
+    @State private var activityActionsHeight: CGFloat = 0
     private var background: Color { dark ? Color(red: 0.055, green: 0.067, blue: 0.082) : Color(red: 0.984, green: 0.988, blue: 0.992) }
     var body: some View {
         NavigationStack {
@@ -64,21 +65,30 @@ struct WalletView: View {
                     // creates fresh views; private search text is never persisted.
                     ZStack(alignment: .top) {
                         VStack(spacing: 16) {
-                            HStack {
-                                Button("Receive", systemImage: "arrow.down") { model.receive() }.buttonStyle(.bordered)
-                                    .disabled(tab != 0 || model.busy).accessibilityHidden(tab != 0)
-                                Button("Send", systemImage: "arrow.up") { model.review = nil; paymentMode = 0; paying = true }.buttonStyle(.borderedProminent)
-                                    .disabled(tab != 0 || model.busy || model.wallet?.synced != true).accessibilityHidden(tab != 0)
-                            }.frame(maxWidth: .infinity)
+                            if tab == 0 {
+                                HStack {
+                                    Button("Receive", systemImage: "arrow.down") { model.receive() }.buttonStyle(.bordered)
+                                        .disabled(model.busy)
+                                    Button("Send", systemImage: "arrow.up") { model.review = nil; paymentMode = 0; paying = true }.buttonStyle(.borderedProminent)
+                                        .disabled(model.busy || model.wallet?.synced != true)
+                                }.frame(maxWidth: .infinity)
+                                .background(GeometryReader { geometry in
+                                    Color.clear.onAppear { activityActionsHeight = geometry.size.height }
+                                        .onChange(of: geometry.size.height) { _, height in activityActionsHeight = height }
+                                })
+                            } else {
+                                // Remove inactive actions from the view tree while
+                                // retaining the sibling ScrollView's size/identity.
+                                Color.clear.frame(height: activityActionsHeight).accessibilityHidden(true)
+                            }
                             ScrollView {
                                 VStack(alignment: .leading, spacing: 16) {
                                     ForEach(model.drafts, id: \.id) { draft in
-                                        Button { model.openReview(draft); paying = true } label: {
-                                            VStack(alignment: .leading) {
-                                                Text(draft.label.isEmpty ? "Saved payment" : draft.label)
-                                                Text("Draft · \(draft.state) · \(draft.inputs.count) inputs").font(.caption)
-                                            }
-                                        }.disabled(tab != 0 || model.busy).accessibilityHidden(tab != 0)
+                                        if tab == 0 {
+                                            Button { model.openReview(draft); paying = true } label: {
+                                                draftLabel(draft)
+                                            }.disabled(model.busy)
+                                        } else { draftLabel(draft).hidden() }
                                     }
                                     ForEach(model.activity, id: \.txid) { row in
                                         VStack(alignment: .leading) {
@@ -103,7 +113,7 @@ struct WalletView: View {
                                     .font(.footnote).foregroundStyle(.secondary)
                             }.frame(maxWidth: .infinity, alignment: .leading)
                         }
-                    .scrollDismissesKeyboard(.interactively)
+                        .scrollDismissesKeyboard(.interactively)
                         .accessibilityIdentifier("coinScroll")
                         .opacity(tab == 1 ? 1 : 0)
                         .allowsHitTesting(tab == 1).accessibilityHidden(tab != 1)
@@ -129,6 +139,12 @@ struct WalletView: View {
                     Button("Close") { model.received = nil }
                 }.padding(24).presentationDetents([.medium])
             }
+        }
+    }
+    private func draftLabel(_ draft: PaymentReview) -> some View {
+        VStack(alignment: .leading) {
+            Text(draft.label.isEmpty ? "Saved payment" : draft.label)
+            Text("Draft · \(draft.state) · \(draft.inputs.count) inputs").font(.caption)
         }
     }
 }

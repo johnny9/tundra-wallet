@@ -108,7 +108,11 @@ final class SigningUITests: XCTestCase {
         app.buttons["Sync public fixture"].tap(); try ready(app)
         app.buttons["Coins"].tap()
         let coins = app.buttons.matching(identifier: "coinDetails")
-        XCTAssertEqual(coins.count, 1); try tap(coins.firstMatch, in: app)
+        // Full descriptor scanning also finds an unrelated confirmed fixture coin.
+        // Open the newly observed payment output by its retained label.
+        XCTAssertEqual(coins.count, 2)
+        let output = coins.matching(NSPredicate(format: "label BEGINSWITH %@", "Published vector"))
+        XCTAssertEqual(output.count, 1); try tap(output.firstMatch, in: app)
         XCTAssertTrue(app.staticTexts["Original input labels · historical record"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["Created by Published vector"].exists)
         XCTAssertEqual(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "Public vector · ")).count, 2)
