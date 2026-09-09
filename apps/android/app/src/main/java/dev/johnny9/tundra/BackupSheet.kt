@@ -59,6 +59,8 @@ import androidx.compose.ui.unit.dp
                 Button(onClick = { importFile.launch(arrayOf("*/*")) }, enabled = !locked && password.isNotEmpty()) { Text("Choose backup file") }
                 state.backupPreview?.let { info ->
                     Text("Review backup", style = MaterialTheme.typography.titleMedium)
+                    Text(if (info.createdAt <= 253402300799uL) "Created " + java.text.DateFormat.getDateTimeInstance()
+                        .format(java.util.Date(info.createdAt.toLong() * 1000)) else "Creation time unavailable")
                     Text("${info.wallets.size} wallets · ${info.drafts} saved payments · ${info.submissions} submission records")
                     info.wallets.forEach { Text("${it.name} · ${policyText(it.policy)}") }
                     Text("Balances will be unknown until a new sync. Saved approvals are suspended, and unresolved submission inputs remain held.")
@@ -75,6 +77,7 @@ import androidx.compose.ui.unit.dp
                 }
             }
             if (state.busy) CircularProgressIndicator(Modifier.size(24.dp))
+            Text("Keep a verified copy outside this app and device. Deleting the app removes its local files.", style = MaterialTheme.typography.bodySmall)
             state.backupMessage?.let { Text(it, modifier = Modifier.testTag("backupResult")) }
             state.error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
             TextButton(onClick = { password = ""; confirmation = ""; vm.cancelBackup(); onClose() }, enabled = !locked) { Text("Close") }

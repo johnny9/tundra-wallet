@@ -1,6 +1,97 @@
 import XCTest
 
 final class WalletUITests: XCTestCase {
+    @MainActor private func visibleDocumentItem(_ label: String, in app: XCUIApplication) -> XCUIElement? {
+        app.descendants(matching: .any).matching(NSPredicate(format: "label == %@", label))
+            .allElementsBoundByIndex.first { $0.isHittable }
+    }
+
+    @MainActor private func localBackupFolder(_ app: XCUIApplication) async -> Bool {
+        // Only inspect named controls in this disposable public-fixture test. Never
+        // log a document/UI tree, user paths or private wallet contents.
+        for _ in 0..<8 {
+            if let folder = visibleDocumentItem("Backups", in: app) { folder.tap(); return true }
+            if let folder = visibleDocumentItem("Tundra", in: app) { folder.tap() }
+            else if let local = visibleDocumentItem("On My iPhone", in: app) { local.tap() }
+            else if let browse = visibleDocumentItem("Browse", in: app) { browse.tap() }
+            else if let locations = visibleDocumentItem("Locations", in: app) { locations.tap() }
+            try? await Task.sleep(for: .milliseconds(350))
+        }
+        XCTFail("The local public-backup document folder was not available"); return false
+    }
+
+    @MainActor private func backupDocumentRoundTrip(_ app: XCUIApplication) async -> Bool {
+        let password = "Public document test password 2026"
+        app.buttons["Settings"].tap(); app.buttons["Backup and recovery"].tap()
+        let first = app.secureTextFields["backupPassword"]
+        guard first.waitForExistence(timeout: 10) else { XCTFail("Backup password control missing"); return false }
+        first.tap(); first.typeText(password)
+        let confirmation = app.secureTextFields["backupPasswordConfirmation"]
+        confirmation.tap(); confirmation.typeText(password)
+        app.buttons["Done"].tap()
+        guard await tapVisible(app.buttons["prepareBackup"], in: app) else { return false }
+        guard await localBackupFolder(app) else { return false }
+        let save = app.buttons.matching(NSPredicate(format: "label IN %@", ["Save", "Export", "Move"]))
+            .allElementsBoundByIndex.first { $0.isEnabled && $0.isHittable }
+        guard let save else { XCTFail("System backup save control missing"); return false }
+        save.tap()
+        let complete = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == true AND enabled == true"), object: first)
+        guard await XCTWaiter.fulfillment(of: [complete], timeout: 20) == .completed else {
+            XCTFail("Backup export/readback did not finish"); return false
+        }
+        app.swipeUp()
+        let result = app.staticTexts["backupResult"]
+        guard result.waitForExistence(timeout: 10), result.label.hasPrefix("Encrypted backup saved and read back successfully") else {
+            XCTFail("System document export did not produce verified success"); return false
+        }
+        app.buttons["Close"].tap()
+        // A receive issued after the backup is intentionally absent from that snapshot.
+        // The recovery screen must explain this limit before the user accepts it.
+        app.buttons["Receive"].tap()
+        guard app.staticTexts["receiveIndex"].waitForExistence(timeout: 10) else { return false }
+        let laterIndex = app.staticTexts["receiveIndex"].label
+        let laterAddress = app.staticTexts["receiveAddress"].label
+        app.buttons["Close"].tap()
+        app.buttons["Settings"].tap(); app.buttons["Backup and recovery"].tap()
+        app.buttons["Backup action"].tap(); app.buttons["Restore"].tap()
+        guard first.waitForExistence(timeout: 10) else { return false }
+        first.tap(); first.typeText(password); app.buttons["Done"].tap()
+        guard await tapVisible(app.buttons["Choose backup file"], in: app) else { return false }
+        var file = app.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH %@", "tundra-backup"))
+            .allElementsBoundByIndex.first { $0.isHittable }
+        if file == nil {
+            guard await localBackupFolder(app) else { return false }
+            file = app.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH %@", "tundra-backup"))
+                .allElementsBoundByIndex.first { $0.isHittable }
+        }
+        guard let file else { XCTFail("Exported public backup was not selectable"); return false }
+        file.tap()
+        let restore = app.buttons["restoreBackup"]
+        for _ in 0..<5 { if restore.exists { break }; app.swipeUp() }
+        guard restore.waitForExistence(timeout: 20) else { XCTFail("Backup review did not appear"); return false }
+        XCTAssertFalse(restore.isEnabled)
+        let limitation = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "An old backup cannot know receive addresses issued later.")).firstMatch
+        XCTAssertTrue(limitation.exists)
+        enable(app.switches["backupRestoreConsent"])
+        guard await tapVisible(restore, in: app) else { return false }
+        let restored = XCTNSPredicateExpectation(predicate: NSPredicate(format: "label BEGINSWITH %@", "Backup restored."), object: result)
+        guard await XCTWaiter.fulfillment(of: [restored], timeout: 20) == .completed else {
+            XCTFail("Reviewed backup did not restore"); return false
+        }
+        app.buttons["Close"].tap()
+        XCTAssertTrue(app.staticTexts["balance"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["balance"].label, "— BTC")
+        XCTAssertTrue(app.staticTexts["Draft · invalidated · 2 inputs"].waitForExistence(timeout: 10))
+        app.terminate(); app.launch()
+        XCTAssertTrue(app.buttons["Receive"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["balance"].label, "— BTC")
+        app.buttons["Receive"].tap()
+        XCTAssertTrue(app.staticTexts["receiveIndex"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["receiveIndex"].label, laterIndex)
+        XCTAssertEqual(app.staticTexts["receiveAddress"].label, laterAddress)
+        app.buttons["Close"].tap()
+        return true
+    }
     @MainActor private func enable(_ toggle: XCUIElement) {
         XCTAssertTrue(toggle.waitForExistence(timeout: 10))
         // SwiftUI includes the long label in the switch's accessibility frame.
@@ -54,6 +145,7 @@ final class WalletUITests: XCTestCase {
 
     @MainActor func testImportRestartAndReceive() async throws {
         continueAfterFailure = false
+        executionTimeAllowance = 420 // All payment modes plus system document recovery/restart.
         let app = XCUIApplication()
         app.launch()
         XCTAssertTrue(app.buttons["Import descriptor"].waitForExistence(timeout: 15))
@@ -152,5 +244,6 @@ final class WalletUITests: XCTestCase {
         XCTAssertTrue(app.buttons["Activity"].waitForExistence(timeout: 10))
         app.buttons["Activity"].tap()
         XCTAssertTrue(app.staticTexts["Draft · unsigned · 2 inputs"].waitForExistence(timeout: 10))
+        guard await backupDocumentRoundTrip(app) else { return }
     }
 }

@@ -32,7 +32,9 @@ data class WalletState(
     val finalized: FinalTransactionInfo? = null, val submission: BroadcastInfo? = null, val qrFrames: List<String>? = null
 ) { val wallet: WalletInfo? get() = wallets.firstOrNull { it.id == selectedId } }
 
-class WalletViewModel(application: Application) : AndroidViewModel(application) {
+class WalletViewModel @JvmOverloads constructor(application: Application,
+    private val storageDirectory: java.io.File = application.noBackupFilesDir,
+    private val storageAlias: String? = null) : AndroidViewModel(application) {
     private val preferences = application.getSharedPreferences("appearance", 0)
     private val mutable = MutableStateFlow(WalletState(dark = preferences.getBoolean("dark", true)))
     val state = mutable.asStateFlow()
@@ -47,7 +49,12 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     fun openStorage() = run {
         if (mutable.value.storageReady) return@run
         val previous = core; core = null
-        core = withContext(Dispatchers.IO) { previous?.close(); StorageVault.openActive(getApplication<Application>()) }
+        core = withContext(Dispatchers.IO) {
+            previous?.close()
+            val context = getApplication<Application>()
+            storageAlias?.let { StorageVault.openActive(context, storageDirectory, it) }
+                ?: StorageVault.openActive(context, storageDirectory)
+        }
         refresh()
         mutable.value = mutable.value.copy(storageReady = true)
     }
@@ -247,7 +254,9 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         try {
             core = withContext(Dispatchers.IO) {
                 previous?.close()
-                StorageVault.restoreActive(getApplication<Application>(), file, password)
+                val context = getApplication<Application>()
+                storageAlias?.let { StorageVault.restoreActive(context, file, password, storageDirectory, it) }
+                    ?: StorageVault.restoreActive(context, file, password, storageDirectory)
             }
             refresh()
             mutable.value = mutable.value.copy(storageReady = true,
@@ -291,6 +300,8 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     }
     override fun onCleared() {
         mutable.value.sync?.id?.let { core?.cancelSync(it) }
+        core?.close(); core = null
+        clearBackupFiles()
         super.onCleared()
     }
     fun label(kind: String, reference: String, value: String) = run {

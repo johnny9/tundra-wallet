@@ -13,6 +13,8 @@ struct EncryptedBackupDocument: FileDocument {
     }
 }
 
+private enum BackupPasswordField: Hashable { case password, confirmation }
+
 struct BackupView: View {
     @ObservedObject var model: WalletModel
     @Environment(\.dismiss) private var dismiss
@@ -22,6 +24,7 @@ struct BackupView: View {
     @State private var acknowledged = false
     @State private var importing = false
     @State private var exporting = false
+    @FocusState private var editingPassword: BackupPasswordField?
     private var locked: Bool { model.busy || model.exportedBackup != nil }
     var body: some View {
         NavigationStack {
@@ -36,18 +39,23 @@ struct BackupView: View {
                 Text("Use a strong, unique password of at least 16 characters and keep it separately. Spaces and Unicode are significant; a lost password cannot be recovered.")
                 SecureField("Backup password", text: $password)
                     .textInputAutocapitalization(.never).autocorrectionDisabled().disabled(locked)
+                    .focused($editingPassword, equals: .password)
                     .accessibilityIdentifier("backupPassword")
                 if !restoring {
                     SecureField("Confirm backup password", text: $confirmation)
                         .textInputAutocapitalization(.never).autocorrectionDisabled().disabled(locked)
+                        .focused($editingPassword, equals: .confirmation)
                         .accessibilityIdentifier("backupPasswordConfirmation")
-                    Button("Create encrypted backup") { model.prepareBackup(password: password) }
+                    Button("Create encrypted backup") { editingPassword = nil; model.prepareBackup(password: password) }
                         .disabled(locked || !model.storageReady || password.isEmpty || password != confirmation)
                         .accessibilityIdentifier("prepareBackup")
                 } else {
                     Button("Choose backup file") { importing = true }.disabled(locked || password.isEmpty)
                     if let info = model.backupPreview {
                         Section("Review backup") {
+                            Text(info.createdAt <= 253402300799
+                                ? "Created " + Date(timeIntervalSince1970: TimeInterval(info.createdAt)).formatted()
+                                : "Creation time unavailable")
                             Text("\(info.wallets.count) wallets · \(info.drafts) saved payments · \(info.submissions) submission records")
                             ForEach(info.wallets, id: \.id) { Text($0.name + " · " + ($0.policy == .singleSig ? "Single signature" : "2 of 3 signatures")) }
                             Text("Balances will be unknown until a new sync. Saved approvals are suspended, and unresolved submission inputs remain held.")
@@ -63,13 +71,17 @@ struct BackupView: View {
                     }
                 }
                 if model.busy { ProgressView().accessibilityLabel("Working") }
+                Text("Keep a verified copy outside this app and device. Deleting the app removes its local files.").font(.footnote)
                 if let message = model.backupMessage { Text(message).accessibilityIdentifier("backupResult") }
                 if let error = model.error { Text(error).foregroundStyle(.red) }
             }
             .navigationTitle("Backup and recovery")
-            .toolbar { ToolbarItem(placement: .cancellationAction) {
-                Button("Close") { password = ""; confirmation = ""; model.cancelBackup(); dismiss() }.disabled(locked)
-            } }
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Close") { password = ""; confirmation = ""; model.cancelBackup(); dismiss() }.disabled(locked)
+                }
+                ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Done") { editingPassword = nil } }
+            }
         }
         .onAppear { restoring = !model.storageReady || model.backupPreview != nil }
         .onChange(of: restoring) { _, _ in password = ""; confirmation = ""; acknowledged = false; model.cancelBackup() }

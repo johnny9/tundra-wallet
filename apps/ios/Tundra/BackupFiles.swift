@@ -24,7 +24,12 @@ enum BackupFiles {
         return directory
     }
     static func exportPath() throws -> URL {
-        try stagingDirectory().appendingPathComponent("export-" + UUID().uuidString + ".tundra")
+        // A local Files destination is available without a cloud account. Only
+        // explicitly exported documents go here; wallet DBs/keys stay in private support storage.
+        let local = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask,
+            appropriateFor: nil, create: true).appendingPathComponent("Backups", isDirectory: true)
+        try FileManager.default.createDirectory(at: local, withIntermediateDirectories: true)
+        return try stagingDirectory().appendingPathComponent("export-" + UUID().uuidString + ".tundra")
     }
 
     static func stage(_ source: URL) throws -> URL {
@@ -34,12 +39,14 @@ enum BackupFiles {
                 attributes: [.protectionKey: FileProtectionType.complete]) else { throw BackupAccessError.unreadable }
             let scoped = source.startAccessingSecurityScopedResource()
             defer { if scoped { source.stopAccessingSecurityScopedResource() } }
-            let input = try FileHandle(forReadingFrom: source)
-            defer { try? input.close() }
-            let output = try FileHandle(forWritingTo: destination)
-            defer { try? output.close() }
-            _ = try copy(input, output)
-            try output.synchronize()
+            try coordinatedRead(source) { coordinated in
+                let input = try FileHandle(forReadingFrom: coordinated)
+                defer { try? input.close() }
+                let output = try FileHandle(forWritingTo: destination)
+                defer { try? output.close() }
+                _ = try copy(input, output)
+                try output.synchronize()
+            }
             return destination
         } catch {
             try? FileManager.default.removeItem(at: destination)
@@ -52,7 +59,7 @@ enum BackupFiles {
             let scoped = destination.startAccessingSecurityScopedResource()
             defer { if scoped { destination.stopAccessingSecurityScopedResource() } }
             let expected = try digest(source)
-            let actual = try digest(destination)
+            let actual = try coordinatedRead(destination) { try digest($0) }
             guard expected.count >= 4096, expected.count == actual.count, expected.hash == actual.hash else {
                 throw BackupAccessError.unverifiedSave
             }
@@ -81,5 +88,15 @@ enum BackupFiles {
             guard chunk.count <= maxBytes - count else { throw BackupAccessError.unreadable }
             count += chunk.count; hash.update(data: chunk)
         }
+    }
+
+    private static func coordinatedRead<T>(_ url: URL, body: (URL) throws -> T) throws -> T {
+        var coordinationError: NSError?
+        var result: Result<T, Error>?
+        NSFileCoordinator().coordinate(readingItemAt: url, options: [], error: &coordinationError) { coordinated in
+            result = Result { try body(coordinated) }
+        }
+        guard coordinationError == nil, let result else { throw BackupAccessError.unreadable }
+        return try result.get()
     }
 }
