@@ -37,6 +37,8 @@ fn main() {
     if env::var("CARGO_CFG_TARGET_VENDOR").as_deref() == Ok("apple") {
         build.define("SQLCIPHER_CRYPTO_CC", None);
         println!("cargo:rustc-link-lib=framework=Security");
+        // The provider reports its version through CFBundle/CFString APIs.
+        println!("cargo:rustc-link-lib=framework=CoreFoundation");
     } else {
         build
             .define("SQLCIPHER_CRYPTO_OPENSSL", None)

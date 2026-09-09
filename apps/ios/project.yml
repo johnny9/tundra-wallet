@@ -27,6 +27,7 @@ targets:
       - framework: Frameworks/TundraCoreFFI.xcframework
         embed: false
       - sdk: Security.framework
+      - sdk: CoreFoundation.framework
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.johnny9.tundra.dev
