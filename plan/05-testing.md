@@ -28,6 +28,11 @@ The `crash` integration test kills a child process after a durable receive/label
 during an uncommitted snapshot/metadata write, then checks reopening, index non-reuse and
 SQLite integrity. It is abrupt-process recovery evidence, not physical power-loss evidence.
 
+The test facade uses bounded, cookie-authenticated loopback HTTP for read-only Bitcoin Core
+RPC, serialized with its chain index. It avoids per-request process launches on slow simulator
+hosts, while continuing to read actual tip/block/transaction data and detect reorgs. No RPC
+credentials or response bodies are logged.
+
 The native runtime tests use a real Bitcoin Core 31.1 node with wallets disabled. It mines
 regtest outputs directly to public fixtures; no private signing keys or native fake balance
 API are used. Android forwards loopback port 3002 using ADB; the iOS simulator uses host
@@ -39,7 +44,7 @@ Core or a valid Signet chain, and accepts only the exact published final transac
 it with `bash scripts/start-published-native-fixture.sh` on a fresh test host; both native
 CI jobs do this explicitly. Android forwards both ports. Rust exercises the same fixture
 through real HTTP with isolated ephemeral ports. Both native vault scenarios pass;
-positive UI controls remain pending as recorded in `VALIDATION.md`.
+both Apple positive payment UI scenarios pass; Android recovery controls remain pending as recorded in `VALIDATION.md`.
 
 ## Existing Rust source tests
 

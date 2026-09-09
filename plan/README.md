@@ -16,7 +16,7 @@ approval system, or cloud account.
 
 - Source: descriptor-first watch-only engine, metadata, unsigned-draft core, UniFFI API,
   native Android and iOS wallet flows, tests and CI.
-- Verified: 189 Rust tests including real regtest, 33 local offline checks, parser fuzzing/audit,
+- Verified: 189 Rust tests including real regtest, 34 local offline checks, parser fuzzing/audit,
   Android debug APK and iOS simulator builds, host FFI smoke tests, all four payment modes on both virtual platforms and initial process-restart checks.
   See [VALIDATION.md](VALIDATION.md) for the exact results and remaining gates.
 - Added: bounded opt-in Esplora scans, cancellation, cached timestamps, coinbase maturity,
@@ -44,8 +44,10 @@ approval system, or cloud account.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Build review: workflow actions pinned to executed revisions; both full Cargo locks have
   a checked license/notice inventory. Android locks/checksums and a retained Maven declaration
-  inventory now have local checks; the full locked native build and binary notice review remain.
-- Not performed locally: Android build or Xcode build.
+  inventory now have local checks; the full locked Android build and APK notice packaging pass locally.
+  Broader binary notice and distribution review remains.
+- Local Android Rust ABIs, app/test APK builds and 10 JVM tests now pass with strict locks.
+- Not performed locally: Android instrumentation or an Xcode build.
 - **No real-funds use. No supported hardware devices yet.**
 
 ## Plan documents

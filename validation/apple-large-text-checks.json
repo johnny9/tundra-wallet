@@ -1,0 +1,38 @@
+{
+  "recorded_at": "2026-09-09T08:36:13.065220+00:00",
+  "run": 34327546681,
+  "source": "2dc846f8758f4858f67dd4ecb9394287e88a65b9",
+  "ios_job": 102388188635,
+  "result": "16 of 17 simulator tests pass; normal wallet UI times out during an active scan",
+  "host_ffi_passed": 6,
+  "hosted_runtime_passed": 13,
+  "long_list": "PASS: 100 outputs/activity entries, exact independent offsets, fixed tabs, light appearance, confirmed accessibility3 enlargement and usable nonoverlapping controls",
+  "public_payment_tests": "Both PASS",
+  "normal_wallet": "Fails 30-second sync expectation; public recording shows active scan at 12 scripts, unknown balance and cancellation still available; same complete wallet/backup scenario passed at 05dabe2",
+  "notice_packaging": "Initial 175-text iOS app resource matches exact reviewed bytes",
+  "correction": "Test-only Esplora facade now uses bounded cookie-authenticated read-only persistent loopback RPC instead of spawning bitcoin-cli for every read; production networking and UI waits unchanged",
+  "real_regtest_after_correction": "PASS maturity/persistence/shorter-reorg/draft-invalidation integration test in 1.63 seconds",
+  "native_rerun": "pending",
+  "files": [
+    {
+      "path": "build/public-screen-ios-fifth.log",
+      "sha256": "38b61497cd52b527399878fcaeaf9a4b810babaf90217803c66e38497b999d22"
+    },
+    {
+      "path": "build/public-screen-ios-fifth.zip",
+      "sha256": "4be9dafdbb6bd411d59989bffe78a7b742d8d4d508f73772d8e9c38697f9ac6d"
+    },
+    {
+      "path": "build/public-screen-ios-fifth-results/ios-runtime-summary.json",
+      "sha256": "d661a4c037bffc56119481b17b2aa3220d5f24296f32938d4accb5d924e5d733"
+    },
+    {
+      "path": "build/ios-normal-sync-timeout.png",
+      "sha256": "5a3bfdddeb7b3d65459221cde11ad9647e9c329b744dafa769d6bba0a98a5666"
+    },
+    {
+      "path": "build/regtest-persistent-rpc-check.log",
+      "sha256": "9395854fc11b4164d51d231192920a0acb407fb401b7da8ffb90dcc1aef41f13"
+    }
+  ]
+}

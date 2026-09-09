@@ -8,9 +8,9 @@ import argparse
 import hashlib
 import http.server
 import json
-import subprocess
 import threading
 from pathlib import Path
+from regtest_rpc import RegtestRPC
 
 p = argparse.ArgumentParser()
 p.add_argument("--datadir", required=True)
@@ -19,13 +19,7 @@ p.add_argument("--port", type=int, default=0)
 args = p.parse_args()
 
 
-def rpc(method, *values):
-    result = subprocess.run(["bitcoin-cli", f"-datadir={args.datadir}", "-regtest", method,
-                             *map(str, values)], check=True, capture_output=True, text=True)
-    try:
-        return json.loads(result.stdout)
-    except json.JSONDecodeError:
-        return result.stdout.strip()
+rpc = RegtestRPC(args.datadir)
 
 
 def sha(value):
@@ -115,13 +109,13 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.send_header("Content-Length", str(len(payload)))
             self.end_headers()
             self.wfile.write(payload)
-        except (KeyError, StopIteration, ValueError, subprocess.CalledProcessError):
+        except (KeyError, StopIteration, ValueError):
             self.send_error(500)
 
 
 server = http.server.ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
-# Readiness includes indexing the actual chain. Otherwise the first mobile request
-# performs hundreds of bitcoin-cli launches inside the app's 15-second HTTP deadline.
+# Readiness includes indexing the actual chain. The first mobile request must not
+# build the entire block index inside the app's 15-second HTTP deadline.
 # Slow hosted macOS runners must not turn an unready test backend into an app failure.
 with index.lock:
     index.refresh()
