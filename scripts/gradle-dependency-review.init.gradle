@@ -1,5 +1,8 @@
 // Explicit review-only bootstrap. Normal builds never run this init script.
 // See Gradle's dependency_locking and dependency_verification user guides.
+import org.gradle.api.artifacts.component.ModuleComponentIdentifier
+import org.gradle.api.artifacts.result.UnresolvedDependencyResult
+
 gradle.beforeProject { project ->
     project.dependencyLocking.lockAllConfigurations()
     project.buildscript.configurations.configureEach {
@@ -17,10 +20,22 @@ gradle.projectsEvaluated {
                 }
             }
             doLast {
-                // Resolve rather than merely print a report: missing artifacts or
-                // incompatible configurations must fail the review collection.
-                project.configurations.findAll { it.canBeResolved }.each { it.resolve() }
-                project.buildscript.configurations.findAll { it.canBeResolved }.each { it.resolve() }
+                def resolveModules = { configuration ->
+                    configuration.incoming.resolutionResult.allDependencies.each { dependency ->
+                        if (dependency instanceof UnresolvedDependencyResult) {
+                            throw new GradleException('Dependency graph could not be resolved', dependency.failure)
+                        }
+                    }
+                    // Android test configurations depend on this project's own
+                    // unbuilt variants. Lock their complete graph, but collect only
+                    // external module artifacts; normal CI builds project outputs.
+                    // This view is strict: external artifact failures still fail.
+                    configuration.incoming.artifactView {
+                        componentFilter { it instanceof ModuleComponentIdentifier }
+                    }.files.files
+                }
+                project.configurations.findAll { it.canBeResolved }.each(resolveModules)
+                project.buildscript.configurations.findAll { it.canBeResolved }.each(resolveModules)
             }
         }
     }

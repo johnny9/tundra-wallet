@@ -46,11 +46,16 @@ downloads, cargo-ndk installation and the Xcode host still need reproducibility 
 
 The manually dispatched `Collect Android dependency review` workflow prepares candidate
 Gradle locks (including plugin classpaths) and SHA-256 verification metadata on an Android
-SDK host. It resolves every resolvable configuration and fails on resolution errors. This
+SDK host. It resolves every resolvable configuration's graph and external module artifacts,
+failing on dependency errors. Application outputs are built by normal native CI. This
 collection is not a native build or a trust decision: inspect the downloaded artifacts,
 review their provenance, then commit the files and enable normal-build enforcement.
 It never commits or pushes generated files. See Gradle's [locking guide](https://docs.gradle.org/current/userguide/dependency_locking.html)
 and [verification guide](https://docs.gradle.org/current/userguide/dependency_verification.html).
+The first collection at `5177836` failed on Android's self-project artifact variants;
+the graph/strict-module-artifact correction is authored and awaits its next Android run.
+The corrected script passes a local Gradle 8.13 fixture: exact module lock/checksum and
+missing-dependency refusal. See [collector evidence](../validation/gradle-review-checks.json).
 
 Both complete Cargo locks now have a deterministic declared-license/notice inventory,
 including all features and the fuzz graph. CI regenerates it from locked package metadata;

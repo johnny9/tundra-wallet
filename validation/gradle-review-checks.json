@@ -1,0 +1,27 @@
+{
+  "recorded_at": "2026-09-09T06:00:26.492951+00:00",
+  "first_run": 34316642887,
+  "first_source": "517783655fdf2ad4966d50268b86c8e0a8f0f65b",
+  "first_conclusion": "failure",
+  "first_failure": "Resolving Android self-project artifacts without artifactType selection was ambiguous",
+  "correction": "Resolve complete graphs and strict external module artifact views; project outputs remain normal native build inputs",
+  "local_gradle_8_13": {
+    "local_module_lock_and_sha256": "passed",
+    "missing_local_dependency_refusal": "passed",
+    "android_dependency_collection": "next run pending"
+  },
+  "logs": [
+    {
+      "path": "build/gradle-dependency-review-first.log",
+      "sha256": "5ab4cd7a6b5d248886d0eada0a0a639983de22f8cac580251f14812c054bbb87"
+    },
+    {
+      "path": "build/gradle-review-smoke.log",
+      "sha256": "11e28d00e3930e178e016dca2301e8535ba2d36c03a55ef23738b86a49ad30e7"
+    },
+    {
+      "path": "build/gradle-review-smoke-missing.log",
+      "sha256": "44a92ad7c5d51200ae5db84247d272e3494e9caab309bcc1db2edfeadf24af94"
+    }
+  ]
+}
