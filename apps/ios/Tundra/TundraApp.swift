@@ -107,6 +107,7 @@ struct WalletView: View {
                                 }.frame(maxWidth: .infinity, alignment: .leading)
                             }.accessibilityIdentifier("activityScroll")
                         }
+                        .accessibilityElement(children: .contain)
                         .opacity(tab == 0 ? 1 : 0)
                         .allowsHitTesting(tab == 0).accessibilityHidden(tab != 0)
                         ScrollView {
@@ -118,7 +119,7 @@ struct WalletView: View {
                                     .font(.footnote).foregroundStyle(.secondary)
                             }.frame(maxWidth: .infinity, alignment: .leading)
                         }
-                        .scrollDismissesKeyboard(.interactively)
+                    .scrollDismissesKeyboard(.interactively)
                         .accessibilityIdentifier("coinScroll")
                         .opacity(tab == 1 ? 1 : 0)
                         .allowsHitTesting(tab == 1).accessibilityHidden(tab != 1)
