@@ -44,7 +44,7 @@ Core or a valid Signet chain, and accepts only the exact published final transac
 it with `bash scripts/start-published-native-fixture.sh` on a fresh test host; both native
 CI jobs do this explicitly. Android forwards both ports. Rust exercises the same fixture
 through real HTTP with isolated ephemeral ports. Both native vault scenarios pass;
-both Apple positive payment UI scenarios pass; Android recovery controls remain pending as recorded in `VALIDATION.md`.
+both platforms now pass their positive payment/recovery UI scenarios as recorded in `VALIDATION.md`.
 
 ## Existing Rust source tests
 

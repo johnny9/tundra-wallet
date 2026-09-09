@@ -42,7 +42,8 @@ These are ordered work packages, not time estimates.
   Native QR and broadcast qualification remain separate acceptance gates.
 - Native 100-output tab-scroll and large-text scenarios are authored for both platforms;
   Apple passes independent scroll restoration, light appearance and measured large-text controls.
-  Android now compiles both scenarios locally; runtime execution remains pending. The data comes from the existing keyless
+  Android also passes independent offsets, light appearance and enlarged-text controls in CI.
+  Subsequent contrast/system-icon corrections await a native rerun. The data comes from the existing keyless
   regtest node, with isolated native vaults and no production balance-injection API.
 - Native coin selection, review, PSBT file export and saved drafts are implemented; validate
   every mode on both platforms and compare layouts/accessibility against the reference.

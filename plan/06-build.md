@@ -44,7 +44,7 @@ upstream versions and revisions, and an offline guard rejects unreviewed/floatin
 The Rust action revision explicitly selects 1.93.1. This prevents tag movement, not malicious
 behavior inside an action. The Gradle wrapper and dependency baseline are pinned. CI now
 explicitly selects the recorded Xcode 16.4, checksummed XcodeGen 2.46.0 release and Linux
-SDK/NDK payloads. Its new installed-file and XcodeGen execution gates are pending. Build Tools
+SDK/NDK payloads. The installed-file and pinned XcodeGen execution gates now pass in CI. Build Tools
 35.0.0 preserves AGP 8.13.2's previous default; CI's unused 36.0.0 installation is removed.
 See the [official AGP compatibility table](https://developer.android.com/build/releases/agp-8-13-0-release-notes).
 Host/emulator images, SDK command-line tools and additional cargo-tool installation graphs
@@ -90,7 +90,7 @@ including all features and the fuzz graph. CI regenerates it from locked package
 offline checks verify graph coverage and retained bytes. See the [notice scope and remaining
 distribution gates](../third-party/README.md). Original Tundra's license remains an owner decision.
 Both native resource configurations now include a deterministic notice bundle. CI compares
-its bytes inside the built APK and iOS app; those packaging gates await their first run.
+its bytes inside the built APK and iOS app; both 177-text packaging gates now pass in CI.
 The Android builder now stages dependency outputs separately and copies only `libtundra_ffi.so`
 into the app's JNI sources. BBQr is statically linked Rust code; its unused standalone cdylibs
 are removed from generated output. The local APK passes actual ABI, ELF/ZIP 16 KiB alignment,

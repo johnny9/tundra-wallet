@@ -1,0 +1,63 @@
+{
+  "recorded_at": "2026-09-09T09:04:56.207219+00:00",
+  "run": 34330225952,
+  "source": "cd4444899dfab92ca6f7b34a799841f16b3cac6f",
+  "conclusion": "All four CI jobs pass",
+  "rust": 189,
+  "offline": 34,
+  "parser_audit_inventory": "PASS",
+  "android": {
+    "job": 102396824873,
+    "builds": "arm64/x86_64 Rust, app and instrumentation APKs pass",
+    "complete_strict_dependency_gate": "PASS",
+    "installed_sdk_payload_files_matched": 20220,
+    "jvm_passed": 10,
+    "instrumentation_passed": 18,
+    "instrumentation_skipped": 0,
+    "cold_restart": "PASS",
+    "new_scenarios": "Recovered transaction reapproval/submission/provenance/label edits and long-list independent offsets/large-text controls pass",
+    "notice_resource": "177 texts / 2301108 bytes match actual APK"
+  },
+  "ios": {
+    "job": 102396825169,
+    "pinned_xcodegen": "2.46.0 release artifact installs and executes",
+    "host_ffi_passed": 6,
+    "simulator_tests_passed": 17,
+    "simulator_skipped": 0,
+    "normal_wallet": "All four payment modes, filters, restart, actual system backup export/readback/inspection/restore/restart pass",
+    "public_scenarios": "Long lists/light/large text and both signature/recovery/payment/provenance UI tests pass",
+    "notice_resource": "177 texts / 2301108 bytes match actual app"
+  },
+  "subsequent_changes": "iOS semantic colors, Android system-bar icon modes and removal of unused JNI cdylibs require the next native run; local Android compilation/10 JVM/binary checks pass",
+  "not_claimed": "Waydroid runtime, 16 KiB runtime, physical phones, QR/USB device qualification, real-network broadcast or independent release review",
+  "files": [
+    {
+      "path": "build/android-locked-native-passing-results/TEST-emulator-5554 - 15-_app-.xml",
+      "sha256": "b2fc6ed82004d4bfe57c58a0c3908e90c5bd463651daa5a7e554cc6730b2b9cb"
+    },
+    {
+      "path": "build/android-locked-native-passing-results/android-restart-launch.log",
+      "sha256": "684acd847593c0529eba0ed8466af19e08f0650443e7743db9b6a676e6100895"
+    },
+    {
+      "path": "build/android-locked-native-passing.log",
+      "sha256": "ac73aac2658400f2c5a8efc27084a41abefb498967ea5bdce1d39c8db9914d11"
+    },
+    {
+      "path": "build/android-locked-native-passing.zip",
+      "sha256": "c1a87f97faf77527494ccf807b4be74ad6e81314cf34559b544c4700d625a034"
+    },
+    {
+      "path": "build/ios-locked-native-passing-results/ios-runtime-summary.json",
+      "sha256": "d68a9a9281687e6ea74bc5c27e0fd732f16d14405a2cea3213e7e3febc628a1f"
+    },
+    {
+      "path": "build/ios-locked-native-passing.log",
+      "sha256": "510316728ff80fa4fecc8164d02b775450d70f9709b5f516d93ceb53935e0301"
+    },
+    {
+      "path": "build/ios-locked-native-passing.zip",
+      "sha256": "5b47395972f3c72aef843df07bdda85bed990d77dbdde6871ddbb5633a346de3"
+    }
+  ]
+}

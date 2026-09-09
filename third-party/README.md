@@ -76,8 +76,8 @@ runtime/compiler notices. The broad source inventory
 includes build/test tools and known platform variants, not an exact binary contents manifest.
 `python3 scripts/package-notices.py` checks its generation and source hashes offline;
 `--write` prepares an explicit update. Both native apps now include this resource in source.
-CI checks its exact bytes inside the APK and built iOS app; the initial Apple gate passes,
-while Android stops earlier at AAPT2 verification. The expanded resource awaits both builds.
+CI checks its exact bytes inside the APK and built iOS app; the expanded 177-text resource
+passes both native packaging gates at `cd44448`.
 
 [`toolchain-inventory.json`](toolchain-inventory.json) records six reviewed archive downloads:
 API 36 revision 2, Linux NDK 27.2.12479018, Build Tools 35/36, XcodeGen 2.46.0 and AGP's Linux
@@ -88,8 +88,8 @@ the release asset's published SHA-256. These are integrity/provenance records, n
 signature authentication or a conclusion that every bundled tool is distributed in an app.
 `python3 scripts/native-toolchains.py --archives` compares the actual archive notices.
 `--fetch --sdk "$ANDROID_HOME"` additionally compares every selected installed SDK payload
-file/link against the pinned Linux archives. The new installed-file and pinned XcodeGen
-execution gates await CI. Command-line tools, emulator/host images and other build utilities
+file/link against the pinned Linux archives. Installed-file comparison and pinned XcodeGen
+execution both pass in CI. Command-line tools, emulator/host images and other build utilities
 still have separate provenance/reproducibility limits.
 
 A complete SDK/design/fixture inventory, other nested vendored notices, validated binary notice

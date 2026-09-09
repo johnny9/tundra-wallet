@@ -9,8 +9,8 @@ It never imports or generates Bitcoin private signing keys.
 > **Development source, not a released wallet. Use disposable test descriptors only.**
 > Rust tests and recorded native builds, payment modes and initial restart checks pass.
 > Android and iOS system backup document exchange, restore and restart tests pass.
-> Both native published-signature/vault tests and Apple positive payment/recovery UI tests pass.
-> Android recovery UI remains under validation.
+> Both native published-signature, recovery, submission and provenance UI scenarios pass.
+> Subsequent contrast and native-library packaging corrections await their next CI run.
 > Explicit test-network sync and external signature validation are implemented. Hardware
 > signing remains unavailable. Explicit test-network broadcast has software validation;
 > USB device and camera qualification remain open.
@@ -32,7 +32,7 @@ It never imports or generates Bitcoin private signing keys.
 | Area | Authored | Important limitation |
 |---|---|---|
 | `tundra-core` | BDK public descriptor validation, receive/change derivation, SQLite snapshots, bounded opt-in Esplora sync | Test networks only; chosen endpoint supplies the chain view |
-| Metadata | Wallet-scoped labels, BIP 329, bulk edits, user freezes and observed-output input provenance | Core and Apple provenance/label-edit UI tests pass; Android UI validation pending |
+| Metadata | Wallet-scoped labels, BIP 329, bulk edits, user freezes and observed-output input provenance | Core and both native provenance/label-edit UI tests pass; physical qualification remains |
 | Transactions | Exact/manual and automatic eligible inputs, max/consolidation, saved reviews/reservations, verified external PSBT signatures and immutable final transaction bytes | All four native modes pass; positive signed submission and hardware qualification remain |
 | QR exchange | Bounded UR/BBQr codecs, native camera/display and independent barcode tests | Both native barcode tests pass; physical interoperability pending |
 | USB exchange | Pinned bhwi Ledger protocol, registration persistence and Android adapter source | Android native tests pass; physical USB qualification pending; signing remains blocked |

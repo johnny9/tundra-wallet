@@ -6,53 +6,48 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
-**Local Android compilation now passes.** The reviewed user-owned SDK contains API 36 r2,
-Build Tools 35.0.0 and NDK 27.2.12479018; all **20,220 archive payload files/links** match the
-pinned downloads. Both Rust mobile ABIs and both generated bindings build. The debug app and
-instrumentation APKs compile, including the updated recovery and 100-output layout scenarios.
-All **10 JVM tests pass** through the real host library. A normal strict **offline** Gradle
-build passes without lock/checksum-writing flags, and its APK contains the exact **177-text
-notice resource**. No sudo installation was needed. See
-[local Android/toolchain evidence](../validation/local-android-toolchain-checks.json).
+**All four CI jobs pass at [cd44448](https://github.com/johnny9/tundra-wallet/actions/runs/34330225952).**
+This includes **189 Rust tests / 34 offline checks**, parser fuzzing/audit and dependency/notice
+checks. Exact results and hashes are in the [passing native record](../validation/locked-native-passing-checks.json).
 
-The complete Android configuration gate also passes in
-[CI at 2dc846f](https://github.com/johnny9/tundra-wallet/actions/runs/34327546681). Its app task
-then refuses previously unverified AGP-selected AAPT2 artifacts. Those exact Google Maven
-JAR/POM checksums are now reviewed; the local build subsequently reveals and records only an
-empty `androidApis` task configuration. No dependency version or trust policy changed.
-Current coverage: **440 locked components / 588 verified metadata components / 1,267 artifact
-checksums**, with all **588 retained Maven POMs** matched. Actual Gradle baseline and three
-refusal cases pass; evidence logs now refuse accidental overwrites. See
-[AAPT2 evidence](../validation/android-aapt2-checks.json).
+Android passes both Rust mobile ABIs, the app/test APK builds, **10 JVM / all 18 instrumentation
+tests** and cold restart. The new recovered-payment screen now passes explicit reapproval,
+separate submission consents, one exact published-fixture POST, observed input provenance and
+retained output-label edits. Its 100-output scenario passes independent Activity/Coins offsets,
+fixed tabs, light appearance and enlarged-text controls. Strict complete dependency checks,
+actual refusal cases, all **20,220 installed SDK payload files/links** and the exact **177-text
+APK notice resource** pass too.
 
-That CI revision passes **189 Rust tests / 33 offline checks**, parser fuzzing/audit and notice
-regeneration. **34 local offline checks** now pass with the added toolchain guard. The fixture
-server's new persistent loopback RPC also passes the real keyless regtest maturity, persistence,
-shorter-reorg and draft-invalidation test. Production networking and UI wait limits are unchanged.
+Apple passes its app build, **6 host FFI / all 17 simulator tests** with no skips. The normal
+wallet scenario passes all four payment modes, filters, saved-draft restart and real system
+Files export/readback/inspection/restore/restart. Both public signing/recovery UI scenarios
+and the complete long-list/light/large-text scenario pass. Pinned XcodeGen 2.46.0 executes,
+and the exact **177-text notice resource** is present in the built app. The persistent,
+read-only loopback RPC correction fixes the preceding fixture scan timeout without changing
+production networking or the UI's wait limits.
 
-Apple builds and passes **6 host FFI / all 13 hosted runtime tests**. Its **100-output layout
-scenario now passes completely**, including independent Activity/Coins offsets, fixed tabs,
-light appearance, measured accessibility text enlargement and usable filter/selection controls.
-Both public payment UI tests pass: exact signature/finalization, restart, recovery sync and
-reapproval, separate submission consents, one exact fixture POST, provenance and retained labels.
-The initial **175-text iOS app resource** also matches its reviewed bytes. The expanded resource
-and newly pinned XcodeGen execution await the next Apple run.
+**Subsequent presentation/packaging changes still require a native rerun.** The screenshots
+exposed weak iOS light-theme/inherited button colors and unreadable Android system icons in
+light appearance. Semantic color and system-bar fixes are authored; source color-pair checks
+and local Android compilation pass. The Android builder also removes two unused BBQr cdylibs;
+all ten remaining APK libraries pass correct-ABI, 16 KiB ELF/ZIP alignment, nonexecutable-stack
+and relocation checks. This is binary inspection, not a 16 KiB runtime qualification. See
+[iOS colors](../validation/ios-semantic-color-checks.json),
+[Android system icons](../validation/android-system-bar-checks.json) and
+[native packaging](../validation/android-native-packaging-checks.json).
 
-Overall Apple result is **16 of 17 simulator tests passing**. The normal wallet UI test times
-out during an active scan; its recording shows 12 scripts processed and balance still unknown,
-not a displayed zero or false success. The same complete four-payment-mode/system-backup
-restore/restart scenario passed at `05dabe2`. The test-only Esplora facade now reuses bounded,
-cookie-authenticated read-only HTTP to Bitcoin Core instead of launching `bitcoin-cli` on every
-request. Native execution of that performance correction remains pending. See
-[Apple layout and sync evidence](../validation/apple-large-text-checks.json) and the
-[earlier complete backup result](../validation/apple-backup-layout-checks.json).
+Local user-owned Android tools now build both APKs and pass strict **offline** Gradle builds,
+10 real host FFI JVM tests and exact native notice checks. No sudo installation was needed.
+Coverage remains **440 locked components / 588 verified metadata components / 1,267 artifact
+checksums**, with all **588 retained Maven POMs** matched. See
+[local toolchain evidence](../validation/local-android-toolchain-checks.json).
 
-Waydroid's session/container run, but it still has **IP UNKNOWN and no ADB device**. No local
-instrumentation execution is claimed. The next hosted Android runtime run must validate the
-compiled recovery and long-list scenarios. Broader visual/accessibility qualification,
-physical phones, hardware transports and independent release review remain open. SDK command-line
-utilities, emulator/host images and remaining upstream/distribution review have separate limits;
-see the [notice scope](../third-party/README.md). No hardware or real-funds readiness is claimed.
+Waydroid's session/container run, but it still reports **IP UNKNOWN with no ADB device**;
+there is no local KVM device either. No local instrumentation is claimed. Broader visual and
+accessibility qualification, physical phones, QR/USB transports, real-network hardware signing
+and independent release review remain open. Command-line utilities, emulator/host images and
+remaining upstream/distribution review have separate limits; see the
+[notice scope](../third-party/README.md). No hardware or real-funds readiness is claimed.
 
 ## Earlier document and fixture checkpoints
 

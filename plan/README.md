@@ -29,9 +29,9 @@ approval system, or cloud account.
 - Added: bounded UR/BBQr codecs and native camera/display source; both native barcode tests pass; iOS uses Vision revision 2 as its independent image decoder.
 - Added: immutable finalized transaction bytes and native final-review source; software tests pass.
 - Added: pinned bhwi Ledger protocol, registration persistence and Android USB adapter source; Android build/FFI/runtime checks pass; physical device qualification remains open.
-- Added: explicit test-network broadcast, durable uncertainty and observed-spend handling; Rust tests and native builds pass; Apple positive submission/recovery UI checks pass; Android coverage remains open.
+- Added: explicit test-network broadcast, durable uncertainty and observed-spend handling; Rust tests and native builds pass; both native positive submission/recovery UI checks pass; hardware qualification remains open.
 - Added: observed payment/output labels and durable input provenance; local rollback,
-  reorg and migration tests pass; Apple coin-detail/provenance/label-edit checks pass; Android validation remains.
+  reorg and migration tests pass; both native coin-detail/provenance/label-edit checks pass.
 - Added: pinned SQLCipher, protected Rust storage and atomic plaintext migration with
   process-kill tests; both native vaults pass platform key-retention tests. Protected
   normal startup and all payment/restart flows pass on both virtual platforms.
@@ -40,7 +40,7 @@ approval system, or cloud account.
   passes Rust tests and native generation recovery now passes on both platforms. File
   helpers, Android system backup round-trip and Apple system export/readback pass. Both native vaults pass published-signature
   finalization/recovery/submission/provenance. Both Apple positive payment screen tests now pass;
-  complete Apple system restore/restart now passes; Android recovery controls remain under validation.
+  complete Apple system restore/restart and Android recovery controls now pass.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Build review: workflow actions pinned to executed revisions; both full Cargo locks have
   a checked license/notice inventory. Android locks/checksums and a retained Maven declaration
