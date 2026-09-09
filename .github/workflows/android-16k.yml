@@ -82,8 +82,13 @@ jobs:
           cat > build/run-android-16k.sh <<'SH'
           #!/usr/bin/env bash
           set -euo pipefail
-          adb root
-          adb wait-for-device
+          for attempt in 1 2 3; do
+            adb root || true
+            timeout 30 adb wait-for-device
+            test "$(adb shell id -u | tr -d '\r')" != 0 || break
+            sleep 1
+          done
+          test "$(adb shell id -u | tr -d '\r')" = 0
           test "$(adb shell getconf PAGE_SIZE | tr -d '\r')" = 16384
           adb shell setprop bionic.linker.16kb.app_compat.enabled false
           adb shell setprop pm.16kb.app_compat.disabled true
