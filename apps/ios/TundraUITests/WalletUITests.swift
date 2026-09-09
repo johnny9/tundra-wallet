@@ -1,6 +1,22 @@
 import XCTest
 
 final class WalletUITests: XCTestCase {
+    @MainActor private func openBackup(_ app: XCUIApplication) async -> Bool {
+        let settings = app.buttons["Settings"]
+        guard settings.waitForExistence(timeout: 10), settings.isEnabled,
+              !settings.frame.isEmpty, app.frame.contains(settings.frame) else {
+            XCTFail("Settings was not enabled inside the visible application"); return false
+        }
+        // The public-fixture recording shows the menu visibly in the header while
+        // XCTest's implicit AX scroll action fails. Tap its actual on-screen center
+        // and require the real menu to open; accessibility qualification stays separate.
+        settings.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        let backup = app.buttons["Backup and recovery"]
+        guard backup.waitForExistence(timeout: 10), backup.isHittable, backup.isEnabled else {
+            XCTFail("Settings did not open the backup menu item"); return false
+        }
+        backup.tap(); return true
+    }
     @MainActor private func visibleDocumentItem(_ label: String, in app: XCUIApplication) -> XCUIElement? {
         app.descendants(matching: .any).matching(NSPredicate(format: "label == %@", label))
             .allElementsBoundByIndex.first { $0.isHittable }
@@ -22,7 +38,7 @@ final class WalletUITests: XCTestCase {
 
     @MainActor private func backupDocumentRoundTrip(_ app: XCUIApplication) async -> Bool {
         let password = "Public document test password 2026"
-        app.buttons["Settings"].tap(); app.buttons["Backup and recovery"].tap()
+        guard await openBackup(app) else { return false }
         let first = app.secureTextFields["backupPassword"]
         guard first.waitForExistence(timeout: 10) else { XCTFail("Backup password control missing"); return false }
         first.tap(); first.typeText(password)
@@ -52,7 +68,7 @@ final class WalletUITests: XCTestCase {
         let laterIndex = app.staticTexts["receiveIndex"].label
         let laterAddress = app.staticTexts["receiveAddress"].label
         app.buttons["Close"].tap()
-        app.buttons["Settings"].tap(); app.buttons["Backup and recovery"].tap()
+        guard await openBackup(app) else { return false }
         app.buttons["Backup action"].tap(); app.buttons["Restore"].tap()
         guard first.waitForExistence(timeout: 10) else { return false }
         first.tap(); first.typeText(password); app.buttons["Done"].tap()

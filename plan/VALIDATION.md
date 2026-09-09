@@ -6,6 +6,18 @@ This is development source with test-network sync, native payments and external 
 
 ## Current software checkpoint
 
+The [first system-picker run at b9434ec](https://github.com/johnny9/tundra-wallet/actions/runs/34310420076)
+passes Rust/parser/audit, both native builds, **10 Android JVM tests**, **12 Android
+instrumentation tests**, **6 Apple host FFI checks** and **12 iOS runtime tests**. Two Android
+UI tests fail: the payment review button is not displayed after scrolling, and the system
+backup filename control is not found. The iOS payment modes/restart portion passes, then
+Settings fails XCTest’s AX scroll action before the backup flow. Its public-fixture recording
+shows the header control visibly on screen. Corrections add explicit Android IME dismissal,
+document-window selection and export-preparation assertions; iOS taps the verified on-screen
+Settings center and requires the menu to open. **These corrections and both complete system
+picker flows await validation.** This does not qualify accessibility. Android cold restart
+did not run. See [`backup-picker-native-checks.json`](../validation/backup-picker-native-checks.json).
+
 The [document-helper run at 56ffb89](https://github.com/johnny9/tundra-wallet/actions/runs/34309306089)
 passes both builds, **10 Android JVM tests** and **13 iOS runtime tests**. Both generation
 recovery tests now pass, including lost keys/selectors and missing databases. Apple host FFI,
@@ -16,7 +28,7 @@ button assertions plus bounded diagnostics; a keyboard cause is not yet confirme
 Android cold restart did not run. See
 [`backup-document-native-checks.json`](../validation/backup-document-native-checks.json).
 
-System document-picker scenarios at `8c29fba` are authored and await their first run.
+System document-picker scenarios at `8c29fba` were first exercised in the failing run above.
 Android uses an isolated real ViewModel, Keystore and Rust core. iOS will save/import through
 Files, confirm recovery, check unknown balances/suspended drafts/restart, and exercise the
 stated limit for unused receive addresses issued after a backup. Native source also adds

@@ -6,17 +6,21 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable internal fun BackupSheet(vm: WalletViewModel, state: WalletState, onClose: () -> Unit) {
+    val focus = LocalFocusManager.current
     var restoring by remember { mutableStateOf(!state.storageReady || state.backupPreview != null) }
     var password by remember { mutableStateOf("") }
     var confirmation by remember { mutableStateOf("") }
@@ -47,11 +51,13 @@ import androidx.compose.ui.unit.dp
                 else "Export all wallets, labels, freezes and saved payment history. The file is encrypted with its own password.")
             Text("Use a strong, unique password of at least 16 characters and keep it separately. Spaces and Unicode are significant; a lost password cannot be recovered.")
             OutlinedTextField(password, { password = it }, label = { Text("Backup password") }, singleLine = true,
-                visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, autoCorrectEnabled = false),
+                visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, autoCorrectEnabled = false, imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { focus.clearFocus() }),
                 enabled = !locked, modifier = Modifier.fillMaxWidth().testTag("backupPassword"))
             if (!restoring) {
                 OutlinedTextField(confirmation, { confirmation = it }, label = { Text("Confirm backup password") }, singleLine = true,
-                    visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, autoCorrectEnabled = false),
+                    visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, autoCorrectEnabled = false, imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focus.clearFocus() }),
                     enabled = !locked, modifier = Modifier.fillMaxWidth().testTag("backupPasswordConfirmation"))
                 Button(onClick = { vm.prepareBackup(password) }, enabled = !locked && password.isNotEmpty() && password == confirmation,
                     modifier = Modifier.testTag("prepareBackup")) { Text("Create encrypted backup") }

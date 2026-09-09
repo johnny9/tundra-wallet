@@ -3,6 +3,8 @@ package dev.johnny9.tundra
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -99,6 +101,14 @@ class WalletRuntimeTest {
             compose.waitUntil(30_000) { compose.onAllNodesWithText("150 BTC").fetchSemanticsNodes().isNotEmpty() }
             lateinit var model: WalletViewModel
             activity.onActivity { model = ViewModelProvider(it)[WalletViewModel::class.java] }
+            fun finishPaymentEntry() {
+                compose.onNodeWithText("Fee rate in sat/vB").performImeAction()
+                compose.waitUntil(10_000) {
+                    var visible = true
+                    activity.onActivity { visible = ViewCompat.getRootWindowInsets(it.window.decorView)?.isVisible(WindowInsetsCompat.Type.ime()) == true }
+                    !visible
+                }
+            }
             fun waitForPayment(inputs: Int, mode: String) {
                 try { compose.waitUntil(10_000) { model.state.value.let { !it.busy && (it.review != null || it.error != null) } } }
                 catch (failure: ComposeTimeoutException) {
@@ -146,6 +156,7 @@ class WalletRuntimeTest {
             compose.onNodeWithText("Recipient address").performTextInput(recipient)
             compose.onNodeWithText("Amount in BTC").performTextInput("0.001")
             compose.onNodeWithText("Fee rate in sat/vB").performTextReplacement("2.5")
+            finishPaymentEntry()
             compose.onNodeWithTag("buildReview").performScrollTo().assertIsDisplayed().assertIsEnabled().performClick()
             waitForPayment(1, "Automatic send")
             assertSavedPayment(1, consolidation = false, oneOutput = false)
@@ -164,6 +175,7 @@ class WalletRuntimeTest {
                     compose.onNodeWithText("Recipient address").performTextInput(recipient)
                 }
                 compose.onNodeWithText("Fee rate in sat/vB").performTextReplacement("2.5")
+                finishPaymentEntry()
                 compose.onNodeWithTag("buildReview").performScrollTo().assertIsDisplayed().assertIsEnabled().performClick()
                 waitForPayment(2, if (consolidation) "Consolidation" else "Maximum send")
                 assertSavedPayment(2, consolidation, oneOutput = true, selected = exact)
@@ -176,6 +188,7 @@ class WalletRuntimeTest {
             compose.onNodeWithText("Recipient address").performTextInput(recipient)
             compose.onNodeWithText("Amount in BTC").performTextInput("0.001")
             compose.onNodeWithText("Fee rate in sat/vB").performTextReplacement("2.5")
+            finishPaymentEntry()
             compose.onNodeWithTag("buildReview").performScrollTo().assertIsDisplayed().assertIsEnabled().performClick()
             waitText("Inputs · 2")
             waitText("Input 1: 0 / 1")

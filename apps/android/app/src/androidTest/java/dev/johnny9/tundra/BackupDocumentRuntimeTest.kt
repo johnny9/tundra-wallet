@@ -1,13 +1,18 @@
 package dev.johnny9.tundra
 
 import android.app.Application
+import android.accessibilityservice.AccessibilityServiceInfo
+import androidx.activity.ComponentActivity
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.accessibility.AccessibilityNodeInfo
+import android.view.accessibility.AccessibilityWindowInfo
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.test.*
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
@@ -23,14 +28,20 @@ import java.util.UUID
 
 /** Real document picker, provider readback, Keystore and Rust; isolated public wallet. */
 class BackupDocumentRuntimeTest {
-    @get:Rule val compose = createComposeRule()
+    @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 
     private fun systemNode(predicate: (AccessibilityNodeInfo) -> Boolean): AccessibilityNodeInfo {
         val automation = InstrumentationRegistry.getInstrumentation().uiAutomation
+        automation.serviceInfo = automation.serviceInfo.apply {
+            flags = flags or AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS or AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS
+        }
         val deadline = SystemClock.uptimeMillis() + 15_000
         while (SystemClock.uptimeMillis() < deadline) {
             val queue = java.util.ArrayDeque<AccessibilityNodeInfo>()
-            automation.rootInActiveWindow?.let(queue::add)
+            automation.windows.filter { it.type == AccessibilityWindowInfo.TYPE_APPLICATION }.forEach { window ->
+                window.root?.takeIf { it.packageName?.toString()?.contains("documentsui", ignoreCase = true) == true }?.let(queue::add)
+            }
+            if (queue.isEmpty()) automation.rootInActiveWindow?.let(queue::add)
             var visited = 0
             while (queue.isNotEmpty() && visited++ < 1024) {
                 val node = queue.removeFirst()
@@ -84,7 +95,13 @@ class BackupDocumentRuntimeTest {
             compose.onNodeWithTag("backupPasswordConfirmation").performScrollTo().performTextInput("different public password")
             compose.onNodeWithTag("prepareBackup").assertIsNotEnabled()
             compose.onNodeWithTag("backupPasswordConfirmation").performTextReplacement(password)
-            compose.onNodeWithTag("prepareBackup").performScrollTo().performClick()
+            compose.onNodeWithTag("backupPasswordConfirmation").performImeAction()
+            compose.waitUntil(10_000) { compose.runOnUiThread {
+                ViewCompat.getRootWindowInsets(compose.activity.window.decorView)?.isVisible(WindowInsetsCompat.Type.ime()) != true
+            } }
+            compose.onNodeWithTag("prepareBackup").performScrollTo().assertIsDisplayed().assertIsEnabled().performClick()
+            compose.waitUntil(10_000) { vm.state.value.backupExportReady || vm.state.value.error != null }
+            assertNull("Public fixture export preparation failed", vm.state.value.error)
             val filename = "tundra-public-$id.tundra"
             val name = systemNode { it.className?.toString()?.endsWith("EditText") == true && it.text?.contains("tundra-backup") == true }
             assertTrue(name.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, Bundle().apply {

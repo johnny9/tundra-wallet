@@ -6,6 +6,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import dev.johnny9.tundra.generated.*
 
 @Composable fun PaymentSheet(vm: WalletViewModel, s: WalletState, initialMode: Int, onClose: () -> Unit) {
@@ -57,9 +61,13 @@ import dev.johnny9.tundra.generated.*
                         FilterChip(selected = mode == index, onClick = { mode = index }, label = { Text(title) }, enabled = !s.busy)
                     }
                 }
-                if (mode != 2) OutlinedTextField(address, { address = it }, label = { Text("Recipient address") }, modifier = Modifier.fillMaxWidth())
+                if (mode != 2) OutlinedTextField(address, { address = it }, label = { Text("Recipient address") }, modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri, imeAction = ImeAction.Done, autoCorrectEnabled = false),
+                    keyboardActions = KeyboardActions(onDone = { focus.clearFocus() }))
                 if (mode == 0) {
-                    OutlinedTextField(amount, { amount = it }, label = { Text("Amount in BTC") }, modifier = Modifier.fillMaxWidth())
+                    OutlinedTextField(amount, { amount = it }, label = { Text("Amount in BTC") }, modifier = Modifier.fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focus.clearFocus() }))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Switch(automatic, { automatic = it }); Text("Automatic eligible inputs")
                     }
@@ -71,7 +79,9 @@ import dev.johnny9.tundra.generated.*
                         Checkbox(acknowledged, { acknowledged = it }, modifier = Modifier.testTag("consolidationConsent")); Text("I understand this links these coins on-chain")
                     }
                 }
-                OutlinedTextField(fee, { fee = it }, label = { Text("Fee rate in sat/vB") }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(fee, { fee = it }, label = { Text("Fee rate in sat/vB") }, modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focus.clearFocus() }))
                 OutlinedTextField(label, { label = it }, label = { Text("Payment label") }, modifier = Modifier.fillMaxWidth())
                 Text("Review reserves the selected inputs and saves an unsigned draft. It does not sign or broadcast.", style = MaterialTheme.typography.bodySmall)
                 Button(onClick = { focus.clearFocus(); vm.createPayment(mode, address, amount, fee, label, automatic, acknowledged) }, enabled = !s.busy, modifier = Modifier.testTag("buildReview")) { Text("Review payment") }

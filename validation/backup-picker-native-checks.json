@@ -1,0 +1,44 @@
+{
+  "recorded_at": "2026-09-09T04:41:43.598607+00:00",
+  "source": "b9434ec4371e4b50d99c2616efc8179ddb54ecbe",
+  "run_id": 34310420076,
+  "conclusion": "failure",
+  "rust_and_parser_audit_jobs": "passed; 187 Rust including separate keyless regtest and 26 offline checks",
+  "android": {
+    "build": "passed",
+    "jvm_passed": 10,
+    "instrumentation_passed": 12,
+    "instrumentation_failed": 2,
+    "failures": [
+      "Payment review button not displayed after scroll in maximum-send/consolidation loop",
+      "Backup system filename control not found after export action"
+    ],
+    "cold_restart": "not run",
+    "correction_pending_validation": "Explicit IME Done/focus dismissal; require export preparation; query document application windows instead of keyboard root"
+  },
+  "ios": {
+    "build": "passed",
+    "host_ffi_passed": 6,
+    "runtime_passed": 12,
+    "ui_failed": 1,
+    "generation_and_file_helpers": "passed",
+    "payment_modes_and_restart": "passed before backup extension",
+    "failure": "Settings menu AX scroll-to-visible failed before backup flow",
+    "recording_review": "Header Settings is visibly on screen at 145 seconds; no obstructing sheet",
+    "correction_pending_validation": "Tap verified on-screen Settings center and assert real backup menu opens; does not qualify accessibility"
+  },
+  "logs": [
+    {
+      "path": "build/backup-picker-android-first.log",
+      "sha256": "fbbd5d05505a621e184860c2e1b9f844be8287a9e347164ac985dcd259c5361b"
+    },
+    {
+      "path": "build/backup-picker-ios-first.log",
+      "sha256": "4a22be2f428731d21dae6b9f4508ee52ed268bd3f0ec48e57826328d8c46bee6"
+    },
+    {
+      "path": "build/backup-picker-keyboard-offline.log",
+      "sha256": "73e9ad4792cf2c68e10f23e9b0606b9d75f8927056df02b29f883eb39d328a2c"
+    }
+  ]
+}
