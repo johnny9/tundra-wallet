@@ -26,6 +26,8 @@ final class WalletUITests: XCTestCase {
         // Only inspect named controls in this disposable public-fixture test. Never
         // log a document/UI tree, user paths or private wallet contents.
         for _ in 0..<8 {
+            if app.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH %@", "tundra-backup"))
+                .allElementsBoundByIndex.contains(where: { $0.isHittable }) { return true }
             if let folder = visibleDocumentItem("Backups", in: app) { folder.tap(); return true }
             if let folder = visibleDocumentItem("Tundra", in: app) { folder.tap() }
             // The simulator's Files provider offers a writable local root even

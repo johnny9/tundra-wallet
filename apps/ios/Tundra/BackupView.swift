@@ -10,6 +10,9 @@ struct EncryptedBackupDocument: FileDocument {
         // The model retains this completed ciphertext until the export callback and
         // readback finish. The provider never receives an in-progress database.
         let wrapper = try FileWrapper(url: source, options: [])
+        // Reading from a URL retains its staging filename independently of the
+        // preferred name. Files used that random name despite defaultFilename.
+        wrapper.filename = "tundra-backup.tundra"
         wrapper.preferredFilename = "tundra-backup.tundra"
         return wrapper
     }
