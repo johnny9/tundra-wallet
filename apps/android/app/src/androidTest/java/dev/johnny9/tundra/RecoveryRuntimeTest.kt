@@ -100,7 +100,8 @@ class RecoveryRuntimeTest {
             assertEquals(0, posts()) // Resuming the exact approval must not transmit.
             compose.onNodeWithTag("reviewBroadcast").performScrollTo().performClick()
             compose.onNodeWithTag("confirmBroadcast").assertIsNotEnabled()
-            compose.onNodeWithTag("broadcastEndpoint").performScrollTo().performTextReplacement(endpoint).performImeAction()
+            compose.onNodeWithTag("broadcastEndpoint").performScrollTo().performTextReplacement(endpoint)
+            compose.onNodeWithTag("broadcastEndpoint").performImeAction()
             compose.onNodeWithTag("broadcastConsent").performScrollTo().performClick()
             compose.onNodeWithTag("confirmBroadcast").assertIsNotEnabled()
             compose.onNodeWithTag("broadcastRetryConsent").performScrollTo().performClick()
