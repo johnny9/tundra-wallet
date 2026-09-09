@@ -109,7 +109,10 @@ class RecoveryRuntimeTest {
             idle()
             assertFalse(vm.state.value.recoveryRequired)
             assertEquals("finalized", vm.state.value.review?.state)
-            assertEquals(txid, vm.state.value.finalized?.txid)
+            // A recovered payment retains its prior submission record. The UI
+            // obtains its transaction ID there, rather than from a new finalization.
+            assertEquals(txid, vm.state.value.submission?.txid)
+            compose.onNodeWithText(txid).performScrollTo().assertIsDisplayed()
             assertFalse(checkNotNull(vm.state.value.submission).acknowledged)
             assertEquals(1uL, vm.state.value.submission?.attemptId)
             assertEquals(0, posts()) // Resuming the exact approval must not transmit.
