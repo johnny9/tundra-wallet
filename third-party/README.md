@@ -34,13 +34,15 @@ The upstream bhwi async HID implementation was reviewed but not copied or linked
 framing requires full reports and never treats old receive-buffer bytes as fresh input.
 The app uses Android's USB API directly through its native adapter.
 
-[`android-inventory.json`](android-inventory.json) covers all **585 Gradle verification
-components** and retains **585 exact Maven POMs**, including their parent metadata. License
+[`android-inventory.json`](android-inventory.json) covers all **587 Gradle verification
+components** and retains **587 exact Maven POMs**, including parent and imported BOM metadata. License
 declarations are followed through explicit Maven parent inheritance. All retained POM hashes
 are now included in Gradle verification: the initial 328 matched that baseline, and 257
 supplemental POMs were independently collected from the official configured repositories,
 retained for review and then added as exact checksum entries. This covers fresh-cache parent
-metadata resolution without trusting whole groups or skipping verification.
+metadata resolution without trusting whole groups or skipping verification. The next native
+run exposed an imported Kotlin coroutines BOM; the inventory now follows literal inherited
+properties and imported BOMs recursively. Both newly discovered BOM POMs have exact checksums.
 Four parent-only metadata components (`jvnet-parent` 1/3 and `oss-parent` 7/9) have no effective
 license declaration; the inventory records that absence explicitly.
 

@@ -120,9 +120,15 @@ def main():
             path.parent.mkdir(parents=True, exist_ok=True); path.write_bytes(data)
         elif not path.exists() or path.read_bytes() != data:
             raise ValueError("Maven metadata has not been retained for review")
+        properties = pom.find("{*}properties")
+        imports = [tuple(text(dependency, k) for k in ("groupId", "artifactId", "version"))
+                   for dependency in pom.findall("{*}dependencyManagement/{*}dependencies/{*}dependency")
+                   if text(dependency, "scope") == "import" and text(dependency, "type") == "pom"]
         return {"coordinate": coordinate, "url": url, "sha256": sha, "path": str(path.relative_to(ROOT)),
                 "gradle_checksum_match": coordinate in checksums, "parent": parent_id,
-                "declared_licenses": licenses}
+                "declared_licenses": licenses, "_imports": imports,
+                "_properties": {child.tag.rsplit("}", 1)[-1]: (child.text or "").strip()
+                                for child in properties} if properties is not None else {}}
 
     poms = {}
     pending = coordinates
@@ -131,6 +137,38 @@ def main():
             for item in executor.map(load, sorted(pending)):
                 poms[item["coordinate"]] = item
         pending = {item["parent"] for item in poms.values() if item["parent"] and item["parent"] not in poms}
+        if pending:
+            continue
+        # Maven also reads imported BOM POMs before resolving the final graph.
+        # Resolve only literal property substitutions, never expressions or URLs.
+        for coordinate, item in poms.items():
+            chain, cursor = [], coordinate
+            while cursor:
+                if cursor in chain:
+                    raise ValueError("Cyclic Maven property inheritance")
+                chain.append(cursor); cursor = poms[cursor]["parent"]
+            properties = {}
+            for ancestor in reversed(chain):
+                properties.update(poms[ancestor]["_properties"])
+            group, name, version = coordinate.split(":")
+            for prefix in ("project", "pom"):
+                properties.update({f"{prefix}.groupId": group, f"{prefix}.artifactId": name, f"{prefix}.version": version})
+                if item["parent"]:
+                    parent_group, parent_name, parent_version = item["parent"].split(":")
+                    properties.update({f"{prefix}.parent.groupId": parent_group,
+                                       f"{prefix}.parent.artifactId": parent_name, f"{prefix}.parent.version": parent_version})
+            def resolve(value):
+                for _ in range(32):
+                    if "${" not in value:
+                        return value
+                    def substitute(match):
+                        if match[1] not in properties:
+                            raise ValueError(f"Unresolved Maven BOM property in {coordinate}")
+                        return properties[match[1]]
+                    value = re.sub(r"\$\{([^}]+)\}", substitute, value)
+                raise ValueError("Cyclic or excessive Maven BOM property substitutions")
+            item["imported_boms"] = sorted({":".join(resolve(part) for part in entry) for entry in item["_imports"]})
+        pending = {bom for item in poms.values() for bom in item["imported_boms"] if bom not in poms}
     for coordinate, item in poms.items():
         visited = {coordinate}; source = coordinate
         while not poms[source]["declared_licenses"] and poms[source]["parent"]:
@@ -139,7 +177,9 @@ def main():
                 raise ValueError("Cyclic Maven license inheritance")
             visited.add(source)
         item["license_source"] = source if poms[source]["declared_licenses"] else None
-    result = {"scope": "All reviewed Gradle verification components plus exact Maven parents; declared licenses only",
+    for item in poms.values():
+        del item["_imports"], item["_properties"]
+    result = {"scope": "All reviewed Gradle verification components plus exact Maven parents/imported BOMs; declared licenses only",
               "limits": "Publisher authentication, full artifact notices and binary distribution review remain separate gates",
               "gradle": counts, "components": sorted(coordinates), "poms": [poms[key] for key in sorted(poms)]}
     encoded = json.dumps(result, indent=2, ensure_ascii=False) + "\n"

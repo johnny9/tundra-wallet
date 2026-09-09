@@ -1,10 +1,10 @@
 {
-  "scope": "All reviewed Gradle verification components plus exact Maven parents; declared licenses only",
+  "scope": "All reviewed Gradle verification components plus exact Maven parents/imported BOMs; declared licenses only",
   "limits": "Publisher authentication, full artifact notices and binary distribution review remain separate gates",
   "gradle": {
     "locked_components": 440,
-    "verified_components": 585,
-    "verified_artifacts": 1263,
+    "verified_components": 587,
+    "verified_artifacts": 1265,
     "nonempty_configurations": {
       "buildscript-gradle.lockfile": 1,
       "app/buildscript-gradle.lockfile": 0,
@@ -560,7 +560,9 @@
     "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2",
     "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3",
     "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.2",
+    "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4",
     "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3",
+    "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.8.0",
     "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.8.1",
     "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.9.0",
     "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2",
@@ -613,6 +615,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.activity:activity-compose:1.10.1"
     },
     {
@@ -629,6 +632,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.activity:activity-ktx:1.10.1"
     },
     {
@@ -645,6 +649,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.activity:activity:1.10.1"
     },
     {
@@ -661,6 +666,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.activity:activity:1.2.1"
     },
     {
@@ -677,6 +683,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.annotation:annotation-experimental:1.4.1"
     },
     {
@@ -693,6 +700,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.annotation:annotation-jvm:1.8.1"
     },
     {
@@ -709,6 +717,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.annotation:annotation-jvm:1.9.1"
     },
     {
@@ -725,6 +734,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.annotation:annotation:1.1.0"
     },
     {
@@ -741,6 +751,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.annotation:annotation:1.7.0"
     },
     {
@@ -757,6 +768,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.annotation:annotation:1.8.1"
     },
     {
@@ -773,6 +785,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.annotation:annotation:1.9.1"
     },
     {
@@ -789,6 +802,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.appcompat:appcompat-resources:1.1.0"
     },
     {
@@ -805,6 +819,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.appcompat:appcompat:1.1.0"
     },
     {
@@ -821,6 +836,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.arch.core:core-common:2.1.0"
     },
     {
@@ -837,6 +853,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.arch.core:core-common:2.2.0"
     },
     {
@@ -853,6 +870,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.arch.core:core-runtime:2.2.0"
     },
     {
@@ -869,6 +887,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.autofill:autofill:1.0.0"
     },
     {
@@ -885,6 +904,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.camera.featurecombinationquery:featurecombinationquery:1.6.2"
     },
     {
@@ -901,6 +921,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.camera.viewfinder:viewfinder-core:1.5.1"
     },
     {
@@ -917,6 +938,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.camera:camera-camera2-pipe:1.6.2"
     },
     {
@@ -933,6 +955,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.camera:camera-camera2:1.6.2"
     },
     {
@@ -954,6 +977,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.camera:camera-core:1.6.2"
     },
     {
@@ -970,6 +994,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.camera:camera-lifecycle:1.6.2"
     },
     {
@@ -986,6 +1011,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.camera:camera-video:1.6.2"
     },
     {
@@ -1002,6 +1028,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.camera:camera-view:1.6.2"
     },
     {
@@ -1018,6 +1045,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.collection:collection-jvm:1.5.0"
     },
     {
@@ -1034,6 +1062,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.collection:collection-ktx:1.5.0"
     },
     {
@@ -1050,6 +1079,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.collection:collection:1.0.0"
     },
     {
@@ -1066,6 +1096,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.collection:collection:1.1.0"
     },
     {
@@ -1082,6 +1113,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.collection:collection:1.4.5"
     },
     {
@@ -1098,6 +1130,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.collection:collection:1.5.0"
     },
     {
@@ -1114,6 +1147,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.animation:animation-android:1.10.0"
     },
     {
@@ -1130,6 +1164,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.animation:animation-core-android:1.10.0"
     },
     {
@@ -1146,6 +1181,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.animation:animation-core:1.10.0"
     },
     {
@@ -1162,6 +1198,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.animation:animation:1.10.0"
     },
     {
@@ -1178,6 +1215,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.foundation:foundation-android:1.10.0"
     },
     {
@@ -1194,6 +1232,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.foundation:foundation-layout-android:1.10.0"
     },
     {
@@ -1210,6 +1249,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.foundation:foundation-layout:1.10.0"
     },
     {
@@ -1226,6 +1266,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.foundation:foundation:1.10.0"
     },
     {
@@ -1242,6 +1283,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.material3:material3-android:1.4.0"
     },
     {
@@ -1258,6 +1300,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.material3:material3:1.4.0"
     },
     {
@@ -1274,6 +1317,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.material:material-android:1.10.0"
     },
     {
@@ -1290,6 +1334,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.material:material-icons-core-android:1.7.8"
     },
     {
@@ -1306,6 +1351,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.material:material-icons-core:1.7.8"
     },
     {
@@ -1322,6 +1368,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.material:material-icons-extended-android:1.7.8"
     },
     {
@@ -1338,6 +1385,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.material:material-icons-extended:1.7.8"
     },
     {
@@ -1354,6 +1402,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.material:material-ripple-android:1.10.0"
     },
     {
@@ -1370,6 +1419,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.material:material-ripple:1.10.0"
     },
     {
@@ -1386,6 +1436,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.material:material:1.10.0"
     },
     {
@@ -1402,6 +1453,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.runtime:runtime-android:1.10.0"
     },
     {
@@ -1418,6 +1470,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.runtime:runtime-annotation-android:1.10.0"
     },
     {
@@ -1434,6 +1487,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.runtime:runtime-annotation:1.10.0"
     },
     {
@@ -1450,6 +1504,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.runtime:runtime-retain-android:1.10.0"
     },
     {
@@ -1466,6 +1521,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.runtime:runtime-retain:1.10.0"
     },
     {
@@ -1482,6 +1538,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.runtime:runtime-saveable-android:1.10.0"
     },
     {
@@ -1498,6 +1555,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.runtime:runtime-saveable:1.10.0"
     },
     {
@@ -1514,6 +1572,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.runtime:runtime:1.10.0"
     },
     {
@@ -1530,6 +1589,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-android:1.10.0"
     },
     {
@@ -1546,6 +1606,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-geometry-android:1.10.0"
     },
     {
@@ -1562,6 +1623,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-geometry:1.10.0"
     },
     {
@@ -1578,6 +1640,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-graphics-android:1.10.0"
     },
     {
@@ -1594,6 +1657,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-graphics:1.10.0"
     },
     {
@@ -1610,6 +1674,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-test-android:1.10.0"
     },
     {
@@ -1626,6 +1691,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-test-junit4-android:1.10.0"
     },
     {
@@ -1642,6 +1708,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-test-junit4:1.10.0"
     },
     {
@@ -1658,6 +1725,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-test-manifest:1.10.0"
     },
     {
@@ -1674,6 +1742,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-test:1.10.0"
     },
     {
@@ -1690,6 +1759,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-text-android:1.10.0"
     },
     {
@@ -1706,6 +1776,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-text:1.10.0"
     },
     {
@@ -1722,6 +1793,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-tooling-android:1.10.0"
     },
     {
@@ -1738,6 +1810,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-tooling-data-android:1.10.0"
     },
     {
@@ -1754,6 +1827,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-tooling-data:1.10.0"
     },
     {
@@ -1770,6 +1844,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-tooling-preview-android:1.10.0"
     },
     {
@@ -1786,6 +1861,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-tooling-preview:1.10.0"
     },
     {
@@ -1802,6 +1878,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-tooling:1.10.0"
     },
     {
@@ -1818,6 +1895,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-unit-android:1.10.0"
     },
     {
@@ -1834,6 +1912,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-unit:1.10.0"
     },
     {
@@ -1850,6 +1929,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-util-android:1.10.0"
     },
     {
@@ -1866,6 +1946,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui-util:1.10.0"
     },
     {
@@ -1882,6 +1963,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose.ui:ui:1.10.0"
     },
     {
@@ -1898,6 +1980,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.compose:compose-bom:2025.12.00"
     },
     {
@@ -1914,6 +1997,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.concurrent:concurrent-futures-ktx:1.1.0"
     },
     {
@@ -1930,6 +2014,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.concurrent:concurrent-futures-ktx:1.2.0"
     },
     {
@@ -1946,6 +2031,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.concurrent:concurrent-futures:1.1.0"
     },
     {
@@ -1962,6 +2048,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.concurrent:concurrent-futures:1.2.0"
     },
     {
@@ -1978,6 +2065,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.core:core-backported-fixes:1.0.0"
     },
     {
@@ -1994,6 +2082,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.core:core-ktx:1.13.0"
     },
     {
@@ -2010,6 +2099,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.core:core-ktx:1.16.0"
     },
     {
@@ -2026,6 +2116,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.core:core-ktx:1.2.0"
     },
     {
@@ -2042,6 +2133,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.core:core-viewtree:1.0.0"
     },
     {
@@ -2058,6 +2150,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.core:core:1.1.0"
     },
     {
@@ -2074,6 +2167,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.core:core:1.13.0"
     },
     {
@@ -2090,6 +2184,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.core:core:1.16.0"
     },
     {
@@ -2106,6 +2201,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.core:core:1.2.0"
     },
     {
@@ -2122,6 +2218,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.core:core:1.3.2"
     },
     {
@@ -2138,6 +2235,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.cursoradapter:cursoradapter:1.0.0"
     },
     {
@@ -2154,6 +2252,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.customview:customview-poolingcontainer:1.0.0"
     },
     {
@@ -2170,6 +2269,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.customview:customview:1.0.0"
     },
     {
@@ -2186,6 +2286,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.databinding:databinding-common:8.13.2"
     },
     {
@@ -2202,6 +2303,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.databinding:databinding-compiler-common:8.13.2"
     },
     {
@@ -2218,6 +2320,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.documentfile:documentfile:1.0.0"
     },
     {
@@ -2234,6 +2337,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.drawerlayout:drawerlayout:1.0.0"
     },
     {
@@ -2250,6 +2354,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.dynamicanimation:dynamicanimation:1.0.0"
     },
     {
@@ -2266,6 +2371,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.emoji2:emoji2:1.2.0"
     },
     {
@@ -2282,6 +2388,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.emoji2:emoji2:1.3.0"
     },
     {
@@ -2298,6 +2405,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.emoji2:emoji2:1.4.0"
     },
     {
@@ -2314,6 +2422,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.exifinterface:exifinterface:1.4.2"
     },
     {
@@ -2330,6 +2439,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.fragment:fragment:1.1.0"
     },
     {
@@ -2346,6 +2456,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.graphics:graphics-path:1.0.1"
     },
     {
@@ -2362,6 +2473,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.interpolator:interpolator:1.0.0"
     },
     {
@@ -2378,6 +2490,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.legacy:legacy-support-core-utils:1.0.0"
     },
     {
@@ -2394,6 +2507,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-common-java8:2.9.0"
     },
     {
@@ -2410,6 +2524,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-common-java8:2.9.2"
     },
     {
@@ -2426,6 +2541,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-common-java8:2.9.4"
     },
     {
@@ -2442,6 +2558,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-common-jvm:2.9.0"
     },
     {
@@ -2458,6 +2575,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-common-jvm:2.9.4"
     },
     {
@@ -2474,6 +2592,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-common:2.3.0"
     },
     {
@@ -2490,6 +2609,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-common:2.3.1"
     },
     {
@@ -2506,6 +2626,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-common:2.6.1"
     },
     {
@@ -2522,6 +2643,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-common:2.8.7"
     },
     {
@@ -2538,6 +2660,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-common:2.9.0"
     },
     {
@@ -2554,6 +2677,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-common:2.9.2"
     },
     {
@@ -2570,6 +2694,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-common:2.9.4"
     },
     {
@@ -2586,6 +2711,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-livedata-core-ktx:2.9.0"
     },
     {
@@ -2602,6 +2728,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-livedata-core-ktx:2.9.2"
     },
     {
@@ -2618,6 +2745,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-livedata-core-ktx:2.9.4"
     },
     {
@@ -2634,6 +2762,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-livedata-core:2.1.0"
     },
     {
@@ -2650,6 +2779,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-livedata-core:2.3.0"
     },
     {
@@ -2666,6 +2796,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-livedata-core:2.3.1"
     },
     {
@@ -2682,6 +2813,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-livedata-core:2.6.1"
     },
     {
@@ -2698,6 +2830,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-livedata-core:2.8.7"
     },
     {
@@ -2714,6 +2847,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-livedata-core:2.9.0"
     },
     {
@@ -2730,6 +2864,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-livedata-core:2.9.2"
     },
     {
@@ -2746,6 +2881,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-livedata-core:2.9.4"
     },
     {
@@ -2762,6 +2898,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-livedata:2.3.1"
     },
     {
@@ -2778,6 +2915,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-livedata:2.6.1"
     },
     {
@@ -2794,6 +2932,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-livedata:2.9.0"
     },
     {
@@ -2810,6 +2949,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-livedata:2.9.2"
     },
     {
@@ -2826,6 +2966,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-livedata:2.9.4"
     },
     {
@@ -2842,6 +2983,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-process:2.9.2"
     },
     {
@@ -2858,6 +3000,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-process:2.9.4"
     },
     {
@@ -2874,6 +3017,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime-android:2.9.0"
     },
     {
@@ -2890,6 +3034,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime-android:2.9.4"
     },
     {
@@ -2906,6 +3051,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime-compose-android:2.9.0"
     },
     {
@@ -2922,6 +3068,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime-compose-android:2.9.4"
     },
     {
@@ -2938,6 +3085,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime-compose:2.8.7"
     },
     {
@@ -2954,6 +3102,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime-compose:2.9.0"
     },
     {
@@ -2970,6 +3119,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime-compose:2.9.2"
     },
     {
@@ -2986,6 +3136,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime-compose:2.9.4"
     },
     {
@@ -3002,6 +3153,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime-ktx-android:2.9.0"
     },
     {
@@ -3018,6 +3170,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime-ktx-android:2.9.4"
     },
     {
@@ -3034,6 +3187,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
     },
     {
@@ -3050,6 +3204,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime-ktx:2.9.0"
     },
     {
@@ -3066,6 +3221,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime-ktx:2.9.2"
     },
     {
@@ -3082,6 +3238,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime-ktx:2.9.4"
     },
     {
@@ -3098,6 +3255,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime:2.3.0"
     },
     {
@@ -3114,6 +3272,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime:2.6.1"
     },
     {
@@ -3130,6 +3289,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime:2.8.7"
     },
     {
@@ -3146,6 +3306,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime:2.9.0"
     },
     {
@@ -3162,6 +3323,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime:2.9.2"
     },
     {
@@ -3178,6 +3340,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-runtime:2.9.4"
     },
     {
@@ -3194,6 +3357,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-android:2.9.2"
     },
     {
@@ -3210,6 +3374,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-android:2.9.4"
     },
     {
@@ -3226,6 +3391,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-compose-android:2.9.0"
     },
     {
@@ -3242,6 +3408,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-compose-android:2.9.4"
     },
     {
@@ -3258,6 +3425,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-compose:2.9.0"
     },
     {
@@ -3274,6 +3442,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-compose:2.9.2"
     },
     {
@@ -3290,6 +3459,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4"
     },
     {
@@ -3306,6 +3476,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
     },
     {
@@ -3322,6 +3493,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.0"
     },
     {
@@ -3338,6 +3510,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2"
     },
     {
@@ -3354,6 +3527,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4"
     },
     {
@@ -3370,6 +3544,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-savedstate-android:2.9.0"
     },
     {
@@ -3386,6 +3561,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-savedstate-android:2.9.4"
     },
     {
@@ -3402,6 +3578,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.0"
     },
     {
@@ -3418,6 +3595,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.7"
     },
     {
@@ -3434,6 +3612,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.9.0"
     },
     {
@@ -3450,6 +3629,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.9.2"
     },
     {
@@ -3466,6 +3646,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.9.4"
     },
     {
@@ -3482,6 +3663,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel:2.3.0"
     },
     {
@@ -3498,6 +3680,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel:2.6.1"
     },
     {
@@ -3514,6 +3697,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel:2.8.7"
     },
     {
@@ -3530,6 +3714,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel:2.9.0"
     },
     {
@@ -3546,6 +3731,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel:2.9.2"
     },
     {
@@ -3562,6 +3748,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.lifecycle:lifecycle-viewmodel:2.9.4"
     },
     {
@@ -3578,6 +3765,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.loader:loader:1.0.0"
     },
     {
@@ -3594,6 +3782,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.localbroadcastmanager:localbroadcastmanager:1.0.0"
     },
     {
@@ -3609,6 +3798,9 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt",
           "distribution": "repo"
         }
+      ],
+      "imported_boms": [
+        "org.jetbrains.kotlin:kotlin-bom:1.8.0"
       ],
       "license_source": "androidx.media3:media3-common:1.9.0"
     },
@@ -3626,6 +3818,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.media3:media3-container:1.9.0"
     },
     {
@@ -3642,6 +3835,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.media3:media3-muxer:1.9.0"
     },
     {
@@ -3658,6 +3852,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.print:print:1.0.0"
     },
     {
@@ -3674,6 +3869,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.profileinstaller:profileinstaller:1.3.0"
     },
     {
@@ -3690,6 +3886,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.profileinstaller:profileinstaller:1.4.0"
     },
     {
@@ -3706,6 +3903,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.savedstate:savedstate-android:1.3.2"
     },
     {
@@ -3722,6 +3920,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.savedstate:savedstate-compose-android:1.3.2"
     },
     {
@@ -3738,6 +3937,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.savedstate:savedstate-compose:1.3.0"
     },
     {
@@ -3754,6 +3954,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.savedstate:savedstate-compose:1.3.2"
     },
     {
@@ -3770,6 +3971,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.savedstate:savedstate-ktx:1.2.1"
     },
     {
@@ -3786,6 +3988,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.savedstate:savedstate-ktx:1.3.1"
     },
     {
@@ -3802,6 +4005,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.savedstate:savedstate-ktx:1.3.2"
     },
     {
@@ -3818,6 +4022,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.savedstate:savedstate:1.1.0"
     },
     {
@@ -3834,6 +4039,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.savedstate:savedstate:1.2.1"
     },
     {
@@ -3850,6 +4056,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.savedstate:savedstate:1.3.0"
     },
     {
@@ -3866,6 +4073,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.savedstate:savedstate:1.3.1"
     },
     {
@@ -3882,6 +4090,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.savedstate:savedstate:1.3.2"
     },
     {
@@ -3898,6 +4107,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.startup:startup-runtime:1.1.1"
     },
     {
@@ -3914,6 +4124,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.test.espresso:espresso-core:3.5.0"
     },
     {
@@ -3930,6 +4141,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.test.espresso:espresso-idling-resource:3.5.0"
     },
     {
@@ -3946,6 +4158,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.test.ext:junit:1.3.0"
     },
     {
@@ -3962,6 +4175,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.test.services:storage:1.6.0"
     },
     {
@@ -3978,6 +4192,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.test:annotation:1.0.1"
     },
     {
@@ -3994,6 +4209,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.test:core-ktx:1.7.0"
     },
     {
@@ -4010,6 +4226,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.test:core:1.7.0"
     },
     {
@@ -4026,6 +4243,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.test:monitor:1.8.0"
     },
     {
@@ -4042,6 +4260,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.test:runner:1.7.0"
     },
     {
@@ -4058,6 +4277,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.tracing:tracing-android:1.3.0"
     },
     {
@@ -4074,6 +4294,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.tracing:tracing-ktx:1.2.0"
     },
     {
@@ -4090,6 +4311,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.tracing:tracing-ktx:1.3.0"
     },
     {
@@ -4106,6 +4328,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.tracing:tracing:1.1.0"
     },
     {
@@ -4122,6 +4345,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.tracing:tracing:1.3.0"
     },
     {
@@ -4138,6 +4362,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.transition:transition:1.6.0"
     },
     {
@@ -4154,6 +4379,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.vectordrawable:vectordrawable-animated:1.1.0"
     },
     {
@@ -4170,6 +4396,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.vectordrawable:vectordrawable:1.1.0"
     },
     {
@@ -4186,6 +4413,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.versionedparcelable:versionedparcelable:1.1.0"
     },
     {
@@ -4202,6 +4430,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.versionedparcelable:versionedparcelable:1.1.1"
     },
     {
@@ -4218,6 +4447,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.viewpager:viewpager:1.0.0"
     },
     {
@@ -4234,6 +4464,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.window:window-core-android:1.5.0"
     },
     {
@@ -4250,6 +4481,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.window:window-core:1.5.0"
     },
     {
@@ -4266,6 +4498,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "androidx.window:window:1.5.0"
     },
     {
@@ -4282,6 +4515,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.application:com.android.application.gradle.plugin:8.13.2"
     },
     {
@@ -4298,6 +4532,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.databinding:baseLibrary:8.13.2"
     },
     {
@@ -4314,6 +4549,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.analytics-library:crash:31.13.2"
     },
     {
@@ -4330,6 +4566,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.analytics-library:protos:31.13.2"
     },
     {
@@ -4346,6 +4583,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.analytics-library:shared:31.13.2"
     },
     {
@@ -4362,6 +4600,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.analytics-library:tracker:31.13.2"
     },
     {
@@ -4378,6 +4617,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.build.jetifier:jetifier-core:1.0.0-beta10"
     },
     {
@@ -4394,6 +4634,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.build.jetifier:jetifier-processor:1.0.0-beta10"
     },
     {
@@ -4410,6 +4651,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.build:aapt2-proto:8.13.2-14304508"
     },
     {
@@ -4426,6 +4668,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.build:aaptcompiler:8.13.2"
     },
     {
@@ -4442,6 +4685,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.build:apksig:8.13.2"
     },
     {
@@ -4458,6 +4702,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.build:apkzlib:8.13.2"
     },
     {
@@ -4474,6 +4719,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.build:builder-model:8.13.2"
     },
     {
@@ -4490,6 +4736,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.build:builder-test-api:8.13.2"
     },
     {
@@ -4506,6 +4753,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.build:builder:8.13.2"
     },
     {
@@ -4522,6 +4770,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.build:bundletool:1.18.1"
     },
     {
@@ -4538,6 +4787,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.build:gradle-api:8.13.2"
     },
     {
@@ -4554,6 +4804,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.build:gradle-common-api:8.13.2"
     },
     {
@@ -4570,6 +4821,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.build:gradle-settings-api:8.13.2"
     },
     {
@@ -4586,6 +4838,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.build:gradle:8.13.2"
     },
     {
@@ -4602,6 +4855,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.build:manifest-merger:31.13.2"
     },
     {
@@ -4618,6 +4872,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.build:transform-api:2.0.0-deprecated-use-gradle-api"
     },
     {
@@ -4634,6 +4889,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.ddms:ddmlib:31.13.2"
     },
     {
@@ -4650,6 +4906,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.emulator:proto:31.13.2"
     },
     {
@@ -4666,6 +4923,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.layoutlib:layoutlib-api:31.13.2"
     },
     {
@@ -4682,6 +4940,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.lint:lint-model:31.13.2"
     },
     {
@@ -4698,6 +4957,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.lint:lint-typedef-remover:31.13.2"
     },
     {
@@ -4714,6 +4974,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-device-provider-ddmlib-proto:31.13.2"
     },
     {
@@ -4730,6 +4991,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-device-provider-ddmlib:31.13.2"
     },
     {
@@ -4746,6 +5008,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-device-provider-profile-proto:31.13.2"
     },
     {
@@ -4762,6 +5025,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-device-provider-profile:31.13.2"
     },
     {
@@ -4778,6 +5042,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-test-plugin-host-additional-test-output-proto:31.13.2"
     },
     {
@@ -4794,6 +5059,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-test-plugin-host-additional-test-output:31.13.2"
     },
     {
@@ -4810,6 +5076,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-test-plugin-host-apk-installer-proto:31.13.2"
     },
     {
@@ -4826,6 +5093,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-test-plugin-host-apk-installer:31.13.2"
     },
     {
@@ -4842,6 +5110,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-test-plugin-host-coverage-proto:31.13.2"
     },
     {
@@ -4858,6 +5127,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-test-plugin-host-coverage:31.13.2"
     },
     {
@@ -4874,6 +5144,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-test-plugin-host-device-info-proto:31.13.2"
     },
     {
@@ -4890,6 +5161,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-test-plugin-host-device-info:31.13.2"
     },
     {
@@ -4906,6 +5178,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-test-plugin-host-emulator-control-proto:31.13.2"
     },
     {
@@ -4922,6 +5195,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-test-plugin-host-emulator-control:31.13.2"
     },
     {
@@ -4938,6 +5212,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-test-plugin-host-logcat-proto:31.13.2"
     },
     {
@@ -4954,6 +5229,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-test-plugin-host-logcat:31.13.2"
     },
     {
@@ -4970,6 +5246,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-test-plugin-result-listener-gradle-proto:31.13.2"
     },
     {
@@ -4986,6 +5263,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:android-test-plugin-result-listener-gradle:31.13.2"
     },
     {
@@ -5002,6 +5280,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools.utp:utp-common:31.13.2"
     },
     {
@@ -5018,6 +5297,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools:annotations:31.13.2"
     },
     {
@@ -5034,6 +5314,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools:common:31.13.2"
     },
     {
@@ -5050,6 +5331,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools:dvlib:31.13.2"
     },
     {
@@ -5066,6 +5348,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools:repository:31.13.2"
     },
     {
@@ -5082,6 +5365,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools:sdk-common:31.13.2"
     },
     {
@@ -5098,6 +5382,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android.tools:sdklib:31.13.2"
     },
     {
@@ -5114,6 +5399,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android:signflinger:8.13.2"
     },
     {
@@ -5130,6 +5416,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.android:zipflinger:8.13.2"
     },
     {
@@ -5146,6 +5433,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.github.ben-manes.caffeine:caffeine:2.9.3"
     },
     {
@@ -5163,6 +5451,7 @@
           "comments": "While the EULA for the Android SDK restricts distribution of those binaries, the source code \n\t\t\t\tis licensed under Apache 2.0 which allows compiling binaries from source and then distributing\n\t\t\t\tthose versions."
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.android:annotations:4.1.1.4"
     },
     {
@@ -5178,6 +5467,7 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.api.grpc:proto-google-common-protos:2.17.0"
     },
     {
@@ -5193,6 +5483,7 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.api.grpc:proto-google-common-protos:2.48.0"
     },
     {
@@ -5208,6 +5499,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.auto.service:auto-service-aggregator:1.1.1"
     },
     {
@@ -5218,6 +5510,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.auto.service:auto-service-aggregator:1.1.1",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.auto.service:auto-service-aggregator:1.1.1"
     },
     {
@@ -5228,6 +5521,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.auto.service:auto-service-aggregator:1.1.1",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.auto.service:auto-service-aggregator:1.1.1"
     },
     {
@@ -5238,6 +5532,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.auto.value:auto-value-parent:1.6.2",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.auto:auto-parent:6"
     },
     {
@@ -5248,6 +5543,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.auto.value:auto-value-parent:1.6.3",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.auto:auto-parent:7"
     },
     {
@@ -5258,6 +5554,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.auto:auto-parent:6",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.auto:auto-parent:6"
     },
     {
@@ -5268,6 +5565,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.auto:auto-parent:7",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.auto:auto-parent:7"
     },
     {
@@ -5283,6 +5581,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.auto:auto-common:1.2.1"
     },
     {
@@ -5298,6 +5597,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.auto:auto-parent:6"
     },
     {
@@ -5313,6 +5613,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.auto:auto-parent:7"
     },
     {
@@ -5329,6 +5630,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.code.findbugs:jsr305:3.0.2"
     },
     {
@@ -5344,6 +5646,7 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.code.gson:gson-parent:2.10.1"
     },
     {
@@ -5359,6 +5662,7 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.code.gson:gson-parent:2.11.0"
     },
     {
@@ -5374,6 +5678,7 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.code.gson:gson-parent:2.8.9"
     },
     {
@@ -5389,6 +5694,7 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.code.gson:gson:2.10.1"
     },
     {
@@ -5404,6 +5710,7 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.code.gson:gson:2.11.0"
     },
     {
@@ -5419,6 +5726,7 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.code.gson:gson:2.8.9"
     },
     {
@@ -5435,6 +5743,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.crypto.tink:tink:1.7.0"
     },
     {
@@ -5450,6 +5759,7 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.dagger:dagger:2.28.3"
     },
     {
@@ -5465,6 +5775,7 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.dagger:dagger:2.48"
     },
     {
@@ -5480,6 +5791,7 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.dagger:dagger:2.59"
     },
     {
@@ -5495,6 +5807,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.errorprone:error_prone_annotations:2.18.0"
     },
     {
@@ -5510,6 +5823,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.errorprone:error_prone_annotations:2.23.0"
     },
     {
@@ -5525,6 +5839,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.errorprone:error_prone_annotations:2.27.0"
     },
     {
@@ -5540,6 +5855,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.errorprone:error_prone_annotations:2.28.0"
     },
     {
@@ -5555,6 +5871,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.errorprone:error_prone_annotations:2.3.1"
     },
     {
@@ -5570,6 +5887,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.errorprone:error_prone_annotations:2.30.0"
     },
     {
@@ -5585,6 +5903,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.errorprone:error_prone_parent:2.18.0"
     },
     {
@@ -5600,6 +5919,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.errorprone:error_prone_parent:2.23.0"
     },
     {
@@ -5615,6 +5935,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.errorprone:error_prone_parent:2.27.0"
     },
     {
@@ -5630,6 +5951,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.errorprone:error_prone_parent:2.28.0"
     },
     {
@@ -5645,6 +5967,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.errorprone:error_prone_parent:2.3.1"
     },
     {
@@ -5660,6 +5983,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.errorprone:error_prone_parent:2.30.0"
     },
     {
@@ -5676,6 +6000,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.flatbuffers:flatbuffers-java:1.12.0"
     },
     {
@@ -5686,6 +6011,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.guava:guava-parent:26.0-android",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.guava:guava-parent:26.0-android"
     },
     {
@@ -5696,6 +6022,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.guava:guava-parent:26.0-android",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.guava:guava-parent:26.0-android"
     },
     {
@@ -5712,6 +6039,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.guava:guava-parent:26.0-android"
     },
     {
@@ -5728,6 +6056,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.guava:guava-parent:32.0.1-android"
     },
     {
@@ -5744,6 +6073,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.guava:guava-parent:32.0.1-jre"
     },
     {
@@ -5760,6 +6090,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.guava:guava-parent:33.3.1-android"
     },
     {
@@ -5776,6 +6107,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.guava:guava-parent:33.3.1-jre"
     },
     {
@@ -5786,6 +6118,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.guava:guava-parent:32.0.1-android",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.guava:guava-parent:32.0.1-android"
     },
     {
@@ -5796,6 +6129,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.guava:guava-parent:32.0.1-jre",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.guava:guava-parent:32.0.1-jre"
     },
     {
@@ -5806,6 +6140,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.guava:guava-parent:33.3.1-android",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.guava:guava-parent:33.3.1-android"
     },
     {
@@ -5816,6 +6151,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.guava:guava-parent:33.3.1-jre",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.guava:guava-parent:33.3.1-jre"
     },
     {
@@ -5826,6 +6162,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.guava:guava-parent:26.0-android",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.guava:guava-parent:26.0-android"
     },
     {
@@ -5836,6 +6173,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.guava:guava-parent:26.0-android",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.guava:guava-parent:26.0-android"
     },
     {
@@ -5852,6 +6190,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.j2objc:j2objc-annotations:2.8"
     },
     {
@@ -5868,6 +6207,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.j2objc:j2objc-annotations:3.0.0"
     },
     {
@@ -5884,6 +6224,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.jimfs:jimfs-parent:1.1"
     },
     {
@@ -5894,6 +6235,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.jimfs:jimfs-parent:1.1",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.jimfs:jimfs-parent:1.1"
     },
     {
@@ -5909,6 +6251,7 @@
           "url": "https://opensource.org/licenses/BSD-3-Clause"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.protobuf:protobuf-bom:3.22.3"
     },
     {
@@ -5924,6 +6267,7 @@
           "url": "https://opensource.org/licenses/BSD-3-Clause"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.protobuf:protobuf-bom:3.24.4"
     },
     {
@@ -5939,6 +6283,7 @@
           "url": "https://opensource.org/licenses/BSD-3-Clause"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.protobuf:protobuf-bom:3.25.5"
     },
     {
@@ -5949,6 +6294,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.protobuf:protobuf-parent:3.22.3",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.protobuf:protobuf-parent:3.22.3"
     },
     {
@@ -5959,6 +6305,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.protobuf:protobuf-parent:3.24.4",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.protobuf:protobuf-parent:3.24.4"
     },
     {
@@ -5969,6 +6316,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.protobuf:protobuf-parent:3.25.5",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.protobuf:protobuf-parent:3.25.5"
     },
     {
@@ -5979,6 +6327,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.protobuf:protobuf-parent:3.24.4",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.protobuf:protobuf-parent:3.24.4"
     },
     {
@@ -5989,6 +6338,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.protobuf:protobuf-parent:3.25.5",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.protobuf:protobuf-parent:3.25.5"
     },
     {
@@ -5999,6 +6349,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.protobuf:protobuf-parent:3.24.4",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.protobuf:protobuf-parent:3.24.4"
     },
     {
@@ -6014,6 +6365,9 @@
           "url": "https://opensource.org/licenses/BSD-3-Clause",
           "distribution": "repo"
         }
+      ],
+      "imported_boms": [
+        "com.google.protobuf:protobuf-bom:3.22.3"
       ],
       "license_source": "com.google.protobuf:protobuf-parent:3.22.3"
     },
@@ -6031,6 +6385,9 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [
+        "com.google.protobuf:protobuf-bom:3.24.4"
+      ],
       "license_source": "com.google.protobuf:protobuf-parent:3.24.4"
     },
     {
@@ -6046,6 +6403,9 @@
           "url": "https://opensource.org/licenses/BSD-3-Clause",
           "distribution": "repo"
         }
+      ],
+      "imported_boms": [
+        "com.google.protobuf:protobuf-bom:3.25.5"
       ],
       "license_source": "com.google.protobuf:protobuf-parent:3.25.5"
     },
@@ -6063,6 +6423,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.testing.platform:android-device-provider-local:0.0.9-alpha03"
     },
     {
@@ -6079,6 +6440,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.testing.platform:android-driver-instrumentation:0.0.9-alpha03"
     },
     {
@@ -6095,6 +6457,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.testing.platform:android-test-plugin:0.0.9-alpha03"
     },
     {
@@ -6111,6 +6474,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.testing.platform:core-proto:0.0.9-alpha03"
     },
     {
@@ -6127,6 +6491,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.testing.platform:core:0.0.9-alpha03"
     },
     {
@@ -6143,6 +6508,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.testing.platform:launcher:0.0.9-alpha03"
     },
     {
@@ -6153,6 +6519,7 @@
       "gradle_checksum_match": true,
       "parent": "com.google.zxing:zxing-parent:3.5.4",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.google.zxing:zxing-parent:3.5.4"
     },
     {
@@ -6169,6 +6536,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.google.zxing:zxing-parent:3.5.4"
     },
     {
@@ -6185,6 +6553,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.googlecode.juniversalchardet:juniversalchardet:1.0.3"
     },
     {
@@ -6200,6 +6569,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.squareup:javapoet:1.10.0"
     },
     {
@@ -6215,6 +6585,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.squareup:javawriter:2.1.1"
     },
     {
@@ -6230,6 +6601,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.squareup:javawriter:2.5.0"
     },
     {
@@ -6247,6 +6619,7 @@
           "comments": "CDDL or GPL version 2 plus the Classpath Exception"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.sun.activation:all:1.2.0"
     },
     {
@@ -6263,6 +6636,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.sun.activation:all:1.2.1"
     },
     {
@@ -6273,6 +6647,7 @@
       "gradle_checksum_match": true,
       "parent": "com.sun.activation:all:1.2.0",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.sun.activation:all:1.2.0"
     },
     {
@@ -6283,6 +6658,7 @@
       "gradle_checksum_match": true,
       "parent": "com.sun.istack:istack-commons:3.0.8",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.sun.istack:istack-commons:3.0.8"
     },
     {
@@ -6299,6 +6675,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.sun.istack:istack-commons:3.0.8"
     },
     {
@@ -6315,6 +6692,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.sun.xml.bind.mvn:jaxb-parent:2.3.2"
     },
     {
@@ -6325,6 +6703,7 @@
       "gradle_checksum_match": true,
       "parent": "com.sun.xml.bind.mvn:jaxb-parent:2.3.2",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.sun.xml.bind.mvn:jaxb-parent:2.3.2"
     },
     {
@@ -6335,6 +6714,7 @@
       "gradle_checksum_match": true,
       "parent": "com.sun.xml.bind.mvn:jaxb-parent:2.3.2",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.sun.xml.bind.mvn:jaxb-parent:2.3.2"
     },
     {
@@ -6345,6 +6725,7 @@
       "gradle_checksum_match": true,
       "parent": "org.glassfish.jaxb:jaxb-bom:2.3.2",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.eclipse.ee4j:project:1.0.5"
     },
     {
@@ -6355,6 +6736,7 @@
       "gradle_checksum_match": true,
       "parent": "com.sun.xml.fastinfoset:fastinfoset-project:1.2.16",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.sun.xml.fastinfoset:fastinfoset-project:1.2.16"
     },
     {
@@ -6375,6 +6757,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "com.sun.xml.fastinfoset:fastinfoset-project:1.2.16"
     },
     {
@@ -6385,6 +6768,7 @@
       "gradle_checksum_match": true,
       "parent": "org.apache.commons:commons-parent:42",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.apache:apache:18"
     },
     {
@@ -6395,6 +6779,7 @@
       "gradle_checksum_match": true,
       "parent": "org.apache.commons:commons-parent:69",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.apache:apache:31"
     },
     {
@@ -6405,6 +6790,7 @@
       "gradle_checksum_match": true,
       "parent": "org.apache.commons:commons-parent:34",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.apache:apache:13"
     },
     {
@@ -6422,6 +6808,7 @@
           "comments": "A business-friendly OSS license"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.github.java-diff-utils:java-diff-utils-parent:4.12"
     },
     {
@@ -6432,6 +6819,7 @@
       "gradle_checksum_match": true,
       "parent": "io.github.java-diff-utils:java-diff-utils-parent:4.12",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.github.java-diff-utils:java-diff-utils-parent:4.12"
     },
     {
@@ -6447,6 +6835,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-api:1.57.2"
     },
     {
@@ -6462,6 +6851,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-api:1.69.1"
     },
     {
@@ -6477,6 +6867,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-context:1.27.2"
     },
     {
@@ -6492,6 +6883,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-context:1.57.2"
     },
     {
@@ -6507,6 +6899,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-context:1.69.1"
     },
     {
@@ -6522,6 +6915,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-core:1.57.2"
     },
     {
@@ -6537,6 +6931,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-core:1.69.1"
     },
     {
@@ -6552,6 +6947,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-inprocess:1.69.1"
     },
     {
@@ -6567,6 +6963,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-netty:1.57.2"
     },
     {
@@ -6582,6 +6979,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-netty:1.69.1"
     },
     {
@@ -6597,6 +6995,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-protobuf-lite:1.57.2"
     },
     {
@@ -6612,6 +7011,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-protobuf-lite:1.69.1"
     },
     {
@@ -6627,6 +7027,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-protobuf:1.57.2"
     },
     {
@@ -6642,6 +7043,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-protobuf:1.69.1"
     },
     {
@@ -6657,6 +7059,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-services:1.57.2"
     },
     {
@@ -6672,6 +7075,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-stub:1.57.2"
     },
     {
@@ -6687,6 +7091,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-stub:1.69.1"
     },
     {
@@ -6702,6 +7107,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.grpc:grpc-util:1.69.1"
     },
     {
@@ -6712,6 +7118,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.110.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.110.Final"
     },
     {
@@ -6722,6 +7129,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.93.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.93.Final"
     },
     {
@@ -6732,6 +7140,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.110.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.110.Final"
     },
     {
@@ -6742,6 +7151,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.93.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.93.Final"
     },
     {
@@ -6752,6 +7162,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.110.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.110.Final"
     },
     {
@@ -6762,6 +7173,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.93.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.93.Final"
     },
     {
@@ -6772,6 +7184,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.110.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.110.Final"
     },
     {
@@ -6782,6 +7195,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.93.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.93.Final"
     },
     {
@@ -6792,6 +7206,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.110.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.110.Final"
     },
     {
@@ -6802,6 +7217,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.93.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.93.Final"
     },
     {
@@ -6812,6 +7228,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.110.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.110.Final"
     },
     {
@@ -6822,6 +7239,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.93.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.93.Final"
     },
     {
@@ -6832,6 +7250,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.110.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.110.Final"
     },
     {
@@ -6842,6 +7261,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.93.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.93.Final"
     },
     {
@@ -6852,6 +7272,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.110.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.110.Final"
     },
     {
@@ -6862,6 +7283,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.93.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.93.Final"
     },
     {
@@ -6877,6 +7299,7 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.110.Final"
     },
     {
@@ -6892,6 +7315,7 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.93.Final"
     },
     {
@@ -6902,6 +7326,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.110.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.110.Final"
     },
     {
@@ -6912,6 +7337,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.93.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.93.Final"
     },
     {
@@ -6922,6 +7348,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.110.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.110.Final"
     },
     {
@@ -6932,6 +7359,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.93.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.93.Final"
     },
     {
@@ -6942,6 +7370,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.110.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.110.Final"
     },
     {
@@ -6952,6 +7381,7 @@
       "gradle_checksum_match": true,
       "parent": "io.netty:netty-parent:4.1.93.Final",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "io.netty:netty-parent:4.1.93.Final"
     },
     {
@@ -6967,6 +7397,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.opencensus:opencensus-api:0.31.0"
     },
     {
@@ -6982,6 +7413,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.opencensus:opencensus-proto:0.2.0"
     },
     {
@@ -6997,6 +7429,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.opentelemetry:opentelemetry-api:1.41.0"
     },
     {
@@ -7012,6 +7445,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.opentelemetry:opentelemetry-context:1.41.0"
     },
     {
@@ -7027,6 +7461,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.perfmark:perfmark-api:0.26.0"
     },
     {
@@ -7042,6 +7477,7 @@
           "url": "https://opensource.org/licenses/Apache-2.0"
         }
       ],
+      "imported_boms": [],
       "license_source": "io.perfmark:perfmark-api:0.27.0"
     },
     {
@@ -7052,6 +7488,7 @@
       "gradle_checksum_match": true,
       "parent": "com.sun.activation:all:1.2.1",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.sun.activation:all:1.2.1"
     },
     {
@@ -7068,6 +7505,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "jakarta.inject:jakarta.inject-api:2.0.1"
     },
     {
@@ -7084,6 +7522,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "jakarta.xml.bind:jakarta.xml.bind-api-parent:2.3.2"
     },
     {
@@ -7094,6 +7533,7 @@
       "gradle_checksum_match": true,
       "parent": "jakarta.xml.bind:jakarta.xml.bind-api-parent:2.3.2",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "jakarta.xml.bind:jakarta.xml.bind-api-parent:2.3.2"
     },
     {
@@ -7111,6 +7551,7 @@
           "comments": "A business-friendly OSS license"
         }
       ],
+      "imported_boms": [],
       "license_source": "javax.annotation:javax.annotation-api:1.3.2"
     },
     {
@@ -7127,6 +7568,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "javax.inject:javax.inject:1"
     },
     {
@@ -7143,6 +7585,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "junit:junit:4.13.2"
     },
     {
@@ -7164,6 +7607,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "net.java.dev.jna:jna-platform:5.6.0"
     },
     {
@@ -7187,6 +7631,7 @@
           "comments": "Java Native Access (JNA) is licensed under the LGPL, version 2.1 or\n        later, or the Apache License, version 2.0. You can freely decide which\n        license you want to apply to the project."
         }
       ],
+      "imported_boms": [],
       "license_source": "net.java.dev.jna:jna:5.17.0"
     },
     {
@@ -7208,6 +7653,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "net.java.dev.jna:jna:5.6.0"
     },
     {
@@ -7218,6 +7664,7 @@
       "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": null
     },
     {
@@ -7228,6 +7675,7 @@
       "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": null
     },
     {
@@ -7244,6 +7692,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "net.sf.jopt-simple:jopt-simple:4.9"
     },
     {
@@ -7267,6 +7716,7 @@
           "comments": "The license applies to the XmlPull API (all classes directly in the org.xmlpull.v1 package)"
         }
       ],
+      "imported_boms": [],
       "license_source": "net.sf.kxml:kxml2:2.3.0"
     },
     {
@@ -7277,6 +7727,7 @@
       "gradle_checksum_match": true,
       "parent": "org.apache.commons:commons-parent:52",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.apache:apache:23"
     },
     {
@@ -7287,6 +7738,7 @@
       "gradle_checksum_match": true,
       "parent": "org.apache:apache:13",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.apache:apache:13"
     },
     {
@@ -7297,6 +7749,7 @@
       "gradle_checksum_match": true,
       "parent": "org.apache:apache:18",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.apache:apache:18"
     },
     {
@@ -7307,6 +7760,7 @@
       "gradle_checksum_match": true,
       "parent": "org.apache:apache:23",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.apache:apache:23"
     },
     {
@@ -7317,6 +7771,9 @@
       "gradle_checksum_match": true,
       "parent": "org.apache:apache:31",
       "declared_licenses": [],
+      "imported_boms": [
+        "org.junit:junit-bom:5.10.2"
+      ],
       "license_source": "org.apache:apache:31"
     },
     {
@@ -7327,6 +7784,7 @@
       "gradle_checksum_match": true,
       "parent": "org.apache.httpcomponents:httpcomponents-client:4.5.14",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.apache.httpcomponents:httpcomponents-client:4.5.14"
     },
     {
@@ -7343,6 +7801,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.apache.httpcomponents:httpcomponents-client:4.5.14"
     },
     {
@@ -7359,6 +7818,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.apache.httpcomponents:httpcomponents-client:4.5.6"
     },
     {
@@ -7375,6 +7835,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.apache.httpcomponents:httpcomponents-core:4.4.16"
     },
     {
@@ -7385,6 +7846,7 @@
       "gradle_checksum_match": true,
       "parent": "org.apache:apache:18",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.apache:apache:18"
     },
     {
@@ -7395,6 +7857,7 @@
       "gradle_checksum_match": true,
       "parent": "org.apache:apache:21",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.apache:apache:21"
     },
     {
@@ -7405,6 +7868,7 @@
       "gradle_checksum_match": true,
       "parent": "org.apache.httpcomponents:httpcomponents-core:4.4.16",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.apache.httpcomponents:httpcomponents-core:4.4.16"
     },
     {
@@ -7415,6 +7879,7 @@
       "gradle_checksum_match": true,
       "parent": "org.apache.httpcomponents:httpcomponents-client:4.5.6",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.apache.httpcomponents:httpcomponents-client:4.5.6"
     },
     {
@@ -7431,6 +7896,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.apache:apache:13"
     },
     {
@@ -7447,6 +7913,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.apache:apache:18"
     },
     {
@@ -7463,6 +7930,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.apache:apache:21"
     },
     {
@@ -7479,6 +7947,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.apache:apache:23"
     },
     {
@@ -7495,6 +7964,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.apache:apache:31"
     },
     {
@@ -7510,6 +7980,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.bitbucket.b_c:jose4j:0.9.5"
     },
     {
@@ -7531,6 +8002,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.bouncycastle:bcpg-jdk18on:1.80"
     },
     {
@@ -7547,6 +8019,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.bouncycastle:bcpkix-jdk18on:1.79"
     },
     {
@@ -7563,6 +8036,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.bouncycastle:bcpkix-jdk18on:1.80"
     },
     {
@@ -7579,6 +8053,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.bouncycastle:bcprov-jdk18on:1.79"
     },
     {
@@ -7595,6 +8070,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.bouncycastle:bcprov-jdk18on:1.80.2"
     },
     {
@@ -7611,6 +8087,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.bouncycastle:bcutil-jdk18on:1.79"
     },
     {
@@ -7627,6 +8104,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.bouncycastle:bcutil-jdk18on:1.80.2"
     },
     {
@@ -7643,6 +8121,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.checkerframework:checker-qual:2.5.8"
     },
     {
@@ -7659,6 +8138,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.checkerframework:checker-qual:3.33.0"
     },
     {
@@ -7675,6 +8155,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.checkerframework:checker-qual:3.43.0"
     },
     {
@@ -7685,6 +8166,7 @@
       "gradle_checksum_match": true,
       "parent": "org.codehaus.mojo:animal-sniffer-parent:1.23",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.codehaus.mojo:animal-sniffer-parent:1.23"
     },
     {
@@ -7695,6 +8177,7 @@
       "gradle_checksum_match": true,
       "parent": "org.codehaus.mojo:animal-sniffer-parent:1.24",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.codehaus.mojo:animal-sniffer-parent:1.24"
     },
     {
@@ -7711,6 +8194,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.codehaus.mojo:animal-sniffer-parent:1.23"
     },
     {
@@ -7727,6 +8211,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.codehaus.mojo:animal-sniffer-parent:1.24"
     },
     {
@@ -7743,6 +8228,9 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [
+        "org.junit:junit-bom:5.9.2"
+      ],
       "license_source": "org.codehaus.mojo:mojo-parent:74"
     },
     {
@@ -7758,6 +8246,9 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
           "distribution": "repo"
         }
+      ],
+      "imported_boms": [
+        "org.junit:junit-bom:5.10.2"
       ],
       "license_source": "org.codehaus.mojo:mojo-parent:84"
     },
@@ -7780,6 +8271,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.eclipse.ee4j:project:1.0.2"
     },
     {
@@ -7801,6 +8293,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.eclipse.ee4j:project:1.0.5"
     },
     {
@@ -7822,6 +8315,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.eclipse.ee4j:project:1.0.6"
     },
     {
@@ -7832,6 +8326,7 @@
       "gradle_checksum_match": true,
       "parent": "org.eclipse.ee4j:project:1.0.5",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.eclipse.ee4j:project:1.0.5"
     },
     {
@@ -7842,6 +8337,7 @@
       "gradle_checksum_match": true,
       "parent": "com.sun.xml.bind.mvn:jaxb-runtime-parent:2.3.2",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.sun.xml.bind.mvn:jaxb-parent:2.3.2"
     },
     {
@@ -7852,6 +8348,7 @@
       "gradle_checksum_match": true,
       "parent": "com.sun.xml.bind.mvn:jaxb-txw-parent:2.3.2",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "com.sun.xml.bind.mvn:jaxb-parent:2.3.2"
     },
     {
@@ -7862,6 +8359,7 @@
       "gradle_checksum_match": true,
       "parent": "org.hamcrest:hamcrest-parent:1.3",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.hamcrest:hamcrest-parent:1.3"
     },
     {
@@ -7872,6 +8370,7 @@
       "gradle_checksum_match": true,
       "parent": "org.hamcrest:hamcrest-parent:1.3",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.hamcrest:hamcrest-parent:1.3"
     },
     {
@@ -7882,6 +8381,7 @@
       "gradle_checksum_match": true,
       "parent": "org.hamcrest:hamcrest-parent:1.3",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.hamcrest:hamcrest-parent:1.3"
     },
     {
@@ -7898,6 +8398,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.hamcrest:hamcrest-parent:1.3"
     },
     {
@@ -7915,6 +8416,7 @@
           "comments": "/*-- \n\n Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.\n All rights reserved.\n \n Redistribution and use in source and binary forms, with or without\n modification, are permitted provided that the following conditions\n are met:\n \n 1. Redistributions of source code must retain the above copyright\n    notice, this list of conditions, and the following disclaimer.\n \n 2. Redistributions in binary form must reproduce the above copyright\n    notice, this list of conditions, and the disclaimer that follows \n    these conditions in the documentation and/or other materials \n    provided with the distribution.\n\n 3. The name \"JDOM\" must not be used to endorse or promote products\n    derived from this software without prior written permission.  For\n    written permission, please contact <request_AT_jdom_DOT_org>.\n \n 4. Products derived from this software may not be called \"JDOM\", nor\n    may \"JDOM\" appear in their name, without prior written permission\n    from the JDOM Project Management <request_AT_jdom_DOT_org>.\n \n In addition, we request (but do not require) that you include in the \n end-user documentation provided with the redistribution and/or in the \n software itself an acknowledgement equivalent to the following:\n     \"This product includes software developed by the\n      JDOM Project (http://www.jdom.org/).\"\n Alternatively, the acknowledgment may be graphical using the logos \n available at http://www.jdom.org/images/logos.\n\n THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED\n WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\n OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\n DISCLAIMED.  IN NO EVENT SHALL THE JDOM AUTHORS OR THE PROJECT\n CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,\n SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT\n LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF\n USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND\n ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,\n OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT\n OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF\n SUCH DAMAGE.\n\n This software consists of voluntary contributions made by many \n individuals on behalf of the JDOM Project and was originally \n created by Jason Hunter <jhunter_AT_jdom_DOT_org> and\n Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information\n on the JDOM Project, please see <http://www.jdom.org/>. \n\n */"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jdom:jdom2:2.0.6"
     },
     {
@@ -7930,6 +8432,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin.android:org.jetbrains.kotlin.android.gradle.plugin:2.2.21"
     },
     {
@@ -7945,6 +8448,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin:2.2.21"
     },
     {
@@ -7960,6 +8464,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:abi-tools-api:2.2.21"
     },
     {
@@ -7975,6 +8480,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:abi-tools:2.2.21"
     },
     {
@@ -7989,6 +8495,9 @@
           "name": "Apache-2.0",
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
+      ],
+      "imported_boms": [
+        "org.jetbrains.kotlin:kotlin-gradle-plugins-bom:2.2.21"
       ],
       "license_source": "org.jetbrains.kotlin:compose-compiler-gradle-plugin:2.2.21"
     },
@@ -8005,6 +8514,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:fus-statistics-gradle-plugin:2.2.21"
     },
     {
@@ -8022,6 +8532,7 @@
           "comments": "A business-friendly OSS license"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-bom:1.8.0"
     },
     {
@@ -8037,6 +8548,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-build-statistics:2.2.21"
     },
     {
@@ -8052,6 +8564,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-build-tools-api:2.2.21"
     },
     {
@@ -8067,6 +8580,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-build-tools-impl:2.2.21"
     },
     {
@@ -8082,6 +8596,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-compiler-embeddable:2.2.21"
     },
     {
@@ -8097,6 +8612,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-compiler-runner:2.2.21"
     },
     {
@@ -8112,6 +8628,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-compose-compiler-plugin-embeddable:2.2.21"
     },
     {
@@ -8127,6 +8644,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-daemon-client:2.2.21"
     },
     {
@@ -8142,6 +8660,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-daemon-embeddable:2.2.21"
     },
     {
@@ -8156,6 +8675,9 @@
           "name": "Apache-2.0",
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
+      ],
+      "imported_boms": [
+        "org.jetbrains.kotlin:kotlin-gradle-plugins-bom:2.2.21"
       ],
       "license_source": "org.jetbrains.kotlin:kotlin-gradle-plugin-annotations:2.2.21"
     },
@@ -8172,6 +8694,9 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [
+        "org.jetbrains.kotlin:kotlin-gradle-plugins-bom:2.2.21"
+      ],
       "license_source": "org.jetbrains.kotlin:kotlin-gradle-plugin-api:2.2.21"
     },
     {
@@ -8187,6 +8712,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-gradle-plugin-idea-proto:2.2.21"
     },
     {
@@ -8202,6 +8728,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-gradle-plugin-idea:2.2.21"
     },
     {
@@ -8216,6 +8743,9 @@
           "name": "Apache-2.0",
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
+      ],
+      "imported_boms": [
+        "org.jetbrains.kotlin:kotlin-gradle-plugins-bom:2.2.21"
       ],
       "license_source": "org.jetbrains.kotlin:kotlin-gradle-plugin-model:2.2.21"
     },
@@ -8232,6 +8762,9 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [
+        "org.jetbrains.kotlin:kotlin-gradle-plugins-bom:2.2.21"
+      ],
       "license_source": "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.21"
     },
     {
@@ -8247,6 +8780,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-gradle-plugins-bom:2.2.21"
     },
     {
@@ -8262,6 +8796,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-klib-commonizer-api:2.2.21"
     },
     {
@@ -8277,6 +8812,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-klib-commonizer-embeddable:2.2.21"
     },
     {
@@ -8292,6 +8828,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-metadata-jvm:2.2.21"
     },
     {
@@ -8306,6 +8843,9 @@
           "name": "Apache-2.0",
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
+      ],
+      "imported_boms": [
+        "org.jetbrains.kotlin:kotlin-gradle-plugins-bom:2.2.21"
       ],
       "license_source": "org.jetbrains.kotlin:kotlin-native-utils:2.2.21"
     },
@@ -8322,6 +8862,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-reflect:1.6.10"
     },
     {
@@ -8337,6 +8878,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-reflect:1.8.21"
     },
     {
@@ -8352,6 +8894,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-reflect:2.0.21"
     },
     {
@@ -8367,6 +8910,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-script-runtime:2.2.21"
     },
     {
@@ -8382,6 +8926,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-scripting-common:2.2.21"
     },
     {
@@ -8397,6 +8942,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:2.2.21"
     },
     {
@@ -8412,6 +8958,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable:2.2.21"
     },
     {
@@ -8427,6 +8974,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-scripting-jvm:2.2.21"
     },
     {
@@ -8442,6 +8990,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.21"
     },
     {
@@ -8457,6 +9006,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-stdlib-common:1.9.0"
     },
     {
@@ -8472,6 +9022,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-stdlib-common:2.2.0"
     },
     {
@@ -8487,6 +9038,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-stdlib-common:2.2.21"
     },
     {
@@ -8502,6 +9054,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.20"
     },
     {
@@ -8517,6 +9070,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.0"
     },
     {
@@ -8532,6 +9086,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20"
     },
     {
@@ -8547,6 +9102,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.0"
     },
     {
@@ -8562,6 +9118,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-stdlib:1.8.21"
     },
     {
@@ -8577,6 +9134,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-stdlib:1.9.0"
     },
     {
@@ -8592,6 +9150,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-stdlib:1.9.21"
     },
     {
@@ -8607,6 +9166,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-stdlib:2.0.21"
     },
     {
@@ -8622,6 +9182,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-stdlib:2.2.0"
     },
     {
@@ -8637,6 +9198,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-stdlib:2.2.21"
     },
     {
@@ -8652,6 +9214,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-tooling-core:2.2.21"
     },
     {
@@ -8667,6 +9230,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-util-io:2.2.21"
     },
     {
@@ -8682,6 +9246,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-util-klib-metadata:2.2.21"
     },
     {
@@ -8697,6 +9262,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:kotlin-util-klib:2.2.21"
     },
     {
@@ -8712,6 +9278,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlin:swift-export-embeddable:2.2.21"
     },
     {
@@ -8728,6 +9295,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlinx:atomicfu-jvm:0.22.0"
     },
     {
@@ -8744,6 +9312,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlinx:atomicfu-jvm:0.28.0"
     },
     {
@@ -8760,6 +9329,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlinx:atomicfu:0.22.0"
     },
     {
@@ -8776,6 +9346,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlinx:atomicfu:0.23.1"
     },
     {
@@ -8792,6 +9363,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlinx:atomicfu:0.27.0"
     },
     {
@@ -8808,6 +9380,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlinx:atomicfu:0.28.0"
     },
     {
@@ -8823,6 +9396,9 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
           "distribution": "repo"
         }
+      ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.2"
       ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2"
     },
@@ -8840,6 +9416,9 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3"
+      ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
     },
     {
@@ -8856,7 +9435,25 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.2"
+    },
+    {
+      "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4",
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-bom/1.6.4/kotlinx-coroutines-bom-1.6.4.pom",
+      "sha256": "ab2614855fba66aa8a42514dbe3d5a884315ffe1ed63f5932e710a8006245ce1",
+      "path": "third-party/android-poms/ab2614855fba66aa8a42514dbe3d5a884315ffe1ed63f5932e710a8006245ce1.xml",
+      "gradle_checksum_match": true,
+      "parent": null,
+      "declared_licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+          "distribution": "repo"
+        }
+      ],
+      "imported_boms": [],
+      "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4"
     },
     {
       "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3",
@@ -8872,7 +9469,25 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3"
+    },
+    {
+      "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.8.0",
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-bom/1.8.0/kotlinx-coroutines-bom-1.8.0.pom",
+      "sha256": "1239e9dbe1397cd5971342956b2511bc3ace7b641842e4372a088dcfa8b9ad55",
+      "path": "third-party/android-poms/1239e9dbe1397cd5971342956b2511bc3ace7b641842e4372a088dcfa8b9ad55.xml",
+      "gradle_checksum_match": true,
+      "parent": null,
+      "declared_licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+          "distribution": "repo"
+        }
+      ],
+      "imported_boms": [],
+      "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.8.0"
     },
     {
       "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.8.1",
@@ -8888,6 +9503,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.8.1"
     },
     {
@@ -8904,6 +9520,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.9.0"
     },
     {
@@ -8919,6 +9536,9 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
           "distribution": "repo"
         }
+      ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.2"
       ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2"
     },
@@ -8936,6 +9556,9 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4"
+      ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.4"
     },
     {
@@ -8951,6 +9574,9 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
           "distribution": "repo"
         }
+      ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3"
       ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.3"
     },
@@ -8968,6 +9594,9 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.8.0"
+      ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0"
     },
     {
@@ -8983,6 +9612,9 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
           "distribution": "repo"
         }
+      ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.8.1"
       ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.1"
     },
@@ -9000,6 +9632,9 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.9.0"
+      ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.9.0"
     },
     {
@@ -9015,6 +9650,9 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
           "distribution": "repo"
         }
+      ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.2"
       ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2"
     },
@@ -9032,6 +9670,9 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4"
+      ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
     },
     {
@@ -9047,6 +9688,9 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
           "distribution": "repo"
         }
+      ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3"
       ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
     },
@@ -9064,6 +9708,9 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.9.0"
+      ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0"
     },
     {
@@ -9079,6 +9726,9 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
           "distribution": "repo"
         }
+      ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.2"
       ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.10.2"
     },
@@ -9096,6 +9746,9 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.9.0"
+      ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.9.0"
     },
     {
@@ -9111,6 +9764,9 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
           "distribution": "repo"
         }
+      ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.2"
       ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2"
     },
@@ -9128,6 +9784,9 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.9.0"
+      ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0"
     },
     {
@@ -9144,6 +9803,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains.kotlinx:kotlinx-serialization-bom:1.7.3"
     },
     {
@@ -9160,6 +9820,9 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-serialization-bom:1.7.3"
+      ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.7.3"
     },
     {
@@ -9175,6 +9838,9 @@
           "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
           "distribution": "repo"
         }
+      ],
+      "imported_boms": [
+        "org.jetbrains.kotlinx:kotlinx-serialization-bom:1.7.3"
       ],
       "license_source": "org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3"
     },
@@ -9193,6 +9859,7 @@
           "comments": "A business-friendly OSS license"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains:annotations:13.0"
     },
     {
@@ -9209,6 +9876,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jetbrains:annotations:23.0.0"
     },
     {
@@ -9224,6 +9892,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jspecify:jspecify:1.0.0"
     },
     {
@@ -9239,6 +9908,7 @@
           "url": "https://www.eclipse.org/legal/epl-v20.html"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.junit:junit-bom:5.10.2"
     },
     {
@@ -9254,6 +9924,7 @@
           "url": "https://www.eclipse.org/legal/epl-v20.html"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.junit:junit-bom:5.9.2"
     },
     {
@@ -9270,6 +9941,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.jvnet.staxex:stax-ex:1.8.1"
     },
     {
@@ -9285,6 +9957,7 @@
           "url": "https://asm.ow2.io/license.html"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.ow2.asm:asm-analysis:9.8"
     },
     {
@@ -9300,6 +9973,7 @@
           "url": "https://asm.ow2.io/license.html"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.ow2.asm:asm-commons:9.8"
     },
     {
@@ -9315,6 +9989,7 @@
           "url": "https://asm.ow2.io/license.html"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.ow2.asm:asm-tree:9.8"
     },
     {
@@ -9330,6 +10005,7 @@
           "url": "https://asm.ow2.io/license.html"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.ow2.asm:asm-util:9.8"
     },
     {
@@ -9345,6 +10021,7 @@
           "url": "https://asm.ow2.io/license.html"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.ow2.asm:asm:9.8"
     },
     {
@@ -9361,6 +10038,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.ow2:ow2:1.5.1"
     },
     {
@@ -9371,6 +10049,7 @@
       "gradle_checksum_match": true,
       "parent": "org.slf4j:slf4j-parent:1.7.30",
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": "org.slf4j:slf4j-parent:1.7.30"
     },
     {
@@ -9387,6 +10066,7 @@
           "distribution": "repo"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.slf4j:slf4j-parent:1.7.30"
     },
     {
@@ -9397,6 +10077,7 @@
       "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": null
     },
     {
@@ -9407,6 +10088,7 @@
       "gradle_checksum_match": true,
       "parent": null,
       "declared_licenses": [],
+      "imported_boms": [],
       "license_source": null
     },
     {
@@ -9422,6 +10104,7 @@
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
+      "imported_boms": [],
       "license_source": "org.tensorflow:tensorflow-lite-metadata:0.2.0"
     }
   ]

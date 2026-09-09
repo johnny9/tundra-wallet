@@ -25,9 +25,13 @@ consolidation and the backup filename/system-restore correction remain unreached
 Android's first complete locked configuration gate fails **before app compilation**, because
 an additional Guava parent POM was missing from verification metadata. That POM and all 256
 other retained supplemental POMs now have explicit exact checksum entries. The baseline
-locks **440 distinct components** and verifies **585 metadata components / 1,263 artifacts**.
-No module version or broad trust exception changed. The next full locked native run is
-pending. Local real-project configuration and missing-lock, disabled-verification and
+locks **440 distinct components**. The second run at `05dabe2` also stops before compilation,
+on an imported coroutines BOM in the Kotlin build-tools configuration. The inventory now
+follows parent properties and imported BOMs, adding two exact POM checksums; verification
+covers **587 metadata components / 1,265 artifacts**. No module version or broad trust exception
+changed. The next full locked native run is pending. See
+[BOM correction evidence](../validation/android-imported-bom-checks.json).
+Local real-project configuration and missing-lock, disabled-verification and
 altered-plugin-checksum refusal checks pass. See [parent metadata evidence](../validation/android-parent-metadata-checks.json).
 The preceding Android runtime run passes **10 JVM / 16 of 17 instrumentation tests**; its
 recovery assertion correction and later recovery/provenance steps await runtime execution.
@@ -35,7 +39,7 @@ recovery assertion correction and later recovery/provenance steps await runtime 
 Local full Rust/regtest, formatting, strict Clippy and both binding generators pass after
 strengthening the secret-marker regression to use valid descriptor checksums. It uses only
 invalid/truncated markers, never usable signing keys. **32 offline checks** now pass, including
-Maven and binary-notice inventory guards. All **585 retained Maven POMs** match verification
+Maven and binary-notice inventory guards. All **587 retained Maven POMs** match verification
 hashes. **138 archive variants** for the **150 release-runtime components** were actually
 fetched and verified; five embedded notice texts and 116 module metadata files are retained.
 54 archives lack embedded notices, including 48 with compiled code. Upstream review and

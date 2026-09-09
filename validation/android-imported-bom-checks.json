@@ -1,0 +1,40 @@
+{
+  "recorded_at": "2026-09-09T08:00:43.948257+00:00",
+  "run": 34325362419,
+  "source": "05dabe26025c6b3bcf5d7873f90c08984baa3914",
+  "android_job": 102381262452,
+  "result": "Failure before app/JVM/instrumentation compilation: unverified kotlinx-coroutines-bom 1.8.0 POM in kotlinBuildToolsApiClasspath",
+  "correction": "Follow imported BOMs with bounded literal inherited Maven property substitution; retain and verify the exact 1.6.4 and 1.8.0 coroutines BOM POMs",
+  "locked_components": 440,
+  "verification_components": 587,
+  "artifact_checksums": 1265,
+  "retained_matching_poms": 587,
+  "offline_passed": 32,
+  "native_rerun": "pending",
+  "files": [
+    {
+      "path": "build/android-locked-ci-second.log",
+      "sha256": "bdca9984ef6c36f2febc8ce9461dfad91df1d2be3226dab33515e7c481262fb9"
+    },
+    {
+      "path": "build/android-imported-bom-final-counts.log",
+      "sha256": "a7aeac30a990a6694040508d26a47200f9b8494a4a067c9da3f4246507d7098f"
+    },
+    {
+      "path": "build/android-imported-bom-final-inventory.log",
+      "sha256": "6b388cbdde4d362b7b4ce973fac55cd0b6994c86333e7ab8fa7ea7bbc332929a"
+    },
+    {
+      "path": "build/android-imported-bom-final-offline.log",
+      "sha256": "52b4aa6f5b44cc2d2f920822f86fe76beddb41e5434556403ec93e5c07fddc71"
+    },
+    {
+      "path": "apps/android/gradle/verification-metadata.xml",
+      "sha256": "51ad93decd5df641f9f708388ee81f98a4d2b770a57df7026144689556b22c10"
+    },
+    {
+      "path": "third-party/android-inventory.json",
+      "sha256": "ae74d21d0f19b9ea84c8632a6907b1438b3b9e6e2180c36e1073f399e3bd9854"
+    }
+  ]
+}
