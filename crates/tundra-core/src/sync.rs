@@ -33,6 +33,9 @@ const MAX_SCRIPTS: u32 = 2_000; // per keychain; reaching the cap is an error, n
 const MAX_TXS: usize = 5_000;
 const MAX_BODY: usize = 4_000_000;
 const MAX_TOTAL: usize = 64_000_000;
+// Native callbacks may outlive a replaced store. An ID must not select a new
+// store's operation merely because that core started its own counter at zero.
+static NEXT_OPERATION: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum SyncPhase {
@@ -69,7 +72,6 @@ struct Operation {
 }
 #[derive(Default)]
 pub(crate) struct Operations {
-    next: AtomicU64,
     entries: Mutex<BTreeMap<u64, Operation>>,
 }
 
@@ -141,9 +143,7 @@ impl Core {
         if entries.len() >= 32 {
             return Err(Error::SyncBusy);
         }
-        let id = self
-            .syncs
-            .next
+        let id = NEXT_OPERATION
             .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
             .map_err(|_| Error::SyncLimit)?
             + 1;
@@ -650,6 +650,40 @@ fn verify_proof(txid: Txid, proof: &Proof, header: &Header, height: u32) -> Resu
 mod tests {
     use super::*;
     const SINGLE: &str = include_str!("../../../tests/fixtures/single-sig.txt");
+    #[test]
+    fn delayed_callback_cannot_cancel_or_run_another_stores_operation() {
+        let first = Core::open(":memory:").unwrap();
+        let second = Core::open(":memory:").unwrap();
+        let old_wallet = first
+            .import_wallet("Before restore", SINGLE, Network::Signet)
+            .unwrap();
+        let new_wallet = second
+            .import_wallet("After restore", SINGLE, Network::Signet)
+            .unwrap();
+        assert_eq!(old_wallet.id, new_wallet.id);
+        let old = first
+            .prepare_sync(&old_wallet.id, "https://unused.invalid", true)
+            .unwrap();
+        let new = second
+            .prepare_sync(&new_wallet.id, "https://unused.invalid", true)
+            .unwrap();
+        assert_ne!(old.id, new.id);
+        assert!(matches!(second.cancel_sync(old.id), Err(Error::NotFound)));
+        assert!(matches!(second.run_sync(old.id), Err(Error::NotFound)));
+        assert!(matches!(second.sync_progress(old.id), Err(Error::NotFound)));
+        assert_eq!(
+            second.sync_progress(new.id).unwrap().phase,
+            SyncPhase::Prepared
+        );
+        first.cancel_sync(old.id).unwrap();
+        assert_eq!(
+            second.sync_progress(new.id).unwrap().phase,
+            SyncPhase::Prepared
+        );
+        second.cancel_sync(new.id).unwrap();
+        assert!(first.wallets().unwrap()[0].synced_at.is_none());
+        assert!(second.wallets().unwrap()[0].synced_at.is_none());
+    }
     #[test]
     fn endpoint_requires_explicit_consent_and_test_network() {
         for source in [
