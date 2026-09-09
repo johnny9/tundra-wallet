@@ -46,8 +46,13 @@ invalid/truncated markers, never usable signing keys. **32 offline checks** now 
 Maven and binary-notice inventory guards. All **587 retained Maven POMs** match verification
 hashes. **138 archive variants** for the **150 release-runtime components** were actually
 fetched and verified; five embedded notice texts and 116 module metadata files are retained.
-54 archives lack embedded notices, including 48 with compiled code. Upstream review and
-binary notice packaging remain open. See [notice scope](../third-party/README.md).
+54 archives lack embedded notices, including 48 with compiled code. Upstream review remains
+open. JNA/libffi supplemental notices are retained, and a deterministic native resource now
+preserves **175 distinct notice texts** with source provenance. **33 local offline checks**
+pass; matching and truncated synthetic app resources exercise the packaging checker. Both
+native resource configurations and exact built-app byte checks are authored; actual packaging
+validation is pending. See [notice evidence](../validation/native-notice-resource-checks.json)
+and [notice scope](../third-party/README.md).
 
 Both native **100-output long-list/large-text scenarios are authored**. Apple compiles and
 passes scroll restoration, with the large-text phase still pending its correction; Android

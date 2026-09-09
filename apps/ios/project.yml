@@ -20,6 +20,8 @@ targets:
     platform: iOS
     sources:
       - path: Tundra
+      - path: ../../third-party/bundle/THIRD-PARTY-NOTICES.txt
+        buildPhase: resources
       - path: Generated
         includes:
           - "*.swift"
@@ -79,6 +81,8 @@ targets:
         excludes:
           - TundraApp.swift
       - path: TundraTestHost
+      - path: ../../third-party/bundle/THIRD-PARTY-NOTICES.txt
+        buildPhase: resources
       - path: ../../tests/fixtures/two-of-three.txt
         buildPhase: resources
       - path: Generated

@@ -61,10 +61,24 @@ ships in the APK.
 
 `python3 scripts/android-artifact-notices.py` checks the graph, hashes and retained notices
 offline. `--collect --fetch --write` downloads pinned archives and extracts notices for review;
-`--collect` can repeat extraction from the ignored local archive cache. SDK/build-tool review,
-remaining upstream notices and binary notice packaging remain release gates.
+`--collect` can repeat extraction from the ignored local archive cache.
 
-A complete SDK/design/fixture inventory, other nested vendored notices, binary notice
+[`android-notice-supplements.json`](android-notice-supplements.json) retains JNA 5.17.0's
+full alternative license texts, credits and bundled libffi notices at its exact upstream
+revision. Their Git blob and SHA-256 hashes are checked offline; the source LICENSE also
+matches the verified JNA archive. The libffi build-tool notice is explicitly scoped separately.
+These records do not choose which alternative license applies.
+
+[`bundle/THIRD-PARTY-NOTICES.txt`](bundle/THIRD-PARTY-NOTICES.txt) combines the reviewed Cargo,
+Android release-graph, supplemental, SQLCipher and design notices into one deterministic
+resource with an index and **175 distinct exact notice texts**. The broad source inventory
+includes build/test tools and known platform variants, not an exact binary contents manifest.
+`python3 scripts/package-notices.py` checks its generation and source hashes offline;
+`--write` prepares an explicit update. Both native apps now include this resource in source.
+CI checks its exact bytes inside the APK and built iOS app; those new packaging gates are
+pending their first native run. SDK/build-tool and remaining upstream review stay open.
+
+A complete SDK/design/fixture inventory, other nested vendored notices, validated binary notice
 packaging and distribution review remain release gates. These notes do not grant rights to
 project branding or imply hardware-vendor endorsement.
 

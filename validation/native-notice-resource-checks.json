@@ -1,0 +1,45 @@
+{
+  "recorded_at": "2026-09-09T08:08:39.983545+00:00",
+  "bundle": "Deterministic generation and offline comparison pass",
+  "distinct_notice_texts": 175,
+  "resource_bytes": 970513,
+  "cargo_packages": 243,
+  "android_release_components": 150,
+  "jna_source_revision": "695ae749e7bfd92f88324147c5d96b7129efec3e",
+  "jna_supplemental_files": 6,
+  "jna_provenance": "Exact Git blob/SHA256 checks pass; retained source LICENSE equals verified archive LICENSE",
+  "offline_passed": 33,
+  "checker_fixture_results": [
+    "Matching synthetic APK/app resources accepted",
+    "Truncated synthetic iOS resource refused",
+    "Truncated synthetic APK resource refused"
+  ],
+  "actual_native_packaging": "NOT RUN yet; both app source resource configurations and CI byte checks authored",
+  "limits": "Source inventory includes build/test and known variants; SDK/build-tool and remaining upstream/distribution review open; no original or alternative license selected",
+  "files": [
+    {
+      "path": "third-party/android-notice-supplements.json",
+      "sha256": "976f28684f187d8b2096afdfd0667e20718a3a7ac7ff569c3d70afcece1f4d59"
+    },
+    {
+      "path": "third-party/bundle-manifest.json",
+      "sha256": "2faf1b768a6ef26aad131fa4eb8f968b846c72470741b06f58a0027ba71244ec"
+    },
+    {
+      "path": "third-party/bundle/THIRD-PARTY-NOTICES.txt",
+      "sha256": "0185fc8724ee8e09a164a9eae6d033a0c08b082f8c2c0fa56c137eecdcb1a69a"
+    },
+    {
+      "path": "build/native-notice-resource-authored.log",
+      "sha256": "5ae13177c8418a37ded6cdcead3f2f13b78cd7550e39c452bf8da743744359e9"
+    },
+    {
+      "path": "build/native-notice-resource-offline.log",
+      "sha256": "74765403a4b96d232f2a23f830d0bef6bbf9b9356a70f103da79ecaaf69a0540"
+    },
+    {
+      "path": "build/native-notice-checker-fixtures.log",
+      "sha256": "d95e61353b927d95c84e4df47eda370c74d9ade21312f127e5476423d314c398"
+    }
+  ]
+}

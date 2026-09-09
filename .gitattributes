@@ -13,3 +13,5 @@ third-party/cargo-notices/*.txt -text -whitespace
 third-party/android-poms/*.xml -text -whitespace
 third-party/android-modules/*.json -text -whitespace
 third-party/android-notices/*.txt -text -whitespace
+third-party/android-supplements/*.txt -text -whitespace
+third-party/bundle/*.txt -text -whitespace

@@ -1,0 +1,63 @@
+{
+  "scope": "Supplemental source notices; does not choose a license for Tundra or a JNA alternative",
+  "packages": [
+    {
+      "coordinate": "net.java.dev.jna:jna:5.17.0",
+      "repository": "https://github.com/java-native-access/jna",
+      "tag": "5.17.0",
+      "revision": "695ae749e7bfd92f88324147c5d96b7129efec3e",
+      "reason": "Embedded JNA LICENSE references separate full license texts; retain upstream credits and bundled libffi notices as well",
+      "packaged_license_matches_source": true,
+      "notices": [
+        {
+          "source_path": "AL2.0",
+          "url": "https://raw.githubusercontent.com/java-native-access/jna/695ae749e7bfd92f88324147c5d96b7129efec3e/AL2.0",
+          "git_blob": "f433b1a53f5b830a205fd2df78e2b34974656c7b",
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+          "retained": "third-party/android-supplements/0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594.txt",
+          "scope": "runtime attribution or alternative license text"
+        },
+        {
+          "source_path": "LGPL2.1",
+          "url": "https://raw.githubusercontent.com/java-native-access/jna/695ae749e7bfd92f88324147c5d96b7129efec3e/LGPL2.1",
+          "git_blob": "3b204400cf3d548f93a0f4f8e85d41d7e39ecb59",
+          "sha256": "eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449",
+          "retained": "third-party/android-supplements/eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449.txt",
+          "scope": "runtime attribution or alternative license text"
+        },
+        {
+          "source_path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/java-native-access/jna/695ae749e7bfd92f88324147c5d96b7129efec3e/LICENSE",
+          "git_blob": "9d95afbeb58a153669393e633af39b48fd4ca94c",
+          "sha256": "07c938b23950ab7d47a24ef35f9f5da3a05ae164278dc959ad6994135ed59ff1",
+          "retained": "third-party/android-supplements/07c938b23950ab7d47a24ef35f9f5da3a05ae164278dc959ad6994135ed59ff1.txt",
+          "scope": "runtime attribution or alternative license text"
+        },
+        {
+          "source_path": "OTHERS",
+          "url": "https://raw.githubusercontent.com/java-native-access/jna/695ae749e7bfd92f88324147c5d96b7129efec3e/OTHERS",
+          "git_blob": "141fb393a03faaf51f64d81dc9dbaa0fba97e50f",
+          "sha256": "e90bf486c8d984a6d0836c9ba77715d9cc9d667a7458ea24cf2fe90ffa446a0a",
+          "retained": "third-party/android-supplements/e90bf486c8d984a6d0836c9ba77715d9cc9d667a7458ea24cf2fe90ffa446a0a.txt",
+          "scope": "runtime attribution or alternative license text"
+        },
+        {
+          "source_path": "native/libffi/LICENSE",
+          "url": "https://raw.githubusercontent.com/java-native-access/jna/695ae749e7bfd92f88324147c5d96b7129efec3e/native/libffi/LICENSE",
+          "git_blob": "75d1bce11f9118ccfd96b24a2e49af078da1b469",
+          "sha256": "2c9c2acb9743e6b007b91350475308aee44691d96aa20eacef8e199988c8c388",
+          "retained": "third-party/android-supplements/2c9c2acb9743e6b007b91350475308aee44691d96aa20eacef8e199988c8c388.txt",
+          "scope": "runtime attribution or alternative license text"
+        },
+        {
+          "source_path": "native/libffi/LICENSE-BUILDTOOLS",
+          "url": "https://raw.githubusercontent.com/java-native-access/jna/695ae749e7bfd92f88324147c5d96b7129efec3e/native/libffi/LICENSE-BUILDTOOLS",
+          "git_blob": "d1d626e00859030061ed7b071e84f8f893d84d93",
+          "sha256": "e67978cd18816c0cb7d29aaaacde7b7447402c2fb321a051698890a8eaedda94",
+          "retained": "third-party/android-supplements/e67978cd18816c0cb7d29aaaacde7b7447402c2fb321a051698890a8eaedda94.txt",
+          "scope": "build tools only"
+        }
+      ]
+    }
+  ]
+}

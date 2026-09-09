@@ -18,6 +18,7 @@ PY
 )"
 xcodebuild -project apps/ios/Tundra.xcodeproj -scheme Tundra \
   -configuration Debug -destination "platform=iOS Simulator,id=$TUNDRA_SIM_ID" \
+  -derivedDataPath build/ios-derived \
   -parallel-testing-enabled NO -resultBundlePath build/ios-runtime.xcresult \
   -test-timeouts-enabled YES -default-test-execution-time-allowance 300 \
   -maximum-test-execution-time-allowance 420 \

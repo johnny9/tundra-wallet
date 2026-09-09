@@ -23,6 +23,7 @@ android {
     kotlinOptions { jvmTarget = "17" }
     packaging { jniLibs.useLegacyPackaging = false }
     buildTypes { release { isMinifyEnabled = false } }
+    sourceSets.getByName("main").assets.srcDir("../../../third-party/bundle")
     sourceSets.getByName("test").resources.srcDir("../../../tests/fixtures")
     sourceSets.getByName("androidTest").assets.srcDir("../../../tests/fixtures")
 }

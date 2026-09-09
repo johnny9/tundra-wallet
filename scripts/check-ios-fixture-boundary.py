@@ -36,6 +36,8 @@ def check(project):
         raise ValueError("Both targets must compile the shared native views")
     if not fixtures <= host_resources or fixtures & production_resources:
         raise ValueError("Public signing resources crossed the test-host boundary")
+    if "THIRD-PARTY-NOTICES.txt" not in production_resources & host_resources:
+        raise ValueError("Both app targets must include the reviewed notice resource")
     if any(Path(name).suffix in {".sqlite", ".psbt", ".tundra"} for name in production_resources):
         raise ValueError("Wallet data must not be bundled in the production app")
 

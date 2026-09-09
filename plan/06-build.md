@@ -81,6 +81,8 @@ Both complete Cargo locks now have a deterministic declared-license/notice inven
 including all features and the fuzz graph. CI regenerates it from locked package metadata;
 offline checks verify graph coverage and retained bytes. See the [notice scope and remaining
 distribution gates](../third-party/README.md). Original Tundra's license remains an owner decision.
+Both native resource configurations now include a deterministic notice bundle. CI compares
+its bytes inside the built APK and iOS app; those packaging gates await their first run.
 
 ## Build commands
 

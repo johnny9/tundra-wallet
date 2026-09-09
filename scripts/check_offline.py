@@ -143,6 +143,10 @@ class SchemaChecks(unittest.TestCase):
 
 
 class FixtureAndSourceChecks(unittest.TestCase):
+    def test_native_notice_bundle_covers_inventories_and_retains_exact_sources(self):
+        subprocess.run(["python3", str(ROOT / "scripts/package-notices.py")],
+                       check=True, capture_output=True, timeout=30)
+
     def test_android_archive_notice_graph_and_retained_bytes(self):
         subprocess.run(["python3", str(ROOT / "scripts/android-artifact-notices.py")],
                        check=True, capture_output=True, timeout=30)
