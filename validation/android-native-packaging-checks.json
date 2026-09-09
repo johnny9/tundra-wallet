@@ -1,0 +1,42 @@
+{
+  "recorded_at": "2026-09-09T08:54:08.520178+00:00",
+  "apk_sha256": "3c3896798b0bb8b1f59f0ad0a1db79b4eed66765d62084699d37ae15dd14c79f",
+  "local_result": "PASS: both ABI bridges rebuilt, APK repackaged, exact notice resource retained",
+  "native_libraries": 10,
+  "checks": "Correct ELF machine per ABI, 16 KiB LOAD alignment, no writable/executable LOAD segments, nonexecutable stack, GNU_RELRO, uncompressed 16 KiB ZIP alignment",
+  "removed": "Two unused BBQr dependency cdylibs; both tundra_ffi ELF dynamic dependency tables contain only libdl/liblog/libc, and generated native clients load only tundra_ffi",
+  "runtime_for_trimmed_apk": "pending",
+  "runtime_16k": "NOT RUN; no local KVM device and Waydroid lacks an ADB connection",
+  "reference": "https://developer.android.com/guide/practices/page-sizes",
+  "offline_passed": 34,
+  "files": [
+    {
+      "path": "scripts/check-android-native-artifacts.py",
+      "sha256": "793cce045b85096941e30fc98a0c515f1caafd6d764bc50c46e80c25a3c4a639"
+    },
+    {
+      "path": "scripts/build-android.sh",
+      "sha256": "e479a6b15149a981711dc3300f0f0efcfea3bf23bd3b2b5ea8c91f53dd1998b5"
+    },
+    {
+      "path": "build/android-native-artifacts-final.json",
+      "sha256": "26c8744f026809762278c6d1418e0683a9fa61b5e82d79f9b270898703c65063"
+    },
+    {
+      "path": "build/local-android-jni-packaging.log",
+      "sha256": "309cc662548fc65bd8c914fa68e017f3f7d733d5e5a3744bcbcd529cd8769e77"
+    },
+    {
+      "path": "build/local-android-trimmed-apk.log",
+      "sha256": "abcf63095bc6d1d158ec23d2b503500c1281c456565855052c06c6477dc04b74"
+    },
+    {
+      "path": "build/local-android-trimmed-notices.log",
+      "sha256": "95f41fe9990b3d07b0d6b1b9c40d41490c00347958bc94672f358c4f7f41d31d"
+    },
+    {
+      "path": "build/android-native-packaging-offline.log",
+      "sha256": "2bd2ac7d5f829c18772b089cff92cd17b49e312214a8bbfd3e1ed5ec4df20c98"
+    }
+  ]
+}

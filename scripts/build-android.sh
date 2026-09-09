@@ -19,5 +19,16 @@ if properties.get('Pkg.Revision') != '27.2.12479018':
 PY
 ./scripts/generate-bindings.sh
 cargo ndk --platform 28 -t arm64-v8a -t x86_64 \
-  -o apps/android/app/src/main/jniLibs build --locked --release -p tundra-ffi --lib
+  -o build/android-rust-libs build --locked --release -p tundra-ffi --lib
+# cargo-ndk also copies dependency cdylibs. The app calls only tundra-ffi;
+# BBQr is linked into that library as Rust code and has no dynamic load entry.
+for ABI in arm64-v8a x86_64; do
+  DESTINATION="apps/android/app/src/main/jniLibs/$ABI"
+  mkdir -p "$DESTINATION"
+  install -m 755 "build/android-rust-libs/$ABI/libtundra_ffi.so" "$DESTINATION/libtundra_ffi.so"
+  # Remove only the previously generated, unused BBQr cdylib from this output.
+  for PREVIOUS in "$DESTINATION"/libbbqr-*.so; do
+    if [[ -f "$PREVIOUS" ]]; then rm -- "$PREVIOUS"; fi
+  done
+done
 echo 'Rust JNI libraries built. Run apps/android/gradlew -p apps/android :app:assembleDebug.'

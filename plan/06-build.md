@@ -91,6 +91,13 @@ offline checks verify graph coverage and retained bytes. See the [notice scope a
 distribution gates](../third-party/README.md). Original Tundra's license remains an owner decision.
 Both native resource configurations now include a deterministic notice bundle. CI compares
 its bytes inside the built APK and iOS app; those packaging gates await their first run.
+The Android builder now stages dependency outputs separately and copies only `libtundra_ffi.so`
+into the app's JNI sources. BBQr is statically linked Rust code; its unused standalone cdylibs
+are removed from generated output. The local APK passes actual ABI, ELF/ZIP 16 KiB alignment,
+nonexecutable stack and relocation protection checks for all ten remaining shared libraries.
+Runtime execution of this packaging correction is pending; see
+[binary inspection evidence](../validation/android-native-packaging-checks.json). A 16 KiB
+runtime remains a separate gate, following the [Android guidance](https://developer.android.com/guide/practices/page-sizes).
 
 ## Build commands
 

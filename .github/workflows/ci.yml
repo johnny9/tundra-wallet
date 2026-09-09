@@ -130,6 +130,7 @@ jobs:
           verifyDependencyReview :app:verifyDependencyReview
       - run: ./apps/android/gradlew --no-daemon -p apps/android :app:assembleDebug :app:testDebugUnitTest
       - run: python3 scripts/package-notices.py --android-apk apps/android/app/build/outputs/apk/debug/app-debug.apk
+      - run: python3 scripts/check-android-native-artifacts.py apps/android/app/build/outputs/apk/debug/app-debug.apk > build/android-native-artifacts.json
       - run: python3 scripts/check-gradle-enforcement.py
       - name: Enable KVM for the hosted Android emulator
         run: sudo chmod 666 /dev/kvm
@@ -181,6 +182,7 @@ jobs:
             build/published-native-server.log
             build/published-screen-server.log
             build/gradle-enforcement/*.log
+            build/android-native-artifacts.json
       - uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         if: ${{ !cancelled() && steps.rust-cache.outputs.cache-hit != 'true' && steps.rust-cache.outputs.cache-primary-key != '' }}
         with:
