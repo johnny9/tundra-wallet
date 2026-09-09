@@ -7,10 +7,11 @@ The product manages public descriptors, labeled coins and hardware-signed paymen
 It never imports or generates Bitcoin private signing keys.
 
 > **Development source, not a released wallet. Use disposable test descriptors only.**
-> Rust tests, Android debug and iOS simulator builds pass in CI. Android exact-input payment
-> and iOS consolidation/restart runtime tests have passed; broader device qualification remains.
+> Rust tests pass; the recorded native baseline builds and initial payment/restart tests
+> passed in CI. Expanded native scenarios and the newer broadcast UI are still being validated.
 > Explicit test-network sync and external signature validation are implemented. Hardware
-> signing and broadcast remain unavailable; USB device and camera qualification remain open.
+> signing remains unavailable. Explicit test-network broadcast has software validation;
+> USB device and camera qualification remain open.
 > Do not fund addresses from the fixtures or use this version with real savings.
 
 ## Start here
@@ -30,7 +31,7 @@ It never imports or generates Bitcoin private signing keys.
 |---|---|---|
 | `tundra-core` | BDK public descriptor validation, receive/change derivation, SQLite snapshots, bounded opt-in Esplora sync | Test networks only; chosen endpoint supplies the chain view |
 | Metadata | Wallet-scoped labels, BIP 329 origins and patch import/export, atomic bulk edits, user freezes | Known references only; development DB is not encrypted |
-| Transactions | Exact/manual and automatic eligible inputs, max/consolidation, saved reviews/reservations, verified external PSBT signatures and immutable final transaction bytes | Every native mode still needs coverage; hardware integration/broadcast unavailable |
+| Transactions | Exact/manual and automatic eligible inputs, max/consolidation, saved reviews/reservations, verified external PSBT signatures and immutable final transaction bytes | Every native mode still needs coverage; explicit broadcast passes Rust tests, native gate pending |
 | QR exchange | Bounded UR/BBQr codecs, native camera/display and independent barcode tests | Both native barcode tests pass; physical interoperability pending |
 | USB exchange | Pinned bhwi Ledger protocol, registration persistence and Android adapter source | Android native tests pass; physical USB qualification pending; signing remains blocked |
 | `tundra-ffi` | Typed UniFFI API; Kotlin and Swift bindings generated and exercised against the host library | Mobile lifecycle/cancellation qualification remains |

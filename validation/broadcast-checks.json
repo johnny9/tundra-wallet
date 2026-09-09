@@ -1,0 +1,70 @@
+{
+  "recorded_at": "2026-09-09T00:33:06.806270+00:00",
+  "rust_toolchain": "1.93.1",
+  "core_unit_tests": 131,
+  "new_broadcast_tests": 14,
+  "process_crash_integration_tests": 1,
+  "http_integration_tests": 5,
+  "separate_real_regtest_tests": 1,
+  "total_rust_tests": 138,
+  "offline_checks": 23,
+  "fmt": "passed",
+  "clippy": "passed with warnings denied",
+  "bindings": "Kotlin and Swift generated from compiled production library",
+  "schema_version": 6,
+  "broadcast_protocol": "Local HTTP fixtures with published signatures only; no Bitcoin network submission or hardware signing was performed",
+  "coverage": [
+    "immutable final bytes and explicit transaction identity",
+    "endpoint and retry consent; wrong genesis and mainnet refusal",
+    "unsigned/incomplete/tampered/frozen rejection",
+    "wallet changes during network preflight",
+    "independent-connection initial-submission race",
+    "late acknowledgement isolation",
+    "timeout/refusal/wrong-ID/redirect/oversized/truncated reply uncertainty",
+    "atomic record-before-POST and acknowledgement failure",
+    "actual process death during POST and read-only restart",
+    "wallet isolation and schema-v5 migration",
+    "own mempool/confirmed observation and eviction/reorg invalidation"
+  ],
+  "fuzz": {
+    "toolchain": "nightly-2026-09-07",
+    "sanitizer": "AddressSanitizer",
+    "targets": [
+      {
+        "name": "public_parsers",
+        "executions": 1552791,
+        "seconds": 61,
+        "crashes": 0
+      },
+      {
+        "name": "usb_protocol",
+        "executions": 1232,
+        "seconds": 61,
+        "crashes": 0
+      },
+      {
+        "name": "validated_signatures",
+        "executions": 684839,
+        "seconds": 61,
+        "crashes": 0
+      }
+    ],
+    "lock": "unchanged",
+    "broadcast_http_fuzzed": false
+  },
+  "native": "Authored; new broadcast build/runtime gate pending. Earlier payment-mode failures retained in payment-modes-checks.json.",
+  "open_gates": [
+    "positive native signed-final-review/submission scenario",
+    "physical hardware signet end-to-end",
+    "output-label provenance",
+    "production storage protection and release qualification"
+  ],
+  "logs": {
+    "build/broadcast-complete-check.log": "195293511394205d145badf79efa35bde28c318129ff225e1b84500a0b04a9dd",
+    "build/broadcast-complete-regtest.log": "1663b8f6136dedf1cc01de325719bc1c4a2be43d02e033b395813338a19bf729",
+    "build/broadcast-complete-bindings.log": "1c51d0663966741931e0e2c5fb0c99c424c5428dd81ff3110b7acfa194311f78",
+    "build/broadcast-fuzz.log": "8bbee19f77aeb07733c031e87e85615084b648d4372254a9592abbe6c04b30f1"
+  },
+  "source": "7a9e06868dd840da8beaf9f67e1e0b669d0674dd",
+  "core_commit": "e453f6fb1e6c1a98ba92dea98a292198313f715b"
+}

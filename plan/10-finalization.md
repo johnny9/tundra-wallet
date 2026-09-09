@@ -1,7 +1,8 @@
 # Final transaction review
 
 Finalization is implemented for test-network P2WPKH and 2-of-3 sorted P2WSH drafts. It does
-not send a request to a hardware device or a network. Broadcast remains unavailable.
+not send a request to a hardware device or a network. [Broadcast](12-broadcast.md) is a
+separate explicit action with its own consent and durable outcome.
 
 Every finalization rechecks the immutable approval, current unspent inputs, confirmations,
 maturity, reservations, freezes, public descriptor derivations and all stored signatures.

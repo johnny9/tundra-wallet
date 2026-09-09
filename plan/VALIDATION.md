@@ -1,8 +1,31 @@
 # Validation status
 
-Planning baseline: September 7, 2026. Recorded validation: **September 8, 2026**.
+Planning baseline: September 7, 2026. Recorded validation: **September 9, 2026**.
 This is development source with test-network sync, native payments and external PSBT validation.
 **The full plan is not complete. No physical hardware or real-funds readiness is claimed.**
+
+## Current software checkpoint
+
+Explicit test-network broadcast now passes **14 additional Rust tests**, bringing the total
+to **138 including real regtest**. Schema v6 records an uncertain attempt before POST and
+keeps endpoint receipt separate from synchronized chain observation. Formatting, strict
+Clippy, 23 offline checks and both binding generators pass. All three sanitizer targets
+pass: 1,552,791 parser, 1,232 USB protocol and 684,839 signature/finalization cases, each in
+61 seconds. See [broadcast rules](12-broadcast.md) and `validation/broadcast-checks.json`.
+The HTTP fixtures are local; no real-network broadcast or hardware signing is claimed.
+
+The [payment-mode run at 1376c10](https://github.com/johnny9/tundra-wallet/actions/runs/34292170172)
+passed Rust/parser/audit and both native builds, but both expanded UI scenarios failed.
+Android completed automatic Send/discard, then timed out waiting for a two-input review;
+the old log does not distinguish Max from consolidation. iOS entered `2.52` instead of
+`2.5` in the fee field and correctly failed its exact-value assertion. Three iOS runtime
+tests and four Android QR/USB instrumentation tests passed; Android cold restart did not
+run. Fixes/diagnostics are authored and retain the original assertions.
+`validation/payment-modes-checks.json` preserves exact failures and artifact identities.
+The newer broadcast API/screens/tests await native CI. The last completely passing native
+baseline remains `dc54fe9`, documented below; no milestone is complete from source alone.
+
+## Earlier executed checkpoints
 
 The later signing implementation passes **15 additional Rust tests** and the full local suite:
 published single-sig/2-of-3 verification, per-input progress, mutation rejection, persistence,
@@ -93,22 +116,23 @@ software results and do not change native/device qualification.
 
 | Check | Actual result |
 |---|---|
-| Rust workspace | **117 core unit tests + 1 process-kill integration test + 5 HTTP integration tests passed**; all targets/features compiled with Rust 1.93.1 |
+| Rust workspace | **131 core unit tests + 1 process-kill integration test + 5 HTTP integration tests passed**; all targets/features compiled with Rust 1.93.1 |
 | Real Bitcoin Core integration | **1 separate regtest test passed** using Core 31.1, wallets disabled; maturity at 99/100 confirmations, persistence, shorter/replacement reorgs, invalidated drafts and durable freezes |
 | Formatting / Clippy | `cargo fmt --all --check` and strict all-target/all-feature Clippy passed |
 | Offline schema/fixture/source checks | **23 passed**, 0 failures/errors |
 | UniFFI | Kotlin and Swift bindings generated from the same compiled Rust library |
-| Parser fuzzing | **2,103,214 executions in 61 seconds**, no crashes; expanded PSBT/descriptor/label/amount harness; AddressSanitizer, cargo-fuzz 0.13.2, nightly-2026-09-07; reviewed fuzz lock unchanged during the run |
+| Sanitizer fuzzing | **1,552,791 parser + 1,232 USB protocol + 684,839 signature/finalization executions**, each target ran 61 seconds with no crashes; pinned tools and unchanged reviewed fuzz lock |
 | Dependency audit | cargo-audit 0.22.2: **0 reported vulnerabilities, no warnings** against the recorded RustSec database; license inventory collected, distribution-license review incomplete |
 | Native test-chain repeatability | Two fresh starts produced height 103; both refused a duplicate start and removed their own ready signal/data on termination |
 | Approved design integrity | Four SHA-256 references pass; rebuilding HTML from editable sources is byte-identical |
 | Approved design rendering | Chrome for Testing headless shell 152.0.7977.82 rendered at 420×900; screenshot visually inspected; no browser/hardware interaction retested |
 
-That is **124 executed Rust tests**, including the separate regtest run. The default suite
+That is **138 executed Rust tests**, including the separate regtest run. The default suite
 intentionally ignores the real-node test and the process-kill child helper; the regtest
 script runs the former explicitly, and the parent crash test invokes the latter.
 
-Machine-readable local evidence is in `validation/local-checks.json` and
+Current machine-readable local evidence is in `validation/broadcast-checks.json`; earlier
+checkpoints and dependency audit remain in `validation/local-checks.json` and
 `validation/rustsec-audit.json`. Offline results describe only their own checker.
 Full logs and generated artifacts remain in ignored `build/`: `hardening-check.log`,
 `regtest.log`, `fuzz.log`, `prototype-local.png`, and the repeat-chain logs.
@@ -189,7 +213,7 @@ strict manual selection and mainnet gates retained.
 QR/UR/BBQr codecs and both native independent barcode tests pass; the iOS test uses
 Vision revision 2, with default-detector and physical-camera qualification still open. Final assembly/persistence passes Rust tests; the development bhwi/USB
 adapter passes software and Android native checks, with physical device qualification pending.
-Broadcast remains **unimplemented**. Physical phones, hardware address/policy verification, all signing
+Explicit broadcast passes local software checks; its native and real-network qualification remain open. Physical phones, hardware address/policy verification, all signing
 pairs and the full adversarial device matrix have not been tested. Native coverage still
 needs every payment mode, accessibility/text sizes and complete visual comparison.
 Protected production metadata storage, recovery/migration qualification, reproducibility,

@@ -10,7 +10,8 @@
 4. User freezes and draft reservations are separate durable facts.
 5. A signing response is untrusted input. No signature is counted until cryptographically
    verified for the correct input/key/policy and approved transaction.
-6. No automatic broadcast, and no broadcast endpoint in this source milestone.
+6. No automatic broadcast. Explicit test-network submission revalidates immutable final bytes
+   and persists uncertainty before network IO; receipt never means confirmation.
 7. Never log descriptors, xpubs, addresses, labels, PSBTs or full native errors. Errors presented
    across FFI use bounded, input-independent descriptions.
 

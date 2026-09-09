@@ -10,13 +10,13 @@ with Kotlin/Compose and SwiftUI presenting that behavior natively. One person ma
 single-sig or 2-of-3 hardware wallets. No private signing keys, signer directory, shared
 approval system, or cloud account.
 
-## Current status — September 8, 2026
+## Current status — September 9, 2026
 
 **Test-network sync and native coin control implemented; mobile qualification in progress.**
 
 - Source: descriptor-first watch-only engine, metadata, unsigned-draft core, UniFFI API,
   Android native import shell, iOS native starter, tests and CI.
-- Verified: 124 Rust tests including real regtest, 23 offline checks, parser fuzzing/audit,
+- Verified: 138 Rust tests including real regtest, 23 offline checks, parser fuzzing/audit,
   Android debug APK and iOS simulator builds, host FFI smoke tests, Android exact-input
   payment/process-restart checks and iOS consolidation/process-restart checks.
   See [VALIDATION.md](VALIDATION.md) for the exact results and remaining gates.
@@ -29,7 +29,8 @@ approval system, or cloud account.
 - Added: bounded UR/BBQr codecs and native camera/display source; both native barcode tests pass; iOS uses Vision revision 2 as its independent image decoder.
 - Added: immutable finalized transaction bytes and native final-review source; software tests pass.
 - Added: pinned bhwi Ledger protocol, registration persistence and Android USB adapter source; Android build/FFI/runtime checks pass; physical device qualification remains open.
-- Not implemented: broadcast and production storage protection.
+- Added: explicit test-network broadcast, durable uncertainty and observed-spend handling; Rust tests pass, native gate pending.
+- Not implemented: production storage protection.
 - Logical implementation commits are pushed to the owner's `johnny9/tundra-wallet` origin.
 - Not performed locally: Android build or Xcode build.
 - **No real-funds use. No supported hardware devices yet.**
@@ -44,6 +45,7 @@ approval system, or cloud account.
 | [04-security.md](04-security.md) | Threats, invariants, privacy and release blockers |
 | [05-testing.md](05-testing.md) | Test layers and real-device qualification |
 | [06-build.md](06-build.md) | Dependency choices, native builds and reproducibility |
+| [12-broadcast.md](12-broadcast.md) | Explicit submission, durable uncertainty and chain observation |
 | [11-usb.md](11-usb.md) | Bounded Ledger protocol and Android USB qualification |
 | [10-finalization.md](10-finalization.md) | Exact final bytes, persistence and review |
 | [09-qr.md](09-qr.md) | QR formats, bounds and native qualification |

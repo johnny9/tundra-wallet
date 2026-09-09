@@ -10,7 +10,7 @@ These are ordered work packages, not time estimates.
 | M3: native coin control + review | Android exact-input and iOS consolidation/restart checks pass; full mode/layout qualification remains | Native exact-input, automatic, max and consolidation flows round-trip through Rust; no UI-only validation; layouts match prototype; interrupted drafts persist |
 | M4: QR external signing | PSBT verification and QR codecs pass software tests; native camera builds/device qualification open | Bounded UR/BBQr sessions interoperate on devices; wrong payloads/transactions rejected; per-input signatures verified; receive/policy comparison works |
 | M5: Android USB / bhwi | Bounded pinned protocol and Android adapter compile; software and mobile FFI tests pass, physical qualification open | Pinned bhwi revision; documented model/firmware/transport matrix; permission, cancellation, reconnect and app lifecycle tests pass |
-| M6: signet end-to-end | Final transaction assembly/persistence passes software tests; hardware/broadcast end-to-end open | 2-of-3 QR + USB with restart signs, validates, finalizes and explicitly broadcasts to a configured test backend |
+| M6: signet end-to-end | Finalization and explicit broadcast pass software tests; native/hardware end-to-end open | 2-of-3 QR + USB with restart signs, validates, finalizes and explicitly broadcasts to a configured test backend |
 | M7: hardened release candidate | Not implemented | Protected storage, backup/recovery/migration tests, dependency/license review, independent security review and a clean supported-device matrix |
 
 ## M1 backlog before declaring it done
@@ -39,7 +39,7 @@ These are ordered work packages, not time estimates.
   barcode tests pass; iOS uses Vision revision 2, with default revision 4 and physical
   interoperability still unqualified.
 - Explicit bounded Esplora test-network sync and signed-response validation are implemented.
-  Native QR qualification and broadcast remain separate acceptance gates.
+  Native QR and broadcast qualification remain separate acceptance gates.
 - Native coin selection, review, PSBT file export and saved drafts are implemented; validate
   every mode on both platforms and compare layouts/accessibility against the reference.
 - Label provenance is captured on draft inputs. New-output labeling after a real broadcast
