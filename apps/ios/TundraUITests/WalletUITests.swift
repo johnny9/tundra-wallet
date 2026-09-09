@@ -230,6 +230,17 @@ final class WalletUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label ==[c] %@", "Inputs · 1")).firstMatch.waitForExistence(timeout: 10))
         guard await discardAndClose(app) else { return }
         app.buttons["Coins"].tap()
+        // Coin filters belong to this tab and survive visiting Activity. Hidden
+        // tab controls must leave the accessibility tree while inactive.
+        let largestFirst = app.switches["Largest first"]
+        enable(largestFirst)
+        app.buttons["Activity"].tap()
+        XCTAssertFalse(largestFirst.exists)
+        XCTAssertTrue(app.buttons["Receive"].exists)
+        app.buttons["Coins"].tap()
+        XCTAssertTrue(largestFirst.waitForExistence(timeout: 10))
+        XCTAssertEqual(largestFirst.value as? String, "1")
+        XCTAssertFalse(app.buttons["Receive"].exists)
         for max in [true, false] {
             let coins = app.buttons.matching(identifier: "Select coin")
             XCTAssertEqual(coins.count, 3)

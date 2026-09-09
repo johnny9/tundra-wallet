@@ -77,38 +77,52 @@ struct WalletView: View {
                         description: Text("Import a public test descriptor. Private signing keys stay on hardware."))
                     Button("Import descriptor") { adding = true }.buttonStyle(.borderedProminent)
                 } else {
-                    if tab == 0 {
-                        HStack {
-                            Button("Receive", systemImage: "arrow.down") { model.receive() }.buttonStyle(.bordered)
-                            Button("Send", systemImage: "arrow.up") { model.review = nil; paymentMode = 0; paying = true }.buttonStyle(.borderedProminent).disabled(model.busy || model.wallet?.synced != true)
-                        }.frame(maxWidth: .infinity)
-                    }
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 16) {
-                            if tab == 0 {
-                                ForEach(model.drafts, id: \.id) { draft in
-                                    Button { model.openReview(draft); paying = true } label: {
-                                        VStack(alignment: .leading) {
-                                            Text(draft.label.isEmpty ? "Saved payment" : draft.label)
-                                            Text("Draft · \(draft.state) · \(draft.inputs.count) inputs").font(.caption)
-                                        }
-                                    }.disabled(model.busy)
-                                }
-                                ForEach(model.activity, id: \.txid) { row in
-                                    VStack(alignment: .leading) {
-                                        Text(row.label.isEmpty ? "Unlabeled transaction" : row.label)
-                                        Text(row.confirmed ? "Confirmed" : "Pending").font(.caption).foregroundStyle(.secondary)
+                    // Keep both tab subtrees alive so their independent scroll offsets
+                    // and in-memory coin filters survive a tab switch. A wallet change
+                    // creates fresh views; private search text is never persisted.
+                    ZStack(alignment: .top) {
+                        VStack(spacing: 16) {
+                            HStack {
+                                Button("Receive", systemImage: "arrow.down") { model.receive() }.buttonStyle(.bordered)
+                                Button("Send", systemImage: "arrow.up") { model.review = nil; paymentMode = 0; paying = true }.buttonStyle(.borderedProminent).disabled(model.busy || model.wallet?.synced != true)
+                            }.frame(maxWidth: .infinity)
+                            ScrollView {
+                                VStack(alignment: .leading, spacing: 16) {
+                                    ForEach(model.drafts, id: \.id) { draft in
+                                        Button { model.openReview(draft); paying = true } label: {
+                                            VStack(alignment: .leading) {
+                                                Text(draft.label.isEmpty ? "Saved payment" : draft.label)
+                                                Text("Draft · \(draft.state) · \(draft.inputs.count) inputs").font(.caption)
+                                            }
+                                        }.disabled(model.busy)
                                     }
-                                }
-                            } else {
-                                CoinsView(model: model) { mode in
+                                    ForEach(model.activity, id: \.txid) { row in
+                                        VStack(alignment: .leading) {
+                                            Text(row.label.isEmpty ? "Unlabeled transaction" : row.label)
+                                            Text(row.confirmed ? "Confirmed" : "Pending").font(.caption).foregroundStyle(.secondary)
+                                        }
+                                    }
+                                    Text("Hardware signing is not qualified. Use disposable test wallets only.")
+                                        .font(.footnote).foregroundStyle(.secondary)
+                                }.frame(maxWidth: .infinity, alignment: .leading)
+                            }.accessibilityIdentifier("activityScroll")
+                        }
+                        .opacity(tab == 0 ? 1 : 0)
+                        .allowsHitTesting(tab == 0).accessibilityHidden(tab != 0)
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 16) {
+                                CoinsView(model: model, active: tab == 1) { mode in
                                     model.review = nil; paymentMode = mode; paying = true
                                 }
-                            }
-                            Text("Hardware signing is not qualified. Use disposable test wallets only.")
-                                .font(.footnote).foregroundStyle(.secondary)
-                        }.frame(maxWidth: .infinity, alignment: .leading)
-                    }
+                                Text("Hardware signing is not qualified. Use disposable test wallets only.")
+                                    .font(.footnote).foregroundStyle(.secondary)
+                            }.frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .scrollDismissesKeyboard(.interactively)
+                        .accessibilityIdentifier("coinScroll")
+                        .opacity(tab == 1 ? 1 : 0)
+                        .allowsHitTesting(tab == 1).accessibilityHidden(tab != 1)
+                    }.id(model.selectedID)
                 }
                 Spacer(minLength: 0)
                 if model.busy { ProgressView().accessibilityLabel("Working") }

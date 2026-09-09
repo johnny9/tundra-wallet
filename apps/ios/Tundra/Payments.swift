@@ -195,6 +195,7 @@ struct PaymentView: View {
 
 struct CoinsView: View {
     @ObservedObject var model: WalletModel
+    var active: Bool
     var send: (Int) -> Void
     @State private var query = ""
     @State private var availableOnly = false
@@ -202,6 +203,7 @@ struct CoinsView: View {
     @State private var editing: CoinInfo?
     @State private var label = ""
     @State private var bulkLabel = false
+    @FocusState private var searching: Bool
     private var visible: [CoinInfo] {
         let filtered = model.coins.filter { coin in
             (!availableOnly || coin.state == .available) &&
@@ -212,6 +214,7 @@ struct CoinsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             TextField("Search labels, addresses, outpoints", text: $query).textFieldStyle(.roundedBorder)
+                .focused($searching).submitLabel(.done).onSubmit { searching = false }
             HStack {
                 Toggle("Available", isOn: $availableOnly)
                 Toggle("Largest first", isOn: $largestFirst)
@@ -244,6 +247,7 @@ struct CoinsView: View {
                 }
             }
         }
+        .onChange(of: active) { _, active in if !active { searching = false } }
         .sheet(isPresented: Binding(get: { editing != nil }, set: { if !$0 { editing = nil } })) {
             VStack(spacing: 20) {
                 Text("Coin label").font(.title2)
