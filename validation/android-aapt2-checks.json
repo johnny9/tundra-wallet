@@ -1,0 +1,41 @@
+{
+  "recorded_at": "2026-09-09T08:18:41.503694+00:00",
+  "run": 34327546681,
+  "source": "2dc846f8758f4858f67dd4ecb9394287e88a65b9",
+  "android_job": 102388189019,
+  "complete_locked_configurations": "PASS",
+  "app_build": "FAIL before Kotlin/JVM tests: detachedConfiguration2 requests unverified AGP-selected AAPT2 8.13.2-14304508 Linux JAR and POM",
+  "correction": "Download exact AGP-selected Linux JAR/POM from Google Maven, check POM identity, add exact SHA256 values and retain POM; no versions or verification policy changed",
+  "locked_components": 440,
+  "verification_components": 588,
+  "artifact_checksums": 1267,
+  "retained_matching_poms": 588,
+  "baseline_offline_passed": 33,
+  "native_rerun": "pending",
+  "files": [
+    {
+      "path": "build/android-locked-ci-third.log",
+      "sha256": "bbe06793e9ff2890746987ee18c2d546ca732e09f191830da31fb17a96773da8"
+    },
+    {
+      "path": "build/aapt2-review/downloads.json",
+      "sha256": "c9f7637c6919b1092d0e7d3c7d39a0016eea31311e6528ad00467a126493a336"
+    },
+    {
+      "path": "apps/android/gradle/verification-metadata.xml",
+      "sha256": "02ed555847bc129258eb0d01b72cef32963635dcf52fee61614ab9d8442e3406"
+    },
+    {
+      "path": "third-party/android-inventory.json",
+      "sha256": "dbc978780fefd4ba4c5b49ce1bb908744ac59ecdb71d77558f11f350fde4eb9f"
+    },
+    {
+      "path": "third-party/bundle-manifest.json",
+      "sha256": "1d1c75546440e9de7323d994238153a5de43d1ae3a6d1667b427c87d4cd4756a"
+    },
+    {
+      "path": "build/android-aapt2-baseline-offline.log",
+      "sha256": "00ab4a6ddc70e9e6d250f4f642f6fc0088afdccca4bf9b6f696f6468ed078fc1"
+    }
+  ]
+}

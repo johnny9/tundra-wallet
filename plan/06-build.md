@@ -52,7 +52,7 @@ at `4570492` passes. Earlier failures and corrections remain in the validation e
 
 Normal builds now require committed locks and strict checksum verification. The baseline
 locks **440 distinct components** across plugin and application configurations. Verification
-covers **587 metadata components / 1,265 artifacts**, including parent/BOM metadata not itself
+covers **588 metadata components / 1,267 artifacts**, including parent/BOM metadata not itself
 in a resolved graph. Three metadata artifacts missing from the CI bootstrap were separately
 fetched from Maven Central, identity-checked and byte-compared with the local cache; the
 pinned Compose BOM was independently compared with Google Maven. These are checksums of the
@@ -67,7 +67,9 @@ building, then runs the same refusal checks. Its first full locked native run re
 checksum set. That POM and all 256 other retained supplemental POMs now have explicit exact
 checksums. The second run reaches Kotlin build-tools resolution and refuses a missing imported
 coroutines BOM. Recursive imported-BOM inventory adds two independently retained POMs with exact
-checksums; the next complete native run remains pending. See
+checksums. The following complete configuration gate passes; actual app compilation exposes
+AGP's detached AAPT2 Linux JAR/POM, now separately checksum-reviewed. The full locked app build
+remains pending. See [AAPT2 evidence](../validation/android-aapt2-checks.json),
 [imported BOM correction](../validation/android-imported-bom-checks.json) and
 [parent-metadata correction](../validation/android-parent-metadata-checks.json).
 See [exact lock/enforcement evidence](../validation/android-lock-enforcement-checks.json).

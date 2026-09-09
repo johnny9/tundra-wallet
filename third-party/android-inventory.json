@@ -3,8 +3,8 @@
   "limits": "Publisher authentication, full artifact notices and binary distribution review remain separate gates",
   "gradle": {
     "locked_components": 440,
-    "verified_components": 587,
-    "verified_artifacts": 1265,
+    "verified_components": 588,
+    "verified_artifacts": 1267,
     "nonempty_configurations": {
       "buildscript-gradle.lockfile": 1,
       "app/buildscript-gradle.lockfile": 0,
@@ -250,6 +250,7 @@
     "com.android.tools.build.jetifier:jetifier-core:1.0.0-beta10",
     "com.android.tools.build.jetifier:jetifier-processor:1.0.0-beta10",
     "com.android.tools.build:aapt2-proto:8.13.2-14304508",
+    "com.android.tools.build:aapt2:8.13.2-14304508",
     "com.android.tools.build:aaptcompiler:8.13.2",
     "com.android.tools.build:apksig:8.13.2",
     "com.android.tools.build:apkzlib:8.13.2",
@@ -4653,6 +4654,23 @@
       ],
       "imported_boms": [],
       "license_source": "com.android.tools.build:aapt2-proto:8.13.2-14304508"
+    },
+    {
+      "coordinate": "com.android.tools.build:aapt2:8.13.2-14304508",
+      "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/aapt2/8.13.2-14304508/aapt2-8.13.2-14304508.pom",
+      "sha256": "7e085634f503d42a4f3ea14488c25d4a573914db23c64a5a05a0c5c186c93112",
+      "path": "third-party/android-poms/7e085634f503d42a4f3ea14488c25d4a573914db23c64a5a05a0c5c186c93112.xml",
+      "gradle_checksum_match": true,
+      "parent": null,
+      "declared_licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt",
+          "distribution": "repo"
+        }
+      ],
+      "imported_boms": [],
+      "license_source": "com.android.tools.build:aapt2:8.13.2-14304508"
     },
     {
       "coordinate": "com.android.tools.build:aaptcompiler:8.13.2",

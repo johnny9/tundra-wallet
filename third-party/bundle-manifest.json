@@ -8,7 +8,7 @@
   "distinct_notice_texts": 175,
   "inputs": {
     "third-party/cargo-inventory.json": "fc6bccd78a7b77f4b92f9bd8008777afec272ac182ae904cf35e1affbfda2660",
-    "third-party/android-inventory.json": "ae74d21d0f19b9ea84c8632a6907b1438b3b9e6e2180c36e1073f399e3bd9854",
+    "third-party/android-inventory.json": "dbc978780fefd4ba4c5b49ce1bb908744ac59ecdb71d77558f11f350fde4eb9f",
     "third-party/android-artifact-inventory.json": "2b6367726d86fcdbc0a7956f25d398d0bbf7762807bb8b03c323f355e95e8d18",
     "third-party/android-notice-supplements.json": "976f28684f187d8b2096afdfd0667e20718a3a7ac7ff569c3d70afcece1f4d59"
   },

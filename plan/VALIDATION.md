@@ -32,8 +32,11 @@ other retained supplemental POMs now have explicit exact checksum entries. The b
 locks **440 distinct components**. The second run at `05dabe2` also stops before compilation,
 on an imported coroutines BOM in the Kotlin build-tools configuration. The inventory now
 follows parent properties and imported BOMs, adding two exact POM checksums; verification
-covers **587 metadata components / 1,265 artifacts**. No module version or broad trust exception
-changed. The next full locked native run is pending. See
+covers **588 metadata components / 1,267 artifacts**. No module version or broad trust exception
+changed. The next run at `2dc846f` passes the complete configuration gate, then the app build
+refuses AGP's AAPT2 Linux JAR/POM, resolved through a detached task configuration. Those exact
+Google Maven artifacts now have reviewed checksums. Kotlin/JVM/instrumentation and the full
+locked app build remain pending. See [AAPT2 evidence](../validation/android-aapt2-checks.json) and
 [BOM correction evidence](../validation/android-imported-bom-checks.json).
 Local real-project configuration and missing-lock, disabled-verification and
 altered-plugin-checksum refusal checks pass. See [parent metadata evidence](../validation/android-parent-metadata-checks.json).
@@ -43,7 +46,7 @@ recovery assertion correction and later recovery/provenance steps await runtime 
 Local full Rust/regtest, formatting, strict Clippy and both binding generators pass after
 strengthening the secret-marker regression to use valid descriptor checksums. It uses only
 invalid/truncated markers, never usable signing keys. **32 offline checks** now pass, including
-Maven and binary-notice inventory guards. All **587 retained Maven POMs** match verification
+Maven and binary-notice inventory guards. All **588 retained Maven POMs** match verification
 hashes. **138 archive variants** for the **150 release-runtime components** were actually
 fetched and verified; five embedded notice texts and 116 module metadata files are retained.
 54 archives lack embedded notices, including 48 with compiled code. Upstream review remains
