@@ -23,12 +23,14 @@ class WalletRuntimeTest {
     }
     @Test fun importRecreateReceiveAppearanceAndSyncConsent() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        // Test app sandbox only, before any engine/activity is opened.
-        listOf("tundra.sqlite", "tundra.sqlite-wal", "tundra.sqlite-shm").forEach {
-            context.noBackupFilesDir.resolve(it).delete()
-        }
+        // Requires the explicitly disposable fresh installation provided by the runner.
+        // Never reset a protected DB or remove its retained key to make a test pass.
+        assertEquals(StorageFile.MISSING, inspectStorage(context.noBackupFilesDir.resolve("tundra.sqlite").path))
+        assertFalse(context.noBackupFilesDir.resolve("storage-key.v1").exists())
         ActivityScenario.launch(MainActivity::class.java).use { activity ->
             waitText("Add wallet")
+            assertEquals(StorageFile.PROTECTED_OR_UNKNOWN, inspectStorage(context.noBackupFilesDir.resolve("tundra.sqlite").path))
+            assertTrue(context.noBackupFilesDir.resolve("storage-key.v1").isFile)
             compose.onNodeWithText("Add wallet").performClick()
             compose.onNodeWithText("Scan descriptor QR").performClick()
             waitText("Close scan")

@@ -73,7 +73,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
             Row(Modifier.fillMaxWidth().height(68.dp), verticalAlignment = Alignment.CenterVertically) {
                 TundraMark(); Spacer(Modifier.width(10.dp))
                 Box(Modifier.weight(1f)) {
-                    TextButton(onClick = { menu = true }, enabled = !s.busy) {
+                    TextButton(onClick = { menu = true }, enabled = !s.busy && s.storageReady) {
                         Text(s.wallet?.name ?: "Tundra", style = MaterialTheme.typography.titleLarge)
                         Icon(Icons.Outlined.ExpandMore, "Choose wallet")
                     }
@@ -85,7 +85,14 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
                 IconButton(onClick = { settings = true }, enabled = !s.busy) { Icon(Icons.Outlined.Settings, "Settings") }
             }
             Text("Development build · test data only", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelSmall)
-            if (s.wallet == null) {
+            if (!s.storageReady) {
+                Spacer(Modifier.height(40.dp))
+                Text(if (s.busy) "Opening wallet storage" else "Wallet storage unavailable", style = MaterialTheme.typography.headlineSmall)
+                Spacer(Modifier.height(16.dp))
+                Text(s.error ?: "Unlock this device to open your wallet storage.")
+                Spacer(Modifier.height(24.dp))
+                Button(onClick = vm::openStorage, enabled = !s.busy, modifier = Modifier.fillMaxWidth()) { Text("Retry storage") }
+            } else if (s.wallet == null) {
                 Spacer(Modifier.height(60.dp))
                 Text("Your bitcoin.\nYour hardware.", fontSize = 32.sp, fontWeight = FontWeight.Medium)
                 Spacer(Modifier.height(16.dp))
@@ -221,7 +228,7 @@ fun policyText(policy: WalletPolicy) = if (policy == WalletPolicy.SINGLE_SIG) "S
         text = { Text("${p.matched} matched · ${p.changed} changed · ${p.skipped} skipped. Freezes may change, but draft reservations will not.") },
         confirmButton = { TextButton(onClick = vm::applyLabels, enabled = !s.busy) { Text("Apply") } },
         dismissButton = { TextButton(onClick = vm::cancelLabels) { Text("Cancel") } }) }
-    s.error?.let { message -> AlertDialog(onDismissRequest = vm::clearError, title = { Text("Could not complete") }, text = { Text(message) }, confirmButton = { TextButton(onClick = vm::clearError) { Text("OK") } }) }
+    if (s.storageReady) s.error?.let { message -> AlertDialog(onDismissRequest = vm::clearError, title = { Text("Could not complete") }, text = { Text(message) }, confirmButton = { TextButton(onClick = vm::clearError) { Text("OK") } }) }
 }
 @Composable private fun SyncSheet(savedEndpoint: String, onClose: () -> Unit, onSync: (String, Boolean) -> Unit) {
     var endpoint by remember { mutableStateOf(savedEndpoint) }

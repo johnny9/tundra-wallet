@@ -19,6 +19,7 @@ data class WalletState(
     val wallets: List<WalletInfo> = emptyList(), val selectedId: String? = null,
     val coins: List<CoinInfo> = emptyList(), val activity: List<ActivityInfo> = emptyList(),
     val busy: Boolean = false, val error: String? = null, val dark: Boolean = true,
+    val storageReady: Boolean = false,
     val importPreview: WalletPreview? = null, val receive: AddressInfo? = null,
     val labelPreview: LabelImportPreview? = null,
     val endpoint: String = "", val sync: SyncInfo? = null,
@@ -37,7 +38,14 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     private var pendingChain = Chain.SIGNET
     private var pendingLabels: String? = null
     private var pendingLabelsWallet: String? = null
-    init { run { core = withContext(Dispatchers.IO) { Tundra.open(application.noBackupFilesDir.resolve("tundra.sqlite").path) }; refresh() } }
+    init { openStorage() }
+    fun openStorage() = run {
+        if (mutable.value.storageReady) return@run
+        val previous = core; core = null
+        core = withContext(Dispatchers.IO) { previous?.close(); StorageVault.open(getApplication<Application>()) }
+        refresh()
+        mutable.value = mutable.value.copy(storageReady = true)
+    }
     // The USB adapter calls this on its IO coroutine and owns the returned native handle.
     fun prepareUsb(walletId: String, operation: UsbOperation): UsbConnection {
         check(mutable.value.selectedId == walletId)
@@ -52,7 +60,11 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
             catch (e: CancellationException) { throw e }
             catch (e: Exception) {
                 // Do not log descriptors, labels, addresses, database paths or native stack traces.
-                mutable.value = mutable.value.copy(error = if (e is AppException.Operation) e.detail else "Operation failed. Please try again.")
+                mutable.value = mutable.value.copy(error = when (e) {
+                    is StorageAccessException -> e.message
+                    is AppException.Operation -> e.detail
+                    else -> "Operation failed. Please try again."
+                })
             } finally { mutable.value = mutable.value.copy(busy = false) }
         }
     }

@@ -7,15 +7,10 @@ actor CoreService {
     private func engine() throws -> Tundra {
         if let core { return core }
         let fm = FileManager.default
-        var directory = try fm.url(for: .applicationSupportDirectory,
+        let directory = try fm.url(for: .applicationSupportDirectory,
                                    in: .userDomainMask, appropriateFor: nil, create: true)
             .appendingPathComponent("Tundra", isDirectory: true)
-        try fm.createDirectory(at: directory, withIntermediateDirectories: true,
-                               attributes: [.protectionKey: FileProtectionType.complete])
-        var values = URLResourceValues()
-        values.isExcludedFromBackup = true
-        try directory.setResourceValues(values)
-        let result = try Tundra.open(path: directory.appendingPathComponent("wallet.sqlite").path)
+        let result = try StorageVault.open(directory: directory)
         core = result
         return result
     }

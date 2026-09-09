@@ -39,7 +39,7 @@ struct WalletView: View {
                         Button("Add wallet", systemImage: "plus") { adding = true }
                     } label: {
                         HStack { Text(model.wallet?.name ?? "Tundra").font(.headline); Image(systemName: "chevron.down").font(.caption) }
-                    }.foregroundStyle(.primary)
+                    }.foregroundStyle(.primary).disabled(!model.storageReady || model.busy)
                     Spacer()
                     Menu {
                         Toggle("Dark appearance", isOn: $dark)
@@ -66,7 +66,11 @@ struct WalletView: View {
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 Picker("Wallet view", selection: $tab) { Text("Activity").tag(0); Text("Coins").tag(1) }
                     .pickerStyle(.segmented)
-                if model.wallet == nil {
+                if !model.storageReady {
+                    ContentUnavailableView(model.busy ? "Opening wallet storage" : "Wallet storage unavailable", systemImage: "lock",
+                        description: Text(model.error ?? "Unlock this device to open your wallet storage."))
+                    Button("Retry storage") { model.load() }.disabled(model.busy).buttonStyle(.borderedProminent)
+                } else if model.wallet == nil {
                     ContentUnavailableView("Add a wallet", systemImage: "wallet.pass",
                         description: Text("Import a public test descriptor. Private signing keys stay on hardware."))
                     Button("Import descriptor") { adding = true }.buttonStyle(.borderedProminent)

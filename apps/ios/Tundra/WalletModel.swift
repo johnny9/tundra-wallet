@@ -10,6 +10,7 @@ final class WalletModel: ObservableObject {
     @Published var preview: WalletPreview?
     @Published var received: AddressInfo?
     @Published var busy = false
+    @Published var storageReady = false
     @Published var error: String?
     @Published var endpoint = ""
     @Published var sync: SyncInfo?
@@ -41,13 +42,14 @@ final class WalletModel: ObservableObject {
             defer { busy = false }
             do { try await operation() }
             catch is CancellationError { }
+            catch is StorageAccessError { self.error = StorageAccessError.message }
             catch let error as AppError {
                 switch error { case .Operation(_, let detail): self.error = detail }
             }
             catch { self.error = "The operation could not be completed. Check the test descriptor and selected network." }
         }
     }
-    func load() { run { try await self.refresh() } }
+    func load() { run { try await self.refresh(); self.storageReady = true } }
     private func refresh() async throws {
         signing = nil; finalized = nil; submission = nil
         wallets = try await service.wallets()
