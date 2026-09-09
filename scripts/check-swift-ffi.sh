@@ -4,6 +4,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 [[ "$(uname -s)" == Darwin ]] || { echo 'Swift FFI checks require a macOS host.' >&2; exit 2; }
 command -v swiftc >/dev/null || { echo 'The Swift compiler is required.' >&2; exit 2; }
+export MACOSX_DEPLOYMENT_TARGET=11.0
 ./scripts/generate-bindings.sh
 TARGET_DIR="${CARGO_TARGET_DIR:-$ROOT/target}"
 mkdir -p build/ffi/swift/headers

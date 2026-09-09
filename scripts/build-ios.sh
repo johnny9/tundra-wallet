@@ -4,6 +4,10 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 [[ "$(uname -s)" == Darwin ]] || { echo 'iOS builds require macOS and Xcode.' >&2; exit 2; }
 xcodebuild -version >/dev/null
+# Match Rust and cc's C/assembly deployment targets to the native app. SDK-derived
+# cc defaults can otherwise exceed rustc defaults and require unavailable symbols.
+export IPHONEOS_DEPLOYMENT_TARGET=17.0
+export MACOSX_DEPLOYMENT_TARGET=11.0
 ./scripts/generate-bindings.sh
 for TARGET in aarch64-apple-ios aarch64-apple-ios-sim x86_64-apple-ios; do
   cargo build --locked --release -p tundra-ffi --lib --target "$TARGET"

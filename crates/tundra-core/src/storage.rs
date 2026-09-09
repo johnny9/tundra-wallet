@@ -130,7 +130,40 @@ impl Drop for StorageLock {
     fn drop(&mut self) {
         // Explicit unlock also releases a transient inherited descriptor during a
         // concurrent process spawn; relying only on close can briefly retain the lock.
+        #[cfg(unix)]
+        let _ = rustix::fs::flock(&self.0, rustix::fs::FlockOperation::Unlock);
+        #[cfg(not(unix))]
         let _ = self.0.unlock();
+    }
+}
+
+fn acquire(file: &File, exclusive: bool) -> Result<()> {
+    // Rust 1.93's std File locking is unsupported on Android. The pinned safe
+    // rustix wrapper provides the same flock semantics on all three Unix targets.
+    #[cfg(unix)]
+    {
+        use rustix::fs::{FlockOperation, flock};
+        let operation = if exclusive {
+            FlockOperation::NonBlockingLockExclusive
+        } else {
+            FlockOperation::NonBlockingLockShared
+        };
+        flock(file, operation).map_err(|error| {
+            if std::io::Error::from(error).kind() == ErrorKind::WouldBlock {
+                Error::StorageBusy
+            } else {
+                Error::Storage
+            }
+        })
+    }
+    #[cfg(not(unix))]
+    {
+        let result = if exclusive {
+            file.try_lock()
+        } else {
+            file.try_lock_shared()
+        };
+        result.map_err(|_| Error::StorageBusy)
     }
 }
 
@@ -139,7 +172,7 @@ pub(crate) fn shared_lock(path: &Path) -> Result<Option<Arc<StorageLock>>> {
         return Ok(None);
     }
     let file = lock_file(path)?;
-    file.try_lock_shared().map_err(|_| Error::StorageBusy)?;
+    acquire(&file, false)?;
     Ok(Some(Arc::new(StorageLock(file))))
 }
 
@@ -203,7 +236,7 @@ fn migrate(
     let canonical = canonical_path(path)?;
     let path = canonical.as_path();
     let lock = lock_file(path)?;
-    lock.try_lock().map_err(|_| Error::StorageBusy)?;
+    acquire(&lock, true)?;
     let lock = StorageLock(lock);
     match storage_format(path)? {
         StorageFormat::Missing => return Err(Error::NotFound),

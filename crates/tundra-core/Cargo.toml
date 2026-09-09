@@ -27,5 +27,8 @@ tokio = { version = "=1.49.0", features = ["rt", "time", "sync", "macros", "net"
 
 tempfile = "=3.27.0"
 
+[target.'cfg(unix)'.dependencies]
+rustix = { version = "=1.1.4", features = ["fs"] }
+
 [lints]
 workspace = true
