@@ -1,0 +1,27 @@
+// Explicit review-only bootstrap. Normal builds never run this init script.
+// See Gradle's dependency_locking and dependency_verification user guides.
+gradle.beforeProject { project ->
+    project.dependencyLocking.lockAllConfigurations()
+    project.buildscript.configurations.configureEach {
+        resolutionStrategy.activateDependencyLocking()
+    }
+}
+
+gradle.projectsEvaluated {
+    gradle.rootProject.allprojects { project ->
+        project.tasks.register('resolveDependencyReview') {
+            notCompatibleWithConfigurationCache('Explicitly resolves configurations for dependency review')
+            doFirst {
+                if (!gradle.startParameter.writeDependencyLocks) {
+                    throw new GradleException('Dependency review requires --write-locks')
+                }
+            }
+            doLast {
+                // Resolve rather than merely print a report: missing artifacts or
+                // incompatible configurations must fail the review collection.
+                project.configurations.findAll { it.canBeResolved }.each { it.resolve() }
+                project.buildscript.configurations.findAll { it.canBeResolved }.each { it.resolve() }
+            }
+        }
+    }
+}

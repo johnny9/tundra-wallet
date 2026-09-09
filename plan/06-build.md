@@ -44,6 +44,14 @@ The Rust action revision explicitly selects 1.93.1. This prevents tag movement, 
 behavior inside an action. The Gradle wrapper is pinned, but Gradle dependencies, SDK
 downloads, cargo-ndk installation and the Xcode host still need reproducibility review.
 
+The manually dispatched `Collect Android dependency review` workflow prepares candidate
+Gradle locks (including plugin classpaths) and SHA-256 verification metadata on an Android
+SDK host. It resolves every resolvable configuration and fails on resolution errors. This
+collection is not a native build or a trust decision: inspect the downloaded artifacts,
+review their provenance, then commit the files and enable normal-build enforcement.
+It never commits or pushes generated files. See Gradle's [locking guide](https://docs.gradle.org/current/userguide/dependency_locking.html)
+and [verification guide](https://docs.gradle.org/current/userguide/dependency_verification.html).
+
 Both complete Cargo locks now have a deterministic declared-license/notice inventory,
 including all features and the fuzz graph. CI regenerates it from locked package metadata;
 offline checks verify graph coverage and retained bytes. See the [notice scope and remaining
