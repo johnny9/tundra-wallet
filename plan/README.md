@@ -53,7 +53,14 @@ approval system, or cloud account.
 - The same app/test APKs also pass all 18 tests and cold restart on the experimental 16 KiB
   Android image with 4 GiB RAM and compatibility fallback disabled. Initial setup and
   low-memory failures are retained in the separate compatibility evidence.
-- Not performed locally: Android instrumentation or an Xcode build.
+- September 10 local macOS VM: Xcode 27 builds the iOS app; 34 offline, 6 host FFI,
+  13 hosted native tests and 3 signing/layout UI tests pass. The wallet UI flow aborted
+  when its simulator Metal service disconnected. The unchanged wallet UI test then
+  passed end to end on fresh simulators (228.795 and 223.485 seconds), including payment
+  modes, system backup export/restore and restart. The final run disabled verbose
+  simulator diagnostics and exited successfully without intervention. These are separate local runs, not a single
+  clean full-suite run. See the September 10 entry in `VALIDATION.md`.
+- Not performed locally on this Mac: Android instrumentation.
 - **No real-funds use. No supported hardware devices yet.**
 
 ## Plan documents

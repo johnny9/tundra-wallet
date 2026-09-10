@@ -1,10 +1,44 @@
 # Validation status
 
-Planning baseline: September 7, 2026. Recorded validation: **September 9, 2026**.
+Planning baseline: September 7, 2026. Recorded validation: **September 10, 2026**.
 This is development source with test-network sync, native payments and external PSBT validation.
 **The full plan is not complete. No physical hardware or real-funds readiness is claimed.**
 
 ## Current software checkpoint
+
+### September 10 local macOS VM rerun
+
+The unchanged `WalletUITests.testImportRestartAndReceive` passed in **228.795 seconds**
+on a fresh iPhone 18 Pro simulator with iOS 27.0 (24A434), Xcode 27.0 (27A266a),
+and macOS 26.6.2. It covered import, receive, restart, local regtest sync, all four
+payment modes, saved drafts, system backup export/readback/restore and restart after
+restore. The keyless regtest fixture server was restarted before the run.
+
+The previous interruption was an app abort at 15:22:53 on September 10. Its crash
+report records `EXC_CRASH / SIGABRT`, termination namespace `METAL`, code `102`,
+and loss of the `SimMetalHost` XPC connection. It was not a coin-selection assertion
+failure. The underlying reason the graphics service disconnected is not established.
+The earlier test process also stalled finalizing its report and was terminated.
+No production behavior, assertion, timeout in the test, or safety gate was changed.
+
+The first successful rerun also stalled collecting verbose diagnostics. A stack sample
+located the wait in `collectSimulatorDiagnostics` / `simCtlDiagnose`; stopping only
+that optional collector allowed Xcode to finalize a passing result and exit 0.
+The runner now accepts `TUNDRA_SIM_ID`, `TUNDRA_RESULT_BUNDLE`, test-selection arguments,
+and `TUNDRA_TEST_DIAGNOSTICS=never` for affected VMs. Its CI default remains `on-failure`.
+A second fresh-simulator run through the updated script passed in **223.485 seconds**,
+reported **TEST SUCCEEDED**, exited **0 without intervention**, and produced a readable
+[xcresult summary](../validation/ios-wallet-2026-09-10/summary.json) and
+[test completion excerpt](../validation/ios-wallet-2026-09-10/result.txt).
+All 34 offline checks passed again; shell syntax and invalid diagnostics-option rejection
+were checked. Xcode still reports an `Invalid frame dimension` runtime warning; it did
+not fail the test and is not claimed fixed here.
+
+The earlier local run passed 13 hosted native tests and 3 signing/layout UI tests;
+34 offline checks and 6 Swift/Rust host checks also passed. The wallet rerun completes
+coverage across separate runs; it does not establish one clean full-suite run.
+Local logs: `build/ios-runtime.log`, `build/ios-wallet-repro.log`, and
+`build/ios-wallet-verified.log`. The final bundle is `build/ios-wallet-verified.xcresult`.
 
 **All four CI jobs pass at [1a9499c](https://github.com/johnny9/tundra-wallet/actions/runs/34332720770).**
 This includes **189 Rust tests / 34 offline checks**, parser fuzzing/audit and dependency/notice

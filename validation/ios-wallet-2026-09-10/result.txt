@@ -1,0 +1,5 @@
+Test Case '-[TundraUITests.WalletUITests testImportRestartAndReceive]' passed (223.485 seconds).
+	 Executed 1 test, with 0 failures (0 unexpected) in 223.485 (223.489) seconds
+	 Executed 1 test, with 0 failures (0 unexpected) in 223.485 (223.489) seconds
+	 Executed 1 test, with 0 failures (0 unexpected) in 223.485 (223.491) seconds
+** TEST SUCCEEDED **
