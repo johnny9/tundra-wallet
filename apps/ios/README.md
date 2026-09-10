@@ -20,6 +20,16 @@ endpoint consent. QR capture/display, signed-file validation, final review and e
 test-network broadcast are implemented; device interoperability remains unqualified.
 The USB adapter is Android-only.
 
+For an isolated local UI rerun, create a fresh iPhone simulator and pass its UDID as
+`TUNDRA_SIM_ID` to `scripts/check-ios-runtime.sh`. The wallet UI test expects empty
+wallet storage; reusing an imported wallet is not a fresh test. `TUNDRA_RESULT_BUNDLE` selects
+a new result path, and extra arguments are forwarded to `xcodebuild`, for example
+`-only-testing:TundraUITests/WalletUITests/testImportRestartAndReceive`.
+On macOS VMs where Xcode's optional `simctl diagnose` collector stalls after the tests,
+set `TUNDRA_TEST_DIAGNOSTICS=never`. This skips verbose simulator diagnostics, not test
+assertions or the result bundle. The default remains `on-failure` for CI. Start the
+keyless local fixture chain before testing as described in the CI workflow.
+
 Run `scripts/check-swift-ffi.sh` from the repository root on macOS for host Swift/Rust
 roundtrips: database reopen, Unicode labels, unknown balances, typed errors and integer
 amounts. These checks complement the Xcode build; iOS simulator/device runtime and lifecycle
