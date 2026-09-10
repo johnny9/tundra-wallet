@@ -1,0 +1,49 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "E952A9B0-CC78-435C-BF08-06AD47FE1076",
+        "deviceName" : "iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 1,
+      "passedTests" : 16,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Tundra · Built with macOS 15.7.9",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1789080032.673,
+  "passedTests" : 16,
+  "result" : "Failed",
+  "skippedTests" : 0,
+  "startTime" : 1789079313.628,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "failed - Backup review did not appear",
+      "targetName" : "TundraUITests",
+      "testIdentifier" : 14,
+      "testIdentifierString" : "WalletUITests/testImportRestartAndReceive()",
+      "testIdentifierURL" : "test://com.apple.xcode/Tundra/TundraUITests/WalletUITests/testImportRestartAndReceive",
+      "testName" : "testImportRestartAndReceive()"
+    }
+  ],
+  "title" : "Test - Tundra",
+  "topInsights" : [
+
+  ],
+  "totalTestCount" : 17
+}

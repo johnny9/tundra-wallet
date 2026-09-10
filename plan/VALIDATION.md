@@ -8,6 +8,21 @@ This is development source with test-network sync, native payments and external 
 
 ### September 10 local macOS VM rerun
 
+Follow-up [CI run 34534457918](https://github.com/johnny9/tundra-wallet/actions/runs/34534457918)
+passed Rust, dependency checks, Android and **16 of 17 iOS tests**. The wallet UI test
+failed at backup restore on iOS 26.2: its recording and accessibility snapshot show
+the exported public backup still in the system picker after the cell tap. The test
+then swiped the picker while looking for the restore button in the underlying form.
+This is separate from the earlier simulator Metal-service crash.
+
+The test now waits for the picker to dismiss before scrolling the restore form. If
+the picker remains, it retries once on the visible, enabled public file's icon and
+requires dismissal; it still requires the full review, consent, restore and restart
+assertions. The modified complete wallet flow passes locally on iOS 27 in **224.313
+seconds**, with exit 0, and all 34 offline checks pass. CI's iOS 26.2 confirmation is
+pending. Retained summaries: [CI failure](../validation/ios-backup-picker-2026-09-10/ci-failure-summary.json)
+and [local pass](../validation/ios-backup-picker-2026-09-10/local-summary.json).
+
 The unchanged `WalletUITests.testImportRestartAndReceive` passed in **228.795 seconds**
 on a fresh iPhone 18 Pro simulator with iOS 27.0 (24A434), Xcode 27.0 (27A266a),
 and macOS 26.6.2. It covered import, receive, restart, local regtest sync, all four

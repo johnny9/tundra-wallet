@@ -61,6 +61,10 @@ approval system, or cloud account.
   simulator diagnostics and exited successfully without intervention. These are separate local runs, not a single
   clean full-suite run. See the September 10 entry in `VALIDATION.md`.
 - Not performed locally on this Mac: Android instrumentation.
+- CI run 34534457918 passed Rust, dependency checks, Android and 16 iOS tests, but
+  the wallet test stalled at backup import with the system picker still open.
+  A bounded file-selection retry and picker-dismissal check pass the complete wallet
+  flow locally on iOS 27 (224.313 seconds). Confirmation on CI's iOS 26.2 is pending.
 - **No real-funds use. No supported hardware devices yet.**
 
 ## Plan documents

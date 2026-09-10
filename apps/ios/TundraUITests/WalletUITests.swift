@@ -90,6 +90,23 @@ final class WalletUITests: XCTestCase {
         }
         guard let file else { XCTFail("Exported public backup was not selectable"); return false }
         file.tap()
+        // The iOS 26.2 CI recording retained the Files picker after its cell tap.
+        // Never swipe the underlying form until the provider has handed the file
+        // back. Retry only while that same public file is still visibly available.
+        let picker = app.otherElements["Browse View (Picker)"]
+        let dismissed = NSPredicate(format: "exists == false")
+        if await XCTWaiter.fulfillment(of: [XCTNSPredicateExpectation(predicate: dismissed, object: picker)], timeout: 5) != .completed {
+            guard file.exists, file.isEnabled, file.isHittable,
+                  !file.frame.isEmpty, app.frame.contains(file.frame) else {
+                XCTFail("Backup picker remained open without an actionable public file"); return false
+            }
+            // Tap the visible file icon inside the cell, avoiding XCTest's implicit
+            // accessibility scrolling of the provider's icon-mode cell.
+            file.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25)).tap()
+            guard await XCTWaiter.fulfillment(of: [XCTNSPredicateExpectation(predicate: dismissed, object: picker)], timeout: 10) == .completed else {
+                XCTFail("Backup file selection did not dismiss the system picker"); return false
+            }
+        }
         let restore = app.buttons["restoreBackup"]
         for _ in 0..<5 { if restore.exists { break }; app.swipeUp() }
         guard restore.waitForExistence(timeout: 20) else { XCTFail("Backup review did not appear"); return false }
