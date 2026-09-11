@@ -141,7 +141,16 @@ class BackupDocumentRuntimeTest {
                 putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, filename)
             }))
             clickSystemText("Save")
-            compose.waitUntil(20_000) { !vm.state.value.busy && vm.state.value.backupMessage != null }
+            try {
+                compose.waitUntil(20_000) {
+                    !vm.state.value.busy && (vm.state.value.backupMessage != null || vm.state.value.error != null)
+                }
+            } catch (failure: ComposeTimeoutException) {
+                capturePublicFixtureScreenshot("backup-save-result")
+                val state = vm.state.value
+                throw AssertionError("Public fixture document save did not finish; busy=${state.busy}, exportReady=${state.backupExportReady}, result=${state.backupMessage != null}, error=${state.error}", failure)
+            }
+            assertNull("Public fixture document save failed", vm.state.value.error)
             assertTrue(vm.state.value.backupMessage?.startsWith("Encrypted backup saved and read back successfully") == true)
             compose.onNodeWithText("Restore", useUnmergedTree = true).performScrollTo().performClick()
             compose.onNodeWithTag("backupPassword").performScrollTo().performTextInput(password)
