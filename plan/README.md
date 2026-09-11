@@ -10,7 +10,7 @@ with Kotlin/Compose and SwiftUI presenting that behavior natively. One person ma
 single-sig or 2-of-3 hardware wallets. No private signing keys, signer directory, shared
 approval system, or cloud account.
 
-## Current status — September 9, 2026
+## Current status — September 11, 2026
 
 **Test-network wallet flows implemented and tested on both virtual platforms; device and release qualification remain open.**
 
@@ -60,7 +60,10 @@ approval system, or cloud account.
   modes, system backup export/restore and restart. The final run disabled verbose
   simulator diagnostics and exited successfully without intervention. These are separate local runs, not a single
   clean full-suite run. See the September 10 entry in `VALIDATION.md`.
-- Not performed locally on this Mac: Android instrumentation.
+- September 11 local Ubuntu/Waydroid: both Android ABIs and APKs build; 10 JVM and
+  34 offline checks pass. The full instrumentation suite passes 17 of 18 tests;
+  system backup save verification fails, and retained-state cold restart is incomplete.
+  This run includes local wallet-creation edits; exact source and limits are in `VALIDATION.md`.
 - CI run 34534457918 passed Rust, dependency checks, Android and 16 iOS tests, but
   the wallet test stalled at backup import with the system picker still open.
   A bounded file-selection retry and picker-dismissal check pass the complete wallet

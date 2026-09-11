@@ -1,0 +1,378 @@
+{
+  "recorded_at": "2026-09-11T01:02:36.802342+00:00",
+  "result": "FAIL: full runtime suite 17/18 passed; backup document save verification failed",
+  "base_commit": "54fe1fe34d84c397ae8459d5fa458e7e37588f9a",
+  "source_scope": "Current working tree, including the uncommitted September 10 native wallet-creation changes. This is not a passing run of a published commit.",
+  "normal_apk_sha256": "f378253066319730ac39b6051f202a996f6326301a45e74bf9911b60dcb26ec6",
+  "runtime_apk_sha256": "a22e6e8d90e036912793a2e7150f74673ca64b426c20a56006ad43a1db2cc8ba",
+  "runtime_test_apk_sha256": "1066ef733e9a20abb2d2b3fd7705809039f73650ed774f2739f9e412ce00f812",
+  "runtime": {
+    "platform": "Waydroid",
+    "android_api": 33,
+    "abi": "x86_64",
+    "adb": "192.168.240.112:5555",
+    "android_user": 10,
+    "application_id": "dev.johnny9.tundra.validation.v20260911"
+  },
+  "isolation": "Separate package ID and Android user; existing development package rejected replacement due to signing-key mismatch and was preserved. Application/FFI source unchanged for the isolated build.",
+  "builds": "PASS: both Rust Android ABIs, generated bindings, normal and isolated app/test APKs",
+  "jvm": {
+    "tests": 10,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "runtime_suite": {
+    "total": 18,
+    "passed": 17,
+    "failed": 1,
+    "skipped": 0,
+    "elapsed_seconds": 45.16,
+    "cases": [
+      {
+        "class": "dev.johnny9.tundra.BackupDocumentRuntimeTest",
+        "test": "encryptedDocumentSaveReadbackAndReviewedRestoreUseNewProtectedGeneration",
+        "status_code": -2
+      },
+      {
+        "class": "dev.johnny9.tundra.BackupRuntimeTest",
+        "test": "portableEncryptedSnapshotAndNativeExportCrossMobileFfi",
+        "status_code": 0
+      },
+      {
+        "class": "dev.johnny9.tundra.BroadcastRuntimeTest",
+        "test": "explicitEndpointAndRetryConsentResetWhenEndpointChanges",
+        "status_code": 0
+      },
+      {
+        "class": "dev.johnny9.tundra.LongListRuntimeTest",
+        "test": "independentLongListsRetainOffsetsAndTabsStayUsableWithLargeText",
+        "status_code": 0
+      },
+      {
+        "class": "dev.johnny9.tundra.QrRuntimeTest",
+        "test": "descriptorQrRequiresSelectedNetworkAndExplicitNewSession",
+        "status_code": 0
+      },
+      {
+        "class": "dev.johnny9.tundra.QrRuntimeTest",
+        "test": "publicUrAndBbqrImagesCrossRealMobileFfi",
+        "status_code": 0
+      },
+      {
+        "class": "dev.johnny9.tundra.RecoveryRuntimeTest",
+        "test": "recoveredReviewRequiresSyncAndSeparateSubmissionConsentThenShowsInputProvenance",
+        "status_code": 0
+      },
+      {
+        "class": "dev.johnny9.tundra.SigningRuntimeTest",
+        "test": "publishedFileResponseUpdatesEachInputAndFinalizationControlUsesExactBytes",
+        "status_code": 0
+      },
+      {
+        "class": "dev.johnny9.tundra.StorageRuntimeTest",
+        "test": "encryptedDatabaseCrossesMobileFfiAndWrongKeyPreservesIt",
+        "status_code": 0
+      },
+      {
+        "class": "dev.johnny9.tundra.StorageRuntimeTest",
+        "test": "plaintextUpgradeRefusesLiveHandlesAndPreservesMobileState",
+        "status_code": 0
+      },
+      {
+        "class": "dev.johnny9.tundra.StorageVaultTest",
+        "test": "keystoreReopenAndLostOrTamperedKeyMaterialNeverResetWallet",
+        "status_code": 0
+      },
+      {
+        "class": "dev.johnny9.tundra.StorageVaultTest",
+        "test": "publishedSignaturesRestoreReviewSubmissionAndProvenanceCrossNativeVault",
+        "status_code": 0
+      },
+      {
+        "class": "dev.johnny9.tundra.StorageVaultTest",
+        "test": "keystoreUpgradeRetainsLegacyDataAndInitializedMarkerRefusesMissingDatabase",
+        "status_code": 0
+      },
+      {
+        "class": "dev.johnny9.tundra.StorageVaultTest",
+        "test": "restoreSwitchesRetainedKeystoreGenerationsAndRecoversFromLostKeysAndSelectors",
+        "status_code": 0
+      },
+      {
+        "class": "dev.johnny9.tundra.StorageVaultTest",
+        "test": "retainedMasterWithoutDatabaseOrWrapperCannotLookLikeNewInstallation",
+        "status_code": 0
+      },
+      {
+        "class": "dev.johnny9.tundra.UsbRuntimeTest",
+        "test": "permissionFilterAcceptsOnlyItsNonceUriScheme",
+        "status_code": 0
+      },
+      {
+        "class": "dev.johnny9.tundra.UsbRuntimeTest",
+        "test": "publicAccountHandshakeCancellationAndSigningGateCrossFfi",
+        "status_code": 0
+      },
+      {
+        "class": "dev.johnny9.tundra.WalletRuntimeTest",
+        "test": "importRecreateReceiveAppearanceAndSyncConsent",
+        "status_code": 0
+      }
+    ]
+  },
+  "backup_failure": {
+    "test": "BackupDocumentRuntimeTest.encryptedDocumentSaveReadbackAndReviewedRestoreUseNewProtectedGeneration",
+    "initial_result": "Timed out waiting for a successful save message",
+    "diagnostic_result": "Tundra returned its bounded BackupSaveException message: saved backup could not be verified",
+    "reproduced_in_android_users": [
+      10,
+      0
+    ],
+    "partial_public_output_bytes_observed": 139264,
+    "root_cause": "Not established; write/flush/readback verification path requires investigation. The existence or size of output is not success.",
+    "test_change": "Stop waiting when the app reports an error; assert that bounded error directly, and capture public diagnostics on an actual timeout. No save success fallback or production gate changed."
+  },
+  "restart": {
+    "launch_status": "ok",
+    "launch_state": "COLD",
+    "launch_time_ms": 468,
+    "saved_state_verification": "INCOMPLETE: separate instrumentation probe emitted no test status and was explicitly terminated with am force-stop; its resulting Process crashed message records that operator termination, not a diagnosed application crash.",
+    "ui_tree_dumped": false
+  },
+  "offline": {
+    "passed": 34,
+    "failed": 0
+  },
+  "dependency_review": "PASS: all locked Gradle configurations and baseline/missing-lock/verification-disabled/checksum-mismatch enforcement cases",
+  "sdk_payload_files_matched": 20220,
+  "packaged_notices": {
+    "texts": 177,
+    "bytes": 2301108,
+    "normal_and_isolated_apks": "PASS"
+  },
+  "native_library_inspection": "PASS: 10 libraries; ABI, 16 KiB ELF/ZIP alignment, nonexecutable stack, no RWX LOAD segment, GNU_RELRO",
+  "cleanup": "Original Android user 0 and animation settings restored; only this run\u2019s port reversals and fixture servers removed; validation app data retained; normal APK outputs rebuilt; ADB remains authorized.",
+  "not_claimed": [
+    "Passing full Android validation",
+    "Completed post-force-stop saved-state verification",
+    "Physical USB or QR/camera interoperability",
+    "An iOS run for the current source",
+    "Real-funds readiness"
+  ],
+  "source_hashes_at_recording": {
+    "Cargo.lock": "4f908838ecaaedd0660b738b96c09ce6f7af5349f746bc3bfc01977479bcb2fe",
+    "apps/android/app/build.gradle.kts": "083ec1b1321737f717f4a312cc4cb0c0330e662c11b88e7a7b8b68f31e725c02",
+    "apps/android/app/src/androidTest/java/dev/johnny9/tundra/BackupDocumentRuntimeTest.kt": "aaa302399f2ebdfbb358d7ac483c1e97b206a5430a80c47b7cb483aadc64c7e9",
+    "apps/android/app/src/androidTest/java/dev/johnny9/tundra/BackupRuntimeTest.kt": "55360fc5eb92d72b3984e08f4ecb140b1201989726a4990e5f301e6f680d4af6",
+    "apps/android/app/src/androidTest/java/dev/johnny9/tundra/BroadcastRuntimeTest.kt": "686a5b08d29e22f945fae6d9f47080422d2713e16544459703cd099884136369",
+    "apps/android/app/src/androidTest/java/dev/johnny9/tundra/LongListRuntimeTest.kt": "2e1f4946c75f348e264168157f8b52270fb1fd8c381597aee22e2fb060db901b",
+    "apps/android/app/src/androidTest/java/dev/johnny9/tundra/PublicFixtureDiagnostics.kt": "1557877f317554b2d42d26e6cb33296fd1cfa822fedb31bf51f118e763019c68",
+    "apps/android/app/src/androidTest/java/dev/johnny9/tundra/QrRuntimeTest.kt": "f0f67a21867970b0c22d054e8331dc693e9d27c8557ce1be9d016619eee8494f",
+    "apps/android/app/src/androidTest/java/dev/johnny9/tundra/RecoveryRuntimeTest.kt": "afab43793a4d5da4351805f9bf4710abf451c41ed723c70b993b44b03f9026a7",
+    "apps/android/app/src/androidTest/java/dev/johnny9/tundra/SigningRuntimeTest.kt": "6d032fb5e039453fe797ea7503ca4732893d91516cee98f7cf4adb2bd9367d6b",
+    "apps/android/app/src/androidTest/java/dev/johnny9/tundra/StorageRuntimeTest.kt": "19f4e464ec82d3ae0bcb80de90bde8993983f7a3539cc64c220633965f2cc018",
+    "apps/android/app/src/androidTest/java/dev/johnny9/tundra/StorageVaultTest.kt": "8a365ca8b1dc0a02123a7ddb6f2913f73ead7508ba2d2ea2d8ac8b456325a1ff",
+    "apps/android/app/src/androidTest/java/dev/johnny9/tundra/UsbRuntimeTest.kt": "a0fb0192372ee63a4206ef9c1544f2275835ab2cc85fd473f4b5169e964db158",
+    "apps/android/app/src/androidTest/java/dev/johnny9/tundra/WalletRuntimeTest.kt": "cd8e01e784d3c7869af11332649643ddd81429f6bf9477c99596d7fcd663e470",
+    "apps/android/app/src/main/AndroidManifest.xml": "feec1e64fc8a7f56f4e9cf351a21334d18d3a3fee422ac66765fd34bd566d450",
+    "apps/android/app/src/main/java/dev/johnny9/tundra/BackupFiles.kt": "d64d9a02b824b9a82e3aab8a509b724e87eb06b9db5dd66894ef7ca8b6e19879",
+    "apps/android/app/src/main/java/dev/johnny9/tundra/BackupSheet.kt": "e166a155c04ac6a9ef69a71ee35b3671ed4c2b602c826b0638bb89d057e90c35",
+    "apps/android/app/src/main/java/dev/johnny9/tundra/Broadcast.kt": "c5956edf88d7bbb71a4844979f525b70dc940d5f0659380063bf6d053f94b124",
+    "apps/android/app/src/main/java/dev/johnny9/tundra/MainActivity.kt": "b9ea31c1b6074e288fe8b7d0266d3968ae85feb38d541c73ab15e76ccd67281a",
+    "apps/android/app/src/main/java/dev/johnny9/tundra/Payments.kt": "68a9dda1e5559c6397068c9bcf065453103f401c349fd31fd0aedd069723ba3a",
+    "apps/android/app/src/main/java/dev/johnny9/tundra/QrExchange.kt": "11a3faf564234de71ef0f1ce98ea49df2b42d86874196a53eb243457883908bb",
+    "apps/android/app/src/main/java/dev/johnny9/tundra/RecoveryReview.kt": "00b49e4f647667c6b84dc8b7a94d52c8594922f00ae6efce7702df85e4d4762f",
+    "apps/android/app/src/main/java/dev/johnny9/tundra/StorageVault.kt": "f9746d0f2d541f00857372f5aa894bf520b398d537674940a11de01e99bb18c4",
+    "apps/android/app/src/main/java/dev/johnny9/tundra/Theme.kt": "fbdc8c80539c04517659326b4ab781f03644a0b9a0839d979f0c8943b258d871",
+    "apps/android/app/src/main/java/dev/johnny9/tundra/UsbExchange.kt": "ab130624e4ad41c595b999e7b6f3c7d42196eb29f0bc4ae97a7156fdcbb6f60f",
+    "apps/android/app/src/main/java/dev/johnny9/tundra/WalletCreation.kt": "be2879205c5e4faa58461db63725830668114eb606cd9fba52ca60dd72ae61a9",
+    "apps/android/app/src/main/java/dev/johnny9/tundra/WalletViewModel.kt": "9ca5b8f53d030bbec96647af91b417651de4ebfd1dbf72afa09dbff635a33dd3",
+    "apps/android/app/src/main/res/values/styles.xml": "2e6a3bd0462a5d5f55960d843a699d4cb2bdcf804d5c3c6134b2d8da4f2d1266",
+    "apps/android/app/src/test/java/dev/johnny9/tundra/BackupFilesTest.kt": "c49ccc820c1d5614359e6055c8f239442eff67cf5ffea3df2d90f5f99f69e6e5",
+    "apps/android/app/src/test/java/dev/johnny9/tundra/NativeCoreTest.kt": "4da88a3c2ccefde3f0e8b6f83b10367dbb65f73fa2cfeb4484ff4990e903f060",
+    "apps/android/app/src/test/java/dev/johnny9/tundra/UsbDescriptorTest.kt": "c972195f1ec40f2b25103395babf3a9753f00f5a9dfabb61c4a0ac76a923b9d5",
+    "apps/android/build.gradle.kts": "7ad8796864ab36fd29c4c867f661d4669b431a4ebf5ec994d47cd0f63e887c84",
+    "apps/android/settings.gradle.kts": "341c45fbf813055e099a9ba9fe668a092f2f666a539f11a1f379781197580014",
+    "crates/tundra-core/src/amount.rs": "af5e91edd619ae44f026413d92215fd876fed0d3a46f2a8cbabbb4bcbfbe9597",
+    "crates/tundra-core/src/backup.rs": "23a1a2d5973aba39f9ccd2b08b91a96ac9c34d935c3e6d424f7895d4b0b0f783",
+    "crates/tundra-core/src/backup_schema_v1.sql": "d5719840d9e785c2ffc04806fe60d204bc2d8bf19be9c2dc09e979ce89cbb9e3",
+    "crates/tundra-core/src/backup_tests.rs": "320a06d4f5c84ac52423e65738e5065d4ffb7a0dea13dd0bf08a7a30b07d1df6",
+    "crates/tundra-core/src/broadcast.rs": "1f880f9046dfa950eb3fce2285f40a8a6b93e17d701e2888d704c4f79c784b0c",
+    "crates/tundra-core/src/broadcast_tests.rs": "42ee84b4127b0effb35c7f8c0c7ffae15a04708900ea135bd819990383c80cdd",
+    "crates/tundra-core/src/descriptor.rs": "bcef73d3f3769b057a57f48be91bfe5ee162d8c1fc5a6ac7b50cdcca4648d727",
+    "crates/tundra-core/src/engine.rs": "f898ef6a57e4325adb1ba44d6172a9f881102a68156e726512ca3d670c33c830",
+    "crates/tundra-core/src/error.rs": "dae870ed3dd34be36022b51ef8a7fdca1aaf830a1d2c4849ebea25d8a683f33a",
+    "crates/tundra-core/src/hardware.rs": "fb1cf1d46e31354a4787ed490fc1a5e142af20c9e77c6776d5b2970ce508a728",
+    "crates/tundra-core/src/labels.rs": "221d2bc67b94e1542ab6c9d26acfc50b69d33ad0de043f1072f98c6ebacfd685",
+    "crates/tundra-core/src/lib.rs": "c4d28cd81c30d600ba5957ae44cc2613923781afed4488c8cb2dafe01083fbd7",
+    "crates/tundra-core/src/model.rs": "c6958faddf50132c55b8693895df89ed2076a4a1d1cd232cbdb886e36c543122",
+    "crates/tundra-core/src/native_fixtures.rs": "783c1f21ac6fd5d24749e2af8295000c289ed7077610542227e948fda15dfd55",
+    "crates/tundra-core/src/qr.rs": "8f00d5398d25b3717e221e41926914951bbe42b7a73d0d611ad9dac94cc5b367",
+    "crates/tundra-core/src/qr_tests.rs": "1972cebc6edfcfba7b02fdf9439e8dbe160532cc4008d61c7a7a1f922c23f207",
+    "crates/tundra-core/src/recovery.rs": "5bc293d9c569ddea0faf62c39b0adcb21e3abfdfcf735b672fb9b6dd3c956c50",
+    "crates/tundra-core/src/restore_tests.rs": "bd617d5fcda7a165375acd4f838fc2de9abf62bdd426e684c109d442981b2144",
+    "crates/tundra-core/src/schema.sql": "70748b49f99103eddd5ab27a9569aa1d5130a32299fbe42eea14f9b012ff2e3f",
+    "crates/tundra-core/src/signing.rs": "2a4bd01e0ef8dba9a09aa7c8784c959b7529ae6bfd36ad0dbb1270be5086c9cc",
+    "crates/tundra-core/src/signing_tests.rs": "a45bfb2ef0fc4c5846048e0fc1b5faa067d5c7406a74d0a6a5a6e33f7bbf0d25",
+    "crates/tundra-core/src/storage.rs": "4db1acd9670ca74c82b63038bfdf83ef0576ea0dbe64532a141f59e5a765d51a",
+    "crates/tundra-core/src/storage_tests.rs": "6954cabe9016e74de85cea3c8b5ff823b62323b3c2993d035f69b51f164d40cb",
+    "crates/tundra-core/src/store_selection.rs": "0410089d33b12d7b19cc23f27dd7e6a685d07f60f5e2862c601350c78cac1d4d",
+    "crates/tundra-core/src/store_selection_tests.rs": "38ecd45d6d5f3550bac4d847d9ed2f78dc5d4c5d16a36bf00a3175aba7d389a3",
+    "crates/tundra-core/src/sync.rs": "a663a886d3926ddd4425aa5ad43cee32bb00ab14c15d7029c44b5a10c4a01d2e",
+    "crates/tundra-core/src/usb/framing.rs": "41b3ff3efc1f06813d22116e329726a51aa2fbf4e24fd7623ae5e6b4343f99a1",
+    "crates/tundra-core/src/usb/mod.rs": "1255f8fbf26d9bc6acb096843de59cd39631199f82ed3e098c2f4795e4257f8e",
+    "crates/tundra-core/src/usb/protocol.rs": "b1aa592d9b5cd1dc1d6a77558f2cd1fdc6e334a00c996d1a55b8170ab3d85e95",
+    "crates/tundra-core/src/usb/protocol_tests.rs": "0466a47717986dbf58c55bbf33cfc6a2cab00b16a39e05268268770afebf755d",
+    "crates/tundra-core/src/usb/tests.rs": "b7f92b80f43652d75b8c890c49ff825a9b3945a7464668f53b5cb699357b2a0e",
+    "crates/tundra-ffi/src/bindgen.rs": "f7a2dd11fb370e9595bdfa6c32fc41a9b67a60bbab06ec711cb7a03eb873ffa6",
+    "crates/tundra-ffi/src/lib.rs": "1d55949e65165922b42618adda402b183f2736fba3b319acaf7254d78e47d748"
+  },
+  "initial_runtime_backup_test_sha256": "e2aec096c28bf4ac1b9ed9afaab2469846ec99690681497998c5e0f5f99018cc",
+  "evidence": [
+    {
+      "path": "build/waydroid-validation-20260911/backup-diagnostic-build.log",
+      "sha256": "35c5604fe6f6f59677b3380b961a205ae366fd6ff672a07d2bb42034bc9112ce"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/backup-diagnostic.log",
+      "sha256": "2f8dc30d0a1d3c48cbfa9561dfd156e3e2311b42859b245a455ab35e1803e28d"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/backup-owner-user.log",
+      "sha256": "c9f9ee6c365b46efaf612d7873bf66a074a51745fd82ccb1dbb68971c622aa68"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/cold-restart.log",
+      "sha256": "11104164fb318bd9b6823c755200c365f069d7bbfe8fc08d3054e8a199362ce3"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/enforcement.log",
+      "sha256": "c75746d049b00704606966eba56d27de3ddef8213cc11c1916218c02a2ae96f1"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/gradle-enforcement/baseline.log",
+      "sha256": "6066783fcbc13113566a51e70f90a26fc342fba6df7250709a8ad89553cb3f01"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/gradle-enforcement/checksum-mismatch.log",
+      "sha256": "547154b5288f77aeaaee732ff71fc4b2c3f404810c71e2fbd04d899413c1c599"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/gradle-enforcement/missing-lock.log",
+      "sha256": "253abc065ddf474acf4f23de2a2e5cdb780fcfb1027f10f3b2649add571c6b3b"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/gradle-enforcement/verification-disabled.log",
+      "sha256": "1fd9f287ccc98b74dc969d85892bccd644ee630d5adf82ebada70a45b36b4d35"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/instrumentation-summary.json",
+      "sha256": "ad0b523a35cd35ff401167f3380794409c83b5c2126121a5291b19cec976e363"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/instrumentation.log",
+      "sha256": "580de06d227be143dc9af572d2b6ece7706123d62d3f2399c16f87c861c3d483"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/isolated-apks/app-debug-androidTest.apk",
+      "sha256": "1066ef733e9a20abb2d2b3fd7705809039f73650ed774f2739f9e412ce00f812"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/isolated-apks/app-debug.apk",
+      "sha256": "a22e6e8d90e036912793a2e7150f74673ca64b426c20a56006ad43a1db2cc8ba"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/isolated-build.log",
+      "sha256": "df8955e0441defa2ad735d44cbb096aee58c5a7d974125a1381869f918a3d27e"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/isolated-native-artifacts.json",
+      "sha256": "25a2b71977ba412735f2af63327e7139272690e9965000ceaec6b281c9436ddd"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/isolated-notices.log",
+      "sha256": "95f41fe9990b3d07b0d6b1b9c40d41490c00347958bc94672f358c4f7f41d31d"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/isolated-package.init.gradle",
+      "sha256": "794d1a540c01e74009d758e949fa7ae1884bbe0b035ce9cece01af6f2ea81f13"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/jvm-dependencies.log",
+      "sha256": "611290a89ea0834b04328fb7050b7faf97a39fc4f7a85476bddef9a3f9bce706"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/jvm-results/TEST-dev.johnny9.tundra.BackupFilesTest.xml",
+      "sha256": "4687d45a0690b4dd5689d0b00d55c7cdd12b86f924c8f707dc7d3fb8ea9b40ed"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/jvm-results/TEST-dev.johnny9.tundra.NativeCoreTest.xml",
+      "sha256": "af0964c4f069e11c47aa82cbebeafa4fc4c3f0b54d40abb2d0b41419197c2069"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/jvm-results/TEST-dev.johnny9.tundra.UsbDescriptorTest.xml",
+      "sha256": "c5f4b936612f232b20595530680517c2bbbb2decd69a9c932d09c0189a1393dc"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/native-artifacts.json",
+      "sha256": "b3eb1ba0fed94a2dbd013a9c82bc11ef004391d36d68a535c908b3a85f830d6f"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/native-chain.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/normal-apks/app-debug-androidTest.apk",
+      "sha256": "889aa3f232c8c7a38f06a7d0b585a547f1e4af0f166e717d9574321bee6db51d"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/normal-apks/app-debug.apk",
+      "sha256": "f378253066319730ac39b6051f202a996f6326301a45e74bf9911b60dcb26ec6"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/normal-build-restored.log",
+      "sha256": "dcf91ef24340309f751ff96789b32d620e76b2614032851ae8b6a8f6429d3398"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/notices.log",
+      "sha256": "95f41fe9990b3d07b0d6b1b9c40d41490c00347958bc94672f358c4f7f41d31d"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/offline.log",
+      "sha256": "9b9df71e3a949d14b17fc36af88ececa3171a1c294f75ae8280d52a00de59359"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/original-animation-settings.json",
+      "sha256": "6c79983ce2d57949b6e53c18cc023b2dbf356ea3ae482c85f417888e5273bff4"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/post-restart.init.gradle",
+      "sha256": "9bba4af5f17a09b0e4d6d46f4f834a5d45aef09b9509d09b4cbb1fecec8f6c88"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/published-native.log",
+      "sha256": "9d2b2b746cb84122f1d53dd3b954d90290f0fb82433d10e70eae7cd8db2faccc"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/published-screen.log",
+      "sha256": "9d2b2b746cb84122f1d53dd3b954d90290f0fb82433d10e70eae7cd8db2faccc"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/restart-src/SavedWalletRestartTest.kt",
+      "sha256": "5afbafbfa714049bb854aa84c5b42ace88bc97b0ddbe8caf260903e17adc8d43"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/restart-test-build.log",
+      "sha256": "2b6c78af2e375222014ab911719b952aea836664ee40a32d441e8ca2c675d49e"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/restart-verification.log",
+      "sha256": "cc376fcd260b55a01f82c04af5e0a9ead88516f600131a38bdea1a3e05b10a8d"
+    },
+    {
+      "path": "build/waydroid-validation-20260911/sdk-payload.log",
+      "sha256": "4d75082ad19c88dc8ce68cc46a66c959ab82a2597f49bcf7e2bebc4c74582300"
+    }
+  ]
+}

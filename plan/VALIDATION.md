@@ -1,12 +1,41 @@
 # Validation status
 
-Planning baseline: September 7, 2026. Recorded validation: **September 10, 2026**.
+Planning baseline: September 7, 2026. Latest local validation: **September 11, 2026**.
 This is development source with test-network sync, native payments and external PSBT validation.
 **The full plan is not complete. No physical hardware or real-funds readiness is claimed.**
 
-## Current software checkpoint
+## September 11 local Android run — not fully passing
 
-### September 10 local macOS VM rerun
+Waydroid now has a DHCP lease and authorized ADB access. The current working tree,
+including the September 10 native wallet-creation changes, builds both Android Rust ABIs
+and the app/test APKs. Fresh execution passes **10 JVM tests**, **34 offline checks**, all
+locked Gradle dependency configurations and their refusal checks, **20,220 SDK payload
+files**, native-library inspection and the exact **177-text notice resource**.
+
+The complete Waydroid API 33 / x86_64 instrumentation suite ran: **17 passed, 1 failed,
+0 skipped**. The passing wallet scenario includes the new import/review navigation,
+all four payment modes, saved drafts, QR codecs and Activity recreation. The failing
+`BackupDocumentRuntimeTest` reaches the system Save action, then Tundra reports that the
+saved backup could not be verified. A focused diagnostic rerun reproduces this in both
+Android users 10 and 0. The test now reports the bounded app error directly instead of
+waiting only for a success message. The underlying write/flush/readback failure remains
+unresolved; production backup verification was not relaxed.
+
+The pre-existing Waydroid app has a different signing key. The runtime run therefore uses
+the same application sources under an isolated validation package and a fresh Android
+user, preserving the existing development installation and its wallet data. Normal APK
+outputs were rebuilt afterward. Exact APK/source hashes, test names, logs and limits are
+in the [Waydroid Android record](../validation/waydroid-android-checks-2026-09-11.json).
+This is working-tree evidence, not a newly passing published source revision.
+
+An explicit cold launch succeeds, but the separate post-force-stop saved-state probe
+stalled without reporting test status and was stopped. Its resulting `Process crashed`
+instrumentation message records that explicit termination; it is not evidence of a
+diagnosed application crash. **Saved-state cold-restart validation is incomplete for
+this run.** No UI tree was dumped. Android user 0 and the original animation settings
+were restored; the isolated validation data was retained.
+
+## September 10 local macOS VM rerun
 
 Follow-up [CI run 34534457918](https://github.com/johnny9/tundra-wallet/actions/runs/34534457918)
 passed Rust, dependency checks, Android and **16 of 17 iOS tests**. The wallet UI test
@@ -54,6 +83,8 @@ The earlier local run passed 13 hosted native tests and 3 signing/layout UI test
 coverage across separate runs; it does not establish one clean full-suite run.
 Local logs: `build/ios-runtime.log`, `build/ios-wallet-repro.log`, and
 `build/ios-wallet-verified.log`. The final bundle is `build/ios-wallet-verified.xcresult`.
+
+## Recorded hosted CI checkpoint
 
 **All four CI jobs pass at [1a9499c](https://github.com/johnny9/tundra-wallet/actions/runs/34332720770).**
 This includes **189 Rust tests / 34 offline checks**, parser fuzzing/audit and dependency/notice
@@ -115,8 +146,9 @@ Coverage remains **440 locked components / 588 verified metadata components / 1,
 checksums**, with all **588 retained Maven POMs** matched. See
 [local toolchain evidence](../validation/local-android-toolchain-checks.json).
 
-Waydroid's session/container run, but it still reports **IP UNKNOWN with no ADB device**;
-there is no local KVM device either. No local instrumentation is claimed. Broader visual and
+At the September 9 checkpoint Waydroid reported **IP UNKNOWN with no ADB device**;
+that networking blocker is resolved by the September 11 run above. There is no local KVM
+device. The new local run has the explicit failure and restart limits above. Broader visual and
 accessibility qualification, physical phones, QR/USB transports, real-network hardware signing
 and independent release review remain open. Command-line utilities, emulator/host images and
 remaining upstream/distribution review have separate limits; see the
